@@ -40,7 +40,8 @@ public class UploadFileUtil {
     private static String saveFileUploaded = "/data/photo/card";
 	private static String saveFileCSV = System.getProperty("user.dir") + "/csv";
     private static Connection conn = null;
-        
+    private static String lostImageFileUploaded = "/data/backup/lost_image";
+    
 	public static String getImageFileFromSCP(String fileNameFromDB, String scpHostName, String scpUser, String scpPassword, Integer scpPort) {
 		String fileNameBase64 = processingCard(fileNameFromDB, scpHostName, scpUser, scpPassword, scpPort);
 		return fileNameBase64;
@@ -234,6 +235,19 @@ public class UploadFileUtil {
 		}
 
 		return fileUpload;
+    }
+    
+    public static int writeLostImage(String data, String fileName) throws IOException{
+    	String absoluteFilePath = lostImageFileUploaded + File.separator + fileName;
+    	try{
+        	//ImageIO.write(decodeToImage(data), "jpg",new File(absoluteFilePath));
+        	ImageIO.write(decodeToImage(data), "jpg",new File("E:\\images\\"+fileName));
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		System.out.println("=================error: write images to lost image folder");
+    		return 3;
+    	}
+        return 0;
     }
     
     public static FileUploadModel overrideImage(String data, String scpHostName, String scpUser, String scpPassword, double rote,String fileName) throws IOException{
