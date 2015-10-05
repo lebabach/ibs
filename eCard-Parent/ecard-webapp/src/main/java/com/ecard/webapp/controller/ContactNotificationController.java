@@ -1,5 +1,6 @@
 package com.ecard.webapp.controller;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,7 @@ import com.ecard.core.service.ContactNotificationService;
 import com.ecard.core.service.EmailService;
 import com.ecard.core.vo.ContactNotification;
 import com.ecard.webapp.constant.CommonConstants;
+import com.ecard.webapp.vo.ContactNotificationVO;
 
 @Controller
 @RequestMapping("/contacts/*")
@@ -36,7 +38,9 @@ public class ContactNotificationController {
 	public ModelAndView contact(){
 		List<ContactNotification> listContactNotification = new ArrayList<>();
 		listContactNotification = contactNotificationService.getAllContactNotification();
-		return new ModelAndView("contact","listContactNotification",listContactNotification);
+		BigInteger numberMessageUnread = contactNotificationService.getTotalMailNotRead();
+		ContactNotificationVO contactNotificationVO = new ContactNotificationVO(listContactNotification, numberMessageUnread);
+		return new ModelAndView("contact","contactNotificationVO",contactNotificationVO);
 	}
 	
     @RequestMapping("delete")

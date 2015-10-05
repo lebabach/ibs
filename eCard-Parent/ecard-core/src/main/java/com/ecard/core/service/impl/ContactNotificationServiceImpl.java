@@ -1,5 +1,6 @@
 package com.ecard.core.service.impl;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,11 @@ public class ContactNotificationServiceImpl implements ContactNotificationServic
 	public int sendContactMail(HistorySendEmail historySendEmail) {
 		// TODO Auto-generated method stub
 		return contactNotificationDAO.sendContactMail(historySendEmail);
+	}
+	@Override
+    public BigInteger getTotalMailNotRead() {
+	   return contactNotificationDAO.getTotalMailNotRead();
+
 	}
 
 }

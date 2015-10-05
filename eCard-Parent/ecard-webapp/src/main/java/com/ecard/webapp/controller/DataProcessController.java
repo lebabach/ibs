@@ -56,7 +56,6 @@ import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.UserMigration;
 import com.ecard.core.model.UserMigrationId;
 import com.ecard.core.model.UserTag;
-import com.ecard.core.service.BatchWriteCardImage;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.CardTagService;
 import com.ecard.core.service.DataIndexService;
@@ -101,9 +100,6 @@ public class DataProcessController {
 
     @Autowired
     PossessionCardService possessionCardService;
-    
-    @Autowired
-    BatchWriteCardImage batchWriteCardImage;
     
     @Autowired
     MasterService masterService;
@@ -598,13 +594,16 @@ public class DataProcessController {
                                     //uploadThread.start();
 				}
 
-                                List<CardInfo> cardList = cardInfoService.listCardInfoByCardType(1);
-                                //Start batch upload image
-                                batchWriteCardImage.writeCardImage(cardList);
-                                //Update card_type
-                                for (CardInfo cardInfo : cardList) {
-                                    cardInfoService.updateCardTypeById(cardInfo.getCardId(), 0);
-                                }
+				// import data to database
+				if (CollectionUtils.isNotEmpty(cardModelList)){
+                        List<CardInfo> importSuccessList = importCsvDataService.importListCardInfoFromCsv(cardModelList);
+                        recordSuccess = importSuccessList.size();
+                        recordError += cardModelList.size() - recordSuccess;
+
+                        // Start new thread to upload default card for list of success importing card
+                        UploadDefaultCardThread uploadThread = new UploadDefaultCardThread();
+                        uploadThread.start();
+				}
                                     
 				modelAndView.addObject("recordSuccess", recordSuccess);
 				modelAndView.addObject("recordError", recordError);
@@ -825,15 +824,12 @@ public class DataProcessController {
 	 * 
 	 * @author nhat.nguyen
 	 */
-	class UploadDefaultCardThread extends Thread {
-		private List<CardInfo> cardInfoList;
-
-		public UploadDefaultCardThread(List<CardInfo> cardInfoList) {
-			this.cardInfoList = cardInfoList;
-		}
+    class UploadDefaultCardThread extends Thread {
 
 		public void run() {
-			if (CollectionUtils.isEmpty(this.cardInfoList) || StringUtils.isEmpty(defaultImage64)) {
+			List<CardInfo> cardInfoList = cardInfoService.listCardInfoByCardType(1);
+			 
+			if (CollectionUtils.isEmpty(cardInfoList) || StringUtils.isEmpty(defaultImage64)) {
 				return;
 			}
 			logger.info("Thread start uploading card");
@@ -843,7 +839,7 @@ public class DataProcessController {
 				File file = new File(classLoader.getResource("MSMINCHO.TTF").getFile());
 				Font font = Font.createFont(Font.TRUETYPE_FONT, file);
 				
-				for (CardInfo cardInfo : this.cardInfoList) {
+				for (CardInfo cardInfo : cardInfoList) {
 					Thread.sleep(1000);
 					BufferedImage image = UploadFileUtil.decodeToImage(defaultImage64);
 					Graphics g = image.getGraphics();
@@ -863,11 +859,12 @@ public class DataProcessController {
 					UploadFileUtil.overrideImage(UploadFileUtil.encodeToString(image, "jpg"), scpHostName, scpUser, scpPassword, cardInfo.getImageFile());
 					
 				}
+				
+				cardInfoService.updateCardType();
 			} catch (Exception ex) {
 				logger.error("Error upload default card image: " + ex.getMessage());
 			}
 		}
-		
 	}
 }
 

@@ -110,7 +110,8 @@ public interface CardInfoService {
    public void updateDateEditting(List<com.ecard.core.vo.CardInfo> cards);
    
    public Boolean editCardInfoNoIndexNo(CardInfo cardInfo);
-   public int updateCardTypeById(Integer cardId, Integer cardType);
+   
+   public int updateCardType();
    
    public List<CardInfo> listCardInfoByCardType(Integer cardType);
 }

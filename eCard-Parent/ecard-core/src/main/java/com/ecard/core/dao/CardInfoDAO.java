@@ -109,7 +109,7 @@ public interface CardInfoDAO {
     
     public void updateListCardInfor(List<CardInfo> cards);
     
-    public int updateCardTypeById(Integer cardId, Integer cardType);
+    public int updateCardType();
     
     public List<CardInfo> listCardInfoByCardType(Integer cardType);
 }

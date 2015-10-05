@@ -640,7 +640,10 @@
 		<!-- CENTER SIDE -->
 		<div id="center-side" class="col-sm-12 ch-title">
 			<div class="row">
-				<div class="col-sm-6">名刺情報</div>
+				<div class="col-sm-6">
+					<span style="color:black;margin-right:100px">名刺情報</span>
+					<span style="color: #6D6363;"><c:out value="${cardInfo.cardIndexNo}"></c:out></span>
+				</div>
 				<div class="col-sm-6 ch-color-link">
                          <c:choose>
 								<c:when test="${pageContext.request.isUserInRole('ROLE_SUPERVISOR')}">
