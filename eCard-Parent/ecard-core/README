@@ -1,2 +1,0 @@
-// Generate database
-mvn test-compile hibernate4:export
