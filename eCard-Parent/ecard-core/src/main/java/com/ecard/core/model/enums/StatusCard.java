@@ -1,7 +1,7 @@
 package com.ecard.core.model.enums;
 
 public enum StatusCard {
-	approved(1), inputWating(2), editWating(3), approvedPending(4), recognitioning(5);
+	approved(1), inputWating(2), editWating(3), approvedPending(4), recognitioning(5), uploadImageFail(-1);
 	private int value;
 
 	private StatusCard(int value) {

@@ -399,7 +399,7 @@ public class CardController {
 			List<Integer> listOwnerId = cardInfoService.getListOwnerIdByCard(nCardInfo);
 			UserInfo noticeUser = new UserInfo();;
 			for (Integer listOwner : listOwnerId) {
-				if(listUserInfo.stream().filter(u-> u.getUserId() == listOwner).noneMatch(u->true)){
+				if(listUserInfo.stream().filter(u-> u.getUserId() == listOwner).collect(Collectors.toList()).size()<=0){
 					continue;
 				}
 				System.out.println("BEGIN ======================= PUSHNOTIFICATION ==============");
