@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+   xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+
+   <persistence-unit name="manager" transaction-type="RESOURCE_LOCAL">
+      <provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+        <class>com.ecard.core.model.UserInfo</class>
+        <class>com.ecard.core.model.Roles</class>
+        <class>com.ecard.core.model.AutoLogin</class>
+        <class>com.ecard.core.model.InquiryInfo</class>
+        <class>com.ecard.core.model.PossessionCard</class>
+        <class>com.ecard.core.model.PossessionCardId</class>
+        <class>com.ecard.core.model.MyCard</class>
+        <class>com.ecard.core.model.MyCardId</class>
+        <class>com.ecard.core.model.UserTag</class>
+        <class>com.ecard.core.model.PrusalHistory</class>
+        <class>com.ecard.core.model.PrusalHistoryId</class>
+        <class>com.ecard.core.model.UserNotification</class>
+        <class>com.ecard.core.model.UserSearch</class>
+        <class>com.ecard.core.model.UserSearchId</class>
+        <class>com.ecard.core.model.CardInfo</class>
+        <class>com.ecard.core.model.CardTag</class>
+        <class>com.ecard.core.model.CardTagId</class>
+        <class>com.ecard.core.model.CardUpdateHistory</class>
+        <class>com.ecard.core.model.CardUpdateHistoryId</class>
+        <class>com.ecard.core.model.CompanyInfo</class>
+        <class>com.ecard.core.model.ContactHistory</class>
+        <class>com.ecard.core.model.ContactHistoryId</class>
+        <class>com.ecard.core.model.GroupComposition</class>
+        <class>com.ecard.core.model.Backup</class>
+        <class>com.ecard.core.model.MstAction</class>
+        <class>com.ecard.core.model.Logs</class>
+        <class>com.ecard.core.model.OldCard</class>
+
+
+
+      <exclude-unlisted-classes/>
+
+      <properties>
+         <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+         <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+         <property name="hibernate.connection.username" value="ecard" />
+         <property name="hibernate.connection.password" value="qraHJ3XcN58HDBn5" />
+         <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/ecard?useUnicode=true&amp;characterEncoding=Shift_JIS" />
+         <property name="hibernate.show_sql" value="true" />
+      </properties>
+
+   </persistence-unit>
+</persistence>

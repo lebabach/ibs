@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Cards</title>
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="../css/animate.css" rel="stylesheet">
+<link href="../css/style.css" rel="stylesheet">
+<link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="../css/admin-style.css" rel="stylesheet">
+<link href="../css/jquery.dataTables.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+	<div id="header">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top bg-white box-shadow" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary "  href="menu_top.html"><i class="fa fa-navicon"></i> </a>
+                    <!-- <form role="search" class="navbar-form-custom" action="search_results.html">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                        </div>
+                    </form> -->
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a7.jpg">
+                                    </a>
+                                    <div class="media-body">
+                                        <small class="pull-right">46h ago</small>
+                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a4.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right text-navy">5h ago</small>
+                                        <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/profile.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right">23h ago</small>
+                                        <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                        <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="mailbox.html">
+                                        <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="mailbox.html">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="profile.html">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                        <span class="pull-right text-muted small">12 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="grid_options.html">
+                                    <div>
+                                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="notifications.html">
+                                        <strong>See All Alerts</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+        
+        
+                    <li>
+                        <a href="../login.html">
+                            <i class="fa fa-sign-out"></i> ログアウト
+                        </a>
+                    </li>
+                </ul>
+                </nav>
+            </div>
+      </div>
+      <!-- END HEADER -->
+      
+      <!-- BODY -->
+      <div class="container-fluid padding-top20 bg-container height100per">
+        
+        <!-- RIGHT SIDE -->
+        <div id="right-side" class="col-sm-12">
+        	<!-- BAR TOP -->
+            <div class="row bg-white box-shadow">
+            	<div class="col-sm-12">
+                	<div class="float-left">
+                    	<h4 class="h4-header">User List</h4>
+                    </div>
+                	
+                    <div class="float-right">
+                    	<a href="#" id="add"><i class="fa fa-plus icon-rounded"></i></a>
+                        <a href="#" id="random"><i class="fa fa fa-upload icon-rounded"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- END BAR TOP -->
+            <div class="row bg-white box-shadow box-marginTop5 padding-top-bottom">
+				<div class="col-sm-12">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Enter name, company name, phone ..."> 
+						<span class="input-group-btn"> <button type="button" class="btn btn-primary">Search</button></span>
+					</div>
+				</div>
+				<!-- END SEARCH -->
+				<!-- DATA TABLE -->
+				<div class="col-sm-12 container table-list-operator">
+					<div class="row " id="data-table">
+						<div class="ibox-content ">
+							<table class="table" id="paging">
+								<thead>
+									<tr>
+                                        
+										<th>Image</th>
+										<th>Name</th>
+										<th>Company Name</th>
+										<th>Position</th>
+										<th>Email</th>
+										<th>Phone</th>
+										<th>Create Date</th>
+									</tr>
+								</thead>
+								<tbody>
+								<tr id="rowData">
+                                    
+									<td><a href="#"><img src="../img/namecard.png" width="90" /></a></td>
+									<td><a href="#">Mark</a></td>
+									<td>Otto</td>
+									<td>DEV</td>
+									<td><a href="#">dev@gmail.com</a></td>
+									<td>0905 353 535</td>
+									<td>2015-07-23</td>
+								</tr>
+								<tr id="rowData">
+				                     
+									<td><a href="#"><img src="../img/namecard1.jpg" width="90" /></a></td>
+									<td><a href="#">Mark</a></td>
+									<td>Otto</td>
+									<td>DEV</td>
+									<td><a href="#">dev@gmail.com</a></td>
+									<td>0905 353 535</td>
+									<td>2015-07-23</td>
+								</tr>
+								<tr id="rowData">
+									
+									<td><a href="#"><img src="../img/namecard2.png" width="90" /></a></td>
+									<td><a href="#">Mark</a></td>
+									<td>Otto</td>
+									<td>DEV</td>
+									<td><a href="#">dev@gmail.com</a></td>
+									<td>0905 353 535</td>
+									<td>2015-07-23</td>
+								</tr>
+								<tr id="rowData">
+									
+									<td><a href="#"><img src="../img/loyalty-card.jpg" width="90" /></a></td>
+									<td><a href="#">Mark</a></td>
+									<td>Otto</td>
+									<td>DEV</td>
+									<td><a href="#">dev@gmail.com</a></td>
+									<td>0905 353 535</td>
+									<td>2015-07-23</td>
+								</tr>
+                                <tr id="rowData">
+                                     
+                                    <td><a href="#"><img src="../img/namecard.png" width="90" /></a></td>
+                                    <td><a href="#">Mark</a></td>
+                                    <td>Otto</td>
+                                    <td>DEV</td>
+                                    <td><a href="#">dev@gmail.com</a></td>
+                                    <td>0905 353 535</td>
+                                    <td>2015-07-23</td>
+                                </tr>
+                                <tr id="rowData">
+                                     
+                                    <td><a href="#"><img src="../img/namecard1.jpg" width="90" /></a></td>
+                                    <td><a href="#">Mark</a></td>
+                                    <td>Otto</td>
+                                    <td>DEV</td>
+                                    <td><a href="#">dev@gmail.com</a></td>
+                                    <td>0905 353 535</td>
+                                    <td>2015-07-23</td>
+                                </tr>
+                                <tr id="rowData">
+                                     
+                                    <td><a href="#"><img src="../img/namecard2.png" width="90" /></a></td>
+                                    <td><a href="#">Mark</a></td>
+                                    <td>Otto</td>
+                                    <td>DEV</td>
+                                    <td><a href="#">dev@gmail.com</a></td>
+                                    <td>0905 353 535</td>
+                                    <td>2015-07-23</td>
+                                </tr>
+                                <tr id="rowData"> 
+                                    
+                                    <td><a href="#"><img src="../img/loyalty-card.jpg" width="90" /></a></td>
+                                    <td><a href="#">Mark</a></td>
+                                    <td>Otto</td>
+                                    <td>DEV</td>
+                                    <td><a href="#">dev@gmail.com</a></td>
+                                    <td>0905 353 535</td>
+                                    <td>2015-07-23</td>
+                                </tr>
+                                <tr id="rowData">
+                                     
+                                    <td><a href="#"><img src="../img/namecard.png" width="90" /></a></td>
+                                    <td><a href="#">Mark</a></td>
+                                    <td>Otto</td>
+                                    <td>DEV</td>
+                                    <td><a href="#">dev@gmail.com</a></td>
+                                    <td>0905 353 535</td>
+                                    <td>2015-07-23</td>
+                                </tr>
+                                <tr id="rowData">
+                                     
+                                    <td><a href="#"><img src="../img/namecard1.jpg" width="90" /></a></td>
+                                    <td><a href="#">Mark</a></td>
+                                    <td>Otto</td>
+                                    <td>DEV</td>
+                                    <td><a href="#">dev@gmail.com</a></td>
+                                    <td>0905 353 535</td>
+                                    <td>2015-07-23</td>
+                                </tr>
+                                <tr id="rowData">
+                                     
+                                    <td><a href="#"><img src="../img/namecard2.png" width="90" /></a></td>
+                                    <td><a href="#">Mark</a></td>
+                                    <td>Otto</td>
+                                    <td>DEV</td>
+                                    <td><a href="#">dev@gmail.com</a></td>
+                                    <td>0905 353 535</td>
+                                    <td>2015-07-23</td>
+                                </tr>
+                                <tr id="rowData">
+                                     
+                                    <td><a href="#"><img src="../img/loyalty-card.jpg" width="90" /></a></td>
+                                    <td><a href="#">Mark</a></td>
+                                    <td>Otto</td>
+                                    <td>DEV</td>
+                                    <td><a href="#">dev@gmail.com</a></td>
+                                    <td>0905 353 535</td>
+                                    <td>2015-07-23</td>
+                                </tr>
+                                <tr id="rowData">
+                                     
+                                    <td><a href="#"><img src="../img/namecard.png" width="90" /></a></td>
+                                    <td><a href="#">Mark</a></td>
+                                    <td>Otto</td>
+                                    <td>DEV</td>
+                                    <td><a href="#">dev@gmail.com</a></td>
+                                    <td>0905 353 535</td>
+                                    <td>2015-07-23</td>
+                                </tr>
+                                <tr id="rowData">
+                                     
+                                    <td><a href="#"><img src="../img/namecard1.jpg" width="90" /></a></td>
+                                    <td><a href="#">Mark</a></td>
+                                    <td>Otto</td>
+                                    <td>DEV</td>
+                                    <td><a href="#">dev@gmail.com</a></td>
+                                    <td>0905 353 535</td>
+                                    <td>2015-07-23</td>
+                                </tr>
+                              
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- END DATA TABLE -->
+			</div>
+            <!-- BAR BODY -->
+            
+        </div>
+        <!-- END RIGHT SIDE -->
+      </div>
+      <!-- END BODY -->
+
+<script src="../js/jquery-2.1.1.js"></script>
+<script src="../js/bootstrap.js"></script>
+
+<script src="../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- iCheck -->
+<script src="../js/plugins/iCheck/icheck.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="../js/plugins/pace/pace.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/plugins/peity/jquery.peity.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/demo/peity-demo.js"></script>
+<script src="../js/jquery.dataTables.min.js"></script>
+	
+<script type="text/javascript">
+$(document).ready(function(){
+    $("div.ibox-content table tbody tr").click(function(){
+        //alert($(this).find(".fo").val());
+        window.location.href = "detail_user.html";
+    });
+	$('.i-checks').iCheck({
+	  checkboxClass: 'icheckbox_square-green',
+	  radioClass: 'iradio_square-green'      
+	});
+	$('#data-table input[name=chkALL]').on('ifChecked', function(event){
+		//alert(event.type + ' callback');
+		if(event.type == "ifChecked"){
+			$(".icheckbox_square-green").addClass("icheckbox_square-green checked");
+		}
+	});
+
+    $('#data-table input[name=chkALL]').on('ifUnchecked', function(event){
+        //alert(event.type + ' callback');
+        if(event.type == "ifUnchecked"){
+            $(".icheckbox_square-green").removeClass("checked");
+        }
+    });
+    $('#paging').dataTable( {
+       
+        /*"dom": '<"bottom"tip><"clear">'*/
+        "dom": '<<t>ip>',
+        "ordering": false,
+        "iDisplayLength": 6
+        
+   
+    } );
+ 
+});
+
+</script>
+</body>
+</html>

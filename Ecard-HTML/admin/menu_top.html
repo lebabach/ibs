@@ -1,0 +1,995 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Cards</title>
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="../css/animate.css" rel="stylesheet">
+<link href="../css/style.css" rel="stylesheet">
+<link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="../css/admin-style.css" rel="stylesheet">
+<link href="../css/jquery.dataTables.css" rel="stylesheet">
+<link href="../css/slick-theme.css" rel="stylesheet">
+<link href="../css/slick.css" rel="stylesheet">
+<link href="../css/clockpicker.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+	<div id="header">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top bg-white box-shadow" role="navigation" style="margin-bottom: 0">
+                <!-- <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " data-toggle="dropdown" href="#"><i class="fa fa-navicon"></i> </a>
+                    <form role="search" class="navbar-form-custom" action="search_results.html">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                        </div>
+                    </form>
+                </div> -->
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a7.jpg">
+                                    </a>
+                                    <div class="media-body">
+                                        <small class="pull-right">46h ago</small>
+                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a4.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right text-navy">5h ago</small>
+                                        <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/profile.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right">23h ago</small>
+                                        <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                        <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="mailbox.html">
+                                        <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="mailbox.html">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="profile.html">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                        <span class="pull-right text-muted small">12 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="grid_options.html">
+                                    <div>
+                                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="notifications.html">
+                                        <strong>See All Alerts</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li>
+                        <a href="../login.html">
+                            <i class="fa fa-sign-out"></i> ログアウト
+                        </a>
+                    </li>
+                </ul>
+                </nav>
+            </div>
+      </div>
+      <!-- END HEADER -->
+
+      <!-- BODY -->
+      <div class="container-fluid padding-top20 bg-container height100per">
+
+
+       <div id="left-side" class="col-sm-2">
+            <!-- Menu -->
+            <div class="row box-shadow bg-white menu-top-header">
+                <h4 class="h4-header">メニュー</h4>
+            </div>
+
+            <div class="row box-shadow bg-white box-marginTop5">
+               <div class="panel-group" id="accordion">
+               <!-- panel 1 -->
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle"  href="manage_card.html">
+                          名刺データ入力<!-- 移動オペレーション -->
+                        </a>
+                      </h4>
+                    </div>
+                  </div>
+                <!-- end panel 1 -->
+                <!-- panel 2 -->
+                  <!-- <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle"  data-parent="#accordion" href="list_operator.html">
+                           Operation List
+                        </a>
+                      </h4>
+                    </div>
+
+                  </div> -->
+                <!-- end panel 2 -->
+                <!-- panel 3 -->
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle" data-parent="#accordion" href="list_user.html">
+                            ユーザ一覧
+                        </a>
+                      </h4>
+                    </div>
+
+                  </div>
+                <!--end panel 3 -->
+                <!-- panel 4 -->
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle"  data-parent="#accordion" href="list_team.html">
+                           チーム一覧
+                        </a>
+                      </h4>
+                    </div>
+                  </div>
+                  <!--emd panel 4 -->
+                  <!-- panel 5 -->
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" ata-parent="#accordion" href="#collapseFive" id="confirm_log">
+                          ログ確認
+                        </a>
+                      </h4>
+                    </div>
+                  </div>
+                  <!-- end panel 5 -->
+                  <!-- panel 6 -->
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle" data-parent="#accordion" href="company_list.html">
+                           会社一覧
+                        </a>
+                      </h4>
+                    </div>
+                  </div>
+                  <!-- end panel 6 -->
+				  <!-- panel 6_1 -->
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle" data-parent="#accordion" href="allocation_card_list.html">
+                           枚数割り振り画面
+                        </a>
+                      </h4>
+                    </div>
+                  </div>
+                  <!-- end panel 6_1 -->
+                  <!-- panel 7 -->
+                 <!--  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" id ="export-csv">
+                           Export CSV
+                        </a>
+                      </h4>
+                    </div>
+                  </div> -->
+                  <!-- end panel 7 -->
+                  <!-- panel 11 -->
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseElement" id="recognition-download">
+                           ダウンロード承認
+                        </a>
+                      </h4>
+                    </div>
+                  </div>
+                  <!-- end panel 11 -->
+                  <!-- panel 9 -->
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse"  href="#collapseNine" id="backup-restore">
+                           バックアップ・リストア
+                        </a>
+                      </h4>
+                    </div>
+                  </div>
+                  <!-- end panel 9 -->
+                  <!-- panel 10 -->
+                  <!-- <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTen">
+                          Download App
+                        </a><i class="indicator fa fa-chevron-down  pull-right"></i>
+                      </h4>
+                    </div>
+                    <div id="collapseTen" class="panel-collapse collapse">
+                      <div class="panel-body">
+                         <ul class="nav navbar-top-links navbar-right">
+                         <li>
+                             <a href="#">IPhone Version 0.31 <i class="fa fa-download"></i></a>
+                         </li>
+                         <li>
+                             <a href="#">Android Version 0.31 <i class="fa fa-download"></i></a>
+                         </li>
+
+                         </ul>
+                      </div>
+                    </div>
+                  </div> -->
+                  <!-- end panel 10 -->
+                   <!-- panel 9 -->
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle"   href="question_answer.html" id="backup-restore">
+                           お問い合わせ
+                        </a>
+                      </h4>
+                    </div>
+                  </div>
+                  <!-- end panel 9 -->
+                   <!-- panel 10 -->
+                  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle"   href="send_mail.html" >
+                           メール送信
+                        </a>
+                      </h4>
+                    </div>
+                  </div>
+				  <div class="panel panel-success">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="accordion-toggle"   href="export_user.html" >
+                           利用者CSV登録
+                        </a>
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="panel panel-success">
+                      <div class="panel-heading">
+                          <h4 class="panel-title">
+                              <a class="accordion-toggle"   href="export.html" >
+                                  オペレーターCSV登録
+                              </a>
+                          </h4>
+                      </div>
+                  </div>
+                  <!-- end panel 10-->
+                </div>
+            </div>
+            <!-- END MENU -->
+
+
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div id="content-side" class="col-sm-10">
+        	<!-- BAR TOP -->
+            <div class="row bg-white box-shadow menu-top menu-top-header">
+            	<div class="col-sm-12">
+                    	<h4 class="h4-header" id="content-header">カード登録システム管理</h4>
+                </div>
+            </div>
+
+            <!-- END BAR TOP -->
+            <div class="row bg-white box-shadow box-marginTop5 padding-top-bottom menu-top">
+                   <!-- progress bar screen -->
+			        <div class="container container-progress" style="display:block;">
+                        <div class="row ">
+                            <div id="carousel" class="carousel col-md-10 ">
+                                <div class="item one">
+                                    <div class="item_head one_1" >
+                                      <p>チーム１</p>
+                                    </div>
+                                    <div class="progress-content">
+                                         <p>目標入力数: <span>1222</span></p>
+                                         <p>入力数: <span>1234</span></p>
+                                         <p>進捗状況: <span>50%</span></p>
+                                     </div>
+                                </div>
+
+                                <div class="item two">
+                                     <div class="item_head two_1">
+                                         <p>チーム 2</p>
+                                     </div>
+                                     <div class="progress-content">
+                                         <p>目標入力数: <span>1222</span></p>
+                                         <p>入力数: <span>1234</span></p>
+                                         <p>進捗状況: <span>50%</span></p>
+                                     </div>
+                                </div>
+
+                                <div class="item three">
+                                    <div class="item_head three_1">
+                                      <p>チーム 3</p>
+                                    </div>
+                                    <div class="progress-content">
+                                        <p>目標入力数: <span>1222</span></p>
+                                        <p>入力数: <span>1234</span></p>
+                                        <p>進捗状況: <span>50%</span></p>
+                                     </div>
+                                </div>
+
+                                <div class="item four">
+                                    <div class="item_head four_1">
+                                     <p>チーム 4</p>
+                                     </div>
+                                     <div class="progress-content">
+                                         <p>目標入力数: <span>1222</span></p>
+                                         <p>入力数: <span>1234</span></p>
+                                         <p>進捗状況: <span>50%</span></p>
+                                     </div>
+                                </div>
+
+                                <div class="item five">
+                                    <div class="item_head five_1">
+                                      <p>チーム 5</p>
+                                    </div>
+                                    <div class="progress-content">
+                                        <p>目標入力数: <span>1222</span></p>
+                                        <p>入力数: <span>1234</span></p>
+                                        <p>進捗状況: <span>50%</span></p>
+                                     </div>
+                                </div>
+
+                                <div class="item six">
+                                    <div class="item_head six_1">
+                                      <p>チーム 6</p>
+                                    </div>
+                                    <div class="progress-content">
+                                        <p>目標入力数: <span>1222</span></p>
+                                        <p>入力数: <span>1234</span></p>
+                                        <p>進捗状況: <span>50%</span></p>
+                                     </div>
+                                </div>
+
+                                <div class="item seven">
+                                      <div class="item_head seven_1">
+                                       <p>チーム 7</p>
+                                      </div>
+                                      <div class="progress-content">
+                                          <p>目標入力数: <span>1222</span></p>
+                                          <p>入力数: <span>1234</span></p>
+                                          <p>進捗状況: <span>50%</span></p>
+                                     </div>
+                                </div>
+
+                                <div class="item eight">
+                                    <div class="item_head eight_1">
+                                       <p>TEAM 8</p>
+                                    </div>
+                                    <div class="progress-content">
+                                        <p>目標入力数: <span>1222</span></p>
+                                        <p>入力数: <span>1234</span></p>
+                                        <p>進捗状況: <span>50%</span></p>
+                                     </div>
+                                </div>
+
+                                <div class="item nine">
+                                    <div class="item_head nine_1">
+                                       <p>TEAM 9</p>
+                                    </div>
+                                    <div class="progress-content">
+                                        <p>目標入力数: <span>1222</span></p>
+                                        <p>入力数: <span>1234</span></p>
+                                        <p>進捗状況: <span>50%</span></p>
+                                     </div>
+                                </div>
+
+                                <div class="item ten">
+                                    <div class="item_head ten_1">
+                                      <p>TEAM 10</p>
+                                    </div>
+                                    <div class="progress-content">
+                                        <p>目標入力数: <span>1222</span></p>
+                                        <p>入力数: <span>1234</span></p>
+                                        <p>進捗状況: <span>50%</span></p>
+                                     </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- END PROGRESS BAR SCREEN -->
+                    <!-- BENGIN BACKUP RESTORE SCREEN -->
+                    <div class="container container-left backup-restored" style="display:none;">
+                        <div class="row clearfix">
+                            <div class="col-md-6 col-md-offset-3 column">
+                                <form role="form">
+                                        <ul class="list-li">
+                                            <li>
+                                                <div class="col-xs-12">
+                                                    <div class="col-xs-6" style="margin-top:8px">
+                                                         <input type="checkbox" class="i-checks idRow i-checks-chk" id="1"> <span>自動バックアップ時間</span>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                            <div class="form-group">
+                                                                <div class='input-group input-group clockpicker' data-placement="left" data-align="top" data-autoclose="true" id='datetimepicker-icon'>
+                                                                    <input type='text' class="form-control" placeholder = "hh:mm:ss" />
+                                                                   <span class="input-group-addon">
+                                                                        <span class="glyphicon glyphicon-time"></span>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="col-xs-12">
+                                                     <div class="form-group">
+                                                        <label for="lastname-furigana" class="control-label col-xs-6" style="margin-top:8px">手動バックアップ</label>
+                                                        <div class="col-xs-6">
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">バックアップ</button>
+                                                        </div>
+                                                     </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="col-xs-12">
+                                                    <div class="form-group">
+                                                        <label for="lastname-furigana" class="control-label col-xs-6" style="margin-top:8px">リストア</label>
+                                                        <div class="col-xs-6">
+                                                             <button type="button" class="btn btn-primary" data-dismiss="modal">リストア</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+
+                                       </ul>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END  BACKUP RESTORE SCREEN -->
+                    <!-- BENGIN BACKUP RESTORE SCREEN -->
+                    <div class="container container-left confirm-log" style="display:none;">
+                        <div class="wrapper-log">
+                            <!-- BEGIN SEARCH -->
+                            <div class="row clearfix search-log header-content">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <div class="input-group search-log-input-text">
+                                        <input type="text" class="form-control" placeholder="キーワードを入力してください......">
+                                        <span class="input-group-btn"> <button type="button" class="btn btn-primary">検索</button></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END SEARCH -->
+                            <div class="row clearfix">
+                                <div class="col-md-6 col-md-offset-3 column">
+                                    <div class="form-group search-log-input-textarea">
+                                      <table class="table">
+                                            <tbody>
+                                                <tr id="rowData" style="background:#c3c3c3;">
+                                                    <td>出力日</td>
+                                                    <td>内容</td>
+
+                                                </tr>
+                                                <tr id="rowData">
+                                                    <td>2015/03/01</td>
+                                                    <td>error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log</td>
+
+                                                </tr>
+                                                <tr id="rowData">
+                                                   <td>2015/03/01</td>
+                                                    <td>error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log error log</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END  BACKUP RESTORE SCREEN -->
+                     <!-- BENGIN EXPORT CSV SCREEN -->
+                    <div class="container container-left export-csv " style="display:none;">
+                        <div class="wrapper-log">
+                            <!-- BEGIN SEARCH -->
+                            <div class="row clearfix export-csv header-content">
+                                <div class="col-md-6 col-md-offset-3">
+                                    Export card
+                                </div>
+                            </div>
+                            <!-- END SEARCH -->
+                            <div class="row clearfix export-input">
+                                <div class="col-md-6 col-md-offset-3 column">
+                                     <div class="input-group  col-sm-10">
+                                       <!--  <input type="file" name="file"  style="display:none;" id="file_upload"/> -->
+                                       <input type="file" name="file" class="form-control upload_btn"    id="input_file_none" >
+                                       <input type="text" class="form-control upload_btn" id="input_file" >
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END SEARCH -->
+                            <div class="row clearfix">
+                                <div class="col-md-6 col-md-offset-7 column">
+                                     <div class="input-group search-log-input-text">
+                                       <button type="button" class="btn btn-primary">Export</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END EXPORT CSV SCREEN -->
+                     <!-- BENGIN DOWNLOAD PERMISSION -->
+                <div class="col-sm-12 table-list-operator download-permission" style="display: none; margin: 0 auto;">
+                    <div class="row " id="data-table">
+                        <div class="ibox-content ibox-content-question ibox-custom01">
+                            <table id="first-table" class="table container paging" style="padding: 0;">
+                                <thead>
+                                    <tr>
+                                        <td colspan="5"  style="background-color: #fff; padding-left: 0;">自社名刺ダウンロード申請者</td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th>申請者</th>
+                                        <th>部署</th>
+                                        <th>役職</th>
+                                        <th>承認者</th>
+                                        <th>承認・否認</th>
+                                        <th>日付</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="1"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　A夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td>課長</td>
+                                    <td id="ft-status-name-1"></td>
+                                    <td id="ft-status-1">未承認</td>
+                                    <td>2015年10月5日</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="2"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　B夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td id="ft-status-name-2"></td>
+                                    <td id="ft-status-2">未承認</td>
+                                    <td>2015年10月5日</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="3"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　C夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td id="ft-status-name-3"></td>
+                                    <td id="ft-status-3">未承認</td>
+                                    <td>2015年10月5日</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="4"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　D夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td id="ft-status-name-4"></td>
+                                    <td id="ft-status-4">未承認</td>
+                                    <td>2015年10月5日</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="5"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　E夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td id="ft-status-name-5"></td>
+                                    <td id="ft-status-5">未承認</td>
+                                    <td>2015年10月5日</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="6"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　F夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td id="ft-status-name-6">承認 次郎</td>
+                                    <td id="ft-status-6">承認</td>
+                                    <td>2015年10月2日</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="7"><label> <div class="icheckbox_square-green  disabled" style="position: relative;"><input type="checkbox" value="" disabled="" checked="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　G夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td id="ft-status-name-7">否認 三郎</td>
+                                    <td id="ft-status-7">否認</td>
+                                    <td>2015年10月1日</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                                <div style="overflow: hidden; margin: 0 auto; width: 210px;">
+                                <div style="float:right;">
+                                    <button id="ok-01" type="button" class="btn btn-primary" style="display: inline-block; width:100px !important">承認</button>
+                                    <button id="ng-01" type="button" class="btn btn-primary" style="display: inline-block; width:100px !important">否認</button>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 table-list-operator download-permission" style="display: none; margin: 0 auto;">
+                    <div class="row " id="data-table">
+                        <div class="ibox-content ibox-content-question ibox-custom01">
+                            <table id="second-table" class="table container paging" style="padding: 0;">
+                                <thead>
+                                    <tr>
+                                        <td colspan="5"  style="background-color: #fff; padding-left: 0;">グループ名刺ダウンロード申請者</td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th>申請者</th>
+                                        <th>部署</th>
+                                        <th>役職</th>
+                                        <th>承認者</th>
+                                        <th>承認・否認</th>
+                                        <th>日付</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="1"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　A夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td>課長</td>
+                                    <td id="st-status-name-1"></td>
+                                    <td id="st-status-1">未承認</td>
+                                    <td>2015年10月5日</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="2"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　B夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td id="st-status-name-2"></td>
+                                    <td id="st-status-2">未承認</td>
+                                    <td>2015年10月5日</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="3"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　C夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td id="st-status-name-3"></td>
+                                    <td id="st-status-3">未承認</td>
+                                    <td>2015年10月5日</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="4"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　D夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td id="st-status-name-4"></td>
+                                    <td id="st-status-4">未承認</td>
+                                    <td>2015年10月5日</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="5"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　E夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td id="st-status-name-5"></td>
+                                    <td id="st-status-5">未承認</td>
+                                    <td>2015年10月5日</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="6"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　F夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td id="st-status-name-6">承認 次郎</td>
+                                    <td id="st-status-6">承認</td>
+                                    <td>2015年10月2日</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks" data-check-id="7"><label class=""> <div class="icheckbox_square-green disabled checked" style="position: relative;"><input type="checkbox" disabled="" checked="" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　G夫</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td id="st-status-name-7">否認 三郎</td>
+                                    <td id="st-status-7">否認</td>
+                                    <td>2015年10月1日</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                                <div style="overflow: hidden; margin: 0 auto; width: 210px;">
+                                <div style="float:right;">
+                                    <button id="ok-02" type="button" class="btn btn-primary" style="display: inline-block; width:100px !important">承認</button>
+                                    <button id="ng-02" type="button" class="btn btn-primary" style="display: inline-block; width:100px !important">否認</button>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+
+                    <!-- END DOWNLOAD PERMISSION -->
+			</div>
+            <!-- BAR BODY -->
+            <!-- <div class="row bg-white box-shadow menu-top menu-top-header">
+                <div class="col-sm-12">
+                        <h4 class="h4-header">System management register cards</h4>
+                </div>
+            </div> -->
+
+        </div>
+        <!-- END RIGHT SIDE -->
+      </div>
+      <!-- END BODY -->
+
+<script src="../js/jquery-2.1.1.js"></script>
+<script src="../js/bootstrap.js"></script>
+
+<script src="../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- iCheck -->
+<script src="../js/plugins/iCheck/icheck.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="../js/plugins/pace/pace.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/plugins/peity/jquery.peity.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/demo/peity-demo.js"></script>
+<script src="../js/jquery.dataTables.min.js"></script>
+<script src="../js/slick.min.js"></script>
+<script src="../js/clockpicker.js"></script>
+<!-- <script src="../js/bootstrap-datetimepicker.min.js"></script> -->
+
+
+<script type="text/javascript">
+function validateForm() {
+   var fileFullPath = $(this).val();
+    abr = fileFullPath.substring(0, url.lastIndexOf('/'))
+    alert(abr);
+}
+
+
+
+$(document).ready(function(){
+  $('.i-checks').iCheck({
+      checkboxClass: 'icheckbox_square-green',
+      radioClass: 'iradio_square-green'
+    });
+
+  $('#carousel').slick({
+    arrows: true,
+    slidesToShow: 4,
+    /*autoplay: true,*/
+    speed: 500,
+    variableWidth: true,
+    onAfterChange: function(){
+          var cat = ($('#carousel').slickCurrentSlide()) + 1;
+          $('.client-text > li').hide();
+          $('.client-text > li:nth-child('+ cat +')').show();
+    }
+  });
+
+   /*var ele = $('#file_upload');
+   $('#input_file').click(function(event) {
+       ele.click();
+       //alert('dsfsdfs');
+   });
+   ele.change(function() {
+   var fileFullPath = $(this).val();
+    alert(fileFullPath);
+
+    var fileFullPath = fileFullPath.substr(0, fileFullPath.lastIndexOf('/'));
+
+    $('#input_file').val(fileFullPath);
+   });*/
+  var abc =  $('input_file');
+  abc.change(function() {
+    var fileFullPath = $(this).val();
+    alert(fileFullPath);
+    /*var fileFullPath = fileFullPath.substr(0, fileFullPath.lastIndexOf('/'));
+    $('#input_file').val(fileFullPath);*/
+  });
+
+  $(document).on('click',"#ok-01",function(){
+    $('#first-table .i-checks').each(function(){
+      if($(this).find('input').prop('disabled') == false) {
+        if($(this).find('input').prop('checked')) {
+          id = $(this).data('check-id');
+          $("#ft-status-"+id).text('承認');
+          $("#ft-status-name-"+id).text('承認 次郎');
+          $(this).find('input').attr('disabled',true);
+          $(this).find('.icheckbox_square-green').addClass('disabled');
+        }
+      }
+    });
+  });
+
+  $(document).on('click',"#ng-01",function(){
+    $('#first-table .i-checks').each(function(){
+      if($(this).find('input').prop('disabled') == false) {
+        if($(this).find('input').prop('checked')) {
+          id = $(this).data('check-id');
+          $("#ft-status-"+id).text('否認');
+          $("#ft-status-name-"+id).text('否認 三郎');
+          $(this).find('input').attr('disabled',true);
+          $(this).find('.icheckbox_square-green').addClass('disabled');
+        }
+      }
+    });
+  });
+
+  $(document).on('click',"#ok-02",function(){
+    $('#second-table .i-checks').each(function(){
+      if($(this).find('input').prop('disabled') == false) {
+        if($(this).find('input').prop('checked')) {
+          id = $(this).data('check-id');
+          $("#st-status-"+id).text('承認');
+          $("#st-status-name-"+id).text('承認 次郎');
+          $(this).find('input').attr('disabled',true);
+          $(this).find('.icheckbox_square-green').addClass('disabled');
+        }
+      }
+    });
+  });
+
+  $(document).on('click',"#ng-02",function(){
+    $('#second-table .i-checks').each(function(){
+      if($(this).find('input').prop('disabled') == false) {
+        if($(this).find('input').prop('checked')) {
+          id = $(this).data('check-id');
+          $("#st-status-"+id).text('否認');
+          $("#st-status-name-"+id).text('否認 三郎');
+          $(this).find('input').attr('disabled',true);
+          $(this).find('.icheckbox_square-green').addClass('disabled');
+        }
+      }
+    });
+  });
+
+});
+
+
+
+
+
+
+
+/*Begin accordion  */
+function toggleChevron(e) {
+    $(e.target)
+        .prev('.panel-heading')
+        .find("i.indicator")
+        .toggleClass('fa-chevron-down fa-chevron-up');
+}
+$('#accordion').on('hidden.bs.collapse', toggleChevron);
+$('#accordion').on('shown.bs.collapse', toggleChevron);
+/*END accordion*/
+
+
+/*begin click backup restore*/
+$( "#backup-restore" ).click(function() {
+     $(".container-progress").css("display", "none");
+     $(".export-csv").css("display", "none");
+    $(".confirm-log").css("display", "none");
+    $(".download-permission").css("display", "none");
+     $("#content-header").text('バックアップ / リストア')
+     $(".backup-restored").css("display", "block");
+});
+
+$('.clockpicker').clockpicker();
+
+/*end click backup restore */
+
+/*begin click confirm log*/
+$( "#confirm_log" ).click(function() {
+    $(".container-progress").css("display", "none");
+    $(".backup-restored").css("display", "none");
+    $(".export-csv").css("display", "none");
+    $(".download-permission").css("display", "none");
+    $(".confirm-log").css("display", "block");
+     $("#content-header").text('ログ確認');
+
+});
+/*end click lick confirm log */
+/*begin click export csv*/
+$("#export-csv" ).click(function() {
+    $(".container-progress").css("display", "none");
+    $(".backup-restored").css("display", "none");
+    $(".confirm-log").css("display", "none");
+    $(".download-permission").css("display", "none");
+    $(".export-csv").css("display", "block");
+     $("#content-header").text('エクスポート');
+
+});
+/*end click export csv */
+/*begin click recognition-download*/
+$("#recognition-download" ).click(function() {
+    $(".container-progress").css("display", "none");
+    $(".backup-restored").css("display", "none");
+    $(".confirm-log").css("display", "none");
+    $(".export-csv").css("display", "none");
+    $(".download-permission").css("display", "block");
+
+     $("#content-header").text('ダウンロード承認');
+
+});
+/*end click recognition-download */
+
+
+
+
+
+</script>
+</body>
+</html>

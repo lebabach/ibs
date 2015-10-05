@@ -1,0 +1,412 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Cards</title>
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="../css/animate.css" rel="stylesheet">
+<link href="../css/style.css" rel="stylesheet">
+<link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="../css/admin-style.css" rel="stylesheet">
+<link href="../css/jquery.dataTables.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+	<div id="header">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top bg-white box-shadow" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary "  href="menu_top.html"><i class="fa fa-navicon"></i> </a>
+                    <!-- <form role="search" class="navbar-form-custom" action="search_results.html">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                        </div>
+                    </form> -->
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a7.jpg">
+                                    </a>
+                                    <div class="media-body">
+                                        <small class="pull-right">46h ago</small>
+                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a4.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right text-navy">5h ago</small>
+                                        <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/profile.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right">23h ago</small>
+                                        <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                        <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="mailbox.html">
+                                        <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="mailbox.html">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="profile.html">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                        <span class="pull-right text-muted small">12 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="grid_options.html">
+                                    <div>
+                                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="notifications.html">
+                                        <strong>See All Alerts</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li>
+                        <a href="../login.html">
+                            <i class="fa fa-sign-out"></i> ログアウト
+                        </a>
+                    </li>
+                </ul>
+                </nav>
+            </div>
+      </div>
+      <!-- END HEADER -->
+
+      <!-- BODY -->
+      <div class="container-fluid padding-top20 bg-container height100per">
+
+        <!-- RIGHT SIDE -->
+        <div id="right-side" class="col-sm-12">
+        	<!-- BAR TOP -->
+            <div class="row bg-white box-shadow menu-top-header">
+            	<div class="col-sm-12">
+                	<div class="float-left">
+                    	<h4 class="h4-header">メール送信</h4>
+                    </div>
+
+                    <div class="float-right float-right-manage">
+                        <button type="button" class="btn btn-primary btn_back_reply">閉じる</button>
+                    </div>
+                </div>
+            </div>
+            <!-- END BAR TOP -->
+            <!-- END BAR TOP -->
+            <div class="row bg-white box-shadow box-marginTop5 padding-top-bottom">
+                <div class="form-group float-right">
+                  <div style="margin: 10px 10px -20px;">
+                    <a href="past_send_mail.html" class="btn btn-primary">過去送信メールを見る</a>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                   <!-- BEGIN FORM -->
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="i-checks">
+                                <label class="">
+                                    <div class="icheckbox_square-green" style="position: relative;">
+                                        <input type="checkbox" style="position: absolute; opacity: 0;">
+                                        <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>
+                                    </div>
+                                    <i></i> 全グループへ送信
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div class="i-checks">
+                                            <label class="">
+                                                <div class="icheckbox_square-green" style="position: relative;">
+                                                    <input type="checkbox" style="position: absolute; opacity: 0;">
+                                                    <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>
+                                                </div>
+                                                <i></i> 会社別送信
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="margin-left: 10px; margin-top: 7px;">
+                                        <select class="form-control m-b" name="account">
+                                            <option>株式会社インテリジェンス</option>
+                                            <option>(株)テンプスタッフ</option>
+                                        </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="col-xs-12">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div class="i-checks" style="margin-top: 5px;">
+                                            <label class="">
+                                                <div class="icheckbox_square-green" style="position: relative;">
+                                                    <input type="checkbox" style="position: absolute; opacity: 0;">
+                                                    <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>
+                                                </div>
+                                                <i></i> 送信者検索
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="margin-left: 10px;">
+                                            <input type="text" placeholder="" class="form-control" style="width: 201px">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="margin-left: 100px">
+                                            <button type="submit" class="btn btn-primary">検索</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+                <!-- DATA TABLE -->
+                <div class="col-sm-12 container table-list-operator">
+                    <div class="row" id="data-table">
+                        <div class="ibox-content  ibox-content-question ibox-custom01">
+                            <table class="table container paging" style="margin-top: -84px; padding: 0;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>名前</th>
+                                        <th>会社名</th>
+                                        <th>部署</th>
+                                        <th>役職</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　A夫</td>
+                                    <td>(株)インテリジェンス</td>
+                                    <td>営業部営業一課　課長</td>
+                                    <td>課長</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　B夫</td>
+                                    <td>(株)テンプスタッフ</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　E夫</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div style="margin-top: -20px; margin-left: 0;">
+                                <button type="submit" class="btn btn-primary" style="width:130px !important">送信リストへ追加</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 container table-list-operator">
+                    <div class="row " id="data-table">
+                        <div class="ibox-content  ibox-content-question ibox-custom01">
+                            <table class="table container paging" style="margin-top: -84px; padding: 0;">
+                                <thead>
+                                    <tr>
+                                        <td colspan="5"  style="background-color: #fff; padding-left: 0;">送信者リスト</td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th>名前</th>
+                                        <th>会社名</th>
+                                        <th>部署</th>
+                                        <th>役職</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　A夫</td>
+                                    <td>(株)インテリジェンス</td>
+                                    <td>営業部営業一課　課長</td>
+                                    <td>課長</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　B夫</td>
+                                    <td>(株)テンプスタッフ</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　E夫</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div style="margin-top: -20px; margin-left: 0;">
+                                <button type="submit" class="btn btn-primary" style="width:150px !important">送信リストから削除</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12" style="margin-top: 30px;">
+                   <!-- BEGIN FORM -->
+                        <div class="col-xs-12">
+                            <table style="width:100%">
+                                <caption>送信内容</caption>
+                                <tr>
+                                    <td>題目</td>
+                                    <td>
+                                        <div style="margin-left: 10px;">
+                                            <input type="text" placeholder="" class="form-control" style="width: 100%">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <div style="margin-top: 10px; margin-left: 10px;">
+                                        <textarea class="form-control" rows="10">BC-RIBBON事務局です。・・・・・・</textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <div style="margin-top: 20px; margin-left: 10px;">
+                                            <button type="submit" class="btn btn-primary" style="width:150px !important">送信</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- BAR BODY -->
+        </div>
+        <!-- END RIGHT SIDE -->
+
+      </div>
+      <!-- END BODY -->
+
+
+
+<script src="../js/jquery-2.1.1.js"></script>
+<script src="../js/bootstrap.js"></script>
+
+<script src="../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- iCheck -->
+<script src="../js/plugins/iCheck/icheck.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="../js/plugins/pace/pace.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/plugins/peity/jquery.peity.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/demo/peity-demo.js"></script>
+<script src="../js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.i-checks').iCheck({
+      checkboxClass: 'icheckbox_square-green',
+      radioClass: 'iradio_square-green'
+
+    });
+    $('.paging').dataTable( {
+        "dom": '<<t>ip>',
+        "ordering": false,
+        "iDisplayLength": 6
+    });
+    $('#paging2').dataTable( {
+        "dom": '<<t>ip>',
+        "ordering": false,
+        "iDisplayLength": 6
+    } );
+});
+</script>
+</body>
+</html>

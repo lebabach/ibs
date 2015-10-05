@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title th:remove="all">こんにちは。BC-RIBBON運営部です</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+	 <p>BC-RIBBON管理者です。</p>
+     <p>BC-RIBBONのID/パスワードをお送りします。</p>
+     <p>以下のリンクからこのメールに記載されているID/パスワードでログインしてください。</p>
+     <p>https://bc-ribbon.temp-holdings.co.jp/</p>
+     <p>ID: <span th:text="${recipientEmail}"></span></p>
+     <p>パスワード：<span th:text="${password}"></span></p>
+     <p>ログイン後、設定画面にてパスワードを変更してください。</p>
+     <p>ログインできない場合はBC-RIBBON管理者までお問い合わせください。</p>
+  </body>
+</html>

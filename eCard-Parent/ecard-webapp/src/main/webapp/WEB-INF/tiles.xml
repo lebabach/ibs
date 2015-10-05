@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+  <definition name="base.definition"  
+         template="/WEB-INF/views/common/teamplate_layout.jsp">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />  
+        <put-attribute name="menu" value="" />  
+        <put-attribute name="body" value="" />  
+    </definition>  
+     <definition name="menutop" extends="base.definition">  
+        <put-attribute name="title" value="Top Menu" />  
+        <put-attribute name="menu" value="/WEB-INF/views/common/menu.jsp" /> 
+        <put-attribute name="body" value="/WEB-INF/views/menutop.jsp" />  
+    </definition> 
+    <definition name="admin/manage_card" extends="base.definition">  
+        <put-attribute name="title" value="Manager Card" />  
+       <!--  <put-attribute name="menu" value="/WEB-INF/views/common/menu.jsp" />  -->
+        <put-attribute name="body" value="/WEB-INF/views/admin/manage_card.jsp" />  
+    </definition>
+    <definition name="home" extends="base.definition">  
+        <put-attribute name="title" value="IBS Admin" />  
+        <put-attribute name="body" value="/WEB-INF/index.jsp" />  
+    </definition>    
+	<definition name="operatorlist" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/operator/list_operator.jsp" />  
+    </definition>
+    <definition name="operatoredit" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/operator/edit_operator.jsp" />  
+    </definition>
+    <definition name="editSuccess" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/operator/edit_operator_success.jsp" />  
+     </definition>
+    <definition name="operatorregister" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/operator/register_operator.jsp" />  
+    </definition>
+        <definition name="operatorconfirm" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/operator/confirm_operator.jsp" />  
+    </definition>
+    <!-- team administration -->
+    <definition name="teamlist" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/team/teamlist.jsp" />  
+    </definition>
+    <definition name="teamdisplay" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/team/team_detail.jsp" />  
+    </definition>
+    <definition name="teamedit" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/team/teamedit.jsp" />  
+    </definition>
+    <definition name="teamregister" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/team/teamregister.jsp" />  
+    </definition>
+    <definition name="team_allocation" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/team/allocation_card_list.jsp" />  
+    </definition>
+    <definition name="add-team-member" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/team/add_team_member.jsp" />  
+    </definition>
+    
+    <!-- card administration -->
+    <definition name="cardmanage" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/card/manage_card.jsp" />  
+    </definition>
+    <definition name="cardconfirm" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/card/confirm_card.jsp" />  
+    </definition>
+    <definition name="scancard" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/card/scan_card.jsp" />  
+    </definition>
+    <definition name="cardedit" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/card/edit_card.jsp" />  
+    </definition>
+    <definition name="cardeditsuccess" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/card/edit_card_success.jsp" />  
+    </definition>
+    <definition name="cardeditwaitsubmit" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/card/wait_submit_card.jsp" />  
+    </definition>
+    <definition name="companylist" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/company/companylist.jsp" />  
+    </definition>
+    <definition name="addcompany" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/company/addcompany.jsp" />  
+    </definition>
+      <definition name="confirmcompany" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/company/confirmcompany.jsp" />  
+    </definition>
+
+     <definition name="editcompany" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/company/editcompany.jsp" />  
+    </definition>
+    
+
+    <definition name="add_department" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/company/add_department.jsp" />  
+    </definition>
+
+    <definition name="downloadlist" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/download/downloadlist.jsp" />  
+    </definition>
+    
+    <definition name="importUserByCSV" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/data/importUserByCSV.jsp" />  
+    </definition>
+    
+    <definition name="importOperatorByCSV" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/data/importOperatorByCSV.jsp" />  
+    </definition>
+    
+    <!-- forgot password-->
+     <definition name="ibsaccount" extends="base.definition">
+        <put-attribute name="header" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/ibs_account.jsp" />  
+    </definition>
+    
+    <!-- list log --> 
+    <definition name="listlog" extends="base.definition"> 
+        <put-attribute name="body" value="/WEB-INF/views/log/listlog.jsp" />  
+    </definition>
+    
+    <!-- PC Screen -->
+    <definition name="base.pc.definition"  
+         template="/WEB-INF/views/common/teamplate_layout_pc.jsp">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="header" value="/WEB-INF/views/common/headerPC.jsp" />  
+        <put-attribute name="menu" value="" />  
+        <put-attribute name="body" value="" />
+        <put-attribute name="footer" value="" />  
+    </definition>
+    
+    <definition name="homePC" extends="base.pc.definition">   	
+        <put-attribute name="title" value="IBS PC" />
+        <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/user/homePC.jsp" />  
+    </definition>
+    
+    <definition name="download" extends="base.pc.definition">   	
+        <put-attribute name="title" value="IBS PC" />  
+        <put-attribute name="body" value="/WEB-INF/views/user/download.jsp" />  
+    </definition>
+    
+    
+    <!-- backup --> 
+    <definition name="backup" extends="base.definition"> 
+        <put-attribute name="body" value="/WEB-INF/views/backup/backupdata.jsp" />  
+    </definition>
+    
+    <!-- contact --> 
+    <definition name="contact" extends="base.definition"> 
+        <put-attribute name="body" value="/WEB-INF/views/contact/listcontact.jsp" />  
+    </definition>
+    <definition name="reply" extends="base.definition"> 
+        <put-attribute name="body" value="/WEB-INF/views/contact/replymail.jsp" />  
+    </definition>
+    <definition name="displaySendNotification" extends="base.definition"> 
+        <put-attribute name="body" value="/WEB-INF/views/contact/sendmail.jsp" />  
+    </definition>
+    
+     <!-- mail --> 
+    <definition name="displayMail" extends="base.definition"> 
+        <put-attribute name="body" value="/WEB-INF/views/mail/sendmail.jsp" />  
+    </definition>
+    <definition name="displayPastMail" extends="base.definition"> 
+        <put-attribute name="body" value="/WEB-INF/views/mail/pastsendmail.jsp" />  
+    </definition>
+    
+    <definition name="viewImportCSV" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/data/viewImportCardCSV.jsp" />  
+    </definition> 
+</tiles-definitions>

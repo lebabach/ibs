@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta content="" name="copyright">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="ja" http-equiv="Content-Language">
+    <meta content="text/css" http-equiv="Content-Style-Type">
+    <meta content="text/javascript" http-equiv="Content-Script-Type">
+    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>IBS</title>
+    
+    <style>
+	@charset "utf-8";
+
+	html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption, tbody, tfoot, thead {border: 0;font-family: inherit;font-size: 100%;font-style: inherit;font-weight: inherit;margin: 0;outline: 0;padding: 0;}
+	:focus {outline: 0;}
+	
+	ol, ul {list-style: none;}
+	caption{font-weight: normal;text-align: left;}
+	blockquote:before, blockquote:after,q:before, q:after {content: "";}
+	blockquote, q {quotes: "" "";}
+	
+	a img {border: 0;}
+	article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {display: block;}
+	
+	
+	a{ text-decoration:none;}
+	body {
+    color: #666;
+    font-size: 14px;
+	
+	}
+	#header {
+		border-bottom:5px solid #e7e7e7;
+		width:100%;
+		height:auto;
+		display:inline-block;
+		margin:0 auto;
+		padding:7px 0;
+		text-align:center;
+		height:auto;
+	}
+	h1 {
+		width:800px;
+		height:auto;
+		margin: 0 auto;
+		display:block;
+		text-align:left;
+	}
+	h1 a{
+		color:#000;
+		font-size:30px;
+		font-weight:bold;
+		
+		}
+	#content {
+		background:#f4f4f4;
+		width:100%;
+		height:auto;
+		display:inline-block;
+		margin:0 auto;
+		padding:0;
+		text-align:center;
+		height:auto;
+	}
+	#inner {
+		width:800px;
+		height:auto;
+		margin: 10px auto;
+		display:block;
+		text-align:left;
+	}	
+	.box-1{
+		
+		width:100%;
+		display:inline-block;
+		background:#fff;
+		}
+	.title-box-1{
+		border-bottom: 1px solid #b1b1b1;
+		background: linear-gradient(#f4f4f4, #e6e6e6);
+		background: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#e6e6e6));
+		background: -moz-linear-gradient(top, #f4f4f4, #e6e6e6);
+		-ms-filter: "progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#f4f4f4, EndColorStr=#e6e6e6)";
+		filter: progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#f4f4f4, EndColorStr=#e6e6e6);
+		box-shadow: 0 1px 1px #fff inset;
+		padding: 8px 30px 4px 30px;
+		text-align: left;
+		border: 1px solid #b1b1b1;
+		border-radius: 4px 4px 0 0;
+		-webkit-border-radius: 4px 4px 0 0;
+		-moz-border-radius: 4px 4px 0 0;
+		font-weight: bold;
+		}	
+	.content-box-1{
+		 background-color: #fff;
+		padding: 20px 30px 20px 30px;
+		border-left: 1px solid #b1b1b1;
+		border-right: 1px solid #b1b1b1;
+		border-bottom: 1px solid #b1b1b1;
+		border-radius: 0 0 4px 4px;
+		-webkit-border-radius: 0 0 4px 4px;
+		-moz-border-radius: 0 0 4px 4px;
+		text-align:center;
+		
+		}	
+	.p-box-1{
+		font-size:14px;
+		text-align:left;
+		margin-top:10px;
+		margin-bottom:20px;
+		}	
+	.box-1-form{
+		width:500px;
+		margin:20px auto 60px auto;
+		text-align:center;
+		display:inline-block;
+		}	
+	.input-1{
+		float:left;
+		border: 1px solid #b1b1b1;
+		border-radius: 4px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		padding: 10px 9px 8px 9px;
+		background-color: #f2f2f2;
+		box-shadow: 0 3px 4px #ccc inset;
+		width:405px;
+		margin-right:10px;
+		color:#666666;
+		font-weight:bold;
+		font-size:14px;
+	}
+	.submit-1{
+		cursor: pointer;
+		font-size: 1.4em;
+		float:left;
+		padding: 10px 12px 8px 12px;
+		border: 1px solid #12476a;
+		border-radius: 3px;
+		background: linear-gradient(#307cae, #27648d);
+		background: -webkit-gradient(linear, left top, left bottom, from(#307cae), to(#27648d));
+		background: -moz-linear-gradient(top, #307cae, #27648d);
+		background-color: #307caf;
+		color: #ffffff !important;
+		vertical-align: middle;
+		text-shadow: 0 -1px 2px #000;
+		box-shadow: 1px 1px 0 #649dc2 inset;
+		white-space: nowrap;
+		-ms-filter: "progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#307cae, EndColorStr=#27648d)";
+		filter: progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#307cae, EndColorStr=#27648d);
+		font-size:14px;
+		width:auto;
+		}
+	.box-2{
+	
+		width:100%;
+		display:inline-block;
+		background:#fff;
+		
+		}
+	.title-box-2{
+		    background-color: #cecece;
+			padding: 8px 30px 4px 30px;
+			text-align: center;
+			border: 1px solid #b1b1b1;
+			border-radius: 4px 4px 0 0;
+			-webkit-border-radius: 4px 4px 0 0;
+			-moz-border-radius: 4px 4px 0 0;
+			font-weight: bold;
+		}	
+	.title-box-2 span{
+		background:url(img/ico_info.png) no-repeat left center;
+		padding-left:30px;
+		height:25px;
+		width:auto;
+		display:inline-block;
+		color:#666666;
+		
+		}	
+	.content-box-2{
+		    background-color: #fafafa;
+			padding: 20px 30px 20px 30px;
+			border-left: 1px solid #b1b1b1;
+			border-right: 1px solid #b1b1b1;
+			border-bottom: 1px solid #b1b1b1;
+			border-radius: 0 0 4px 4px;
+			-webkit-border-radius: 0 0 4px 4px;
+			-moz-border-radius: 0 0 4px 4px;
+		}	
+	.p-box-2{
+		margin:0px 0 20px 0;
+		width:auto;
+		display:block;
+		text-align:left;
+		}	
+	@media screen and (max-width: 799px) {
+		h1 {
+			width: auto;
+			text-align: center;
+		}
+		#inner {
+			width: auto;
+			margin:10px 1%;
+		}
+		.content-box-1,
+		.content-box-2{
+			padding:20px;
+			}
+		.box-1-form {
+			width: auto;
+			margin: 20px auto 60px auto;
+			text-align: center;
+			display: block;
+		}
+		.input-1{
+			float:none;
+			width:100%;
+			display:inline-block;
+			margin:0;
+			padding:10px 0 8px 0;
+			text-indent:10px;
+			}
+		.submit-1{
+			float:right;
+			margin-top:10px;
+			}	
+	}
+	</style>
+  </head>
+  <body>
+  		
+      <div id="header">
+            <h1><a href="/">IBS</a></h1>
+      </div>
+      <div id="content">
+           <div id="inner">
+           		<div class="box-1">
+                	<div class="title-box-1">
+                    	ログインメールアドレスまたはユーザーIDをお忘れの場合
+                    </div>
+                    <div class="content-box-1">
+                        <p class="p-box-1">ユーザーIDをお忘れの場合、またはどのメールアドレスがログインに使えるのか分からない場合は、こちらからご確認いただけます。</p>
+                        <p class="p-box-1">IBSに登録したメールアドレスを入力してください。<br>ユーザーIDまたはログインに使うメールアドレスをメールでお知らせします。</p>
+                        <form class="box-1-form">
+                        	<input type="text" class="input-1" placeholder="メールアドレス" >
+                            <input type="submit" class="submit-1" value="送 信">
+                        </form>
+                        
+                        <div class="box-2">
+                            <div class="title-box-2">
+                                <span>IBSに登録したメールアドレスとは？</span>
+                            </div>
+                            <div class="content-box-2">
+                                <p class="p-box-2">下記のメールアドレスで確認できます。
+                                <br>　・ログインに使うメールアドレス
+                                <br>　・IBSからの連絡が届いているメールアドレス
+                                <br>　・プロフィールとして登録した名刺に記載のメールアドレス (認証している必要があります)</p>
+                                <p class="p-box-2">複数のアカウントをお持ちの場合、意図したアカウントとは別のアカウントの情報を通知してしまうことがあります。
+<br>意図したアカウントの情報を確認できない時は、会社のメールアドレス、個人のアドレス、携帯端末のアドレスなど、お使いのメールアドレスをすべてご確認ください。</p>
+                            </div>    
+                        </div>
+                        
+                    </div>    
+                </div>
+           </div>
+      </div>     
+    
+  </body>
+</html>

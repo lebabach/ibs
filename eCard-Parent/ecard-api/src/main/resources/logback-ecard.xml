@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration debug="true">
+
+  <appender name="errorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <file>${catalina.base}/logs/ecard_error.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${catalina.base}/logs/ecard_error.log.%d.gz</fileNamePattern>
+      <!-- keep 5 days' worth of history -->
+      <maxHistory>5</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{ISO8601} %-5p [%t] [%F:%L] %m%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="debugLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>DEBUG</level>
+    </filter>
+    <file>${catalina.base}/logs/ecard_debug.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${catalina.base}/logs/ecard_debug.log.%d.gz</fileNamePattern>
+      <!-- keep 5 days' worth of history -->
+      <maxHistory>5</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <!-- use "[%C]" to see full class name -->
+      <pattern>%d{ISO8601} %-5p [%t] [%F:%L] %m%n</pattern>
+    </encoder>
+  </appender>
+ <!--
+  <appender name="dbLog" class="ch.qos.logback.classic.db.DBAppender">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>INFO</level>
+    </filter>
+    <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+      <driverClass>com.mysql.jdbc.Driver</driverClass>
+      <url>jdbc:mysql://localhost:3306/new_ecard</url>
+      <user>ecard</user>
+      <password>qraHJ3XcN58HDBn5</password>
+    </connectionSource>
+    <encoder>
+      <pattern>%d{ISO8601} %-5p [%t] [%F:%L] %m%n</pattern>
+    </encoder>
+  </appender>
+  -->
+
+  <logger name="org.quartz">
+    <level value="info" />
+  </logger>
+
+  <logger name="org.springframework">
+    <level value="info" />
+  </logger>
+
+  <logger name="org.springframework.jdbc">
+    <level value="info"/>
+  </logger>
+
+  <logger name="org.springframework.transaction.jta">
+    <level value="error" />
+  </logger>
+
+  <logger name="org.springframework.ws">
+    <level value="warn" />
+  </logger>
+
+  <logger name="org.springframework.integration">
+    <level value="warn" />
+  </logger>
+
+  <logger name="org.hibernate">
+    <level value="warn" />
+  </logger>
+
+  <logger name="org.apache.mina">
+    <level value="warn" />
+  </logger>
+
+  <logger name="org.apache.activemq">
+    <level value="info" />
+  </logger>
+
+  <logger name="com.mchange">
+    <level value="warn" />
+  </logger>
+
+  <logger name="atomikos">
+    <level value="error" />
+  </logger>
+
+  <logger name="org.apache.commons.httpclient">
+    <level value="error" />
+  </logger>
+
+  <logger name="httpclient.wire">
+    <level value="info" />
+  </logger>
+
+  <logger name="httpclient.wire.header">
+    <level value="info" />
+  </logger>
+
+  <logger name="httpclient.wire.content">
+    <level value="info" />
+  </logger>
+
+  <logger name="com.ecard.api">
+    <level value="info" />
+    <appender-ref ref="dbLog" />
+  </logger>
+
+  <root level="debug">
+    <appender-ref ref="errorLog" />
+    <appender-ref ref="debugLog" />
+  </root>
+
+
+</configuration>

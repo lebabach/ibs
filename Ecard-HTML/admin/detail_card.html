@@ -1,0 +1,850 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Cards</title>
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="../css/animate.css" rel="stylesheet">
+<link href="../css/style.css" rel="stylesheet">
+<link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="../css/admin-style.css" rel="stylesheet">
+<link href="../css/jquery.dataTables.css" rel="stylesheet">
+
+<style>
+.form-control, .single-line {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #e5e6e7;
+    border-radius: 1px;
+    color: inherit;
+    display: block;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 400px;
+    font-size: 14px;
+}
+.col-sm-12 span{
+ color: red;
+}
+.mesage_error{
+ color:red;
+ display:none;
+}
+.ch-color-link .ch-address{
+background-color: blue;
+}
+.container-collectname {
+    width: 100% !important;
+}
+.float-right-button{
+	float:right;
+	margin-left:5px !important
+}
+.round-loupe{
+   border-radius: 75px;
+   border: 5px solid #F0F0F0;
+}
+</style>
+<script src="../js/jquery-2.1.1.js"></script>
+<script src="../js/bootstrap.js"></script>
+
+<script src="../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- iCheck -->
+<script src="../js/plugins/iCheck/icheck.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="../js/plugins/pace/pace.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/plugins/peity/jquery.peity.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/demo/peity-demo.js"></script>
+<script src="../js/jquery.dataTables.min.js"></script>
+<script src="../js/custom-datatable.js"></script>
+<script src="../js/zoomsl-3.0.js"></script>
+<script src="../js/jQueryRotate.js"></script>
+</head>
+
+<body>
+
+	<div id="header">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top bg-white box-shadow" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary "  href="manage_card.html"><i class="fa fa-navicon"></i> </a>
+                    <!-- <form role="search" class="navbar-form-custom" action="search_results.html">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                        </div>
+                    </form> -->
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a7.jpg">
+                                    </a>
+                                    <div class="media-body">
+                                        <small class="pull-right">46h ago</small>
+                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a4.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right text-navy">5h ago</small>
+                                        <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/profile.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right">23h ago</small>
+                                        <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                        <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="mailbox.html">
+                                        <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="mailbox.html">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="profile.html">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                        <span class="pull-right text-muted small">12 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="grid_options.html">
+                                    <div>
+                                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="notifications.html">
+                                        <strong>See All Alerts</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li>
+                        <a href="../login.html">
+                            <i class="fa fa-sign-out"></i> ログアウト
+                        </a>
+                    </li>
+                </ul>
+                </nav>
+            </div>
+      </div>
+      <!-- END HEADER -->
+
+      <!-- BODY -->
+      <div class="container-fluid padding-top20 bg-container height100per">
+
+          <div style="position: relative;">
+
+
+
+<script type="text/javascript">
+function checkValidationForm(){
+	   var checkValidation=true;
+	   var firstname = $("#fistname").val();
+ 	   var lastname = $("#lastname").val();
+ 		var firstnamekana = $("#firstnamekana").val();
+ 		var lastnamekana = $("#lastnamekana").val();
+ 		var telcompany = $("#telcompany").val();
+ 		var teldepartment = $("#teldepartment").val();
+		var teldirect = $("#teldirect").val();
+		var mobilenumber = $("#mobilenumber").val();
+ 		var email = $("#email").val();
+ 		var companyname = $("#companyname").val();
+ 		var departmentname = $("#departmentname").val();
+ 		var address1 = $("#address1").val();
+ 	    var address2 = $("#address2").val();
+ 	    var address3 = $("#address3").val();
+ 	   var address4 = $("#address4").val();
+ 	    var zipcode = $('#zipcode').val();
+	if(firstname == ""){
+		$(".error_firstname").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	if( lastname == ""){
+		$(".error_lastname").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		$(".mesage_error").css("display","block");
+	}
+	if( firstnamekana == "") {
+		$(".error_fistnamekana").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	if( lastnamekana == ""){
+		$(".error_lastnamekana").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	if( telcompany == ""){
+		$(".error_telcompany").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	if (teldepartment == ""){
+		$(".error_teldepartment").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	if ( teldirect == ""){
+		$(".error_telnumberdirect").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	} if ( mobilenumber == ""){
+		$(".error_mobilenumber").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	if ( email == ""){
+		$(".error_email").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	if ( companyname == ""){
+		$(".error_companyname").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	if ( departmentname == ""){
+		$(".error_departmentName").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+   if ( address1 == ""){
+
+		$(".error_address1").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	 if ( address2 == ""){
+
+		$(".error_address2").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	if ( address3 == ""){
+		$(".error_address3").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	if(zipcode == ""){
+		$(".error_zipcode").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	if(address4 == ""){
+		$(".error_address4").text("未記入で承認申請した場合はエラー");
+		checkValidation = false;
+		 $(".mesage_error").css("display","block");
+	}
+	return checkValidation;
+}
+function resetValidationForm(){
+	$(".error_firstname").text("");
+	$(".error_lastname").text("");
+	$(".error_fistnamekana").text("");
+	$(".error_lastnamekana").text("");
+	$(".error_telcompany").text("");
+	$(".error_teldepartment").text("");
+	$(".error_telnumberdirect").text("");
+	$(".error_mobilenumber").text("");
+	$(".error_email").text("");
+	$(".error_companyname").text("");
+	$(".error_departmentName").text("");
+	$(".error_address1").text("");
+	$(".error_address2").text("");
+	$(".error_address3").text("");
+	$(".error_address4").text("");
+	$(".error_zipcode").text("");
+}
+$(document).ready(function(){
+	var ENUM_APPROVAL = 1;
+	var ENUM_TEMP = 3;
+	var ENUM_TEMP_SAVE = 4;
+	 $("#rote-image").val(0);
+
+	$('#tempSave').on('click', function(){
+			resetValidationForm();
+			if(!checkValidationForm()){
+				return false;
+			}
+		    $("#cardInforEditSubmitForm").attr("action", "/ecard-webapp/cards/editDirect");
+			$('input[name=approvalStatus]', '#cardInforEditSubmitForm').val(ENUM_TEMP);
+			$('#cardInforEditSubmitForm').submit();
+
+	});
+	$('#saveTempStatus4').on('click', function(){
+		resetValidationForm();
+		if(!checkValidationForm()){
+			return false;
+		}
+		    //$("#cardInforEditSubmitForm").attr("action", "/ecard-webapp/cards/editDirect");
+			$('input[name=approvalStatus]', '#cardInforEditSubmitForm').val(ENUM_TEMP_SAVE);
+			$('#cardInforEditSubmitForm').submit();
+
+
+   });
+  $('#moveFix').on('click', function(){
+	   resetValidationForm();
+		/* if(!checkValidationForm()){
+			return false;
+		}  */
+		$("#cardInforEditSubmitForm").attr("action", "/ecard-webapp/cards/editStatus");
+	    $('input[name=approvalStatus]', '#cardInforEditSubmitForm').val(ENUM_TEMP);
+	    $('#cardInforEditSubmitForm').submit();
+
+   });
+	$('#approvalSave').on('click', function(){
+		resetValidationForm();
+		if(!checkValidationForm()){
+			return false;
+		}
+		var cardOwnerId = $("input[name=ownerId]").val();
+		var cardId = $("input[name=cardId]").val();
+		var msg = "Approval new card";
+		var type = 4;
+		$.ajax({
+			type: 'POST',
+			url: '/ecard-webapp/notification/push',
+			data: 'cardOwnerId='+ cardOwnerId+'&msg='+ msg+'&cardId=' +cardId+'&type='+type
+		}).done(function(resp, status, xhr) {
+			$("#cardInforEditSubmitForm").attr("action", "/ecard-webapp/cards/editDirect");
+		    $('input[name=approvalStatus]', '#cardInforEditSubmitForm').val(ENUM_APPROVAL);
+			$('#cardInforEditSubmitForm').submit();
+		}).fail(function(xhr, status, err) {
+			alert('Error');
+		});
+
+	});
+	$('#backToManage').on('click', function(){
+		document.location.href='/ecard-webapp/cards/list';
+	});
+
+	//get address code
+	$(".btn_address" ).click(function() {
+		var zipcodeString = $('#zipcode').val();
+		console.log(zipcodeString.indexOf('-'));
+		if (zipcodeString.indexOf('-') > 1) {
+			$(".error_zipcode").text("正しい郵便番号(ハイフンなし)のフォーマットを入力してください");
+			$(".mesage_error").css("display","block");
+			return false;
+		}
+
+		if(zipcodeString != ''){
+			$.ajax({
+				type: 'POST',
+				url: '/ecard-webapp/cards/zipCodeSearch',
+				data: 'zipCode='+zipcodeString,
+			}).done(function(resp, status, xhr) {
+				if(resp != ''){
+					$(".mesage_error").css("display","none");
+					$(".error_zipcode").text("");
+					if(resp.length > 0){
+						for (i = 0; i < resp.length; ++i) {
+						    $('#address'+(i+1)).val(resp[i]);
+						}
+					}
+				}else{
+					$(".error_zipcode").text("正しい郵便番号(ハイフンなし)のフォーマットを入力してください");
+					$(".mesage_error").css("display","block");
+				}
+			}).fail(function(xhr, status, err) {
+				$(".error_zipcode").text("正しい郵便番号(ハイフンなし)のフォーマットを入力してください");
+				$(".mesage_error").css("display","block");
+			});
+		}
+	});
+
+	function centerModal() {
+        $(this).css('display', 'block');
+        var $dialog = $(this).find(".modal-dialog");
+        var offset = ($(window).height() - $dialog.height()) / 2;
+        // Center modal vertically in window
+        var path_image = $(".img-icon-rotated").attr('src');
+        $("#img-icon-rotated").attr("src", path_image);
+        $dialog.css("margin-top", offset);
+    }
+
+    $('.modal').on('show.bs.modal', centerModal);
+    $(window).on("resize", function () {
+        $('.modal:visible').each(centerModal);
+    });
+
+  //bach.le reset rotation
+    function resetRotationOfImages(){
+ 	   value =0;
+        $("#rote-image").val(0);
+    }
+    function getRoteImage(roteOfImage){
+ 	 var rote=0;
+   	 if($.isNumeric(roteOfImage)){
+   		 rote=parseInt(roteOfImage)
+   	 } else{
+   		rote=0;
+   	 }
+   	 return rote;
+    }
+
+    /*rotate  image  */
+
+     var value = 0
+     $('.btn_rotate_180').click(function(){
+     	 value +=180;
+     	 var rote=getRoteImage($("#rote-image").val());
+
+          $("#rote-image").val(rote+180);
+          $(".img-100").rotate({
+				animateTo:value
+		  });
+      });
+
+    /*rotate left 90*/
+     $('.btn_rotate_left_90').click(function(){
+     	 //var value = 0
+     	value -=90;
+     	var rote=getRoteImage($("#rote-image").val());
+         $("#rote-image").val(rote+270);
+         $(".img-100").rotate({
+				animateTo:value
+		  });
+      });
+     /*rotate rightt  90*/
+     $('.btn_rotate_right_90').click(function(){
+     	 //var value = 0
+     	value +=90;
+     	var rote=getRoteImage($("#rote-image").val());
+     	$("#rote-image").val(rote+90);
+     	 $(".img-100").rotate({
+				animateTo:value
+		  });
+
+      });
+});
+
+
+
+</script>
+<style>
+.col-sm-12 span{
+ color: red;
+}
+.mesage_error{
+ color:red;
+ display:none;
+}
+.ch-color-link .ch-address{
+background-color: blue;
+}
+.container-collectname {
+    width: 100% !important;
+}
+</style>
+<!-- BODY -->
+<div class="bg-detail">
+  <!-- BODY -->
+  <form id="cardInforEditSubmitForm" class="padding-top20 bg-container height100per container-collectname" method="POST" action="/ecard-webapp/cards/edit/3321" accept-charset="UFT-8">
+	<input type="hidden" name="cardId" value="3321">
+	<input type="hidden" name="ownerId" value="0">
+	<input type="hidden" name="approvalStatus" value="1">
+	<input type="hidden" name="cardBackImgFile" value="card_04.jpg">
+	<!-- CENTER SIDE -->
+	<div id="center-side" class="col-sm-12 ch-title">
+            <div class="row">
+                <div class="col-sm-6"> 名刺情報</div>
+                <div class="col-sm-6 ch-color-link">
+						 <a href="manage_card.html" class="ch-edit float-right-button">戻る</a>
+						 <a href="manage_card.html" class="ch-edit float-right-button">一時保存</a>
+						 <a href="manage_card.html" class="ch-edit float-right-button">承認申請</a>
+						 <a href="manage_card.html" class="ch-edit float-right-button">修正依頼</a>
+						 <a href="card_wait_submit.html" class="ch-edit float-right-button">承認</a>
+
+                </div>
+            </div>
+        </div>
+	<div id="center-side" class="col-sm-12">
+		<div class="row bg-white box-shadow">
+
+			<div class="col-sm-12" id="ct1">
+
+
+				<div class="float-left" style="width: 35%;">
+					<div style="margin-left: 10px;margin-top: 10px;">
+						<!-- <input class="btn btn-default btn_rotate_180" type="button" value="180°回転" style="color: #666666; width:100px">
+			             <input class="btn btn-default btn_rotate_left_90" type="button" value="左に90°回転" style="color: #666666; width:100px"> -->
+			             <input class="btn btn-default btn_rotate_right_90" type="button" value="右に90°回転" style="color: #666666; width:100px">
+					</div>
+					<h4 class="h4-header"><a href="#">
+					    <div style="position:fixed; width:33%;">
+					       <img src="../img/name_card_big.jpg"class="img-100 img-full img-icon-rotated">
+					    </div>
+					 </a></h4>
+					<input type="hidden" name="imageFile" value="../img/name_card_big.jpg">
+					<input type="hidden" name="rote" id="rote-image" value="0">
+					<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" style="width:1024px">
+                            <div class="modal-content">
+                                <div class="modal-body">
+
+
+                                    <span><img src="http://52.69.91.93/ecard-webapp/assets/img/cbox-close.png" class="img-icon-close" data-dismiss="modal"></span>
+
+                                    <img src="" class="img-responsive" id="img-icon-rotated">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+				</div>
+
+				<!-- <div class="float-right flr-400" style="width: 60%;"> -->
+					<div class="row box-shadow bg-white float-right flr-400" style="width: 60%;">
+					    <div class="col-sm-12 right-side-top ">
+						</div>
+						<div class="row" id="content-detail-card" style="width:100%;">
+
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>氏名</h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <h4 class=""></h4>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>氏名（姓） <span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="lastName" type="text" value="小×" class="form-control" id="lastname" placeholder="">
+								   <p class="mesage_error error_lastname"></p>
+
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>氏名（名）<span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="firstName" type="text" value="紀×" class="form-control" id="fistname" placeholder="">
+								   <p class="mesage_error error_firstname"></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>氏名（姓）カナ <span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								  <input name="lastNameKana" type="text" value="コ××" class="form-control" id="lastnamekana" placeholder="">
+								  <p class="mesage_error error_lastnamekana"></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>氏名（名）カナ <span> * </span> </h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="firstNameKana" type="text" value="1" class="form-control" id="firstnamekana" placeholder="">
+								   <p class="mesage_error error_fistnamekana"></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>連絡先</h4>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>電話番号 1<span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="telNumberCompany" type="text" value="03-3233-3621" class="form-control" id="telcompany" placeholder="">
+								   <p class="mesage_error error_telcompany"></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>電話番号 2<span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="telNumberDepartment" type="text" value="2" class="form-control" id="teldepartment" placeholder="">
+								   <p class="mesage_error error_teldepartment"></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>電話番号(直通) <span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="telNumberDirect" type="text" value="3" class="form-control" id="teldirect" placeholder="">
+								   <p class="mesage_error error_telnumberdirect"></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>携帯電話番号 <span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="mobileNumber" type="text" value="4" class="form-control" id="mobilenumber" placeholder="">
+								   <p class="mesage_error error_mobilenumber "></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>FAX番号</h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="faxNumber" type="text" value="03-3233-3624" class="form-control" id="exampleInputName2" placeholder="">
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>メールアドレス <span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								  <input name="email" type="email" value="koyxxx@asai-ichikawa.co.jp" class="form-control" id="email" placeholder="">
+								  <p class="mesage_error error_email"></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>会社名<span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								  <input name="companyName" type="text" value="株式会社浅井市川海損精算所" class="form-control" id="companyname" placeholder="">
+								  <p class="mesage_error error_companyname"></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>会社名カナ <span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="companyNameKana" type="text" value="アサイイチカワカイソンセイサンショ" class="form-control" id="exampleInputName2" placeholder="">
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>部署名<span></span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								  <input name="departmentName" type="text" value="貨物損害部" class="form-control" id="departmentname" placeholder="">
+								  <p class="mesage_error error_departmentName"></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>役職名</h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="positionName" type="text" value="" class="form-control" id="exampleInputName2" placeholder="">
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>会社URL</h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="companyUrl" type="text" value="" class="form-control" id="exampleInputName2" placeholder="">
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>郵便番号<span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content  ch-color-link">
+								   <div class=" inline block-inline" style="position: relative;margin: 0 auto; width: auto;">
+								   <input name="subZipCode" type="text" value="321312" class="form-control" id="zipcode" placeholder="">
+								   <a style="position: absolute;left: 198px;top: 0px;width: 150px;height: 32px;" class="ch-address btn_address">郵便番号から住所を入力</a>
+								  </div>
+								   <p class="mesage_error error_zipcode"></p>
+								</div>
+							</div>
+
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>住所（都道府県）<span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="address1" type="text" value="東京都" class="form-control" id="address1" placeholder="">
+								   <p class="mesage_error error_address1"></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>住所（市区町村）<span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="address2" type="text" value="千代田区" class="form-control" id="address2" placeholder="">
+								   <p class="mesage_error error_address2"></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>住所（番地） <span> * </span></h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="address3" type="text" value="神田錦町2-5-16" class="form-control" id="address3" placeholder="">
+								   <p class="mesage_error error_address3"></p>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>住所（マンション・建物名等）</h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="address4" type="text" value="名古路ビル新館4階" class="form-control" id="address4" placeholder="">
+								   <p class="mesage_error error_address4"></p>
+								</div>
+							</div>
+
+
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>備考１</h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="memo1" type="text" value="" class="form-control" id="exampleInputName2" placeholder="">
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="float-left">
+								   <h4>備考２</h4>
+								</div>
+								<div class="float-right float-right-content">
+								   <input name="memo2" type="text" value="" class="form-control" id="exampleInputName2" placeholder="">
+								</div>
+							</div>
+						</div>
+
+					</div>
+			   <!--  </div> -->
+			</div>
+
+		</div>
+	</div></form> <!-- END CENTER SIDE  -->
+	<!-- END RIGHT SIDE -->
+
+</div>
+<!-- END BODY -->
+<style>
+.float-right-button{
+	float:right;
+	margin-left:5px !important
+}
+</style>
+
+          </div>
+       </div>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	 $('#paging').dataTable( {
+
+        "dom": '<<t>p><"clear">',
+        "ordering": false,
+        "iDisplayLength": 5
+
+    } );
+     var page = $('#left-side div#paging_paginate.dataTables_paginate.paging_simple_numbers .paginate_button').size();
+    if (page >= 8){
+        $("#left-side div#paging_paginate.dataTables_paginate.paging_simple_numbers").css("padding-left", "5px");
+    }else{
+       $("#left-side div#paging_paginate.dataTables_paginate.paging_simple_numbers").css("padding-left", "25%");
+    }
+
+	 $(".img-100").imagezoomsl({
+
+         zoomrange: [1, 12],
+         zoomstart: 4,
+         innerzoom: true,
+         magnifierborder: "none"
+      });
+
+});
+var message = $('#message');
+var tr = $('.table_edit_card').find('tr');
+ tr.bind('click', function(event) {
+        var values = '';
+        tr.removeClass('row-highlight');
+        var tds = $(this).addClass('row-highlight').find('td');
+        $.each(tds, function(index, item) {
+               //alert(item.img);
+            values = values + item.innerHTML
+        });
+        $('#center-side .h4-header').html(values);
+        //when click tr then biding data in here
+        //$("#content-detail-card").css("display", "block");;
+        //alert(values);
+ });
+
+ // go to page edit
+ $(".btn-edit").click(function(){
+        window.location.href = "edit_card.html";
+});
+
+</script>
+
+</body>
+</html>

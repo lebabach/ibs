@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ログイン</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/my-style.css" rel="stylesheet">
+    <link href="css/admin-style.css" rel="stylesheet">
+
+    <!-- <link href="css/table_table.css" rel="stylesheet"> -->
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+
+      <div id="header">
+    <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <ul class="nav navbar-top-links navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                    <i class="fa fa-flag"></i>  <span class="label label-warning">1</span>
+                </a>
+                <ul class="dropdown-menu notification dropdown-messages ">
+                    <li>
+                        <div class="dropdown-messages-box">
+                            <p>アップデート</p>
+                        </div>
+                    </li>
+                    <!-- <li class="divider"></li> -->
+                    <li>                  
+                      <!-- <div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;"> -->
+                        <table class="table table-hover" id="notification">
+                        <!-- <table class="" id="paging" style="width: 100%;max-width: 100%;margin-bottom:10px">                      -->
+                          <col width="40%">
+                          <col width="50%">
+                          <col width="10%">
+                          <tbody>
+                              <tr class="pointer" id="4575476666">
+                                <td style="vertical-align: middle"><img alt="image" style="width:80%" src="img/businesscard-1.png"></td>                  
+                                <td style="vertical-align: middle">
+                                  <div class="content_notice">Mark111111111333333333333333333333333333333333333333333333</div>
+                                  <div class="date">
+                                    3日前
+                                  </div>
+                                </td>
+                                <td style="vertical-align: middle"><a href="#" class=""><i class="fa fa-angle-right"></i></a></td>
+                              </tr>
+                              <tr class="pointer" id="5654686866">
+                                <td style="vertical-align: middle"><img alt="image" style="width:80%" src="img/businesscard-1.png"></td>                  
+                                <td style="vertical-align: middle">
+                                  <div class="content_notice">2345555</div>
+                                  <div class="date">
+                                    3日前
+                                  </div>
+                                </td>
+                                <td style="vertical-align: middle"><a href="#" class=""><i class="fa fa-angle-right"></i></a></td>
+                              </tr>
+                          </tbody>
+                        </table>
+                    <!-- </div> -->
+                  </li>
+                </ul>
+            </li>
+            <!-- <li class="dropdown">
+                <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                    <i class="fa fa-comments"></i>  <span class="label label-primary">0</span>
+                </a>
+                <ul class="dropdown-menu dropdown-alerts">
+                    <li>
+                        <span>メッセージ</span>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="#">
+                            <span>
+                              メッセージがありません
+                            </span>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <div class="text-center link-block">
+                            <a href="#">
+                                <strong>See All Message</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </li> -->
+
+            <li>
+              <p>abc@example.com</p>
+            </li>
+
+            <li>
+                <!-- <a href="login.html">
+                    <i class="fa fa-sign-out"></i> ログアウト
+                </a> -->
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">                  
+                  <i class="fa fa-user"><b class="caret"></b></i>
+                </a>
+                <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                  <li><a href="properties.html">Profile</a></li>
+                  <li><a href="download.html">自分の名刺をダウンロード</a></li>
+                  <li><a href="contacts.html">Settings</a></li>
+                  <li><a href="mailbox.html">Mailbox</a></li>
+                  <li class="divider"></li>
+                  <li><a href="login.html">ログアウト</a></li>
+                </ul>
+            </li>
+        </ul>
+        </nav>
+        </div>  
+
+    
+  </div>
+    <div id="details" class="container">              
+
+      <!-- Start banner -->
+      <div class="row animated fadeInRight">
+        <div class="rel">
+          <div class="bg">
+            <img src="img/bg-1.jpg">
+          </div>
+          <div><a href="personal_cards.html" class="btn_back"><span>戻る</span></a></div>
+          <div class="abs">
+            <div class="name1">
+              <dt>永利敦</dt>
+              <dd>livepass株式会社</dd>
+            </div>
+            <ul class="icon">
+                <li class="ic_ml"><span><span class="none">Eight Link</span></span></li>
+                
+            </ul>
+            <div class="card">
+              <div class="card_img">
+                <a href="#" title="Image from Unsplash" data-target="#myModal" id="popup">
+                <img id="imageresource" src="img/loyalty-card.jpg" ></a>
+              </div>
+            </div>  
+          </div>                    
+        </div>           
+      </div>
+
+      <!-- End banner -->
+
+      <div class="row" style="margin-top: 25px">
+        <button id="addTag" class="btn btn-primary " type="button"><i class="fa fa-tag"></i></button>
+                      <div class="balloon lbl_balloon" style="display: none; margin-top:10px">
+                <div class="lbl_srh">
+                  <dl class="srhbox_round">
+                    <dt><a class="search_tag_index_btn" href="javascript: void(0);"></a><i class="fa fa-search"></i></dt>
+                    <dd><span class="iptxt"><input type="text" class="search_tag_index" value="" style="color: rgb(171, 171, 171);"></span></dd>
+                  </dl>
+                </div>
+                <div class="">
+                  <div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;">
+                    <table class="table" id="paging">
+                      <col width="10%">
+                      <col width="80%">
+                      <col width="10%">
+                      <tbody>
+                          <tr id="rowData">
+                            <td><input type="checkbox" class="i-checks" id="1"></td>                  
+                            <td>Mark111111111</td>
+                            <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
+                          </tr>
+                          <tr id="rowData">
+                            <td><input type="checkbox" class="i-checks" id="1"></td>                  
+                            <td class="nametag">22222222222222222244444444222244444</td>
+                            <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
+                          </tr>
+                          <tr id="rowData">
+                            <td><input type="checkbox" class="i-checks " id="1"></td>                  
+                            <td>33333</td>
+                            <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
+                          </tr>
+                      </tbody>
+                    </table>
+                </div>
+                </div>
+                
+                <div class="">
+                  <div class="input-group lbl" style="padding: 15px;">
+                    <input type="text" class="form-control" placeholder="add more tag"> 
+                      <span class="input-group-btn"> 
+                      <button id="addLabel" type="button" class="btn btn-success">作成</button> 
+                      </span>
+                  </div>
+                </div>
+              </div>
+      </div>
+      <div class="row" style="margin-top: 20px">
+        <!-- Left side -->
+        <div class="col-xs-5">
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="height:40px;">
+                        <div style="float:left">
+                            <h5>刺交換日</h5>    
+                        </div>
+                        
+                        <div style="float:right">
+                            <a >
+                                <i class="fa fa-pencil"></i>
+                            </a>                            
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <p>7/2015</p>
+                    </div>
+                    <!-- <div class="panel-footer" style="height:50px">
+                      <button class="btn btn-sm btn-primary" type="submit">Save</button>
+                    </div> -->
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>メモ</h5>
+                    </div>
+                    <div class="panel-body">
+                        <textarea class="form-control custom-control" rows="3" style="resize:vertical;margin-bottom: 5px;"></textarea> 
+                        <button class="btn btn-sm btn-primary pull-right" type="submit">Save</button>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>刺交換日</h5>
+                    </div>
+                    <div class="panel-body">
+                        <div class="career_section selected">
+                            <div class="career_date " style="font-weight: bold !important;">2014/10/26;----/--/--<span>(最新)</span></div>
+                            <div>
+                                <table class="table">
+                                    <tbody>
+                                    <tr id="rowData">
+                                        <td>
+                                            <p>株式会社コアネット</p>
+                                            <p></p>
+                                            <p>代表取締役</p>
+                                        </td>
+                                        <td><a href="#"><img src="img/namecard.png" width="90" /></a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="career_section">
+                            <div class="career_date " style="font-weight: bold !important;">2014/10/26;----/--/--</div>
+                            <div>
+                                <table class="table">
+                                    <tbody>
+                                    <tr id="rowData">
+                                        <td>
+                                            <p>株式会社コアネット</p>
+                                            <p></p>
+                                            <p>代表取締役</p>
+                                        </td>
+                                        <td><a href="#"><img src="img/namecard.png" width="90" /></a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="career_section">
+                            <div class="career_date " style="font-weight: bold !important;">2014/10/26;----/--/--</div>
+                            <div>
+                                <table class="table">
+                                    <tbody>
+                                    <tr id="rowData">
+                                        <td>
+                                            <p>株式会社コアネット</p>
+                                            <p></p>
+                                            <p>代表取締役</p>
+                                        </td>
+                                        <td><a href="#"><img src="img/namecard.png" width="90" /></a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                 <button id="delBusinessCard"type="button" class="btn btn-block btn-outline btn-primary"><i class="fa fa-trash"></i> この名刺を削除する</button>
+            </div>
+
+        <!-- End Left side -->
+
+        <!-- Right side -->
+        <div class="col-xs-7">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="height:40px;">
+                    <div class="col-md-12">
+                        <div style="float:left">
+                            <h5>名刺情報</h5>    
+                        </div>
+                        
+                        <div style="float:right">
+                            <a id="editPersonalInfo">
+                                <i class="fa fa-pencil"></i>
+                            </a>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="section">                      
+                        <dl>
+                            <dt><img src="img/ico_busho.png" alt="部署"></dt>
+                            <dd><div class="ipt_txt front_full_name">代表取締役</div></dd>
+                        </dl>
+                    </div>
+                    <div class="section">                      
+                        <dl>
+                            <dt><img src="img/ico_com.png" alt="氏名"></dt>
+                            <dd><div class="ipt_txt front_full_name">会社名</div>
+                            <div class="com_tag company_keyword omit" style="display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; float: left; padding-right: 0px; margin-right: 0px; width: 368px;">楽&#8203;天&#8203;市&#8203;場&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;W&#8203;e&#8203;b&#8203;デ&#8203;ザ&#8203;イ&#8203;ン&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;ホ&#8203;ー&#8203;ム&#8203;ペ&#8203;ー&#8203;ジ&#8203;制&#8203;作&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;プ&#8203;ロ&#8203;ジ&#8203;ェ&#8203;ク&#8203;シ&#8203;ョ&#8203;ン&#8203;マ&#8203;ッ&#8203;ピ&#8203;ン&#8203;グ&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;埼&#8203;玉&#8203;県&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;ホ&#8203;ー&#8203;ム&#8203;ペ&#8203;ー&#8203;ジ&#8203;作&#8203;成&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;Y&#8203;a&#8203;h&#8203;o&#8203;o&#8203;!&#8203;シ&#8203;ョ&#8203;ッ&#8203;ピ&#8203;ン&#8203;グ&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;W&#8203;e&#8203;b&#8203;制&#8203;作&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;S&#8203;E&#8203;M&#8203;対&#8203;策&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;全&#8203;国&#8203;対&#8203;応&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;Ｓ&#8203;Ｅ&#8203;Ｏ&#8203;対&#8203;策&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;群&#8203;馬&#8203;県&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;W&#8203;E&#8203;B&#8203;サ&#8203;イ&#8203;ト&#8203;作&#8203;成&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;栃&#8203;木&#8203;県&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;ロ&#8203;ゴ&#8203;デ&#8203;ザ&#8203;イ&#8203;ン&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;茨&#8203;城&#8203;県&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;w&#8203;e&#8203;b&#8203;シ&#8203;ス&#8203;テ&#8203;ム&#8203;開&#8203;発&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;シ&#8203;ス&#8203;テ&#8203;ム&#8203;開&#8203;発&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;ア&#8203;ク&#8203;セ&#8203;ス&#8203;ア&#8203;ッ&#8203;プ</div><span class="omit-open" style="float: right; text-align: left; width: 40px; font-size: 12px; margin-top: 10px; margin-bottom: 8px;"><a href="javascript:void(0);">続き</a></span>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="section">                      
+                        <dl>
+                            <dt><img src="img/ico_mail.png" alt="氏名"></dt>
+                            <dd><div class="ipt_txt front_email"><a href="mailto:info%40coa2.co.jp?body=%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE%E3%82%B3%E3%82%A2%E3%83%8D%E3%83%83%E3%83%88%0D%0A%E4%BB%A3%E8%A1%A8%E5%8F%96%E7%B7%A0%E5%BD%B9%E3%80%80%E7%86%8A%E5%80%89%E6%98%8E%E6%A7%98%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A--------------------%0A%E5%90%8D%E5%88%BA%E7%AE%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA%20Eight%E3%81%A7%E9%80%81%E4%BF%A1%0Ahttps%3A%2F%2F8card.net%0A" target="_blank">info@coa2.co.jp</a></div></dd>
+                        </dl>
+                    </div>
+
+                    <div class="section">                    
+                        <dl>
+                            <dt><img src="img/ico_tel_com.png" alt="会社電話"></dt>
+                            <dd><div class="ipt_txt front_full_name">0285-33-4372</div></dd>
+                        </dl>
+                    </div>
+                    <div class="section">                    
+                        <dl>
+                            <dt><img src="img/ico_fax.png" alt="会社FAX"></dt>
+                            <dd><div class="ipt_txt front_full_name">0285-33-4383</div></dd>
+                        </dl>
+                    </div>
+                    <div class="section">                    
+                        <dl>
+                            <dt><img src="img/ico_url.png" alt="ホームページ"></dt>
+                            <dd><div class="ipt_txt front_url1"><a href="http://www.coa2.co.jp" target="_blank">http://www.coa2.co.jp</a></div></dd>
+                        </dl>
+                    </div>
+                    <div class="section">                    
+                        <dl>
+                            <dt><img src="img/ico_name.png" alt="氏名"></dt>
+                            <dd><div class="ipt_txt front_full_name">熊倉明</div></dd>
+                        </dl>
+                    </div>
+                </div>
+
+            </div>
+            <div class="panel panel-default">
+                    <div class="panel-heading" style="height:40px;">
+                        <div style="float:left">
+                            <h5>この名刺で繋がっている人</h5>    
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <!-- <p>7/2015</p> -->
+                    </div>
+                    <!-- <div class="panel-footer" style="height:50px">
+                      <button class="btn btn-sm btn-primary" type="submit">Save</button>
+                    </div> -->
+                </div>
+
+        </div>
+        <!-- End Right side -->    
+      </div>
+
+
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:50px;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <button type="button" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">rotate</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Image preview</h4>
+          </div> -->
+          <div class="modal-body">
+            <a href="#"><img src="img/cbox-flip.png" class ="img-icon-rotate"  title="Click here to rotate image."></a>
+
+            <a href="#"><img src="img/cbox-close.png" class ="img-icon-close" data-dismiss="modal" ></a>
+
+            <img src="" id="imagepreview" style="width: 536px; height: 264px;" >
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Mainly scripts -->
+    <script src="js/jquery-2.1.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+    <script src="js/plugins/pace/pace.min.js"></script>
+
+    <!-- Peity -->
+    <script src="js/plugins/peity/jquery.peity.min.js"></script>
+
+    <!-- Peity -->
+    <script src="js/demo/peity-demo.js"></script>
+
+    <!-- blueimp gallery -->
+    <script src="js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+        });
+
+        $('#delBusinessCard').click(function() {
+            console.log('Delete a Personal detail card');
+        });
+
+        $('#editPersonalInfo').click(function() {
+            console.log('Delete a Personal detail card 111111');
+        });
+        $(".more").toggle(function(){
+            $(this).text("less..").siblings(".complete").show();    
+        }, function(){
+            $(this).text("more..").siblings(".complete").hide();    
+        });
+        
+        $("#addTag").click(function(e){
+          if($(".balloon").css('display') == 'block')
+            $(".balloon").css("display","none");
+          else
+            $(".balloon").css("display","block");
+        });
+
+        $("#popup").on("click", function() {
+            console.log('123');
+           $('#imagepreview').attr('src', $('#imageresource').attr('src'));
+           $('#imagemodal').modal('show');
+        });
+    </script>
+</body>
+
+</html>
