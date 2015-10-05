@@ -1,0 +1,18 @@
+DROP TABLE `team_info`;
+
+CREATE TABLE IF NOT EXISTS `team_info` (
+  `team_id` int(11) NOT NULL COMMENT 'チームID',
+  `team_name` text NOT NULL COMMENT 'チーム名',
+  `target_count` int(11) COMMENT '登録目標件数',
+  `create_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登録日',
+  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日',
+  `operater_id` int(11) NOT NULL COMMENT '登録更新者ID'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='チーム情報';
+
+
+ALTER TABLE `team_info`
+  ADD PRIMARY KEY (`team_id`);
+
+
+ALTER TABLE `team_info`
+  MODIFY `team_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'チームID';

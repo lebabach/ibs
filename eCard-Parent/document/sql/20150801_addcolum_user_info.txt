@@ -1,0 +1,2 @@
+alter table user_info add mail_notice_flg int(1) after mail_send_flg;
+alter table user_info add mail_use_assist_flg int(1) after mail_notice_flg;

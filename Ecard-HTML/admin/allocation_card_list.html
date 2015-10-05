@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Cards</title>
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="../css/animate.css" rel="stylesheet">
+<link href="../css/style.css" rel="stylesheet">
+<link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="../css/admin-style.css" rel="stylesheet">
+<link href="../css/jquery.dataTables.css" rel="stylesheet">
+
+<style>
+thead, tbody { display: block; width:100% }
+
+#paging tbody {
+    height: 200px;       /* Just for the demo          */
+    overflow-y: auto;    /* Trigger vertical scroll    */
+    overflow-x: hidden;  /* Hide the horizontal scroll */
+}
+.table-column{
+	width:33%;
+	padding-right:0px
+}
+.txt-table{
+	float:right;
+	width:230px
+}
+.title-abc{
+	background:#f5f5f5;
+	padding:10px;
+	display:inline-block;
+	text-align:left;
+	width:1000px;
+}
+</style>
+</head>
+
+<body>
+
+	<div id="header">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top bg-white box-shadow" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary "  href="menu_top.html"><i class="fa fa-navicon"></i> </a>
+                    <!-- <form role="search" class="navbar-form-custom" action="search_results.html">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                        </div>
+                    </form> -->
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a7.jpg">
+                                    </a>
+                                    <div class="media-body">
+                                        <small class="pull-right">46h ago</small>
+                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a4.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right text-navy">5h ago</small>
+                                        <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/profile.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right">23h ago</small>
+                                        <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                        <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="mailbox.html">
+                                        <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="mailbox.html">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="profile.html">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                        <span class="pull-right text-muted small">12 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="grid_options.html">
+                                    <div>
+                                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="notifications.html">
+                                        <strong>See All Alerts</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+        
+        
+                    <li>
+                        <a href="../login.html">
+                            <i class="fa fa-sign-out"></i> ログアウト
+                        </a>
+                    </li>
+                </ul>
+                </nav>
+            </div>
+      </div>
+      <!-- END HEADER -->
+      
+      <!-- BODY -->
+      <div class="container-fluid padding-top20 bg-container height100per">
+        
+        <!-- RIGHT SIDE -->
+        <div id="right-side" class="col-sm-12">
+        	<!-- BAR TOP -->
+            <div class="row bg-white box-shadow menu-top-header">
+            	<div class="col-sm-12">
+                	<div class="float-left">
+                    	<h4 class="h4-header">枚数割り振り画面</h4>
+                    </div>
+                	
+                    <div class="float-right">
+                        <a href="detail_user.html" id="add" style="display:inline-block;"><i class="fa icon-rounded">キャンセル</i></a>
+                        <a href="detail_user.html" id="add" style="display:inline-block;"><i class="fa icon-rounded">登録</i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- END BAR TOP -->
+            <div class="row bg-white box-shadow box-marginTop5 padding-top-bottom">
+				<div class="col-sm-12">
+					<table>
+						<tr style="height:45px">
+							<td colspan="2">
+								<select id="companyId" style="width:210px">
+								  <option value="volvo">チーム選択</option>
+								  <option value="saab">Saab</option>
+								  <option value="mercedes">Mercedes</option>
+								  <option value="audi">Audi</option>
+								</select>
+							</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr style="height:45px">
+							<td>全体数</td>
+							<td><span style="float:right">1523 枚 </span></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr style="height:45px">
+							<td>チーム割り振り数</td>
+							<td><input type="text" name="card1" value="500" style="width:80px; float:right"/></td>
+							<td class="non-lpadding"> 枚 </td>
+							<td><span style="margin-left: 15px; margin-right: 30px;">現在の割り振り数</span></td>
+							<td><input type="text" name="card1" value="450" /></td>
+							<td class="non-lpadding"> 枚 </td>
+						</tr>
+					</table>
+				</div>
+				<!-- END SEARCH -->
+				<!-- DATA TABLE -->
+				
+				<div class="col-sm-12 table-list-operator">
+					<div class="row " id="data-table">
+						<div class="ibox-content " >
+							<div class="title-abc">メンバー一覧</div>
+							<table class="table" id="paging" style="width: 1000px;margin-left: 0px;">
+								<tbody>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr><tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								<tr id="rowData">
+									<td class="table-column">名刺A子 <input type="text" name="card1" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card2" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+									<td class="table-column">名刺A子 <input type="text" name="card3" class="txt-table"></td>
+									<td class="non-lpadding"> 枚 </td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- END DATA TABLE -->
+			</div>
+            <!-- BAR BODY -->
+            
+        </div>
+        <!-- END RIGHT SIDE -->
+      </div>
+      <!-- END BODY -->
+
+<script src="../js/jquery-2.1.1.js"></script>
+<script src="../js/bootstrap.js"></script>
+
+<script src="../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- iCheck -->
+<script src="../js/plugins/iCheck/icheck.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="../js/plugins/pace/pace.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/plugins/peity/jquery.peity.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/demo/peity-demo.js"></script>
+<script src="../js/jquery.dataTables.min.js"></script>
+	
+</body>
+</html>

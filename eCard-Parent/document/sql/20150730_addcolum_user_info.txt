@@ -1,0 +1,1 @@
+alter table user_info add cover_image text after first_name_kana;

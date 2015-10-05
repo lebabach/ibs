@@ -1,0 +1,17 @@
+CREATE TABLE IF NOT EXISTS `zipcode_info` (
+    jis        varchar(10)  NULL,
+    zip_old    varchar(5)   NULL,
+    zip        varchar(7)   NULL,
+    addr1_kana varchar(100) NULL,
+    addr2_kana varchar(100) NULL,
+    addr3_kana varchar(100) NULL,
+    addr1      varchar(100) NULL,
+    addr2      varchar(100) NULL,
+    addr3      varchar(100) NULL,
+    c1         int          NULL,
+    c2         int          NULL,
+    c3         int          NULL,
+    c4         int          NULL,
+    c5         int          NULL,
+    c6         int          NULL
+)

@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Cards</title>
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="../css/animate.css" rel="stylesheet">
+<link href="../css/style.css" rel="stylesheet">
+<link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="../css/admin-style.css" rel="stylesheet">
+<link href="../css/jquery.dataTables.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+	<div id="header">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top bg-white box-shadow" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary "  href="menu_top.html"><i class="fa fa-navicon"></i> </a>
+                    <!-- <form role="search" class="navbar-form-custom" action="search_results.html">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                        </div>
+                    </form> -->
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a7.jpg">
+                                    </a>
+                                    <div class="media-body">
+                                        <small class="pull-right">46h ago</small>
+                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a4.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right text-navy">5h ago</small>
+                                        <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/profile.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right">23h ago</small>
+                                        <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                        <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="mailbox.html">
+                                        <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="mailbox.html">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="profile.html">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                        <span class="pull-right text-muted small">12 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="grid_options.html">
+                                    <div>
+                                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="notifications.html">
+                                        <strong>See All Alerts</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li>
+                        <a href="../login.html">
+                            <i class="fa fa-sign-out"></i> ログアウト
+                        </a>
+                    </li>
+                </ul>
+                </nav>
+            </div>
+      </div>
+      <!-- END HEADER -->
+
+      <!-- BODY -->
+      <div class="container-fluid padding-top20 bg-container height100per">
+
+        <!-- RIGHT SIDE -->
+        <div id="right-side" class="col-sm-12">
+        	<!-- BAR TOP -->
+            <div class="row bg-white box-shadow menu-top-header">
+            	<div class="col-sm-12">
+                	<div class="float-left">
+                    	<h4 class="h4-header">お問い合わせリスト</h4>
+                    </div>
+
+                    <div class="float-right float-right-manage">
+                        <button type="button" class="btn btn-primary">閉じる</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- END BAR TOP -->
+            <div class="row bg-white box-shadow box-marginTop5 padding-top-bottom">
+				<!-- <div class="col-sm-12">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="Enter name, company name, phone ...">
+						<span class="input-group-btn"> <button type="button" class="btn btn-primary">Search</button></span>
+					</div>
+				</div> -->
+				<!-- END SEARCH -->
+				<!-- DATA TABLE -->
+				<div class="col-sm-12 container table-list-operator">
+
+					<div class="row " id="data-table">
+						<div class="ibox-content  ibox-content-question ibox-custom01">
+							<table class="table container" id="paging" style="margin-top: -84px;">
+								<thead>
+                                    <tr>
+                                     <td colspan="9" style="background-color: #fff;">未回答のお問い合わせが10件あります。</td>
+                                    </tr>
+									<tr>
+                                        <th></th>
+										<th>申請者</th>
+										<th>会社名</th>
+										<th>部署</th>
+										<th>役職</th>
+										<th>日付</th>
+                                        <th>回答</th>
+                                        <th>内容</th>
+									</tr>
+								</thead>
+								<tbody>
+								<tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="option1" name="a" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+									<td>名刺　A夫</td>
+									<td>(株)インテリジェンス</td>
+									<td>営業部営業一課　課長</td>
+									<td>課長</td>
+									<td>2015年10月5日</td>
+                                    <td></td>
+                                    <td>名刺画像に関して質問です・・</td>
+								</tr>
+								<tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" checked="" value="option2" name="a" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+									<td>名刺　B夫</td>
+                                    <td>(株)テンプスタッフ</td>
+                                    <td>営業部営業一課</td>
+                                    <td></td>
+                                    <td>2015年10月5日</td>
+                                    <td></td>
+                                    <td>・・・・・・・</td>
+								</tr>
+								<tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="option1" name="a" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+									<td>名刺　C夫</td>
+                                    <td>(株)インテリジェンス</td>
+                                    <td>営業部営業一課　課長</td>
+                                    <td>課長</td>
+                                    <td>2015年10月5日</td>
+                                    <td></td>
+                                    <td>・・・・・・・</td>
+								</tr>
+								<tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="option1" name="a" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+									<td>名刺　D夫</td>
+                                    <td>(株)インテリジェンス</td>
+                                    <td>営業部営業一課　課長</td>
+                                    <td>課長</td>
+                                    <td>2015年10月5日</td>
+                                    <td></td>
+                                    <td>・・・・・・・</td>
+								</tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="option1" name="a" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　E夫</td>
+                                    <td>(株)インテリジェンス</td>
+                                    <td>営業部営業一課　課長</td>
+                                    <td>課長</td>
+                                    <td>2015年10月5日</td>
+                                    <td></td>
+                                    <td>・・・・・・・</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="option1" name="a" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　F夫</td>
+                                    <td>(株)インテリジェンス</td>
+                                    <td>営業部営業一課　課長</td>
+                                    <td>課長</td>
+                                    <td>2015年10月2日</td>
+                                    <td>回答済み</td>
+                                    <td>・・・・・・・</td>
+                                </tr>
+                                <tr id="rowData">
+                                    <td><div class="i-checks"><label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="option1" name="a" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+                                    <td>名刺　G夫</td>
+                                    <td>(株)インテリジェンス</td>
+                                    <td>営業部営業一課　課長</td>
+                                    <td>課長</td>
+                                    <td>2015年10月1日</td>
+                                    <td>回答済み</td>
+                                    <td>・・・・・・・</td>
+                                </tr>
+								</tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="8" align="right">
+                                        <div class="float-right" style="float:right !important;">
+                                            <a href="reply_email.html" class="btn btn-primary" style="width:100px !important">回答画面へ</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- END DATA TABLE -->
+			</div>
+            <!-- BAR BODY -->
+
+        </div>
+        <!-- END RIGHT SIDE -->
+      </div>
+      <!-- END BODY -->
+
+<script src="../js/jquery-2.1.1.js"></script>
+<script src="../js/bootstrap.js"></script>
+
+<script src="../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- iCheck -->
+<script src="../js/plugins/iCheck/icheck.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="../js/plugins/pace/pace.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/plugins/peity/jquery.peity.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/demo/peity-demo.js"></script>
+<script src="../js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+    });
+});
+
+$(document).ready(function(){
+    $(".btn-right-reply").click(function(){
+        //alert($(this).find(".fo").val());
+        window.location.href = "reply_email.html";
+    });
+
+    $('#paging').dataTable( {
+
+        /*"dom": '<"bottom"tip><"clear">'*/
+        "dom": '<<t>ip>',
+        "ordering": false,
+        "iDisplayLength": 6
+
+
+    } );
+    $("#send_mail_new").click(function(event) {
+        /* Act on the event */
+       window.location.href = "send_mail.html";
+    });
+
+});
+
+</script>
+</body>
+</html>

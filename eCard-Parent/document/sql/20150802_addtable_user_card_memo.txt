@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS `user_card_memo` (
+  `user_id` int(11) NOT NULL COMMENT 'ƒ†[ƒU[ID',
+  `card_id` int(11) NOT NULL COMMENT '–¼hID',
+  `memo` text NOT NULL COMMENT 'ƒƒ‚',
+  `seq` int(4) NOT NULL COMMENT '•À‚Ñ‡˜',
+  `create_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '“o˜^“ú'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ŒÂ•Ê–¼hƒƒ‚';
+

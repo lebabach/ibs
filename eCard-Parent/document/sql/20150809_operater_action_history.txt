@@ -1,0 +1,10 @@
+DROP TABLE `operater_action_history`;
+
+CREATE TABLE IF NOT EXISTS `operater_action_history` (
+  `team_id` int(11) NOT NULL COMMENT 'チームID',
+  `user_id` int(11) NOT NULL COMMENT 'ユーザーID',
+  `action_type` date NOT NULL COMMENT '操作区分',
+  `target` text COMMENT '操作対象',
+  `action_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '操作日'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='オペレーター操作履歴';
+

@@ -1,0 +1,445 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Cards</title>
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="../css/animate.css" rel="stylesheet">
+<link href="../css/style.css" rel="stylesheet">
+<link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="../css/admin-style.css" rel="stylesheet">
+<link href="../css/jquery.dataTables.css" rel="stylesheet">
+
+<style type="text/css">
+.img-100{
+    width: 100%!important;
+}
+
+.mg-auto{
+    text-align: center;
+}
+.for-ch{
+    width: 365px!important;
+}
+</style>
+</head>
+
+<body>
+
+	<div id="header">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top bg-white box-shadow" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="manage_card.html"><i class="fa fa-navicon"></i> </a>
+                    <!-- <form role="search" class="navbar-form-custom" action="search_results.html">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                        </div>
+                    </form> -->
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>ƒ
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a7.jpg">
+                                    </a>
+                                    <div class="media-body">
+                                        <small class="pull-right">46h ago</small>
+                                        <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/a4.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right text-navy">5h ago</small>
+                                        <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                        <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="dropdown-messages-box">
+                                    <a href="profile.html" class="pull-left">
+                                        <img alt="image" class="img-circle" src="../img/profile.jpg">
+                                    </a>
+                                    <div class="media-body ">
+                                        <small class="pull-right">23h ago</small>
+                                        <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                        <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="mailbox.html">
+                                        <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="mailbox.html">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="profile.html">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                        <span class="pull-right text-muted small">12 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="grid_options.html">
+                                    <div>
+                                        <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                        <span class="pull-right text-muted small">4 minutes ago</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="notifications.html">
+                                        <strong>See All Alerts</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+        
+        
+                    <li>
+                        <a href="../login.html">
+                            <i class="fa fa-sign-out"></i> ログアウト
+                        </a>
+                    </li>
+                </ul>
+                </nav>
+            </div>
+      </div>
+      <!-- END HEADER -->
+      
+      <!-- BODY -->
+      <div class="container padding-top20 bg-container height100per container-collectname">
+        <!-- CENTER SIDE -->
+        <div id="center-side" class="col-sm-12 ch-title">
+            <div class="row">
+                <div class="col-sm-8">
+                   名刺情報
+                </div>
+                <div class="col-sm-2 ch-color-link">
+                   <a href="manage_card.html" class="ch-edit"> 戻る</a>
+                </div>
+                <!-- <div class="col-sm-2 ch-color-link">
+                   <a href="manage_card.html" class="ch-edit"> 編集</a>
+                </div> -->
+            </div>
+        </div>
+        <div id="center-side" class="col-sm-12">
+        	<div class="row bg-white box-shadow">
+                
+                <div class="col-sm-12" id="ct1">
+                    <div class="float-left" style="width: 35%;">
+                        <h4 class="h4-header"><a href="#"><div style="position:fixed; width:26%;"><img src="../img/namecard.png" class="img-100"></div></a>
+                                         
+                                        </h4>
+                    </div>
+                    
+                    <!-- <div class="float-right flr-400" style="width: 60%;"> -->
+                        <div class="row box-shadow bg-white float-right flr-400" style="width: 60%;">
+                           <div class="col-sm-12 right-side-top">        
+                            </div>
+                            <div class="row" id="content-detail-card" style="width:100%;">
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>氏名</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 class=""></h4>
+                                    </div>
+                                </div> 
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>氏名（姓）</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 class="">公平</h4>
+                                    </div>
+                                </div> 
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>氏名（名）</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 class="">夏樹</h4>
+                                    </div>
+                                </div> 
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>氏名（姓）カナ</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 class="">コウヘイ</h4>
+                                    </div>
+                                </div>  
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>氏名（名）カナ </h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 class="">ナッキ</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>連絡先 </h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>電話番号 1</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">00-0000-0000</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>電話番号 2</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">00-0000-0001</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>電話番号(直通)</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">090-0000-0000</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>携帯電話番号</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">00-0000-0001</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>FAX番号</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">00-0000-0002</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>メールアドレス</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">test@test.com</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>会社名</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">livepass</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>会社名カナ</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">リブバス</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>部署名</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">システム部</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>役職名</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">技師</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>会社URL</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">http://~~~~~~~~~~~.com</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>郵便番号</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">000-0000</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>住所（都道府県）</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">東京都</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>住所（市区町村・番地）</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">新宿区1-1-1</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>住所(マンション・建物名等)</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">Livepassビル</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>名刺交換日</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">名刺交換日</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>備考１</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">備考1です</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="float-left">
+                                       <h4>備考２</h4>
+                                    </div>
+                                    <div class="float-right float-right-content">
+                                       <h4 style="width:250px;">2015-07-27 (日時)</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                   <!--  </div> -->
+                </div>
+                
+            </div>
+        </div> <!-- END CENTER SIDE  -->
+        <!-- END RIGHT SIDE -->
+       </div>
+      <!-- END BODY -->
+
+<script src="../js/jquery-2.1.1.js"></script>
+<script src="../js/bootstrap.js"></script>
+
+<script src="../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- iCheck -->
+<script src="../js/plugins/iCheck/icheck.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="../js/plugins/pace/pace.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/plugins/peity/jquery.peity.min.js"></script>
+
+<!-- Peity -->
+<script src="../js/demo/peity-demo.js"></script>
+<script src="../js/jquery.dataTables.min.js"></script>
+<script src="../js/custom-datatable.js"></script>
+	
+<script type="text/javascript">
+$(document).ready(function(){
+	 $('#paging').dataTable( {
+        
+        "dom": '<<t>p><"clear">',
+        "ordering": false,
+        "iDisplayLength": 5
+
+    } );
+     var page = $('#left-side div#paging_paginate.dataTables_paginate.paging_simple_numbers .paginate_button').size();
+    if (page >= 8){
+        $("#left-side div#paging_paginate.dataTables_paginate.paging_simple_numbers").css("padding-left", "5px");
+    }else{
+       $("#left-side div#paging_paginate.dataTables_paginate.paging_simple_numbers").css("padding-left", "25%");
+    }
+    
+});
+var message = $('#message');
+var tr = $('.table_edit_card').find('tr');
+ tr.bind('click', function(event) {
+        var values = '';
+        tr.removeClass('row-highlight');
+        var tds = $(this).addClass('row-highlight').find('td');           
+        $.each(tds, function(index, item) {
+               //alert(item.img);
+            values = values + item.innerHTML   
+        });
+        $('#center-side .h4-header').html(values);
+        //when click tr then biding data in here
+        //$("#content-detail-card").css("display", "block");;
+        //alert(values);
+ });
+
+ $("#btn_back").click(function(){
+        window.location.href = "manage_card.html";
+});  
+
+
+
+</script>
+</body>
+</html>
