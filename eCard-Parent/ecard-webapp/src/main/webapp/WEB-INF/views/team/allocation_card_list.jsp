@@ -268,6 +268,7 @@ $(function() {
 					if(resp){
 						console.log(resp);
 						$('.card_number').text(resp.totalCard + '枚');
+						$('.total-card').val(resp.totalCard);
 						$('.btn-add').css('display','none');
 					}
 				}).fail(function(xhr, status, err) {
@@ -288,6 +289,7 @@ $(function() {
 					if(resp){
 						console.log(resp);
 						$('.card_number').text(resp.totalCard + '枚');
+						$('.total-card').val(resp.totalCard);
 						$('.btn-add').css('display','none');
 					}
 				}).fail(function(xhr, status, err) {
@@ -307,6 +309,7 @@ $(function() {
 					if(resp){
 						console.log(resp);
 						$('.card_number').text(resp.totalCard + '枚');
+						$('.total-card').val(resp.totalCard);
 						$('.btn-add').css('display','none');
 					}
 				}).fail(function(xhr, status, err) {
