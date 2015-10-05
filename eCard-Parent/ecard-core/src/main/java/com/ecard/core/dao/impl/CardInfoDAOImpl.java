@@ -15,6 +15,8 @@ import com.ecard.core.vo.CardInfoConnectUser;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -1102,11 +1104,8 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
     	this.getEntityManager().clear();
     }
     
-    public int updateCardTypeById(Integer cardId, Integer cardType){
-        Query query = getEntityManager().createQuery("UPDATE CardInfo c SET c.cardType = :cardType WHERE c.cardId = :cardId");
-        query.setParameter("cardId", cardId);
-        query.setParameter("cardType", cardType);
-        
+    public int updateCardType(){
+        Query query = getEntityManager().createQuery("UPDATE CardInfo c SET c.cardType = 0 WHERE c.cardType = 1");
         return (int)query.executeUpdate();
     }
     

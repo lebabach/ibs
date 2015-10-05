@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.stat.internal.CategorizedStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.enums.ActionTypeEnum;
 import com.ecard.core.model.enums.IndexTypeEnum;
 import com.ecard.core.model.enums.PropertyCodeEnum;
+import com.ecard.core.model.enums.StatusCard;
 import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.util.DataIndexUtil;
@@ -264,8 +266,8 @@ public class CardInfoServiceImpl implements CardInfoService {
     	cardInfoDAO.updateDateEditting(cards);
     }
     
-    public int updateCardTypeById(Integer cardId, Integer cardType){
-        return cardInfoDAO.updateCardTypeById(cardId, cardType);
+    public int updateCardType(){
+        return cardInfoDAO.updateCardType();
     }
     
     public List<CardInfo> listCardInfoByCardType(Integer cardType){
