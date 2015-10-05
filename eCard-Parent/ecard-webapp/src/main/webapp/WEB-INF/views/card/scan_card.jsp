@@ -36,7 +36,7 @@ var picFile = "";
 
 $(document).ready(function(){
 	
-	$("#files").on("change",function(){
+	$("#files").on("change",function(event){
 		var files = event.target.files; //FileList object
         var output = document.getElementById("result");
 		
@@ -175,52 +175,53 @@ $(document).ready(function(){
 
 	}); 
   
-     
-   $('.btn_register_card').on("click", function() { 
-	   var userId = $('.user_id').val();
-	   var rote = $("#rote-image").val();
-	   //$('#loading').css("display","block");
-	   //var checkNotOk=1;
-	   //$("#loadingProgress").removeAttr("style");
-	   $('.list-view').each(function() {
-			if($(this).find('.lable input[name=bla][type=checkbox]:checked').length != 0){
-				
-			   var imagesource = $(this).find('img').attr('src');  
-		       var n = imagesource.indexOf(",");
-			   var image = imagesource.substring(n+1, base64.length);
-			   var imageFile = { "imageFile":image,"userId":userId,"rote":rote};
-			   var target = $(this);
-			   $.ajax({
-					    type: 'POST',
-					    url: "registerCardImage",
-					    data: JSON.stringify(imageFile),
-						datatype: 'json',
-						async: false,
-						contentType: 'application/json'
-					}).done(function(data) { 
+	$('.btn_register_card').on("click", function() { 
+		   var userId = $('.user_id').val();
+		   var rote = $("#rote-image").val();
+		   var listCards = new Array();
+		   $('.list-view').each(function() {
+				if($(this).find('.lable input[name=bla][type=checkbox]:checked').length != 0){
+					
+				   var imagesource = $(this).find('img').attr('src');  
+			       var n = imagesource.indexOf(",");
+				   var image = imagesource.substring(n+1, base64.length);
+				   var card = { "imageFile":image,"userId":userId,"rote":rote};
+				   listCards.push({ 'card' : card});
+			     }  
+		    });
+		   if($("#exampleInputName2").val()!=""){
+			   if(listCards.length>0){
+				   $.ajax({
+						type: 'POST',
+						url: 'registerCardImage',
+						 dataType: 'json', 
+						 contentType: 'application/json',
+						 mimeType: 'application/json',
+						data:JSON.stringify({"listCards":listCards}) 
+					}).done(function(data) {
 						if(data == 0){
-						    target.remove();
-						    //location.reload();
-						    
+							location.reload();
 						}else if(data == 1){
-							alert("Please choose image need upload");
+							alert("データ通信が利用できません");
+							//checkNotOk=0;
+						}else if(data == 3){
+							alert("データ通信が利用できません");
 							//checkNotOk=0;
 						}else{
 							alert("<fmt:message key="card.scancard.user.error"/>");
 							//checkNotOk=0;
 						}
-						
-					}).fail(function(data) {
-						console.log(data);
+					}).fail(function(xhr, status, err) {
+						alert('エラー !!!');
 					});
-		     }
-			
-			  
-	    });
-	   //fix: can not reload image again
-	   //$("#loadingProgress").attr("style","display:none");
-	});
-   
+			   } 
+		   }else{
+			   alert('ユーザを選択してください');
+		   }
+			   
+		   
+		   
+		});
  	//bach.le reset rotation
    function resetRotationOfImages(){
 	   value =0;
