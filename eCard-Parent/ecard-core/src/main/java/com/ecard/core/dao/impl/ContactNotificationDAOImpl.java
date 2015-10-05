@@ -1,5 +1,6 @@
 package com.ecard.core.dao.impl;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -80,5 +81,13 @@ public class ContactNotificationDAOImpl extends GenericDao implements ContactNot
 		em.close();
 		return 0;
 	}
+	
+	@Override
+ 	public BigInteger getTotalMailNotRead() {
+ 		String sqlQuery = " SELECT COUNT(*) FROM inquiry_info inq inner join user_info u on  inq.user_id = u.user_id " 
+                     + " where u.leave_flg = 0 and u.delete_flg = 0 and inq.answer_flg = 0 ";
+ 	Query query = getEntityManager().createNativeQuery(sqlQuery);
+ 	return (BigInteger)query.getSingleResult();
+ }
 
 }

@@ -77,7 +77,7 @@ $(document).ready(function() {
 							<table class="table container" id="paging" style="margin-top: -84px;">
 								<thead>
                                     <tr>
-                                     <td colspan="9" style="background-color: #fff;">未回答のお問い合わせが10件あります。</td>
+                                     <td colspan="9" style="background-color: #fff;">未回答のお問い合わせが<c:out value="${contactNotificationVO.numberMessageUnread}" />件あります。</td>
                                     </tr>
 									<tr>
                                         <th></th>
@@ -91,7 +91,7 @@ $(document).ready(function() {
 									</tr>
 								</thead>
 								<tbody>
-								   <c:forEach var="contact" items="${listContactNotification}">
+								   <c:forEach var="contact" items="${contactNotificationVO.listContactNotification}">
 										<tr >
 		                                    <td><div class="i-checks"><label class=""> <div class="" style="position: relative;"><input type="radio" value="<c:out value="${contact.inquiryId}" />" name="inquiryId" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
 											<c:choose>
