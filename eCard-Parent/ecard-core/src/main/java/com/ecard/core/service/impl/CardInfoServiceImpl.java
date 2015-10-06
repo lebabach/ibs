@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecard.core.dao.CardInfoDAO;
-import com.ecard.core.dao.DataIndexIdDAO;
+import com.ecard.core.dao.DataIndexDAO;
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.enums.ActionTypeEnum;
@@ -39,9 +39,9 @@ public class CardInfoServiceImpl implements CardInfoService {
     
     @Autowired
     CardInfoDAO cardInfoDAO;
-    
+        
     @Autowired
-    DataIndexIdDAO dataIndexIdDAO;
+    DataIndexDAO dataIndexDAO;
 
     public List<CardInfo> listAllCardInfo(){
     	return cardInfoDAO.listAllCardInfo();
@@ -72,7 +72,7 @@ public class CardInfoServiceImpl implements CardInfoService {
     		//String indexId=dataIndexIdDAO.updateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Update, TableTypeEnum.CardInfor, PropertyCodeEnum.ShootingApp,cardInfo.getCardIndexNo());
     		/*String indexId=DataIndexUtil.generateFormatIdWith(TableTypeEnum.CardInfor, DataIndexUtil.getSequenceCodeFrom(cardInfo.getCardIndexNo()), 
 					DataIndexUtil.getPropertyCodeFrom(cardInfo.getCardIndexNo()),PropertyCodeEnum.findByName(cardInfo.getCardIndexNo().substring(cardInfo.getCardIndexNo().length()-1)),  ActionTypeEnum.Update);*/
-    		String indexId=dataIndexIdDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Update, TableTypeEnum.CardInfor, PropertyCodeEnum.ShootingApp,cardInfo.getCardIndexNo());
+    		String indexId=dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Update, TableTypeEnum.CardInfor, PropertyCodeEnum.ShootingApp,cardInfo.getCardIndexNo());
         	cardInfo.setCardIndexNo(indexId);
     	}
         return cardInfoDAO.editCardInfo(cardInfo);
@@ -125,7 +125,7 @@ public class CardInfoServiceImpl implements CardInfoService {
     
     public CardInfo registerCardImage(CardInfo cardInfo) {
     	//String indexId=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.ShootingApp);
-    	String indexId=dataIndexIdDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.ShootingApp,cardInfo.getCardIndexNo());
+    	String indexId=dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.ShootingApp,cardInfo.getCardIndexNo());
     	cardInfo.setCardIndexNo(indexId);
     	if(!StringUtils.isEmpty(indexId)){
 			cardInfo.setImageFile(DataIndexUtil.getIndexNoOfImageBy(TableTypeEnum.ImageInfor, indexId)+".jpg");
@@ -135,7 +135,7 @@ public class CardInfoServiceImpl implements CardInfoService {
     
     public CardInfo registerCardImageOfAdmin(CardInfo cardInfo) {
     	//String indexId=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Scanner);
-    	String indexId=dataIndexIdDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Scanner,cardInfo.getCardIndexNo());
+    	String indexId=dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Scanner,cardInfo.getCardIndexNo());
     	cardInfo.setCardIndexNo(indexId);
     	if(!StringUtils.isEmpty(indexId)){
 			cardInfo.setImageFile(DataIndexUtil.getIndexNoOfImageBy(TableTypeEnum.ImageInfor, indexId)+".jpg");
@@ -163,7 +163,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 		//String indexId=dataIndexIdDAO.updateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Update, TableTypeEnum.CardInfor, PropertyCodeEnum.Scanner,cardInfo.getCardIndexNo());
 		/*String indexId=DataIndexUtil.generateFormatIdWith(TableTypeEnum.CardInfor, DataIndexUtil.getSequenceCodeFrom(cardInfo.getCardIndexNo()), 
 				DataIndexUtil.getPropertyCodeFrom(cardInfo.getCardIndexNo()),PropertyCodeEnum.findByName(cardInfo.getCardIndexNo().substring(cardInfo.getCardIndexNo().length()-1)),  ActionTypeEnum.Update);*/
-		String indexId=dataIndexIdDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Update, TableTypeEnum.CardInfor, PropertyCodeEnum.Scanner,cardInfo.getCardIndexNo());
+		String indexId=dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Update, TableTypeEnum.CardInfor, PropertyCodeEnum.Scanner,cardInfo.getCardIndexNo());
     	cardInfo.setCardIndexNo(indexId);	
         return cardInfoDAO.updateCardInfoAdmin(cardInfo);
     }
@@ -231,7 +231,7 @@ public class CardInfoServiceImpl implements CardInfoService {
     public CardInfo importCardInfoFromCsv(CardInfo cardInfo){
     	/*String cardIndexNo=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Migration);
 		cardInfo.setCardIndexNo(cardIndexNo);*/
-    	String indexId=dataIndexIdDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Migration,cardInfo.getCardIndexNo());
+    	String indexId=dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Migration,cardInfo.getCardIndexNo());
     	cardInfo.setCardIndexNo(indexId);
         cardInfo.setImageFile(DataIndexUtil.getIndexNoOfImageBy(TableTypeEnum.ImageInfor, indexId)+".jpg");
     	

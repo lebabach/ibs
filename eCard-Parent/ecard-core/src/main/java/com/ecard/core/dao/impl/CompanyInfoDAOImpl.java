@@ -2,7 +2,7 @@ package com.ecard.core.dao.impl;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManager;import javax.persistence.LockModeType;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
