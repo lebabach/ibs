@@ -4,10 +4,7 @@
    <%@ page import="java.lang.Integer" %>
  <%@ page import="java.util.List" %>  
 <div class="row border-bottom">
-          <%
-             List<Integer> roles = ( List<Integer>) session.getAttribute("rolesOfUser");
-            System.out.println("SSSSSSSSSSSSSSSSheaderSSSSSSSSSSSSSSSSSSSSSSSSS : " + roles);
-          %>
+
             <nav class="navbar navbar-static-top bg-white box-shadow" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header" style = "position:relative;">
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary "  href="<c:url value='/manager/home'/>" style = "position:absolute;">
