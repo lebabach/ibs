@@ -748,58 +748,6 @@
 
     <!-- Peity -->
     <script src="js/demo/peity-demo.js"></script>
-
-    <!--  -->
-    <script>
-      var stockData = [
-        {          
-            "Name": "寺本司 423423",
-            "FirstName" : "寺本司",
-            "LastName" : "423423",
-            "Company": "livepass.",
-            "Department" : "1940023 東京都町田市旭町3丁目11番20号",
-            "Position" : "Tokyo",
-            "Email" : "abc@gmail.com",
-            "TEL" : "0123456789",
-            "MobilePhone" : "080-4120-6152",
-            "FAX" : "0000011212",
-            "URL" : "http://www.infes.jp/",
-            "Updated" : "7/5/2015",
-            "Link" : "1"
-        },
-        {
-            "Name": "寺本司 423423",
-            "FirstName" : "寺本司",
-            "LastName" : "423423",
-            "Company": "livepass.",
-            "Department" : "1940023 東京都町田市旭町3丁目11番20号",
-            "Position" : "Tokyo",
-            "Email" : "abc@gmail.com",
-            "TEL" : "0123456789",
-            "MobilePhone" : "080-4120-6152",
-            "FAX" : "0000011212",
-            "URL" : "http://www.abc.com.jp/",
-            "Updated" : "7/5/2015",
-            "Link" : "1"
-        },
-        {
-            "Name": "寺本司 423423",
-            "FirstName" : "寺本司",
-            "LastName" : "423423",
-            "Company": "livepass.",
-            "Department" : "1940023 東京都町田市旭町3丁目11番20号",
-            "Position" : "Tokyo",
-            "Email" : "abc@gmail.com",
-            "TEL" : "0123456789",
-            "MobilePhone" : "080-4120-6152",
-            "FAX" : "0000011212",
-            "URL" : "http://www.google.com/",
-            "Updated" : "7/5/2015",
-            "Link" : "1"
-        },
-      ];
-      var id_manager = 1;
-
 <script>
       var id_manager = 1;      
       $(window).scroll(function() {
