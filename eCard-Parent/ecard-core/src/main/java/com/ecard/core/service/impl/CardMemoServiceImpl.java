@@ -44,7 +44,7 @@ public class CardMemoServiceImpl implements CardMemoService {
     
     public int getMaxSeqByUserId(Integer userId){
     	int result = cardMemoDAO.getMaxSeqByUserId(userId);
-    	if(result > 0)
+    	if(result >= 0)
     		result += 1;
     	return result;
     }
