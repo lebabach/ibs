@@ -8,6 +8,7 @@ import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
+import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
 
@@ -87,7 +88,7 @@ public interface CardInfoDAO {
 //    
 //    public BigInteger getTotalCardSearchAllByMroonga(Integer groupCompanyId, List<Integer> listUserId, String searchText,String name, String position,String department,String company, int pageNumber); 
     
-    public List<CardInfo> getListPossesionCard(Integer userId);
+    public List<CardInfoUserVo> getListPossesionCard(Integer userId);
     
     public void updateOldCardInfo(CardInfo cardInfo);
     
@@ -112,4 +113,5 @@ public interface CardInfoDAO {
     public int updateCardType();
     
     public List<CardInfo> listCardInfoByCardType(Integer cardType);
+    public List<String> getListSortType(Integer userId);
 }

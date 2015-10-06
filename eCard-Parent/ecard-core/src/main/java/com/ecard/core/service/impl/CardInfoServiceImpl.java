@@ -26,6 +26,7 @@ import com.ecard.core.util.DataIndexUtil;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
+import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
 
@@ -221,7 +222,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 //	}
 
 	@Override
-	public List<CardInfo> getListPossesionCard(Integer userId) {
+	public List<CardInfoUserVo> getListPossesionCard(Integer userId) {
 		return cardInfoDAO.getListPossesionCard(userId);
 	}
 	public void updateOldCardInfo (CardInfo cardInfo){
@@ -273,4 +274,10 @@ public class CardInfoServiceImpl implements CardInfoService {
     public List<CardInfo> listCardInfoByCardType(Integer cardType){
         return cardInfoDAO.listCardInfoByCardType(cardType);
     }
+
+	@Override
+	public List<String> getListSortType(Integer userId) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.getListSortType(userId);
+	}
 }

@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -38,9 +41,11 @@ import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.converter.CardInfoConverter;
 import com.ecard.core.vo.CardInfoCSV;
 import com.ecard.core.vo.CardInfoResponse;
+import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.UserDownloadPermission;
 import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.util.UploadFileUtil;
+import com.ecard.webapp.vo.CardInfoPCVo;
 
 
 @Controller
@@ -69,18 +74,34 @@ public class UserController {
     public ModelAndView home() {	
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		CardInfoResponse cardInfoResponse = new CardInfoResponse();
+		List<CardInfo> cardInfoDisp = new ArrayList<>();
+		List<CardInfoPCVo>  lstCardInfoPCVo = new ArrayList<>();
 		if (ecardUser != null) {
-			List<CardInfo> cardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId());
-			try {
-				cardInfoResponse.setListCardInfo(CardInfoConverter.convertCardInforList(cardInfo));
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
+			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId());
+			
+			for(String nameSort : lstNameSort) {
+			    for(CardInfoUserVo cardInfo :lstCardInfo ){
+			    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
+			    		cardInfoDisp.add(cardInfo.getCardInfo());
+			    	}
+			    }
+			    CardInfoPCVo cardInfoPCVo;
+				try {
+					cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
+					lstCardInfoPCVo.add(cardInfoPCVo);
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    
 			}
+			
 		}
-		return new ModelAndView("homePC", "cardInfoResponse", cardInfoResponse);
+		return new ModelAndView("homePC", "lstCardInfoPCVo", lstCardInfoPCVo);
     }
 	
 	@RequestMapping("getImageFile") 
