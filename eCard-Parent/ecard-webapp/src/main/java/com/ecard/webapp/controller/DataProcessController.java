@@ -582,17 +582,6 @@ public class DataProcessController {
 					
 					cardModelList.add(cardModel);
 				}				
-				
-				// import data to database
-				if (CollectionUtils.isNotEmpty(cardModelList)){
-                                    List<CardInfo> importSuccessList = importCsvDataService.importListCardInfoFromCsv(cardModelList);
-                                    recordSuccess = importSuccessList.size();
-                                    recordError += cardModelList.size() - recordSuccess;
-
-                                    // Start new thread to upload default card for list of success importing card
-                                    //UploadDefaultCardThread uploadThread = new UploadDefaultCardThread(importSuccessList);
-                                    //uploadThread.start();
-				}
 
 				// import data to database
 				if (CollectionUtils.isNotEmpty(cardModelList)){
