@@ -971,7 +971,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         return query.getResultList();
     }
     
-    public List<Integer> getListOwnerIdByCard(CardInfo cardInfo){
+    public List<Integer> getListUserPushToByCard(CardInfo cardInfo){
     	String sqlStr="SELECT DISTINCT ci.card_owner_id"
 				+ " FROM card_info ci "
 				+ "	WHERE ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName))" 
@@ -985,12 +985,32 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		}
 		if(cardInfo.getContactDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(comDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate())){
 			if(cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 ||cardInfo.getGroupCompanyId() == 3 ||cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5){
+	    		sqlStr += "AND ( ci.group_company_id IN (1,2,3,4,5))";
+	    	} else {
+	    		sqlStr += "AND ( ci.group_company_id = "+cardInfo.getGroupCompanyId() +")";
+	    	}			
+		}
+		
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		query.setParameter("name", cardInfo.getName());
+		query.setParameter("email", cardInfo.getEmail());
+		query.setParameter("companyName", cardInfo.getCompanyName());
+		query.setParameter("cardOwnerId", cardInfo.getCardOwnerId());
+		
+	    return query.getResultList();
+    }
+    
+    public List<Integer> getListUserPushFromByCard(CardInfo cardInfo){
+    	String sqlStr="SELECT DISTINCT ci.card_owner_id"
+				+ " FROM card_info ci "
+				+ "	WHERE ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName))" 
+				+ " AND ci.old_card_flg = 0  AND ci.approval_status = 1 AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";
+		if(cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 ||cardInfo.getGroupCompanyId() == 3 ||cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5){
 	    		sqlStr += "AND ( ci.group_company_id IN (1,2,3,4,5)  OR ( ci.group_company_id NOT IN(1,2,3,4,5) AND ci.contact_date >= '"+ this.complianceDate +"' ))";
 	    	} else {
 	    		sqlStr += "AND ( ci.group_company_id = "+cardInfo.getGroupCompanyId() 
 	    				+" OR ( ci.group_company_id <> "+cardInfo.getGroupCompanyId() +" AND ci.contact_date >= '"+ this.complianceDate +"' ))";
-	    	}			
-		}
+	    	}	
 		
 		Query query = getEntityManager().createNativeQuery(sqlStr);
 		query.setParameter("name", cardInfo.getName());

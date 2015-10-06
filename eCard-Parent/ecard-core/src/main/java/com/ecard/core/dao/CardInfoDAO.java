@@ -97,7 +97,9 @@ public interface CardInfoDAO {
     
     public List<CardInfo> getListCardInfoByUserId(Integer userId);
     
-    public List<Integer> getListOwnerIdByCard(CardInfo cardInfo);
+    public List<Integer> getListUserPushToByCard(CardInfo cardInfo);
+    
+    public List<Integer> getListUserPushFromByCard(CardInfo cardInfo);
     
     public int updateCardDeleted(Integer cardId);
     
