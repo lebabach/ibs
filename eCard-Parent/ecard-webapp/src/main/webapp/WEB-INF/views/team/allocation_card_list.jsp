@@ -1,34 +1,42 @@
 <%@page import="java.util.List"%>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ page session="false" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+	session="false"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ page session="false"%>
 <style>
-thead, tbody { display: block; width:100% }
+thead, tbody {
+	display: block;
+	width: 100%
+}
 
 #paging1 tbody {
-    height: 250px;       /* Just for the demo          */
-    overflow-y: auto;    /* Trigger vertical scroll    */
-    overflow-x: hidden;  /* Hide the horizontal scroll */
+	height: 250px; /* Just for the demo          */
+	overflow-y: auto; /* Trigger vertical scroll    */
+	overflow-x: hidden; /* Hide the horizontal scroll */
 }
+
 #paging1 tbody tr {
-   width:1201px;
+	width: 1201px;
 }
-.table-column{
-	width:33%;
-	padding-right:0px
+
+.table-column {
+	width: 33%;
+	padding-right: 0px
 }
-.txt-table{
-	float:right;
-	width:230px;
+
+.txt-table {
+	float: right;
+	width: 230px;
 	height: 33px;
 }
-.title-abc{
-	background:#f5f5f5;
-	padding:10px;
-	display:inline-block;
-	text-align:left;
-	width:1201px;
+
+.title-abc {
+	background: #f5f5f5;
+	padding: 10px;
+	display: inline-block;
+	text-align: left;
+	width: 1201px;
 }
 </style>
 <script>
@@ -325,113 +333,151 @@ $(function() {
 });
 
 </script>
- <!-- BODY -->
-      <div class="container-fluid padding-top20 bg-container height100per">
-        
-        <!-- RIGHT SIDE -->
-        <div id="right-side" class="col-sm-12">
-        	<!-- BAR TOP -->
-            <div class="row bg-white box-shadow menu-top-header">
-            	<div class="col-sm-12">
-                	<div class="float-left">
-                    	<h4 class="h4-header"><fmt:message key="team.allocation.title"/></h4>
-                    </div>
-                	
-                    <div class="float-right">
-                        <a href="../manager/home" id="add" style="display:inline-block;"><i class="fa icon-rounded"><fmt:message key="team.allocation.cancel"/></i></a>
-                        <a href="#" id="add" class = "btn-add" style="display:inline-block;"><i class="fa icon-rounded"><fmt:message key="team.allocation.register"/></i></a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- END BAR TOP -->
-            <div class="row bg-white box-shadow box-marginTop5 padding-top-bottom">
-				<div class="col-sm-12">
-					<table>
-						<tr style="height:45px">
-							<td colspan="2">
-								<select id="listTeam" class ="team" style="width:210px;height: 33px">
+<!-- BODY -->
+<div class="container-fluid padding-top20 bg-container height100per">
+
+	<!-- RIGHT SIDE -->
+	<div id="right-side" class="col-sm-12">
+		<!-- BAR TOP -->
+		<div class="row bg-white box-shadow menu-top-header">
+			<div class="col-sm-12">
+				<div class="float-left">
+					<h4 class="h4-header">
+						<fmt:message key="team.allocation.title" />
+					</h4>
+				</div>
+
+				<div class="float-right">
+					<a href="../manager/home" id="add" style="display: inline-block;"><i
+						class="fa icon-rounded"><fmt:message
+								key="team.allocation.cancel" /></i></a> <a href="#" id="add"
+						class="btn-add" style="display: inline-block;"><i
+						class="fa icon-rounded"><fmt:message
+								key="team.allocation.register" /></i></a>
+				</div>
+			</div>
+		</div>
+
+		<!-- END BAR TOP -->
+		<div class="row bg-white box-shadow box-marginTop5 padding-top-bottom">
+			<div class="col-sm-12">
+				<table>
+					<tr style="height: 45px">
+						<td colspan="2"><select id="listTeam" class="team"
+							style="width: 210px; height: 33px">
 								<option value='0'>チーム選択</option>
 								<c:if test="${not empty allocationTeamVO.teamList}">
-									<c:forEach var="team" items="${allocationTeamVO.teamList}" varStatus="loop">
-									  <option value='<c:out value="${team.teamId}" />'><c:out value="${team.teamName}" /></option>
-									 </c:forEach>
-							   </c:if>
-								</select>
-							</td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr style="height:45px">
-							<td><fmt:message key="team.allocation.total.number"/></td>
-							<td><span style="float:right" class = "card_number"><c:out value="${allocationTeamVO.totalCard}" /> <fmt:message key="team.allocation.card"/> </span>
-							<input type="hidden" class ="total-card"  name="total-card" value="${allocationTeamVO.totalCard}"> </td>
-						
-							<td></td>
-							<td></td>
-						</tr>
-						<tr style="height:45px">
-							<td><span style="margin-left: 15px; margin-right: 30px;"><fmt:message key="team.allocation.number.team.allocation"/></span></td>
-							<c:choose>
-							
-									<c:when test="${pageContext.request.isUserInRole('ROLE_SUPERVISOR')}">
-											<td><input type="text" name="target_count1" class ="target_count1" value="${allocationTeamVO.teamList[0].targetCount}" style=" height: 33px"/></br><span class='sp-target_count' style="color:red;"></span></td>
-				                    </c:when>
-					                <c:otherwise>
-											<td><input type="text" name="target_count1" class ="target_count1" disabled="disabled" value="${allocationTeamVO.teamList[0].targetCount}" style=" height: 33px"/></br><span class='sp-target_count' style="color:red;"></span></td>
-															       
-									</c:otherwise>
-				           </c:choose>
-							
-							<input type="hidden"  name = "target_count" class = "target_count2"  value="${allocationTeamVO.teamList[0].targetCount}"> </td>
-							<td class="non-lpadding"> <fmt:message key="team.allocation.card"/> </td>
-							<td><span style="margin-left: 15px; margin-right: 30px;"><fmt:message key="team.allocation.number.allocation"/></span></td>
-							<td><label  class ="current_count" style="padding-right: 2px;margin-bottom: 0px;"><c:out value="${allocationTeamVO.lstUserVo[0].totalCardTeam}" /></br><span class='sp-current_count' style="color:red;"></span></td>
-							<td class="non-lpadding"> <fmt:message key="team.allocation.card"/> </td>
-						</tr>
-					</table>
-				</div>
-				<!-- END SEARCH -->
-				<!-- DATA TABLE -->
-				
-				<div class="col-sm-12 table-list-operator">
-					<div class="row " id="data-table">
-						<div class="ibox-content " >
-							<div class="title-abc"><fmt:message key="team.allocation.team.list"/></div>
-							<table class="table" id = "paging1"  style="width: 1201px;margin-left: 0px;">
-								<tbody class = "content-user">
-								<c:forEach var="user" items="${allocationTeamVO.lstUserVo}" varStatus="loop">
+									<c:forEach var="team" items="${allocationTeamVO.teamList}"
+										varStatus="loop">
+										<option value='<c:out value="${team.teamId}" />'><c:out
+												value="${team.teamName}" /></option>
+									</c:forEach>
+								</c:if>
+						</select></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr style="height: 45px">
+						<td><fmt:message key="team.allocation.total.number" /></td>
+						<td><span style="float: right" class="card_number"><c:out
+									value="${allocationTeamVO.totalCard}" /> <fmt:message
+									key="team.allocation.card" /> </span> <input type="hidden"
+							class="total-card" name="total-card"
+							value="${allocationTeamVO.totalCard}"></td>
+
+						<td></td>
+						<td></td>
+					</tr>
+					<tr style="height: 45px">
+						<td><span style="margin-left: 15px; margin-right: 30px;"><fmt:message
+									key="team.allocation.number.team.allocation" /></span></td>
+						<c:choose>
+
+							<c:when
+								test="${pageContext.request.isUserInRole('ROLE_SUPERVISOR')}">
+								<td><input type="text" name="target_count1"
+									class="target_count1"
+									value="${allocationTeamVO.teamList[0].targetCount}"
+									style="height: 33px" /></br>
+								<span class='sp-target_count' style="color: red;"></span></td>
+							</c:when>
+							<c:otherwise>
+								<td><input type="text" name="target_count1"
+									class="target_count1" disabled="disabled"
+									value="${allocationTeamVO.teamList[0].targetCount}"
+									style="height: 33px" /></br>
+								<span class='sp-target_count' style="color: red;"></span></td>
+
+							</c:otherwise>
+						</c:choose>
+
+						<input type="hidden" name="target_count" class="target_count2"
+							value="${allocationTeamVO.teamList[0].targetCount}">
+						</td>
+						<td class="non-lpadding"><fmt:message
+								key="team.allocation.card" /></td>
+						<td><span style="margin-left: 15px; margin-right: 30px;"><fmt:message
+									key="team.allocation.number.allocation" /></span></td>
+						<td><label class="current_count"
+							style="padding-right: 2px; margin-bottom: 0px;"><c:out
+									value="${allocationTeamVO.lstUserVo[0].totalCardTeam}" /></br>
+							<span class='sp-current_count' style="color: red;"></span></td>
+						<td class="non-lpadding"><fmt:message
+								key="team.allocation.card" /></td>
+					</tr>
+				</table>
+			</div>
+			<!-- END SEARCH -->
+			<!-- DATA TABLE -->
+
+			<div class="col-sm-12 table-list-operator">
+				<div class="row " id="data-table">
+					<div class="ibox-content ">
+						<div class="title-abc">
+							<fmt:message key="team.allocation.team.list" />
+						</div>
+						<table class="table" id="paging1"
+							style="width: 1201px; margin-left: 0px;">
+							<tbody class="content-user">
+								<c:forEach var="user" items="${allocationTeamVO.lstUserVo}"
+									varStatus="loop">
 									<tr id="${loop.index}">
-									   <c:if test="${not empty user.name}">  
-										 	<td class="table-column"><c:out value="${user.name}" /><input type="hidden" name="userId"  value="${user.userId}"> 
-										 		<input type="text" name="teamdivide" class="txt-table">
-										 	</td>
-											<td class="non-lpadding"> <fmt:message key="team.allocation.card"/> </td>
-										</c:if>
-										 <c:if test="${not empty user.name1}">  
-											<td class="table-column"><c:out value="${user.name1}" /><input type="hidden" name="userId" value="${user.userId1}"> 
+										<c:if test="${not empty user.name}">
+											<td class="table-column"><c:out value="${user.name}" /><input
+												type="hidden" name="userId" value="${user.userId}">
 												<input type="text" name="teamdivide" class="txt-table">
 											</td>
-											<td class="non-lpadding"> <fmt:message key="team.allocation.card"/> </td>
+											<td class="non-lpadding"><fmt:message
+													key="team.allocation.card" /></td>
 										</c:if>
-										<c:if test="${not empty user.name2}">  
-											<td class="table-column"><c:out value="${user.name2}" /><input type="hidden" name="userId" value="${user.userId2}"> 
+										<c:if test="${not empty user.name1}">
+											<td class="table-column"><c:out value="${user.name1}" /><input
+												type="hidden" name="userId" value="${user.userId1}">
 												<input type="text" name="teamdivide" class="txt-table">
 											</td>
-											<td class="non-lpadding"> <fmt:message key="team.allocation.card"/> </td>
+											<td class="non-lpadding"><fmt:message
+													key="team.allocation.card" /></td>
+										</c:if>
+										<c:if test="${not empty user.name2}">
+											<td class="table-column"><c:out value="${user.name2}" /><input
+												type="hidden" name="userId" value="${user.userId2}">
+												<input type="text" name="teamdivide" class="txt-table">
+											</td>
+											<td class="non-lpadding"><fmt:message
+													key="team.allocation.card" /></td>
 										</c:if>
 									</tr>
-								 </c:forEach>
-								</tbody>
-							</table>
-						</div>
+								</c:forEach>
+							</tbody>
+						</table>
 					</div>
 				</div>
-				<!-- END DATA TABLE -->
 			</div>
-            <!-- BAR BODY -->
-            
-        </div>
-        <!-- END RIGHT SIDE -->
-      </div>
-      <!-- END BODY -->
+			<!-- END DATA TABLE -->
+		</div>
+		<!-- BAR BODY -->
+
+	</div>
+	<!-- END RIGHT SIDE -->
+</div>
+<!-- END BODY -->

@@ -2,9 +2,9 @@
 	session="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
- <%@ page import="java.lang.Integer" %>
- <%@ page import="java.util.List" %>
- 
+<%@ page import="java.lang.Integer"%>
+<%@ page import="java.util.List"%>
+
 <script type="text/javascript">
 	var base64 = "";
 	/* function rotateBase64Image(base64data, callback,rorate) {
@@ -616,54 +616,60 @@
 <!-- BODY -->
 <div class="bg-detail">
 	<!-- BODY -->
-	<c:if test="${pageContext.request.isUserInRole('ROLE_OPERATOR') and (cardInfo.approvalStatus == 4 or cardInfo.approvalStatus == 5)}">
+	<c:if
+		test="${pageContext.request.isUserInRole('ROLE_OPERATOR') and (cardInfo.approvalStatus == 4 or cardInfo.approvalStatus == 5)}">
 		<c:if test="${not permissionEdit}">
 			<script type="text/javascript">
 				alert("You haven't permission to edit this card");				
 			</script>
-			<meta http-equiv="Refresh" content="0; url='<c:url value='/cards/list"'/>'">
+			<meta http-equiv="Refresh"
+				content="0; url='<c:url value='/cards/list"'/>'">
 		</c:if>
 	</c:if>
-	
-	<form id="cardInforEditSubmitForm"
-		class="h-adr"
-		method="POST" action="/ecard-webapp/cards/edit/${cardInfo.cardId}"
+
+	<form id="cardInforEditSubmitForm" class="h-adr" method="POST"
+		action="/ecard-webapp/cards/edit/${cardInfo.cardId}"
 		accept-charset="UFT-8">
-		
-	    
-	    
+
+
+
 		<input type="hidden" name="cardId" value="${cardInfo.cardId}">
-		<input type="hidden" name="cardOwnerId" value="${cardInfo.cardOwnerId}">
-		<input type="hidden" name="approvalStatus" value="${cardInfo.approvalStatus}"> 
-		<input type="hidden" name="cardBackImgFile" value="${cardInfo.cardBackImgFile}">
-		<input type="hidden" name="cardName" value="${cardInfo.name}">
+		<input type="hidden" name="cardOwnerId"
+			value="${cardInfo.cardOwnerId}"> <input type="hidden"
+			name="approvalStatus" value="${cardInfo.approvalStatus}"> <input
+			type="hidden" name="cardBackImgFile"
+			value="${cardInfo.cardBackImgFile}"> <input type="hidden"
+			name="cardName" value="${cardInfo.name}">
 		<!-- CENTER SIDE -->
 		<div id="center-side" class="col-sm-12 ch-title">
 			<div class="row">
 				<div class="col-sm-6">
-					<span style="color:black;margin-right:100px">名刺情報</span>
-					<span style="color: #6D6363;"><c:out value="${cardInfo.cardIndexNo}"></c:out></span>
+					<span style="color: black; margin-right: 100px">名刺情報</span> <span
+						style="color: #6D6363;"><c:out
+							value="${cardInfo.cardIndexNo}"></c:out></span>
 				</div>
 				<div class="col-sm-6 ch-color-link">
-                         <c:choose>
-								<c:when test="${pageContext.request.isUserInRole('ROLE_SUPERVISOR')}">
-					               <a id="approvalSave" class="ch-edit float-right-button">承認</a>	
-								   <a id="tempSave" class="ch-edit float-right-button">一時保存</a>
-									<a id="saveTempStatus4" class="ch-edit float-right-button">承認申請</a>
-									<a id="moveFix" class="ch-edit float-right-button">修正依頼</a>
-								     <a id="backToManage" class="ch-edit float-right-button">戻る</a>
-								</c:when>
-								<c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
-									<a id="approvalSave" class="ch-edit float-right-button">承認</a>	
-                                    <a id="moveFix" class="ch-edit float-right-button">修正依頼</a>
-                                    <a id="backToManage" class="ch-edit float-right-button">戻る</a>
-								</c:when>
-								<c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
-									<a id="saveTempStatus4" class="ch-edit float-right-button">承認申請</a>
-									 <a id="tempSave" class="ch-edit float-right-button">一時保存</a>
-								    <a id="backToManage" class="ch-edit float-right-button">戻る</a>									   
-								</c:when>
-						 </c:choose>
+					<c:choose>
+						<c:when
+							test="${pageContext.request.isUserInRole('ROLE_SUPERVISOR')}">
+							<a id="approvalSave" class="ch-edit float-right-button">承認</a>
+							<a id="tempSave" class="ch-edit float-right-button">一時保存</a>
+							<a id="saveTempStatus4" class="ch-edit float-right-button">承認申請</a>
+							<a id="moveFix" class="ch-edit float-right-button">修正依頼</a>
+							<a id="backToManage" class="ch-edit float-right-button">戻る</a>
+						</c:when>
+						<c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
+							<a id="approvalSave" class="ch-edit float-right-button">承認</a>
+							<a id="moveFix" class="ch-edit float-right-button">修正依頼</a>
+							<a id="backToManage" class="ch-edit float-right-button">戻る</a>
+						</c:when>
+						<c:when
+							test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+							<a id="saveTempStatus4" class="ch-edit float-right-button">承認申請</a>
+							<a id="tempSave" class="ch-edit float-right-button">一時保存</a>
+							<a id="backToManage" class="ch-edit float-right-button">戻る</a>
+						</c:when>
+					</c:choose>
 				</div>
 			</div>
 		</div>
@@ -694,7 +700,8 @@
 						</h4>
 						<input type="hidden" name="imageFile"
 							value="data:image/png;base64,${cardInfo.imageFile}">
-						<canvas id="canvas" style='display: none' width="1000px" height="602px"></canvas>
+						<canvas id="canvas" style='display: none' width="1000px"
+							height="602px"></canvas>
 						<input type="hidden" name="rote" id="rote-image" value="">
 
 					</div>
@@ -920,19 +927,23 @@
 									<div class="float-right float-right-content  ch-color-link">
 										<div class=" inline block-inline"
 											style="position: relative; margin: 0 auto; width: auto">
-											<input name="zipCode" type="text"
-												value="${cardInfo.zipCode}" class="form-control p-postal-code"
-												id="zipcode" placeholder="" style="width: 322px"> <!-- <a
+											<input name="zipCode" type="text" value="${cardInfo.zipCode}"
+												class="form-control p-postal-code" id="zipcode"
+												placeholder="" style="width: 322px">
+											<!-- <a
 												style="position: absolute; left: 198px; top: 0px; width: 150px; height: 32px;"
 												class="ch-address btn_address">郵便番号から住所を入力</a> -->
 										</div>
 										<p class="mesage_error error_zipcode"></p>
-										
-									    <span class="p-country-name" style="display:none;">Japan</span>
-									
-									    <input type="text" class="p-region" readonly="" id="p-region"  style="display:none;">
-									    <input type="text" class="p-locality" readonly="" id="p-locality"  style="display:none;">
-									    <input type="text" class="p-street-address p-extended-address" id="extended-address"  style="display:none;">
+
+										<span class="p-country-name" style="display: none;">Japan</span>
+
+										<input type="text" class="p-region" readonly="" id="p-region"
+											style="display: none;"> <input type="text"
+											class="p-locality" readonly="" id="p-locality"
+											style="display: none;"> <input type="text"
+											class="p-street-address p-extended-address"
+											id="extended-address" style="display: none;">
 									</div>
 								</div>
 								<div class="col-sm-12">
@@ -946,7 +957,7 @@
 										<textarea name="addressFull" class="form-control"
 											id="addressFull" placeholder="" rows="3">${cardInfo.addressFull}</textarea>
 										<p class="mesage_error error_addressFull" />
-										<p style="margin: 5px; width: 100%;font-size: 12px;">
+										<p style="margin: 5px; width: 100%; font-size: 12px;">
 											<fmt:message key='card.memo.addressFull' />
 										</p>
 									</div>

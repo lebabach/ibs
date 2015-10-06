@@ -1,5 +1,5 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <script type="text/javascript">
 var dataTables;
@@ -156,8 +156,8 @@ var dataTables;
 	});
 </script>
 <style>
-.icon-white{
-background-color: #fff;
+.icon-white {
+	background-color: #fff;
 }
 </style>
 <!-- BODY -->
@@ -168,12 +168,16 @@ background-color: #fff;
 		<div class="row bg-white box-shadow menu-top-header">
 			<div class="col-sm-12">
 				<div class="float-left">
-					<h4 class="h4-header"><fmt:message key="operator.list.title"/></h4>
+					<h4 class="h4-header">
+						<fmt:message key="operator.list.title" />
+					</h4>
 				</div>
 
 				<div class="float-right">
-					<a href="<c:url value="/operators/register"/>" id="add"><i class="fa fa-plus icon-rounded icon-white"></i></a> 
-					<a href="<c:url value="/data/importUserByCSV"/>" id="addUser"><i class="fa fa fa-upload icon-rounded icon-white"></i></a>
+					<a href="<c:url value="/operators/register"/>" id="add"><i
+						class="fa fa-plus icon-rounded icon-white"></i></a> <a
+						href="<c:url value="/data/importUserByCSV"/>" id="addUser"><i
+						class="fa fa fa-upload icon-rounded icon-white"></i></a>
 				</div>
 			</div>
 		</div>
@@ -181,14 +185,18 @@ background-color: #fff;
 		<!-- END BAR TOP -->
 		<div class="row bg-white box-shadow box-marginTop5 padding-top-bottom">
 			<!-- <form> -->
-				<div class="col-sm-12">
-					<div class="input-group">
-						<input type="text" class="form-control" id = "criteriaSearch" name="criteriaSearch" placeholder="<fmt:message key="operator.list.placeholder"/>" /> 
-						<span class="input-group-btn">
-							<button type="button" id="btnSearch" class="btn btn-primary"><fmt:message key = "operator.list.search" /></button>
-						</span>
-					</div>
+			<div class="col-sm-12">
+				<div class="input-group">
+					<input type="text" class="form-control" id="criteriaSearch"
+						name="criteriaSearch"
+						placeholder="<fmt:message key="operator.list.placeholder"/>" /> <span
+						class="input-group-btn">
+						<button type="button" id="btnSearch" class="btn btn-primary">
+							<fmt:message key="operator.list.search" />
+						</button>
+					</span>
 				</div>
+			</div>
 			<!-- </form> -->
 			<!-- END SEARCH -->
 			<!-- DATA TABLE -->
@@ -198,18 +206,18 @@ background-color: #fff;
 						<table class="table" id="listUser">
 							<thead>
 								<tr>
-								   <%--  <th><fmt:message key = "operator.list.id" /></th>
+									<%--  <th><fmt:message key = "operator.list.id" /></th>
 								    <th><fmt:message key = "operator.list.lastname" /></th>
 								    <th><fmt:message key = "operator.list.firstname" /></th>
 									<th><fmt:message key = "operator.list.lastnamekana" /></th>--%>
-									<th><fmt:message key = "operator.list.id" /></th> 
-									<th><fmt:message key = "operator.list.name" /></th>
-									<th><fmt:message key = "operator.list.companyName" /></th>
-									<th><fmt:message key = "operator.list.position" /></th>
-									<th><fmt:message key = "operator.list.email" /></th>
-									<th><fmt:message key = "operator.list.phone" /></th>
-									<th><fmt:message key = "operator.list.createDate" /></th>
-									<th><fmt:message key = "operator.list.action" /></th>
+									<th><fmt:message key="operator.list.id" /></th>
+									<th><fmt:message key="operator.list.name" /></th>
+									<th><fmt:message key="operator.list.companyName" /></th>
+									<th><fmt:message key="operator.list.position" /></th>
+									<th><fmt:message key="operator.list.email" /></th>
+									<th><fmt:message key="operator.list.phone" /></th>
+									<th><fmt:message key="operator.list.createDate" /></th>
+									<th><fmt:message key="operator.list.action" /></th>
 								</tr>
 							</thead>
 						</table>

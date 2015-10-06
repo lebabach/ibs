@@ -1,552 +1,614 @@
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%> 
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 
 <style>
-.btn-lg{
-    padding: 2px 16px;  
-  }
-  .form-group{
-    margin-bottom: 0;
-  }
-  .clearfix{
-    margin-bottom: 4px;
-  }
-  .navbar-right{
-    margin-right: -40px;
-  }
-  .clearfix a.active{
-    font-weight: bold;
-  }
-  .navbar-left{
-    float: left;
-     margin-top: 45px;
-  }
-  .navbar-left li {
-   
-    position: relative;
-    margin-left: 20px;
+.btn-lg {
+	padding: 2px 16px;
+}
 
-    }
-    .navbar-top-links .dropdown-menu li{
-    margin-left: 0;
-  }  
-  .navbar-left li a {
-    padding: 0;
-    min-height: inherit;
-    }
-  .navbar-left li a .label {
-    line-height: 12px;
-    padding: 2px 5px;
-    position: absolute;
-    right: -3px;
-    top: -8px;
-  }
-  .navbar-static-top{
-    margin-bottom: 0;
-    float: right;
-    background: none;
-    position: absolute;
-    right: -15px;
-    bottom: -7px;
-  }
-  .searchTargetSwitcher{
-    background: #fff;
-     
-     display: block;
-     padding-bottom: 5px;
-  }
-  .list-group-item-title{
-    background: -moz-linear-gradient(center top , #f4f4f4, #e6e6e6) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    border: 1px solid #b1b1b1;
-    border-radius: 4px 4px 0 0;
-    box-shadow: 0 1px 1px #fff inset;
-    font-weight: bold;
-    padding: 14px 30px 10px;
-    text-align: left;
-    color: #666;
-    font-weight: bold;
-    font-family: "メイリオ",Meiryo,"ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","ＭＳ Ｐゴシック","MS PGothic",sans-serif !important;
-  }
-  .list-group-item{
-    background: #fff;
-     border: 1px solid #b1b1b1;
-  }
+.form-group {
+	margin-bottom: 0;
+}
+
+.clearfix {
+	margin-bottom: 4px;
+}
+
+.navbar-right {
+	margin-right: -40px;
+}
+
+.clearfix a.active {
+	font-weight: bold;
+}
+
+.navbar-left {
+	float: left;
+	margin-top: 45px;
+}
+
+.navbar-left li {
+	position: relative;
+	margin-left: 20px;
+}
+
+.navbar-top-links .dropdown-menu li {
+	margin-left: 0;
+}
+
+.navbar-left li a {
+	padding: 0;
+	min-height: inherit;
+}
+
+.navbar-left li a .label {
+	line-height: 12px;
+	padding: 2px 5px;
+	position: absolute;
+	right: -3px;
+	top: -8px;
+}
+
+.navbar-static-top {
+	margin-bottom: 0;
+	float: right;
+	background: none;
+	position: absolute;
+	right: -15px;
+	bottom: -7px;
+}
+
+.searchTargetSwitcher {
+	background: #fff;
+	display: block;
+	padding-bottom: 5px;
+}
+
+.list-group-item-title {
+	background: -moz-linear-gradient(center top, #f4f4f4, #e6e6e6) repeat
+		scroll 0 0 rgba(0, 0, 0, 0);
+	border: 1px solid #b1b1b1;
+	border-radius: 4px 4px 0 0;
+	box-shadow: 0 1px 1px #fff inset;
+	font-weight: bold;
+	padding: 14px 30px 10px;
+	text-align: left;
+	color: #666;
+	font-weight: bold;
+	font-family: "メイリオ", Meiryo, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",
+		"ＭＳ Ｐゴシック", "MS PGothic", sans-serif !important;
+}
+
+.list-group-item {
+	background: #fff;
+	border: 1px solid #b1b1b1;
+}
 </style>
 <!-- START HEADER -->
-<div class="" style="border: solid 1px #f3f3f4;background: #e3e3e3;">
-      <div class="row clearfix">
-        
-          <div class="col-md-2" style="width: 150px; display:inline-block">
-            <div class="form-group">
-                <div class="icon-addon addon-md">
-                    <!-- <form name="myform">  -->
-						<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-example">検索画面</button>
-						<!-- modal -->
-							<div class="modal" id="modal-example" tabindex="-1">
-								<div class="modal-dialog">
+<div class="" style="border: solid 1px #f3f3f4; background: #e3e3e3;">
+	<div class="row clearfix">
 
-									<!-- modal content -->
-										<div class="modal-content">
-											<!-- modal header -->
-												<div class="modal-header">
-													<button type="button" class="close" data-dismiss="modal">
-														<span aria-hidden="true">&times;</span>
-													</button>
-													<h4 class="modal-title" id="modal-label">検索条件を入力してください</h4>
-            									</div>
-												<!-- modal body -->
-													<div class="modal-body">
-														<label for="exampleInputEmail1">検索対象</label>
-															<select class="form-control">
-																<option>自分の名刺</option>
-																<option>グループ</option>
-																<option>全体</option>
-															</select>
-																<div class="form-group">
-																	<label for="exampleInputEmail1">フリーワード</label>
-																	<input type="email" class="form-control" id="exampleInputEmail1" placeholder="会社名・氏名・emailを入力 * or * でOR検索">
-																</div>
-															<button type="button" class="btn btn-primary btn-lg">検索</button>
-															<h4 class="modal-title" id="modal-label">必要に応じて入力してください</h4>
-														<div class="form-group">
-															<label for="exampleInputEmail1">会社名</label>
-																<input type="email" class="form-control" id="exampleInputEmail1" placeholder="例：田中物産株式会社">
-														</div>
-														<div class="form-group">
-															<label for="exampleInputEmail1">氏名</label>
-																<input type="email" class="form-control" id="exampleInputEmail1" placeholder="例：田中　太郎">
-														</div>
-														<div class="form-group">
-															<label for="exampleInputEmail1">email</label>
-																<input type="email" class="form-control" id="exampleInputEmail1" placeholder="例：tanaka@gmail.com">
-														</div>
-														<div class="form-group">
-															<label for="exampleInputEmail1">部署</label>
-																<input type="email" class="form-control" id="exampleInputEmail1" placeholder="例：管理部">
-														</div>
-														<div class="form-group">
-															<label for="exampleInputEmail1">役職</label>
-																<input type="email" class="form-control" id="exampleInputEmail1" placeholder="例：部長">
-														</div>
-														<div class="form-group">
-															<label for="exampleInputEmail1">住所</label>
-																<input type="email" class="form-control" id="exampleInputEmail1" placeholder="例：東京都千代田区神田">
-														</div>
-        											</div>
-													<!-- modal footer -->
-														<div class="modal-footer">
-															<div class="col-md-3">
-															<select class="form-control">
-																<option>1</option>
-																<option>2</option>
-																<option>3</option>
-																<option>4</option>
-																<option>5</option>
-															</select>
-															</div>
-															←
-															<button type="button" class="btn btn-success" data-dismiss="modal">保存済みの検索条件を呼び出す</button>
-															<button type="button" class="btn btn-info">検索条件を保存する</button>
-            											</div>
-        											</div>
-    											</div>
-											</div>
-                    <!-- </form> -->
-                    
-                    <!-- <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>  -->
-                </div>
-            
-            </div>
-            
-          </div>
-          <div class="col-md-2 m-b-xs setDisplayTerm" style="width:188px; display:inline-block">
-            <select id="selectSortBox" class="input-sm form-control input-s-sm inline">
-              <option value="0">ラベルで絞り込み</option>
-              <option value="1">​つ​な​が​っ​て​い​る​人​</option>
-              <option value="2">​ラ​ベ​ル​な​し​</option>                          
-            </select>
-          </div>
-         
-          <div class="col-md-2 setDisplayTerm" style="float:right; margin-right:0;">
-              <select class="input-sm form-control input-s-sm inline">
-                <option value="0">名刺交換日順</option>
-                <option value="1">氏名順</option>
-                <option value="2">会社名順</option>                          
-            </select>
-          </div>    
-          <div class="col-md-2 m-b-xs setDisplayTerm" style="float:right; width:155px; margin-right:0">
-            <!--<img src="img/img-p-c-1.png" class="img-p-c-1" style="float:left; margin-top:-3px;">-->
-            <div class="btn-group" role="group" aria-label="..." style="float:right;">
-              <button id="addTag" class="btn btn-primary disabled" type="button">                  
-                <i class="fa fa-tag"></i>               
-              </button>
-              <div class="balloon lbl_balloon" style="display: none;">
-                <!--<div class="lbl_srh">
+		<div class="col-md-2" style="width: 150px; display: inline-block">
+			<div class="form-group">
+				<div class="icon-addon addon-md">
+					<!-- <form name="myform">  -->
+					<button class="btn btn-primary btn-lg" data-toggle="modal"
+						data-target="#modal-example">検索画面</button>
+					<!-- modal -->
+					<div class="modal" id="modal-example" tabindex="-1">
+						<div class="modal-dialog">
+
+							<!-- modal content -->
+							<div class="modal-content">
+								<!-- modal header -->
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									<h4 class="modal-title" id="modal-label">検索条件を入力してください</h4>
+								</div>
+								<!-- modal body -->
+								<div class="modal-body">
+									<label for="exampleInputEmail1">検索対象</label> <select
+										class="form-control">
+										<option>自分の名刺</option>
+										<option>グループ</option>
+										<option>全体</option>
+									</select>
+									<div class="form-group">
+										<label for="exampleInputEmail1">フリーワード</label> <input
+											type="email" class="form-control" id="exampleInputEmail1"
+											placeholder="会社名・氏名・emailを入力 * or * でOR検索">
+									</div>
+									<button type="button" class="btn btn-primary btn-lg">検索</button>
+									<h4 class="modal-title" id="modal-label">必要に応じて入力してください</h4>
+									<div class="form-group">
+										<label for="exampleInputEmail1">会社名</label> <input
+											type="email" class="form-control" id="exampleInputEmail1"
+											placeholder="例：田中物産株式会社">
+									</div>
+									<div class="form-group">
+										<label for="exampleInputEmail1">氏名</label> <input type="email"
+											class="form-control" id="exampleInputEmail1"
+											placeholder="例：田中　太郎">
+									</div>
+									<div class="form-group">
+										<label for="exampleInputEmail1">email</label> <input
+											type="email" class="form-control" id="exampleInputEmail1"
+											placeholder="例：tanaka@gmail.com">
+									</div>
+									<div class="form-group">
+										<label for="exampleInputEmail1">部署</label> <input type="email"
+											class="form-control" id="exampleInputEmail1"
+											placeholder="例：管理部">
+									</div>
+									<div class="form-group">
+										<label for="exampleInputEmail1">役職</label> <input type="email"
+											class="form-control" id="exampleInputEmail1"
+											placeholder="例：部長">
+									</div>
+									<div class="form-group">
+										<label for="exampleInputEmail1">住所</label> <input type="email"
+											class="form-control" id="exampleInputEmail1"
+											placeholder="例：東京都千代田区神田">
+									</div>
+								</div>
+								<!-- modal footer -->
+								<div class="modal-footer">
+									<div class="col-md-3">
+										<select class="form-control">
+											<option>1</option>
+											<option>2</option>
+											<option>3</option>
+											<option>4</option>
+											<option>5</option>
+										</select>
+									</div>
+									←
+									<button type="button" class="btn btn-success"
+										data-dismiss="modal">保存済みの検索条件を呼び出す</button>
+									<button type="button" class="btn btn-info">検索条件を保存する</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- </form> -->
+
+					<!-- <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>  -->
+				</div>
+
+			</div>
+
+		</div>
+		<div class="col-md-2 m-b-xs setDisplayTerm"
+			style="width: 188px; display: inline-block">
+			<select id="selectSortBox"
+				class="input-sm form-control input-s-sm inline">
+				<option value="0">ラベルで絞り込み</option>
+				<option value="1">​つ​な​が​っ​て​い​る​人​</option>
+				<option value="2">​ラ​ベ​ル​な​し​</option>
+			</select>
+		</div>
+
+		<div class="col-md-2 setDisplayTerm"
+			style="float: right; margin-right: 0;">
+			<select class="input-sm form-control input-s-sm inline">
+				<option value="0">名刺交換日順</option>
+				<option value="1">氏名順</option>
+				<option value="2">会社名順</option>
+			</select>
+		</div>
+		<div class="col-md-2 m-b-xs setDisplayTerm"
+			style="float: right; width: 155px; margin-right: 0">
+			<!--<img src="img/img-p-c-1.png" class="img-p-c-1" style="float:left; margin-top:-3px;">-->
+			<div class="btn-group" role="group" aria-label="..."
+				style="float: right;">
+				<button id="addTag" class="btn btn-primary disabled" type="button">
+					<i class="fa fa-tag"></i>
+				</button>
+				<div class="balloon lbl_balloon" style="display: none;">
+					<!--<div class="lbl_srh">
                   <dl class="srhbox_round">
                     <dt><a class="search_tag_index_btn" href="javascript: void(0);"></a><i class="fa fa-search"></i></dt>
                     <dd><span class="iptxt"><input type="text" class="search_tag_index" value="" style="color: rgb(171, 171, 171);"></span></dd>
                   </dl>
                 </div>-->
-                <div class="">
-                  <div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;">
-                    <table class="table" id="paging">
-                    <!-- <table class="" id="paging" style="width: 100%;max-width: 100%;margin-bottom:10px">                      -->
-                      <col width="10%">
-                      <col width="80%">
-                      <col width="10%">
-                      <tbody>
-                          <tr id="rowData">
-                            <td><input type="checkbox" class="i-checks" id="1"></td>                  
-                            <td class="nametag">Mark111111111</td>
-                            <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
-                          </tr>
-                          <tr id="rowData">
-                            <td><input type="checkbox" class="i-checks" id="1"></td>                  
-                            <td class="nametag">22222222222222222244444444222244444</td>
-                            <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
-                          </tr>
-                          <tr id="rowData">
-                            <td><input type="checkbox" class="i-checks " id="1"></td>                  
-                            <td>33333</td>
-                            <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
-                          </tr>
-                      </tbody>
-                    </table>
-                </div>
-                </div>
-                
-                <div class="">
-                  <div class="input-group lbl" style="padding: 15px;">
-                    <input type="text" class="form-control" placeholder="新規タグを追加">
-                      <span class="input-group-btn"> 
-                      <button id="addLabel" type="button" class="btn btn-success">作成</button> 
-                      </span>
-                  </div>
-                </div>
-              </div>               
-              <button id="deletePeople" class="btn btn-primary disabled" type="button">
-                <i class="fa fa-trash"></i></button>
-            </div>
-            
-          </div>
-              
-     
-      </div>
-    </div>
+					<div class="">
+						<div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;">
+							<table class="table" id="paging">
+								<!-- <table class="" id="paging" style="width: 100%;max-width: 100%;margin-bottom:10px">                      -->
+								<col width="10%">
+								<col width="80%">
+								<col width="10%">
+								<tbody>
+									<tr id="rowData">
+										<td><input type="checkbox" class="i-checks" id="1"></td>
+										<td class="nametag">Mark111111111</td>
+										<td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
+									</tr>
+									<tr id="rowData">
+										<td><input type="checkbox" class="i-checks" id="1"></td>
+										<td class="nametag">22222222222222222244444444222244444</td>
+										<td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
+									</tr>
+									<tr id="rowData">
+										<td><input type="checkbox" class="i-checks " id="1"></td>
+										<td>33333</td>
+										<td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
 
-    <div class="searchTargetSwitcher">
-      <div class="clearfix">
-      <a href="javascript:void(0)" class="BusinessCardList active"> あなたの名刺 </a>
-      <div class="ManagerSearch_box" style="display: none;">
-        <div class="lbl_srh">
-          <dl class="srhbox_round">
-            <dt><a class="search_tag_index_btn" href="javascript: void(0);"></a><i class="fa fa-search"></i></dt>
-            <dd><span class="iptxt"><input type="text" class="search_tag_index" value="" style="color: rgb(171, 171, 171);"></span></dd>
-          </dl>
-        </div>
-        <div class="">
-          <div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;">
-            <table class="table" id="mSearch">
-              <col width="10%">
-              <col width="90%">              
-              <tbody>
-                  <tr id="rowData_1">
-                    <td><input type="checkbox" class="i-checks"></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-                  <tr id="rowData_2">
-                    <td><input type="checkbox" class="i-checks"></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-                  <tr id="rowData_3">
-                    <td><input type="checkbox" class="i-checks "></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-                  <tr id="rowData_4">
-                    <td><input type="checkbox" class="i-checks "></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-                  <tr id="rowData_5">
-                    <td><input type="checkbox" class="i-checks "></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-              </tbody>
-            </table>
-        </div>
-        </div>
-        
-        <div class="" style="margin-top:5px">
-          <div class="ac">
-            <p><a href="#">選択した検索条件を使用する</a></p>
-            <p><a href="#">選択した検索条件を削除</a></p>
-          </div>
-          <!-- <div class="input-group lbl" style="padding: 15px;">            
+					<div class="">
+						<div class="input-group lbl" style="padding: 15px;">
+							<input type="text" class="form-control" placeholder="新規タグを追加">
+							<span class="input-group-btn">
+								<button id="addLabel" type="button" class="btn btn-success">作成</button>
+							</span>
+						</div>
+					</div>
+				</div>
+				<button id="deletePeople" class="btn btn-primary disabled"
+					type="button">
+					<i class="fa fa-trash"></i>
+				</button>
+			</div>
+
+		</div>
+
+
+	</div>
+</div>
+
+<div class="searchTargetSwitcher">
+	<div class="clearfix">
+		<a href="javascript:void(0)" class="BusinessCardList active">
+			あなたの名刺 </a>
+		<div class="ManagerSearch_box" style="display: none;">
+			<div class="lbl_srh">
+				<dl class="srhbox_round">
+					<dt>
+						<a class="search_tag_index_btn" href="javascript: void(0);"></a><i
+							class="fa fa-search"></i>
+					</dt>
+					<dd>
+						<span class="iptxt"><input type="text"
+							class="search_tag_index" value=""
+							style="color: rgb(171, 171, 171);"></span>
+					</dd>
+				</dl>
+			</div>
+			<div class="">
+				<div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;">
+					<table class="table" id="mSearch">
+						<col width="10%">
+						<col width="90%">
+						<tbody>
+							<tr id="rowData_1">
+								<td><input type="checkbox" class="i-checks"></td>
+								<td class="nametag"></td>
+							</tr>
+							<tr id="rowData_2">
+								<td><input type="checkbox" class="i-checks"></td>
+								<td class="nametag"></td>
+							</tr>
+							<tr id="rowData_3">
+								<td><input type="checkbox" class="i-checks "></td>
+								<td class="nametag"></td>
+							</tr>
+							<tr id="rowData_4">
+								<td><input type="checkbox" class="i-checks "></td>
+								<td class="nametag"></td>
+							</tr>
+							<tr id="rowData_5">
+								<td><input type="checkbox" class="i-checks "></td>
+								<td class="nametag"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="" style="margin-top: 5px">
+				<div class="ac">
+					<p>
+						<a href="#">選択した検索条件を使用する</a>
+					</p>
+					<p>
+						<a href="#">選択した検索条件を削除</a>
+					</p>
+				</div>
+				<!-- <div class="input-group lbl" style="padding: 15px;">            
               <span class="input-group-btn"> 
               <button id="addLabel" type="button" class="btn btn-success">Check</button> 
               <button id="addLabel" type="button" class="btn btn-success">DisableAll</button> 
               </span>
           </div> -->
-        </div>
-      </div> 
-      <!-- <a class="export"> Export CSV</a> -->
-    </div>
-    </div>
-    
-  </div>
+			</div>
+		</div>
+		<!-- <a class="export"> Export CSV</a> -->
+	</div>
+</div>
 
-  
-  <!--  End Header -->
+</div>
 
-  <!-- Start Container -->
-  <div id="container" class="container">
-    <div class="business_card_book">
-      <div class="list-group">
-        <div class="list-group-item-title">7/2015</div>
-        <div class="list-group-item pointer">
-          <div class="row">
-            <div class="col-md-1 col-xs-1">
-              <div class="icheckbox_square-green">
-                <input type="checkbox" class="i-checks" name="bla">
-              </div>
-            </div>
-            <div class="col-md-5">
-              <div class="col-xs-11 mg-top">
-                <p class="name">寺本司 423423</p>
-                <p class="livepass">livepass株式会社</p>
-                      <p class="department_and_position">開発部 海外開発事業室長</p>
-                <p class="num">0123456789</p>
-                <p class="mail"><a href="#">abc@gmail.com</a></p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="col-xs-5">
-                </div>
-                  <div class="col-xs-7">
-                    <img src="img/namecard2.png" class="img-responsive img-thumb pull-right" alt="Responsive image">
-                  </div> 
-            </div>
-          </div>          
-        </div>
-        <div class="list-group-item pointer">
-          <div class="row">
-            <div class="col-md-1 col-xs-1">
-              <div class="icheckbox_square-green">
-                 <input type="checkbox" class="i-checks" name="bla">
-              </div>
-            </div>
-            <div class="col-md-5">
-              <div class="col-xs-11 mg-top">
-                <p class="name">寺本司 423423</p>
-                <p class="livepass">livepass株式会社</p>
-                      <!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
-                <!-- <p class="num">0123456789</p> -->
-                <p class="mail"><a href="#">abc@gmail.com</a></p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="col-xs-5">
-                  </div>
-                  <div class="col-xs-7">
-                    <img src="img/namecard1.jpg" class="img-responsive img-thumb pull-right" alt="Responsive image">
-                  </div> 
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item pointer">
-          <div class="row">
-            <div class="col-md-1 col-xs-1">
-              <div class="icheckbox_square-green">
-                 <input type="checkbox" class="i-checks" name="bla">
-              </div>
-            </div>
-            <div class="col-md-5">
-              <div class="col-xs-11 mg-top">
-                <p class="name">寺本司 423423</p>
-                <!-- <p class="livepass">livepass株式会社</p> -->
-                      <!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
-                <!-- <p class="num">0123456789</p> -->
-                <!-- <p class="mail"><a href="#">abc@gmail.com</a></p> -->
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="col-xs-5">
-                  
-                  </div>
-                  <div class="col-xs-7">
-                    <img src="img/namecard2.png" class="img-responsive img-thumb pull-right" alt="Responsive image">
-                  </div> 
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="list-group">
-        <div class="list-group-item bg-title">5/2015</div>
-        <div class="list-group-item pointer">
-          <div class="row">
-            <div class="col-md-1 col-xs-1">
-              <div class="icheckbox_square-green">
-                 <input type="checkbox" class="i-checks" name="bla">
-              </div>
-            </div>
-            <div class="col-md-5">
-              <div class="col-xs-11 mg-top">
-                <p class="name">寺本司 423423</p>
-                <p class="livepass">livepass株式会社</p>
-                <p class="department_and_position">開発部 海外開発事業室長</p>
-                <p class="num">0123456789</p>
-                <p class="mail"><a href="#">abc@gmail.com</a></p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="col-xs-5">
-                
-              </div>
-                <div class="col-xs-7">
-                  <img src="img/namecard2.png" class="img-responsive img-thumb pull-right" alt="Responsive image">
-                </div> 
-            </div>
-          </div>          
-        </div>
-        <div class="list-group-item pointer">
-          <div class="row">
-            <div class="col-md-1 col-xs-1">
-              <div class="icheckbox_square-green">
-                 <input type="checkbox" class="i-checks" name="bla">
-              </div>
-            </div>
-            <div class="col-md-5">
-              <div class="col-xs-11 mg-top">
-                <p class="name">寺本司 423423</p>
-                <p class="livepass">livepass株式会社</p>
-                      <!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
-                <!-- <p class="num">0123456789</p> -->
-                <p class="mail"><a href="#">abc@gmail.com</a></p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="col-xs-5">
-                  
-                  </div>
-                  <div class="col-xs-7">
-                    <img src="img/namecard2.png" class="img-responsive img-thumb pull-right" alt="Responsive image">
-                  </div> 
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item pointer">
-          <div class="row">
-            <div class="col-md-1 col-xs-1">
-              <div class="icheckbox_square-green">
-                 <input type="checkbox" class="i-checks" name="bla">
-              </div>
-            </div>
-            <div class="col-md-5">
-              <div class="col-xs-11 mg-top">
-                <p class="name">寺本司 423423</p>
-                <!-- <p class="livepass">livepass株式会社</p> -->
-                      <!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
-                <!-- <p class="num">0123456789</p> -->
-                <!-- <p class="mail"><a href="#">abc@gmail.com</a></p> -->
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="col-xs-5">
-                  
-                  </div>
-                  <div class="col-xs-7">
-                    <img src="img/namecard2.png" class="img-responsive img-thumb pull-right" alt="Responsive image">
-                  </div> 
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="peopleSearchResults" style="display:none">
-      <div class="haveIBScard">
-      <div class="list-group ">
-        <div class="list-group-item bg-title">お知り合いの方がいれば、追加してみましょう。</div>
-        <div class="list-group-item pointer">
-          <div class="row">
-            <div class="col-md-1 col-xs-1">
-            </div>
-            <div class="col-md-5">
-              <div class="col-xs-11 mg-top">
-                <p class="name">寺本司 423423</p>
-                <p class="livepass">livepass株式会社</p>
-                <p class="department_and_position">開発部 海外開発事業室長</p>
-                <p class="makefriend"><button class="btn btn-w-m btn-success">追加</button></p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="col-xs-5">
-                  
-                </div>
-                  <div class="col-xs-7">
-                    <img src="img/namecard2.png" class="img-responsive img-thumb pull-right" alt="Responsive image">
-                  </div> 
-            </div>
-          </div>          
-        </div>
-        <div class="list-group-item pointer">
-          <div class="row">
-            <div class="col-md-1 col-xs-1">              
-            </div>
-            <div class="col-md-5">
-              <div class="col-xs-11 mg-top">
-                <p class="name">寺本司 423423</p>
-                <p class="livepass">livepass株式会社</p>
-                      <!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
-                <!-- <p class="num">0123456789</p> -->
-                <p class="makefriend"><button class="btn btn-w-m btn-default">取り消す</button></p>
-                <!-- <p class="mail"><a href="#">abc@gmail.com</a></p> -->
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="col-xs-5">
-                    <!-- <img src="https://graph.facebook.com/524128593/picture" alt="facebook" class="ico_social_account thumb_fb absolute1"> -->
-                    <img src="img/link2.png" class="img-responsive img-thumb pull-right absolute" alt="Responsive image">
-                  </div>
-                  <div class="col-xs-7">
-                    <img src="img/namecard1.jpg" class="img-responsive img-thumb pull-right" alt="Responsive image">
-                  </div> 
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item pointer">
-          <div class="row">
-            <div class="col-md-1 col-xs-1">
-            </div>
-            <div class="col-md-5">
-              <div class="col-xs-11 mg-top">
-                <p class="name">寺本司 423423</p>
-                <!-- <p class="livepass">livepass株式会社</p> -->
-                      <!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
-                <!-- <p class="num">0123456789</p> -->
-                <!-- <p class="mail"><a href="#">abc@gmail.com</a></p> -->
-                <p class="makefriend"><button class="btn btn-w-m btn-default">取り消す</button></p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="col-xs-5">
-                  
-                  </div>
-                  <div class="col-xs-7">
-                    <img src="img/namecard2.png" class="img-responsive img-thumb pull-right" alt="Responsive image">
-                  </div> 
-            </div>
-          </div>
-        </div>
-      </div>        
-      </div>
+<!--  End Header -->
 
-      <div class="empty" style="display:none;">
-        <p class="ac"><img src="img/search_user_icon.png"></p>
-        <p class="ac em15 lh20">Eightを利用しているユーザーから<br>お知り合いを検索して名刺リストに追加します。</p>
-      </div>
+<!-- Start Container -->
+<div id="container" class="container">
+	<div class="business_card_book">
+		<div class="list-group">
+			<div class="list-group-item-title">7/2015</div>
+			<div class="list-group-item pointer">
+				<div class="row">
+					<div class="col-md-1 col-xs-1">
+						<div class="icheckbox_square-green">
+							<input type="checkbox" class="i-checks" name="bla">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="col-xs-11 mg-top">
+							<p class="name">寺本司 423423</p>
+							<p class="livepass">livepass株式会社</p>
+							<p class="department_and_position">開発部 海外開発事業室長</p>
+							<p class="num">0123456789</p>
+							<p class="mail">
+								<a href="#">abc@gmail.com</a>
+							</p>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-xs-5"></div>
+						<div class="col-xs-7">
+							<img src="img/namecard2.png"
+								class="img-responsive img-thumb pull-right"
+								alt="Responsive image">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item pointer">
+				<div class="row">
+					<div class="col-md-1 col-xs-1">
+						<div class="icheckbox_square-green">
+							<input type="checkbox" class="i-checks" name="bla">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="col-xs-11 mg-top">
+							<p class="name">寺本司 423423</p>
+							<p class="livepass">livepass株式会社</p>
+							<!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
+							<!-- <p class="num">0123456789</p> -->
+							<p class="mail">
+								<a href="#">abc@gmail.com</a>
+							</p>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-xs-5"></div>
+						<div class="col-xs-7">
+							<img src="img/namecard1.jpg"
+								class="img-responsive img-thumb pull-right"
+								alt="Responsive image">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item pointer">
+				<div class="row">
+					<div class="col-md-1 col-xs-1">
+						<div class="icheckbox_square-green">
+							<input type="checkbox" class="i-checks" name="bla">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="col-xs-11 mg-top">
+							<p class="name">寺本司 423423</p>
+							<!-- <p class="livepass">livepass株式会社</p> -->
+							<!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
+							<!-- <p class="num">0123456789</p> -->
+							<!-- <p class="mail"><a href="#">abc@gmail.com</a></p> -->
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-xs-5"></div>
+						<div class="col-xs-7">
+							<img src="img/namecard2.png"
+								class="img-responsive img-thumb pull-right"
+								alt="Responsive image">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-    </div>
-    <!-- <div class="manager_search_card" style="display:none">
+		<div class="list-group">
+			<div class="list-group-item bg-title">5/2015</div>
+			<div class="list-group-item pointer">
+				<div class="row">
+					<div class="col-md-1 col-xs-1">
+						<div class="icheckbox_square-green">
+							<input type="checkbox" class="i-checks" name="bla">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="col-xs-11 mg-top">
+							<p class="name">寺本司 423423</p>
+							<p class="livepass">livepass株式会社</p>
+							<p class="department_and_position">開発部 海外開発事業室長</p>
+							<p class="num">0123456789</p>
+							<p class="mail">
+								<a href="#">abc@gmail.com</a>
+							</p>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-xs-5"></div>
+						<div class="col-xs-7">
+							<img src="img/namecard2.png"
+								class="img-responsive img-thumb pull-right"
+								alt="Responsive image">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item pointer">
+				<div class="row">
+					<div class="col-md-1 col-xs-1">
+						<div class="icheckbox_square-green">
+							<input type="checkbox" class="i-checks" name="bla">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="col-xs-11 mg-top">
+							<p class="name">寺本司 423423</p>
+							<p class="livepass">livepass株式会社</p>
+							<!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
+							<!-- <p class="num">0123456789</p> -->
+							<p class="mail">
+								<a href="#">abc@gmail.com</a>
+							</p>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-xs-5"></div>
+						<div class="col-xs-7">
+							<img src="img/namecard2.png"
+								class="img-responsive img-thumb pull-right"
+								alt="Responsive image">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item pointer">
+				<div class="row">
+					<div class="col-md-1 col-xs-1">
+						<div class="icheckbox_square-green">
+							<input type="checkbox" class="i-checks" name="bla">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="col-xs-11 mg-top">
+							<p class="name">寺本司 423423</p>
+							<!-- <p class="livepass">livepass株式会社</p> -->
+							<!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
+							<!-- <p class="num">0123456789</p> -->
+							<!-- <p class="mail"><a href="#">abc@gmail.com</a></p> -->
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-xs-5"></div>
+						<div class="col-xs-7">
+							<img src="img/namecard2.png"
+								class="img-responsive img-thumb pull-right"
+								alt="Responsive image">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="peopleSearchResults" style="display: none">
+		<div class="haveIBScard">
+			<div class="list-group ">
+				<div class="list-group-item bg-title">お知り合いの方がいれば、追加してみましょう。</div>
+				<div class="list-group-item pointer">
+					<div class="row">
+						<div class="col-md-1 col-xs-1"></div>
+						<div class="col-md-5">
+							<div class="col-xs-11 mg-top">
+								<p class="name">寺本司 423423</p>
+								<p class="livepass">livepass株式会社</p>
+								<p class="department_and_position">開発部 海外開発事業室長</p>
+								<p class="makefriend">
+									<button class="btn btn-w-m btn-success">追加</button>
+								</p>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="col-xs-5"></div>
+							<div class="col-xs-7">
+								<img src="img/namecard2.png"
+									class="img-responsive img-thumb pull-right"
+									alt="Responsive image">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="list-group-item pointer">
+					<div class="row">
+						<div class="col-md-1 col-xs-1"></div>
+						<div class="col-md-5">
+							<div class="col-xs-11 mg-top">
+								<p class="name">寺本司 423423</p>
+								<p class="livepass">livepass株式会社</p>
+								<!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
+								<!-- <p class="num">0123456789</p> -->
+								<p class="makefriend">
+									<button class="btn btn-w-m btn-default">取り消す</button>
+								</p>
+								<!-- <p class="mail"><a href="#">abc@gmail.com</a></p> -->
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="col-xs-5">
+								<!-- <img src="https://graph.facebook.com/524128593/picture" alt="facebook" class="ico_social_account thumb_fb absolute1"> -->
+								<img src="img/link2.png"
+									class="img-responsive img-thumb pull-right absolute"
+									alt="Responsive image">
+							</div>
+							<div class="col-xs-7">
+								<img src="img/namecard1.jpg"
+									class="img-responsive img-thumb pull-right"
+									alt="Responsive image">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="list-group-item pointer">
+					<div class="row">
+						<div class="col-md-1 col-xs-1"></div>
+						<div class="col-md-5">
+							<div class="col-xs-11 mg-top">
+								<p class="name">寺本司 423423</p>
+								<!-- <p class="livepass">livepass株式会社</p> -->
+								<!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
+								<!-- <p class="num">0123456789</p> -->
+								<!-- <p class="mail"><a href="#">abc@gmail.com</a></p> -->
+								<p class="makefriend">
+									<button class="btn btn-w-m btn-default">取り消す</button>
+								</p>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="col-xs-5"></div>
+							<div class="col-xs-7">
+								<img src="img/namecard2.png"
+									class="img-responsive img-thumb pull-right"
+									alt="Responsive image">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="empty" style="display: none;">
+			<p class="ac">
+				<img src="img/search_user_icon.png">
+			</p>
+			<p class="ac em15 lh20">
+				Eightを利用しているユーザーから<br>お知り合いを検索して名刺リストに追加します。
+			</p>
+		</div>
+
+	</div>
+	<!-- <div class="manager_search_card" style="display:none">
      <div class="row" style="margin:auto;"> 
       <div class="i-checks mrg_bot5" id="managercard_1"><form> <input type="checkbox" value="" name="sch"> <input type="text" name="firstname" value="" disabled> </form></div>
       <div class="i-checks mrg_bot5" id="managercard_2"><form> <input type="checkbox" value="" name="sch"> <input type="text" name="firstname" value="" disabled> </form> </form></div>
@@ -559,31 +621,31 @@
         <p><a href="#">選択した検索条件を削除</a></p>
       </div>
     </div> -->
-    <div class="network_card_book" style="display:none"></div>
- 
-  </div>  
+	<div class="network_card_book" style="display: none"></div>
 
-  <!-- End Container -->
-    <script src="js/jquery-2.1.1.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+</div>
 
-    <!-- Custom and plugin javascript -->
-    <script src="js/inspinia.js"></script>
-    <script src="js/plugins/pace/pace.min.js"></script>
+<!-- End Container -->
+<script src="js/jquery-2.1.1.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <!-- Peity -->
-    <script src="js/plugins/peity/jquery.peity.min.js"></script>
+<!-- Custom and plugin javascript -->
+<script src="js/inspinia.js"></script>
+<script src="js/plugins/pace/pace.min.js"></script>
 
-    <!-- iCheck -->
-    <script src="js/plugins/iCheck/icheck.min.js"></script>
+<!-- Peity -->
+<script src="js/plugins/peity/jquery.peity.min.js"></script>
 
-    <!-- Peity -->
-    <script src="js/demo/peity-demo.js"></script>
+<!-- iCheck -->
+<script src="js/plugins/iCheck/icheck.min.js"></script>
 
-    <!--  -->
-    <script>
+<!-- Peity -->
+<script src="js/demo/peity-demo.js"></script>
+
+<!--  -->
+<script>
       var stockData = [
         {          
             "Name": "寺本司 423423",

@@ -1,4 +1,5 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+	session="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page session="false"%>
@@ -44,10 +45,10 @@ tbody td {
 	margin-left: auto !important;
 }
 
-.scrollbarVerital{
+.scrollbarVerital {
 	width: 400px;
-    height: 200px;
-    overflow-y: scroll;
+	height: 200px;
+	overflow-y: scroll;
 }
 </style>
 
@@ -180,14 +181,16 @@ $(function() {
 		<div class="row bg-white box-shadow menu-top-header col-sm-12">
 			<div class="col-sm-12">
 				<div class="float-left">
-					<h4 class="h4-header"><fmt:message key="team.add.team.title"/></h4>
+					<h4 class="h4-header">
+						<fmt:message key="team.add.team.title" />
+					</h4>
 				</div>
 
 				<div class="float-right float-right-manage">
 					<a style="display: inline-block;" href="/ecard-webapp/teams/list"><i
-						class="fa icon-rounded"><fmt:message key="team.add.team.back"/></i></a>
-						<a id="add" style="display: inline-block;"><i
-						class="fa icon-rounded"><fmt:message key="team.add.team.save"/></i></a>
+						class="fa icon-rounded"><fmt:message key="team.add.team.back" /></i></a>
+					<a id="add" style="display: inline-block;"><i
+						class="fa icon-rounded"><fmt:message key="team.add.team.save" /></i></a>
 				</div>
 			</div>
 		</div>
@@ -199,17 +202,22 @@ $(function() {
 				id="data-table"
 				style="width: 900px; padding-bottom: 77px; padding-left: 140px">
 				<div class="container">
-					<form class="form-horizontal" role="form" id="formSubmit" >
+					<form class="form-horizontal" role="form" id="formSubmit">
 						<div class="form-group">
-							<label class="control-label col-sm-1 column-left" for="team"><fmt:message key="team.add.team.name"/></label>
+							<label class="control-label col-sm-1 column-left" for="team"><fmt:message
+									key="team.add.team.name" /></label>
 							<div class="col-sm-4">
-								<span style="display: block;text-align: left;width: 100%;padding-top: 8px"><c:out value="${team.teamName}" /></span> 
+								<span
+									style="display: block; text-align: left; width: 100%; padding-top: 8px"><c:out
+										value="${team.teamName}" /></span>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-1 column-left" for="team"><fmt:message key="team.add.team.members"/></label>
+							<label class="control-label col-sm-1 column-left" for="team"><fmt:message
+									key="team.add.team.members" /></label>
 							<div class="col-sm-4">
-								<label class="control-label col-sm-1 column-right" for="team"><fmt:message key="team.add.team.member.title.name"/></label>
+								<label class="control-label col-sm-1 column-right" for="team"><fmt:message
+										key="team.add.team.member.title.name" /></label>
 							</div>
 						</div>
 						<div class="form-group">
@@ -218,14 +226,16 @@ $(function() {
 								<table class="table" id="listUser"
 									style="margin-left: 0px; margin-bottom: 0px;">
 									<tbody>
-										<c:forEach var="user" items="${team.listUser}" varStatus="loop">
+										<c:forEach var="user" items="${team.listUser}"
+											varStatus="loop">
 											<tr id="tr_${user.userId}">
-											  <td class="table-column" align="left"><span><input
-													icheck type="checkbox" class="i-checks memberName"name="${user.memberName}" value="${user.userId}"
-													id="user_${user.userId}"><span class="member">${user.memberName}</span></span>
-													</td>
+												<td class="table-column" align="left"><span><input
+														icheck type="checkbox" class="i-checks memberName"
+														name="${user.memberName}" value="${user.userId}"
+														id="user_${user.userId}"><span class="member">${user.memberName}</span></span>
+												</td>
 											</tr>
-										 </c:forEach>
+										</c:forEach>
 
 									</tbody>
 								</table>
@@ -235,14 +245,16 @@ $(function() {
 							<label class="control-label col-sm-1 column-left" for="team"></label>
 							<div class="col-sm-4 ch-color-link"
 								style="margin-left: 0px; width: auto;">
-								<a href="" class="ch-del"><fmt:message key="team.add.team.member.remove"/></a>
+								<a href="" class="ch-del"><fmt:message
+										key="team.add.team.member.remove" /></a>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-1 column-left" for="team"><fmt:message key="team.add.team.member.search"/></label>
+							<label class="control-label col-sm-1 column-left" for="team"><fmt:message
+									key="team.add.team.member.search" /></label>
 							<div class="col-sm-4">
-								<input type="text"
-									style="width: 360px; height: 30px" id="txtSearch">
+								<input type="text" style="width: 360px; height: 30px"
+									id="txtSearch">
 							</div>
 						</div>
 						<div class="form-group">
@@ -251,29 +263,32 @@ $(function() {
 								<table class="table" id="listUserNotExited"
 									style="margin-left: 0px; margin-bottom: 0px;">
 									<tbody>
-										<c:forEach var="user" items="${team.listNotExitedUser}" varStatus="loop">
+										<c:forEach var="user" items="${team.listNotExitedUser}"
+											varStatus="loop">
 											<tr id="tr_${user.userId}">
-											  <td class="table-column" align="left"><span><input
-													icheck type="checkbox" class="i-checks memberName" name="${user.memberName}"
-													value="${user.userId}"
-													id="user_${user.userId}"><span class="member">${user.memberName}</span></span></td>
+												<td class="table-column" align="left"><span><input
+														icheck type="checkbox" class="i-checks memberName"
+														name="${user.memberName}" value="${user.userId}"
+														id="user_${user.userId}"><span class="member">${user.memberName}</span></span></td>
 											</tr>
-										 </c:forEach>
-										
+										</c:forEach>
+
 									</tbody>
 								</table>
 								<table class="table" id="listUserNotExitedSearch"
-									style="margin-left: 0px; margin-bottom: 0px; display:none">
+									style="margin-left: 0px; margin-bottom: 0px; display: none">
 									<tbody>
-										<c:forEach var="user" items="${team.listNotExitedUser}" varStatus="loop">
+										<c:forEach var="user" items="${team.listNotExitedUser}"
+											varStatus="loop">
 											<tr id="search_tr_${user.userId}">
-											  <td class="table-column" align="left"><span><input
-													icheck type="checkbox" class="i-checks memberNameSearch" name="${user.memberName}"
-													value="${user.userId}"
-													id="user_search_${user.userId}"><span class="member">${user.memberName}</span></span></td>
+												<td class="table-column" align="left"><span><input
+														icheck type="checkbox" class="i-checks memberNameSearch"
+														name="${user.memberName}" value="${user.userId}"
+														id="user_search_${user.userId}"><span
+														class="member">${user.memberName}</span></span></td>
 											</tr>
-										 </c:forEach>
-										
+										</c:forEach>
+
 									</tbody>
 								</table>
 							</div>
@@ -282,7 +297,8 @@ $(function() {
 							<label class="control-label col-sm-1 column-left" for="team"></label>
 							<div class="col-sm-4 ch-color-link"
 								style="margin-left: 0px; width: auto;">
-								<a href="" class="ch-ok"><fmt:message key="team.add.team.member.add"/></a>
+								<a href="" class="ch-ok"><fmt:message
+										key="team.add.team.member.add" /></a>
 							</div>
 						</div>
 					</form>
