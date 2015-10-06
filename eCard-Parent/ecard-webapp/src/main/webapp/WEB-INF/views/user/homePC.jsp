@@ -424,7 +424,7 @@
 			</div>
 		</div>
 
-		<div class="list-group">
+		<div class="list-group" id="list72015">
 			<div class="list-group-item bg-title">5/2015</div>
 			<div class="list-group-item pointer">
 				<div class="row">
@@ -643,14 +643,13 @@
 
 <!--  -->
 <script>
-      var id_manager = 1;
-      
+      var id_manager = 1;      
       $(window).scroll(function() {
-    	    if($(window).scrollTop() == $(document).height() - $(window).height()) {
+    	    if($(window).scrollTop() >= ($(document).height() - $(window).height())*0.7) {
     	    	// Call ajax here
     	   		console.log('aaa = '+id_manager);
     	   		id_manager++;
-    	   		$('.business_card_book .list-group').append(
+    	   		$('.business_card_book #list72015').append(
         	    		'<div class="list-group-item pointer">'
     					+'<div class="row">'
     					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" class="i-checks" name="bla"></div></div>'
@@ -670,9 +669,9 @@
         	    );
     	   		
         	    $('.i-checks').iCheck({
-        	          checkboxClass: 'icheckbox_square-green',
-        	          radioClass: 'iradio_square-green',                
-        	        });
+       	          checkboxClass: 'icheckbox_square-green',
+       	          radioClass: 'iradio_square-green',                
+        	    });        	    
     	    }
     	    
     	});
