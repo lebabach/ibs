@@ -985,9 +985,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		}
 		if(cardInfo.getContactDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(comDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate())){
 			if(cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 ||cardInfo.getGroupCompanyId() == 3 ||cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5){
-	    		sqlStr += "AND ( ci.group_company_id IN (1,2,3,4,5))";
+	    		sqlStr += "AND ( ci.group_company_id IN (1,2,3,4,5) OR ( ci.group_company_id NOT IN(1,2,3,4,5) AND ci.contact_date >= '"+ this.complianceDate +"' ))";
 	    	} else {
-	    		sqlStr += "AND ( ci.group_company_id = "+cardInfo.getGroupCompanyId() +")";
+	    		sqlStr += "AND ( ci.group_company_id = "+cardInfo.getGroupCompanyId() +""
+	    				+ " OR ( ci.group_company_id <> "+cardInfo.getGroupCompanyId() +" AND ci.contact_date >= '"+ this.complianceDate +"' ))";
 	    	}			
 		}
 		
