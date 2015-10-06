@@ -333,9 +333,6 @@
 	</div>
 </div>
 
-</div>
-
-
 <!--  End Header -->
 
 <!-- Start Container -->
@@ -646,56 +643,42 @@
 
 <!--  -->
 <script>
-      var stockData = [
-        {          
-            "Name": "寺本司 423423",
-            "FirstName" : "寺本司",
-            "LastName" : "423423",
-            "Company": "livepass.",
-            "Department" : "1940023 東京都町田市旭町3丁目11番20号",
-            "Position" : "Tokyo",
-            "Email" : "abc@gmail.com",
-            "TEL" : "0123456789",
-            "MobilePhone" : "080-4120-6152",
-            "FAX" : "0000011212",
-            "URL" : "http://www.infes.jp/",
-            "Updated" : "7/5/2015",
-            "Link" : "1"
-        },
-        {
-            "Name": "寺本司 423423",
-            "FirstName" : "寺本司",
-            "LastName" : "423423",
-            "Company": "livepass.",
-            "Department" : "1940023 東京都町田市旭町3丁目11番20号",
-            "Position" : "Tokyo",
-            "Email" : "abc@gmail.com",
-            "TEL" : "0123456789",
-            "MobilePhone" : "080-4120-6152",
-            "FAX" : "0000011212",
-            "URL" : "http://www.abc.com.jp/",
-            "Updated" : "7/5/2015",
-            "Link" : "1"
-        },
-        {
-            "Name": "寺本司 423423",
-            "FirstName" : "寺本司",
-            "LastName" : "423423",
-            "Company": "livepass.",
-            "Department" : "1940023 東京都町田市旭町3丁目11番20号",
-            "Position" : "Tokyo",
-            "Email" : "abc@gmail.com",
-            "TEL" : "0123456789",
-            "MobilePhone" : "080-4120-6152",
-            "FAX" : "0000011212",
-            "URL" : "http://www.google.com/",
-            "Updated" : "7/5/2015",
-            "Link" : "1"
-        },
-      ];
       var id_manager = 1;
+      
+      $(window).scroll(function() {
+    	    if($(window).scrollTop() == $(document).height() - $(window).height()) {
+    	    	// Call ajax here
+    	   		console.log('aaa = '+id_manager);
+    	   		id_manager++;
+    	   		$('.business_card_book .list-group').append(
+        	    		'<div class="list-group-item pointer">'
+    					+'<div class="row">'
+    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" class="i-checks" name="bla"></div></div>'
+    					+	'<div class="col-md-5">'
+    					+		'<div class="col-xs-11 mg-top">'
+    					+ 			'<p class="name">寺本司 423423 = '+ id_manager +'</p>'
+    					+			'<p class="livepass">livepass株式会社</p>'
+    					+			'<p class="department_and_position">開発部 海外開発事業室長</p>'
+    					+			'<p class="num">0123456789</p>'
+    					+			'<p class="mail"><a href="#">abc@gmail.com</a></p>'
+    					+ '</div></div>'
+    					+	'<div class="col-md-6">'
+    					+	'<div class="col-xs-5"></div>'	
+    					+	'<div class="col-xs-7">'								
+    					+	'<img src="img/namecard2.png" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'							
+    					+	'</div> </div> </div> </div>'
+        	    );
+    	   		
+        	    $('.i-checks').iCheck({
+        	          checkboxClass: 'icheckbox_square-green',
+        	          radioClass: 'iradio_square-green',                
+        	        });
+    	    }
+    	    
+    	});
+      
       $(document).ready(function(){
-                
+    	 
         $('.i-checks').iCheck({
           checkboxClass: 'icheckbox_square-green',
           radioClass: 'iradio_square-green',                
