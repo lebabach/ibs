@@ -42,4 +42,11 @@ public class CardMemoServiceImpl implements CardMemoService {
         cardMemoDAO.deleteCardMemo(cardMemo);
     }
     
+    public int getMaxSeqByUserId(Integer userId){
+    	int result = cardMemoDAO.getMaxSeqByUserId(userId);
+    	if(result > 0)
+    		result += 1;
+    	return result;
+    }
+    
 }

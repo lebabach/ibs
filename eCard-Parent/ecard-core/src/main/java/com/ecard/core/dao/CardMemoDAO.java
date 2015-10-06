@@ -5,9 +5,10 @@
  */
 package com.ecard.core.dao;
 
+import java.util.List;
+
 import com.ecard.core.model.UserCardMemoId;
 import com.ecard.core.vo.CardInfoMemo;
-import java.util.List;
 
 /**
  *
@@ -22,5 +23,7 @@ public interface CardMemoDAO {
     public void createCardMemo(UserCardMemoId cardMemo);
     
     public void deleteCardMemo(UserCardMemoId cardMemo);
+    
+    public int getMaxSeqByUserId(Integer userId);
 
 }

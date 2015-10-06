@@ -115,8 +115,12 @@ public class CardMemoController extends RestExceptionHandler {
             SchemaContextHolder.setSchemaType(SchemaType.MANAGER);
             
             int response = cardMemoService.registerCardMemo(cardMemo);
-            if(response == 0 )
+            if(response == 0 ){
+            	if(cardMemo.getSeq() == 0){
+                	cardMemo.setSeq(cardMemoService.getMaxSeqByUserId(userId));
+                }
                 cardMemoService.createCardMemo(cardMemo);
+            }
             statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgRegisterMemoCardSuccess, token);            
         }
         catch(Exception ex){
