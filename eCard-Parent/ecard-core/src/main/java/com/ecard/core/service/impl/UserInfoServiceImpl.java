@@ -307,4 +307,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     public List<UserInfoVo> getListUserAllTeam(){
 		return userInfoDAO.getListUserAllTeam();
 	}
+    
+    public boolean checkUseDateEndDate(String email){
+    	return userInfoDAO.checkUseDateEndDate(email);
+    }
 }

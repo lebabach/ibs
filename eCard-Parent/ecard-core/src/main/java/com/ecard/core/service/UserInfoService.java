@@ -127,4 +127,6 @@ public interface UserInfoService {
     public void saveActionLog(ActionLog actionLog);
 
     public List<UserInfoVo> getListUserAllTeam();
+    
+    public boolean checkUseDateEndDate(String email);
 }
