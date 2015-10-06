@@ -6,10 +6,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.LockModeType;
 import javax.persistence.Query;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecard.core.dao.*;
 import com.ecard.core.model.*;
@@ -18,52 +20,58 @@ import com.ecard.core.model.enums.IndexTypeEnum;
 import com.ecard.core.model.enums.PropertyCodeEnum;
 import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.util.DataIndexUtil;
+
 @Repository("DataIndexDAO")
-public class DataIndexDAOImpl extends GenericDao<DataIndex> implements DataIndexDAO{
-	public void insertDataIndex(DataIndexId dataIndexId){
-		DataIndex dataindex=new DataIndex();
+public class DataIndexDAOImpl extends GenericDao<DataIndex>implements DataIndexDAO {
+	public void insertDataIndex(DataIndexId dataIndexId) {
+		DataIndex dataindex = new DataIndex();
 		dataindex.setId(dataIndexId);
-		System.out.println("=============debugs====insert===dataindex=============persist function: insert DataIndex: index_no: "+dataindex.getId().getIndexNo()+" index_type: "+dataindex.getId().getIndexType()+" date: "+dataindex.getId().getCreateDate());
+		System.out.println(
+				"=============debugs====insert===dataindex=============persist function: insert DataIndex: index_no: "
+						+ dataindex.getId().getIndexNo() + " index_type: " + dataindex.getId().getIndexType()
+						+ " date: " + dataindex.getId().getCreateDate());
 		this.persist(dataindex);
 	}
-	
+
 	@Override
-	public boolean updateDataIndex(IndexTypeEnum indexType,String indexNo){
-		String sql="UPDATE DataIndex t SET t.id.indexNo = :newindexNo, t.id.createDate = :createDate WHERE t.id.indexType = :indexType";
+	public boolean updateDataIndex(IndexTypeEnum indexType, String indexNo) {
+		String sql = "UPDATE DataIndex t SET t.id.indexNo = :newindexNo, t.id.createDate = :createDate WHERE t.id.indexType = :indexType";
 		Query query = getEntityManager().createQuery(sql);
-		Date date=new Date();
+		Date date = new Date();
 		query.setParameter("newindexNo", indexNo);
 		query.setParameter("indexType", indexType.getStatusCode());
 		query.setParameter("createDate", date);
-		System.out.println("=============debugs=====update===dataindex========="+printSql(sql,indexType,indexNo,date));
+		System.out.println(
+				"=============debugs=====update===dataindex=========" + printSql(sql, indexType, indexNo, date));
 		int result = query.executeUpdate();
-        if(result == 0){
-            return false;
-        } else {
-            return true;
-        }
+		if (result == 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
-	
-	private String printSql(String sql,IndexTypeEnum indexType,String indexNo,Date date){
-		sql=sql.replace(":newindexNo", indexNo+"");
-		sql=sql.replace(":indexType", indexType.getStatusCode()+"");
-		sql=sql.replace(":createDate", date+"");
-    	return sql;
-    }
-	
+
+	private String printSql(String sql, IndexTypeEnum indexType, String indexNo, Date date) {
+		sql = sql.replace(":newindexNo", indexNo + "");
+		sql = sql.replace(":indexType", indexType.getStatusCode() + "");
+		sql = sql.replace(":createDate", date + "");
+		return sql;
+	}
+
 	@Override
-	public boolean updateDataIndex(String indexNo,IndexTypeEnum indexType){
-		Query query = getEntityManager().createNativeQuery("UPDATE data_index t SET t.index_no = :newindexNo WHERE t.index_type = :indexType");
+	public boolean updateDataIndex(String indexNo, IndexTypeEnum indexType) {
+		Query query = getEntityManager()
+				.createNativeQuery("UPDATE data_index t SET t.index_no = :newindexNo WHERE t.index_type = :indexType");
 		query.setParameter("newindexNo", indexNo);
 		query.setParameter("indexType", indexType.getStatusCode());
 		int result = query.executeUpdate();
-        if(result == 0){
-            return false;
-        } else {
-            return true;
-        }
+		if (result == 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
-	
+
 	public DataIndexId getLastDataIndexBy(IndexTypeEnum indexType, Date updatedDate, DataIndexId lastDataIndex) {
 		try {
 			List<DataIndexId> dataindexes = this.findAll(DataIndex.class).stream().map(x -> x.getId())
@@ -218,52 +226,11 @@ public class DataIndexDAOImpl extends GenericDao<DataIndex> implements DataIndex
 	// https://livepass.backlog.jp/view/MEISHI-694
 
 	public String insertOrUpdateDataIndexBy(IndexTypeEnum indexType, ActionTypeEnum actionType, TableTypeEnum tableType,
-			PropertyCodeEnum propertyCode, String IndexNo) {
-		String formatIdAfterGenerating = StringUtils.EMPTY;
-		List<DataIndexId> dataIndexs = this.findAll(DataIndex.class).stream().map(x -> x.getId())
-				.filter(x -> x.getIndexType() == indexType.getStatusCode()).collect(Collectors.toList());
-		if (dataIndexs != null && dataIndexs.size() > 0) {
-			// found ==> update
-			// if is not empty
-			System.out.println("========================SIZE=============: " + dataIndexs.size());
-			if (!StringUtils.isEmpty(IndexNo)) {
-				formatIdAfterGenerating = DataIndexUtil.generateFormatIdWith(tableType,
-						DataIndexUtil.getSequenceCodeFrom(IndexNo), DataIndexUtil.getPropertyCodeFrom(IndexNo),
-						PropertyCodeEnum.findByName(IndexNo.substring(IndexNo.length() - 1)), actionType,
-						DataIndexUtil.getDateFrom(IndexNo, propertyCode, actionType), IndexNo);
-				// dataIndexDAO.updateDataIndex(formatIdAfterGenerating,indexType);
-			} else {
-				// if is empty
-				DataIndexId dataindex = dataIndexs.stream().findFirst().get();
-				if (dataindex != null) {
-					formatIdAfterGenerating = DataIndexUtil.generateFormatIdWith(tableType,
-							DataIndexUtil.getSequenceCodeFrom(dataindex.getIndexNo()),
-							DataIndexUtil.getPropertyCodeFrom(dataindex.getIndexNo()), propertyCode, actionType,
-							DataIndexUtil.getDateFrom(dataindex.getIndexNo(), propertyCode, actionType),
-							dataindex.getIndexNo());
-					this.updateDataIndex(indexType, formatIdAfterGenerating);
-				}
-			}
-
-		} else {
-			System.out.println("========================SIZE=============: " + 0);
-			// not found ==> insert
-			DataIndexId dataIndexInsert = new DataIndexId();
-			formatIdAfterGenerating = DataIndexUtil.generateFormatIdWith(tableType, 0, 0, propertyCode, actionType);
-			dataIndexInsert.setIndexType(indexType.getStatusCode());
-			dataIndexInsert.setIndexNo(formatIdAfterGenerating);
-			dataIndexInsert.setCreateDate(new Date());
-			this.insertDataIndex(dataIndexInsert);
-		}
-		return formatIdAfterGenerating;
-	}
-
-	public String insertOrUpdateDataIndexBy(IndexTypeEnum indexType, ActionTypeEnum actionType, TableTypeEnum tableType,
 			PropertyCodeEnum propertyCode, String IndexNo, String companyId) {
 		String formatIdAfterGenerating = StringUtils.EMPTY;
 		List<DataIndexId> dataIndexs = this.findAll(DataIndex.class).stream().map(x -> x.getId())
 				.filter(x -> x.getIndexType() == indexType.getStatusCode()).collect(Collectors.toList());
-		
+
 		if (dataIndexs != null && dataIndexs.size() > 0) {
 			System.out.println("========================SIZE=============: " + dataIndexs.size());
 			// found ==> update
@@ -296,5 +263,54 @@ public class DataIndexDAOImpl extends GenericDao<DataIndex> implements DataIndex
 			this.insertDataIndex(dataIndexInsert);
 		}
 		return formatIdAfterGenerating;
+	}
+	
+	public String insertOrUpdateDataIndexBy(IndexTypeEnum indexType, ActionTypeEnum actionType, TableTypeEnum tableType,
+			PropertyCodeEnum propertyCode, String IndexNo) {
+		String formatIdAfterGenerating = StringUtils.EMPTY;
+		/*List<DataIndexId> dataIndexs = this.findAll(DataIndex.class).stream().map(x -> x.getId())
+				.filter(x -> x.getIndexType() == indexType.getStatusCode()).collect(Collectors.toList());*/
+		DataIndex dataIndex = this.getDataIndexById(indexType.getStatusCode());
+		
+		if (dataIndex!= null) {
+			// found ==> update
+			// if is not empty
+			if (!StringUtils.isEmpty(IndexNo)) {
+				formatIdAfterGenerating = DataIndexUtil.generateFormatIdWith(tableType,
+						DataIndexUtil.getSequenceCodeFrom(IndexNo), DataIndexUtil.getPropertyCodeFrom(IndexNo),
+						PropertyCodeEnum.findByName(IndexNo.substring(IndexNo.length() - 1)), actionType,
+						DataIndexUtil.getDateFrom(IndexNo, propertyCode, actionType), IndexNo);
+				// dataIndexDAO.updateDataIndex(formatIdAfterGenerating,indexType);
+			} else {
+				// if is empty
+				DataIndexId dataIndexId=dataIndex.getId();
+				if (dataIndexId != null) {
+					formatIdAfterGenerating = DataIndexUtil.generateFormatIdWith(tableType,
+							DataIndexUtil.getSequenceCodeFrom(dataIndexId.getIndexNo()),
+							DataIndexUtil.getPropertyCodeFrom(dataIndexId.getIndexNo()), propertyCode, actionType,
+							DataIndexUtil.getDateFrom(dataIndexId.getIndexNo(), propertyCode, actionType),
+							dataIndexId.getIndexNo());
+					this.updateDataIndex(indexType, formatIdAfterGenerating);
+				}
+			}
+
+		} else {
+			// not found ==> insert
+			DataIndexId dataIndexInsert = new DataIndexId();
+			formatIdAfterGenerating = DataIndexUtil.generateFormatIdWith(tableType, 0, 0, propertyCode, actionType);
+			dataIndexInsert.setIndexType(indexType.getStatusCode());
+			dataIndexInsert.setIndexNo(formatIdAfterGenerating);
+			dataIndexInsert.setCreateDate(new Date());
+			this.insertDataIndex(dataIndexInsert);
+		}
+		return formatIdAfterGenerating;
+	}
+
+	@Transactional
+	public DataIndex getDataIndexById(int indexType) {
+		Query query = getEntityManager().createQuery("SELECT di FROM DataIndex di WHERE di.id.indexType = :indexType");
+		query.setParameter("indexType", indexType);
+		query.setLockMode(LockModeType.PESSIMISTIC_WRITE);
+		return (DataIndex) getOrNull(query);	
 	}
 }
