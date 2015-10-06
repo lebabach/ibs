@@ -68,6 +68,6 @@ public class CardMemoDAOImpl extends GenericDao implements CardMemoDAO {
     	Query query = getEntityManager().createNativeQuery("SELECT MAX(seq) FROM user_card_memo u WHERE u.user_id = :userId");
     	query.setParameter("userId", userId);
     	
-    	return (int)query.getFirstResult();
+    	return (int)query.getSingleResult();
     }
 }
