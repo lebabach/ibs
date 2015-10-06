@@ -246,8 +246,12 @@ public class CardInfoServiceImpl implements CardInfoService {
         return cardInfoDAO.getListCardInfoByUserId(userId);
     }
     
-    public List<Integer> getListOwnerIdByCard(CardInfo cardInfo){
-    	return cardInfoDAO.getListOwnerIdByCard(cardInfo);
+    public List<Integer> getListUserPushToByCard(CardInfo cardInfo){
+    	return cardInfoDAO.getListUserPushToByCard(cardInfo);
+    }    
+    
+    public List<Integer> getListUserPushFromByCard(CardInfo cardInfo){
+    	return cardInfoDAO.getListUserPushFromByCard(cardInfo);
     }
     
     public int updateCardDeleted(Integer cardId){
