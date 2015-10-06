@@ -123,7 +123,7 @@ public class CardMemoController extends RestExceptionHandler {
             		seq = cardMemoService.getMaxSeqByUserId(userId);
             	}
             	catch(Exception e){
-            		seq = 0;
+            		seq = 1;
             	}
             	
             	if(cardMemo.getSeq() == 0){
