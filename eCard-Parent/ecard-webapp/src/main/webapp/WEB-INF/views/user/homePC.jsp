@@ -439,6 +439,273 @@
         </div>
       </div>        
       </div>
+			</div>
+		</div>
+		<!-- <a class="export"> Export CSV</a> -->
+	</div>
+</div>
+
+<!--  End Header -->
+
+<!-- Start Container -->
+<div id="container" class="container">
+	<div class="business_card_book">
+		<div class="list-group">
+			<div class="list-group-item-title">7/2015</div>
+			<div class="list-group-item pointer">
+				<div class="row">
+					<div class="col-md-1 col-xs-1">
+						<div class="icheckbox_square-green">
+							<input type="checkbox" class="i-checks" name="bla">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="col-xs-11 mg-top">
+							<p class="name">寺本司 423423</p>
+							<p class="livepass">livepass株式会社</p>
+							<p class="department_and_position">開発部 海外開発事業室長</p>
+							<p class="num">0123456789</p>
+							<p class="mail">
+								<a href="#">abc@gmail.com</a>
+							</p>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-xs-5"></div>
+						<div class="col-xs-7">
+							<img src="img/namecard2.png"
+								class="img-responsive img-thumb pull-right"
+								alt="Responsive image">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item pointer">
+				<div class="row">
+					<div class="col-md-1 col-xs-1">
+						<div class="icheckbox_square-green">
+							<input type="checkbox" class="i-checks" name="bla">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="col-xs-11 mg-top">
+							<p class="name">寺本司 423423</p>
+							<p class="livepass">livepass株式会社</p>
+							<!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
+							<!-- <p class="num">0123456789</p> -->
+							<p class="mail">
+								<a href="#">abc@gmail.com</a>
+							</p>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-xs-5"></div>
+						<div class="col-xs-7">
+							<img src="img/namecard1.jpg"
+								class="img-responsive img-thumb pull-right"
+								alt="Responsive image">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item pointer">
+				<div class="row">
+					<div class="col-md-1 col-xs-1">
+						<div class="icheckbox_square-green">
+							<input type="checkbox" class="i-checks" name="bla">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="col-xs-11 mg-top">
+							<p class="name">寺本司 423423</p>
+							<!-- <p class="livepass">livepass株式会社</p> -->
+							<!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
+							<!-- <p class="num">0123456789</p> -->
+							<!-- <p class="mail"><a href="#">abc@gmail.com</a></p> -->
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-xs-5"></div>
+						<div class="col-xs-7">
+							<img src="img/namecard2.png"
+								class="img-responsive img-thumb pull-right"
+								alt="Responsive image">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="list-group" id="list72015">
+			<div class="list-group-item bg-title">5/2015</div>
+			<div class="list-group-item pointer">
+				<div class="row">
+					<div class="col-md-1 col-xs-1">
+						<div class="icheckbox_square-green">
+							<input type="checkbox" class="i-checks" name="bla">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="col-xs-11 mg-top">
+							<p class="name">寺本司 423423</p>
+							<p class="livepass">livepass株式会社</p>
+							<p class="department_and_position">開発部 海外開発事業室長</p>
+							<p class="num">0123456789</p>
+							<p class="mail">
+								<a href="#">abc@gmail.com</a>
+							</p>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-xs-5"></div>
+						<div class="col-xs-7">
+							<img src="img/namecard2.png"
+								class="img-responsive img-thumb pull-right"
+								alt="Responsive image">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item pointer">
+				<div class="row">
+					<div class="col-md-1 col-xs-1">
+						<div class="icheckbox_square-green">
+							<input type="checkbox" class="i-checks" name="bla">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="col-xs-11 mg-top">
+							<p class="name">寺本司 423423</p>
+							<p class="livepass">livepass株式会社</p>
+							<!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
+							<!-- <p class="num">0123456789</p> -->
+							<p class="mail">
+								<a href="#">abc@gmail.com</a>
+							</p>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-xs-5"></div>
+						<div class="col-xs-7">
+							<img src="img/namecard2.png"
+								class="img-responsive img-thumb pull-right"
+								alt="Responsive image">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item pointer">
+				<div class="row">
+					<div class="col-md-1 col-xs-1">
+						<div class="icheckbox_square-green">
+							<input type="checkbox" class="i-checks" name="bla">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<div class="col-xs-11 mg-top">
+							<p class="name">寺本司 423423</p>
+							<!-- <p class="livepass">livepass株式会社</p> -->
+							<!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
+							<!-- <p class="num">0123456789</p> -->
+							<!-- <p class="mail"><a href="#">abc@gmail.com</a></p> -->
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-xs-5"></div>
+						<div class="col-xs-7">
+							<img src="img/namecard2.png"
+								class="img-responsive img-thumb pull-right"
+								alt="Responsive image">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="peopleSearchResults" style="display: none">
+		<div class="haveIBScard">
+			<div class="list-group ">
+				<div class="list-group-item bg-title">お知り合いの方がいれば、追加してみましょう。</div>
+				<div class="list-group-item pointer">
+					<div class="row">
+						<div class="col-md-1 col-xs-1"></div>
+						<div class="col-md-5">
+							<div class="col-xs-11 mg-top">
+								<p class="name">寺本司 423423</p>
+								<p class="livepass">livepass株式会社</p>
+								<p class="department_and_position">開発部 海外開発事業室長</p>
+								<p class="makefriend">
+									<button class="btn btn-w-m btn-success">追加</button>
+								</p>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="col-xs-5"></div>
+							<div class="col-xs-7">
+								<img src="img/namecard2.png"
+									class="img-responsive img-thumb pull-right"
+									alt="Responsive image">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="list-group-item pointer">
+					<div class="row">
+						<div class="col-md-1 col-xs-1"></div>
+						<div class="col-md-5">
+							<div class="col-xs-11 mg-top">
+								<p class="name">寺本司 423423</p>
+								<p class="livepass">livepass株式会社</p>
+								<!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
+								<!-- <p class="num">0123456789</p> -->
+								<p class="makefriend">
+									<button class="btn btn-w-m btn-default">取り消す</button>
+								</p>
+								<!-- <p class="mail"><a href="#">abc@gmail.com</a></p> -->
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="col-xs-5">
+								<!-- <img src="https://graph.facebook.com/524128593/picture" alt="facebook" class="ico_social_account thumb_fb absolute1"> -->
+								<img src="img/link2.png"
+									class="img-responsive img-thumb pull-right absolute"
+									alt="Responsive image">
+							</div>
+							<div class="col-xs-7">
+								<img src="img/namecard1.jpg"
+									class="img-responsive img-thumb pull-right"
+									alt="Responsive image">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="list-group-item pointer">
+					<div class="row">
+						<div class="col-md-1 col-xs-1"></div>
+						<div class="col-md-5">
+							<div class="col-xs-11 mg-top">
+								<p class="name">寺本司 423423</p>
+								<!-- <p class="livepass">livepass株式会社</p> -->
+								<!-- <p class="department_and_position">開発部 海外開発事業室長</p> -->
+								<!-- <p class="num">0123456789</p> -->
+								<!-- <p class="mail"><a href="#">abc@gmail.com</a></p> -->
+								<p class="makefriend">
+									<button class="btn btn-w-m btn-default">取り消す</button>
+								</p>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="col-xs-5"></div>
+							<div class="col-xs-7">
+								<img src="img/namecard2.png"
+									class="img-responsive img-thumb pull-right"
+									alt="Responsive image">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
       <div class="empty" style="display:none;">
         <p class="ac"><img src="img/search_user_icon.png"></p>
@@ -532,8 +799,43 @@
         },
       ];
       var id_manager = 1;
+
+<script>
+      var id_manager = 1;      
+      $(window).scroll(function() {
+    	    if($(window).scrollTop() >= ($(document).height() - $(window).height())*0.7) {
+    	    	// Call ajax here
+    	   		console.log('aaa = '+id_manager);
+    	   		id_manager++;
+    	   		$('.business_card_book #list72015').append(
+        	    		'<div class="list-group-item pointer">'
+    					+'<div class="row">'
+    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" class="i-checks" name="bla"></div></div>'
+    					+	'<div class="col-md-5">'
+    					+		'<div class="col-xs-11 mg-top">'
+    					+ 			'<p class="name">寺本司 423423 = '+ id_manager +'</p>'
+    					+			'<p class="livepass">livepass株式会社</p>'
+    					+			'<p class="department_and_position">開発部 海外開発事業室長</p>'
+    					+			'<p class="num">0123456789</p>'
+    					+			'<p class="mail"><a href="#">abc@gmail.com</a></p>'
+    					+ '</div></div>'
+    					+	'<div class="col-md-6">'
+    					+	'<div class="col-xs-5"></div>'	
+    					+	'<div class="col-xs-7">'								
+    					+	'<img src="img/namecard2.png" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'							
+    					+	'</div> </div> </div> </div>'
+        	    );
+    	   		
+        	    $('.i-checks').iCheck({
+       	          checkboxClass: 'icheckbox_square-green',
+       	          radioClass: 'iradio_square-green',                
+        	    });        	    
+    	    }
+    	    
+    	});
+
       $(document).ready(function(){
-                
+    	 
         $('.i-checks').iCheck({
           checkboxClass: 'icheckbox_square-green',
           radioClass: 'iradio_square-green',                

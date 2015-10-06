@@ -139,7 +139,7 @@
 			<ul class="nav navbar-top-links navbar-right">
 
 				<li>
-					<p style="margin-bottom: 0;">abc@example.com</p>
+					<p>${pageContext.request.remoteUser}</p>
 				</li>
 
 				<li>
@@ -157,7 +157,7 @@
 						<li><a href="mailbox.html">ご意見・不具合の連絡</a></li>
 						<!-- Profile -->
 						<li class="divider"></li>
-						<li><a href="login.html">ログアウト</a></li>
+						<li><a href="<c:url value='/j_spring_security_logout'/>">ログアウト</a></li>						
 					</ul>
 				</li>
 			</ul>
