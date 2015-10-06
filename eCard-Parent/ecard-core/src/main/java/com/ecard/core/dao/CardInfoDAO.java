@@ -114,4 +114,6 @@ public interface CardInfoDAO {
     public int updateCardType();
     
     public List<CardInfo> listCardInfoByCardType(Integer cardType);
+    
+    public CardInfo getNewestCardInfo(CardInfo cardInfo);
 }

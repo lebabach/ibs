@@ -92,7 +92,7 @@ public interface CardInfoService {
    public List<CardInfo> getListPossesionCard(Integer userId);
    
    public void updateOldCardInfo (CardInfo cardInfo);
-   
+
    public CardInfo importCardInfoFromCsv(CardInfo cardInfo);
    
    public int getCardIdByCardIndexNo(String cardIndexNo);
@@ -116,4 +116,7 @@ public interface CardInfoService {
    public int updateCardType();
    
    public List<CardInfo> listCardInfoByCardType(Integer cardType);
+   
+   public CardInfo getNewestCardInfo(CardInfo cardInfo);
+   
 }

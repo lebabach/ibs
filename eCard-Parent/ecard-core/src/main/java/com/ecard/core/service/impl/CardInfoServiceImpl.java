@@ -277,4 +277,8 @@ public class CardInfoServiceImpl implements CardInfoService {
     public List<CardInfo> listCardInfoByCardType(Integer cardType){
         return cardInfoDAO.listCardInfoByCardType(cardType);
     }
+    
+    public CardInfo getNewestCardInfo(CardInfo cardInfo){
+    	return cardInfoDAO.getNewestCardInfo(cardInfo);
+    }
 }

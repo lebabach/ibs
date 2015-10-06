@@ -363,10 +363,7 @@ public class CardController {
 
 			cardInfo.setName(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastName(), cardInfo.getFirstName(), " "));
 			cardInfo.setNameKana(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastNameKana(), cardInfo.getFirstNameKana(), " "));
-			//cardInfo.setContactDate(new Date());
-			cardInfo.setNewestCardFlg(1);
 			
-
 			// bach.le https://livepass.backlog.jp/view/MEISHI-575
 			List<String> listAddress = new ArrayList<String>(Arrays.asList(cardInfo.getAddressFull().trim().split(" ")));
 			cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
@@ -444,8 +441,9 @@ public class CardController {
 				userNotificationTOME.setNotifyMessage(strPushTO);            	
 	        	userInfoService.saveHistoryNotification(userNotificationTOME);				
 			}
-			cardInfoService.updateOldCardInfo(cardInfo);
-
+			CardInfo newestCardInfo = cardInfoService.getNewestCardInfo(cardInfo);
+			System.out.println("AAA = "+newestCardInfo.getCardId());
+			cardInfoService.updateOldCardInfo(newestCardInfo);
 		}
 		if (result == 1)
 			return new ModelAndView("redirect:list");

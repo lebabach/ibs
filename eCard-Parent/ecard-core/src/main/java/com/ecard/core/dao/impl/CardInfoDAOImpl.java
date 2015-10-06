@@ -936,11 +936,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	}
 	
 	public void updateOldCardInfo(CardInfo cardInfo){
-		Query query = getEntityManager().createQuery("UPDATE CardInfo ci SET ci.newestCardFlg = 0 WHERE ci.email = :email"
-				+ " AND ci.companyName = :companyName AND ci.positionName = :positionName "
+		Query query = getEntityManager().createQuery("UPDATE CardInfo ci SET ci.newestCardFlg = (CASE WHEN ci.cardId = :cardId  THEN 1 ELSE 0 END) "
+				+ " WHERE ci.email = :email AND ci.companyName = :companyName AND ci.positionName = :positionName "
 				+ " AND ci.departmentName = :departmentName AND ci.mobileNumber = :mobileNumber "
-				+ " AND ci.addressFull = :addressFull"
-				+ " AND ci.cardId != :cardId");
+				+ " AND ci.addressFull = :addressFull");
 		query.setParameter("email", cardInfo.getEmail());
 		query.setParameter("companyName", cardInfo.getCompanyName());
 		query.setParameter("positionName", cardInfo.getPositionName());
@@ -1145,5 +1144,20 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         Query query = getEntityManager().createQuery("SELECT c FROM CardInfo c WHERE c.cardType = :cardType");
         query.setParameter("cardType", cardType);
         return (List<CardInfo>)query.getResultList();
+    }
+    
+    public CardInfo getNewestCardInfo(CardInfo cardInfo){
+            Query query = getEntityManager().createQuery("SELECT c FROM CardInfo c "
+                                + " WHERE c.email = :email AND c.companyName = :companyName AND c.positionName = :positionName AND c.departmentName = :departmentName"
+                                + " AND c.mobileNumber = :mobileNumber AND c.addressFull = :addressFull"
+                                + " ORDER BY c.contactDate DESC, c.createDate DESC");
+            query.setParameter("email", cardInfo.getEmail());
+            query.setParameter("companyName", cardInfo.getCompanyName());
+            query.setParameter("positionName", cardInfo.getPositionName());
+            query.setParameter("departmentName", cardInfo.getDepartmentName());
+            query.setParameter("mobileNumber", cardInfo.getMobileNumber());
+            query.setParameter("addressFull", cardInfo.getAddressFull());
+            query.setMaxResults(1);
+            return (CardInfo)query.getSingleResult();    
     }
 }
