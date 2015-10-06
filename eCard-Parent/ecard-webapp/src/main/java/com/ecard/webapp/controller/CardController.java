@@ -397,7 +397,7 @@ public class CardController {
 				ex.printStackTrace();
 				return new ModelAndView("redirect:list");
 			}
-			List<Integer> listOwnerId = cardInfoService.getListOwnerIdByCard(nCardInfo);
+			List<Integer> listOwnerId = cardInfoService.getListOwnerIdByCard(cardInfo);
 			UserInfo noticeUser = new UserInfo();;
 			for (Integer listOwner : listOwnerId) {
 				if(listUserInfo.stream().filter(u-> u.getUserId() == listOwner).collect(Collectors.toList()).size()<=0){
