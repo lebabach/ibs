@@ -224,7 +224,8 @@ public class DataIndexDAOImpl extends GenericDao<DataIndex>implements DataIndexD
 	// bach.le insert or update dataindex
 	// https://livepass.backlog.jp/view/MEISHI-695
 	// https://livepass.backlog.jp/view/MEISHI-694
-
+	
+	@Transactional
 	public String insertOrUpdateDataIndexBy(IndexTypeEnum indexType, ActionTypeEnum actionType, TableTypeEnum tableType,
 			PropertyCodeEnum propertyCode, String IndexNo, String companyId) {
 		String formatIdAfterGenerating = StringUtils.EMPTY;
@@ -262,6 +263,7 @@ public class DataIndexDAOImpl extends GenericDao<DataIndex>implements DataIndexD
 		return formatIdAfterGenerating;
 	}
 	
+	@Transactional
 	public String insertOrUpdateDataIndexBy(IndexTypeEnum indexType, ActionTypeEnum actionType, TableTypeEnum tableType,
 			PropertyCodeEnum propertyCode, String IndexNo) {
 		String formatIdAfterGenerating = StringUtils.EMPTY;
@@ -303,7 +305,6 @@ public class DataIndexDAOImpl extends GenericDao<DataIndex>implements DataIndexD
 		return formatIdAfterGenerating;
 	}
 
-	@Transactional
 	public DataIndex getDataIndexById(int indexType) {
 		Query query = getEntityManager().createQuery("SELECT di FROM DataIndex di WHERE di.id.indexType = :indexType");
 		query.setParameter("indexType", indexType);
