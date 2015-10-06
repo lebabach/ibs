@@ -228,11 +228,9 @@ public class DataIndexDAOImpl extends GenericDao<DataIndex>implements DataIndexD
 	public String insertOrUpdateDataIndexBy(IndexTypeEnum indexType, ActionTypeEnum actionType, TableTypeEnum tableType,
 			PropertyCodeEnum propertyCode, String IndexNo, String companyId) {
 		String formatIdAfterGenerating = StringUtils.EMPTY;
-		List<DataIndexId> dataIndexs = this.findAll(DataIndex.class).stream().map(x -> x.getId())
-				.filter(x -> x.getIndexType() == indexType.getStatusCode()).collect(Collectors.toList());
+		DataIndex dataIndex = this.getDataIndexById(indexType.getStatusCode());
 
-		if (dataIndexs != null && dataIndexs.size() > 0) {
-			System.out.println("========================SIZE=============: " + dataIndexs.size());
+		if (dataIndex!= null) {
 			// found ==> update
 			if (!StringUtils.isEmpty(IndexNo)) {
 				formatIdAfterGenerating = DataIndexUtil.generateFormatIdWith(tableType,
@@ -241,19 +239,18 @@ public class DataIndexDAOImpl extends GenericDao<DataIndex>implements DataIndexD
 						DataIndexUtil.getDateFrom(IndexNo, propertyCode, actionType), IndexNo);
 				// dataIndexDAO.updateDataIndex(formatIdAfterGenerating,indexType);
 			} else {
-				DataIndexId dataindex = dataIndexs.stream().findFirst().get();
-				if (dataindex != null) {
+				DataIndexId dataIndexId=dataIndex.getId();
+				if (dataIndexId != null) {
 					formatIdAfterGenerating = DataIndexUtil.generateFormatIdWith(tableType,
-							DataIndexUtil.getSequenceCodeFrom(dataindex.getIndexNo()), Integer.parseInt(companyId),
+							DataIndexUtil.getSequenceCodeFrom(dataIndexId.getIndexNo()), Integer.parseInt(companyId),
 							propertyCode, actionType,
-							DataIndexUtil.getDateFrom(dataindex.getIndexNo(), propertyCode, actionType),
-							dataindex.getIndexNo());
+							DataIndexUtil.getDateFrom(dataIndexId.getIndexNo(), propertyCode, actionType),
+							dataIndexId.getIndexNo());
 					this.updateDataIndex(indexType, formatIdAfterGenerating);
 				}
 			}
 
 		} else {
-			System.out.println("========================SIZE=============: " + 0);
 			// not found ==> insert
 			DataIndexId dataIndexInsert = new DataIndexId();
 			formatIdAfterGenerating = DataIndexUtil.generateFormatIdWith(tableType, 0, 0, propertyCode, actionType);

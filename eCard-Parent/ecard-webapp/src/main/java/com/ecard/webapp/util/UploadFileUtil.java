@@ -240,8 +240,8 @@ public class UploadFileUtil {
     public static int writeLostImage(String data, String fileName) throws IOException{
     	String absoluteFilePath = lostImageFileUploaded + File.separator + fileName;
     	try{
-        	//ImageIO.write(decodeToImage(data), "jpg",new File(absoluteFilePath));
-        	ImageIO.write(decodeToImage(data), "jpg",new File("E:\\images\\"+fileName));
+        	ImageIO.write(decodeToImage(data), "jpg",new File(absoluteFilePath));
+        	//ImageIO.write(decodeToImage(data), "jpg",new File("C:\\images\\"+fileName));
     	}catch(Exception e){
     		e.printStackTrace();
     		System.out.println("=================error: write images to lost image folder");

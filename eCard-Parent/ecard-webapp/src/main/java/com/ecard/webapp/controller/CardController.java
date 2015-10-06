@@ -576,6 +576,7 @@ public class CardController {
 	            if(!fileUploadModel.isStatus()){
 	            	statusOfResult=UploadFileUtil.writeLostImage(imageData, cardInfoObject.getImageFile());
 	            	if(statusOfResult==3){
+	            		cardInfoService.deleteCardInfo(cardInfoObject.getCardId());
 	            		return statusOfResult;
 	            	}
 				}
