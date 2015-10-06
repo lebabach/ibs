@@ -116,10 +116,12 @@ public class CardMemoController extends RestExceptionHandler {
             
             int response = cardMemoService.registerCardMemo(cardMemo);
             if(response == 0 ){
+            	int seq = cardMemoService.getMaxSeqByUserId(userId);
             	if(cardMemo.getSeq() == 0){
-                	cardMemo.setSeq(cardMemoService.getMaxSeqByUserId(userId));
+                	cardMemo.setSeq(seq);
                 }
                 cardMemoService.createCardMemo(cardMemo);
+                cardMemoResponse.setSeq(seq);
             }
             statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgRegisterMemoCardSuccess, token);            
         }
