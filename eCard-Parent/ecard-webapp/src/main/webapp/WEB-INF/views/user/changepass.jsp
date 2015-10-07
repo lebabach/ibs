@@ -4,6 +4,13 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <style type="text/css">
+.mesage_error {
+	color: red;
+	display: none;
+	margin-top: 10px !important;
+	margin-left: 153px !important;
+}
+
 .btn-lg {
 	padding: 2px 16px;
 }
@@ -105,7 +112,6 @@
 
 .list-profile li p {
 	width: 100%;
-	display: inline-block;
 	margin: 0;
 	padding: 0;
 }
@@ -195,19 +201,22 @@
 	<div class="box-1">
 		<div class="title-box-1">パスワード設定</div>
 		<div class="content-box-1">
-			<form>
+			<form id="updatePassForm" class="h-adr" method="POST"
+				accept-charset="UFT-8">
 				<ul class="list-profile">
-					<li><label class="label-c">ç¾å¨ã®ãã¹ã¯ã¼ã</label> <input
-						class="input-c" value=""></li>
-					<li><label class="label-c">æ°ãããã¹ã¯ã¼ã</label> <input
-						class="input-c" value=""></li>
-					<li><label class="label-c">æ°ãããã¹ã¯ã¼ãï¼ç¢ºèªï¼</label>
-						<input class="input-c" value=""></li>
+					<li><label class="label-c">現在のパスワード</label> <input
+						class="input-c" value="" type="password" id="oldpass">
+					<p class="mesage_error error_oldpass"></p></li>
+					<li><label class="label-c">新しいパスワード</label> <input
+						class="input-c" value="" type="password" id="newpass1">
+					<p class="mesage_error error_newpass1"></p></li>
+					<li><label class="label-c">新しいパスワード（確認）</label> <input
+						class="input-c" value="" type="password" id="newpass2">
+					<p class="mesage_error error_newpass2"></p></li>
 					<li
 						style="border: none; padding-bottom: 0; text-align: center; margin: 0 auto;">
 
-						<input type="submit" class="input-submit"
-						value="ãã¹ã¯ã¼ããå¤æ´">
+						<input type="button" class="input-submit" value="パスワードを変更">
 					</li>
 				</ul>
 			</form>
@@ -215,51 +224,97 @@
 	</div>
 </div>
 
-<!-- Mainly scripts -->
-<script src="js/jquery-2.1.1.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
-<!-- Custom and plugin javascript -->
-<script src="js/inspinia.js"></script>
-<script src="js/plugins/pace/pace.min.js"></script>
-
-<!-- Peity -->
-<script src="js/plugins/peity/jquery.peity.min.js"></script>
-
-<!-- Peity -->
-<script src="js/demo/peity-demo.js"></script>
-
-<!-- blueimp gallery -->
-<script src="js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
 <script>
 	$(document).ready(function() {
+		$(".input-submit").click(function() {
+			resetValidationForm();
+			if (!checkValidationForm()) {
+				return false;
+			}
+			var pass=$("#newpass1").val();
+			debugger;
+			$.ajax({
+			    type: 'POST',
+			    url: 'updatePass',
+			    data: { 
+			        'newPass':pass
+			    },
+			    success: function(msg){
+			        if(msg==true){
+			        	window.location = "home";
+			        }
+			    }
+			});
+		});
+
 	});
 
-	$('#delBusinessCard').click(function() {
-		console.log('Delete a Personal detail card');
-	});
+	function checkValidationForm() {
+		var checkValidation = true;
+		var oldpass = $("#oldpass").val();
+		var newpass1 = $("#newpass1").val();
+		var newpass2 = $("#newpass2").val();
+		
+		if (newpass1.length < 8) {
+			$(".error_newpass1").text(
+					"<fmt:message key='user.profile.length.pass'/>");
+			checkValidation = false;
+			$(".mesage_error").css("display", "block");
+		}
+		
+		if (newpass2.length < 8) {
+			$(".error_newpass2").text(
+					"<fmt:message key='user.profile.length.pass'/>");
+			checkValidation = false;
+			$(".mesage_error").css("display", "block");
+		}
+		
+		if (oldpass == newpass1) {
+			$(".error_newpass1").text(
+					"<fmt:message key='user.profile.old.pass.equal.new.pass'/>");
+			checkValidation = false;
+			$(".mesage_error").css("display", "block");
+		}
+		
+		if (newpass2 != newpass1) {
+			$(".error_newpass2").text(
+					"<fmt:message key='user.profile.new.pass1.equal.new.pass2'/>");
+			checkValidation = false;
+			$(".mesage_error").css("display", "block");
+		}
+		
+		var regexLetterAndNumber = /^(?=.*[a-zA-Z])(?=.*[0-9])/;
+		if (!(regexLetterAndNumber.test(newpass1))) {
+			$(".error_newpass1").text(
+					"<fmt:message key='user.profile.format.pass'/>");
+			checkValidation = false;
+			$(".mesage_error").css("display", "block");
+		}
+		
+		if(checkValidation){
+			$.ajax({
+			    type: 'POST',
+			    url: 'checkPass',
+			    async: false,
+			    data: { 
+			        'oldpass': $("#oldpass").val()
+			    },
+			    success: function(data){
+			        if(data!=true){
+			        	$(".error_oldpass").text(
+						"<fmt:message key='user.profile.oldpass.not.match'/>");
+						checkValidation = false;
+						$(".mesage_error").css("display", "block");
+			        }
+			    }
+			});
+		} 
+		return checkValidation;
+	}
+	function resetValidationForm() {
+		$(".error_oldpass").text("");
+		$(".error_newpass1").text("");
+		$(".error_newpass2").text("");
 
-	$('#editPersonalInfo').click(function() {
-		console.log('Delete a Personal detail card 111111');
-	});
-	$(".more").toggle(function() {
-		$(this).text("less..").siblings(".complete").show();
-	}, function() {
-		$(this).text("more..").siblings(".complete").hide();
-	});
-
-	$("#addTag").click(function(e) {
-		if ($(".balloon").css('display') == 'block')
-			$(".balloon").css("display", "none");
-		else
-			$(".balloon").css("display", "block");
-	});
-
-	$("#popup").on("click", function() {
-		console.log('123');
-		$('#imagepreview').attr('src', $('#imageresource').attr('src'));
-		$('#imagemodal').modal('show');
-	});
+	}
 </script>

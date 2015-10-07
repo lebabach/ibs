@@ -152,7 +152,7 @@
 					<ul class="dropdown-menu animated fadeInRight m-t-xs">
 						<li><a href="profile">プロフィール名刺</a></li>
 						<li><a href="download.html">分の名刺をダウン</a></li>
-						<li><a href="contact">ロード -パスワード 設定</a></li>
+						<li><a href="changepass">ロード -パスワード 設定</a></li>
 						<li><a href="faq">FAQ</a></li>
 						<li><a href="mailbox">ご意見・不具合の連絡</a></li>
 						<!-- Profile -->

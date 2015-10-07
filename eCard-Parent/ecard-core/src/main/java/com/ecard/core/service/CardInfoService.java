@@ -90,7 +90,7 @@ public interface CardInfoService {
 //   
 //   public BigInteger getTotalCardSearchAllByMroonga(Integer groupCompanyId, List<Integer> listUserId, String searchText,String name, String position,String department,String company, int pageNumber);
    
-   public List<CardInfoUserVo> getListPossesionCard(Integer userId);
+   public List<CardInfoUserVo> getListPossesionCard(Integer userId, int pageNumber);
    
    public void updateOldCardInfo (CardInfo cardInfo);
    
@@ -119,4 +119,7 @@ public interface CardInfoService {
    public List<String> getListSortType(Integer userId);
    
    public int updateContactDate(CardInfo cardInfo);
+
+   public Long countPossessionCard(Integer userId);
+
 }
