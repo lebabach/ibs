@@ -379,6 +379,7 @@
     <!-- Peity -->
     <script src="js/demo/peity-demo.js"></script>
 <script>
+
       var id_manager = 1;
       var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
      
@@ -511,7 +512,7 @@
         // Click to personal details page
         $('.business_card_book .list-group-item').click( function() {
           console.log("Move to personal details page"); 
-          window.location.href = "personal_details.html"
+          window.location.href = '<c:url value="/user/detail/1048"/>';
         }).hover(function() {
           $(this).toggleClass('hover');
         });

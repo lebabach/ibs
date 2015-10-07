@@ -133,9 +133,15 @@
     </definition>
     
     <definition name="homePC" extends="base.pc.definition">   	
-        <put-attribute name="title" value="IBS PC" />
+        <put-attribute name="title" value="IBS" />
         <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
         <put-attribute name="body" value="/WEB-INF/views/user/homePC.jsp" />  
+    </definition>
+    
+    <definition name="detailPC" extends="base.pc.definition">   	
+        <put-attribute name="title" value="IBS" />
+        <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/user/detailPC.jsp" />  
     </definition>
     
     <definition name="download" extends="base.pc.definition">   	
@@ -143,7 +149,25 @@
         <put-attribute name="body" value="/WEB-INF/views/user/download.jsp" />  
     </definition>
     
+    <definition name="profile" extends="base.pc.definition">   	
+        <put-attribute name="title" value="IBS PC" />  
+        <put-attribute name="body" value="/WEB-INF/views/user/profile.jsp" />  
+    </definition>
     
+    <definition name="contact-us" extends="base.pc.definition">   	
+        <put-attribute name="title" value="IBS PC" />  
+        <put-attribute name="body" value="/WEB-INF/views/user/contact.jsp" />  
+    </definition>
+    
+    <definition name="faq" extends="base.pc.definition">   	
+        <put-attribute name="title" value="IBS PC" />  
+        <put-attribute name="body" value="/WEB-INF/views/user/faq.jsp" />  
+    </definition>
+    
+    <definition name="mailbox" extends="base.pc.definition">   	
+        <put-attribute name="title" value="IBS PC" />  
+        <put-attribute name="body" value="/WEB-INF/views/user/mailbox.jsp" />  
+    </definition>
     <!-- backup --> 
     <definition name="backup" extends="base.definition"> 
         <put-attribute name="body" value="/WEB-INF/views/backup/backupdata.jsp" />  
