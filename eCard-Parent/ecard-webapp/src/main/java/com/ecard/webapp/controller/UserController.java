@@ -176,8 +176,8 @@ public class UserController {
 	}
 
 	@RequestMapping("getImageFile")
-	@ResponseBody
-	public String getFileImageSCP(@RequestParam(value = "fileImage") String fileImage) {
+	@ResponseBody	
+	public synchronized  String getFileImageSCP(@RequestParam(value = "fileImage") String fileImage) {
 		String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(fileImage, scpHostName, scpUser, scpPassword,
 				Integer.parseInt(scpPort));
 		return fileNameFromSCP;
