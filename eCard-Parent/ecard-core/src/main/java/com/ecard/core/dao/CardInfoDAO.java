@@ -8,6 +8,7 @@ import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
+import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
 
