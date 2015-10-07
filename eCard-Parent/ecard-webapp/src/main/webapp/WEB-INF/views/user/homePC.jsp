@@ -680,8 +680,10 @@
     	    $.ajax({
     	        type: 'POST',
     	        url: 'getImageFile',
-    	        data: 'fileImage='+fileImageName
+    	        data: 'fileImage='+fileImageName,
+    	        async: false
     	    }).done(function(resp, status, xhr){
+    	    	console.log('resp: '+ resp);
     	    	if(resp == ""){
     	    		target.attr('src','');    	  
         	        target.attr('src','/ecard-webapp/assets/img/card_08.png');
@@ -691,17 +693,16 @@
     	    	}
     	    }).fail(function(resp, status, xhr){
     	        alert('Error');
-    	    });    	  
+    	    });
     	});
-		function getImageFromSCP( fileImageName ){
-			
-			//var fileImageName =$(self).parent().find('input[name=fileImageName]').val();
+		function getImageFromSCP( fileImageName ){			
 			var target = $('img[name="'+fileImageName+'"]');
 			console.log('BBB = '+fileImageName);
 			$.ajax({
     	        type: 'POST',
     	        url: 'getImageFile',
-    	        data: 'fileImage='+fileImageName
+    	        data: 'fileImage='+fileImageName,
+    	        async: false
     	    }).done(function(resp, status, xhr){
     	    	if(resp == ""){
     	    		target.attr('src','');    	  
@@ -713,6 +714,6 @@
     	    	
     	    }).fail(function(resp, status, xhr){
     	        alert('Error');
-    	    });
+    	    });			
 		}
     </script>
