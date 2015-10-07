@@ -254,7 +254,7 @@ public class DataIndexDAOImpl extends GenericDao<DataIndex>implements DataIndexD
 		} else {
 			// not found ==> insert
 			DataIndexId dataIndexInsert = new DataIndexId();
-			formatIdAfterGenerating = DataIndexUtil.generateFormatIdWith(tableType, 0, 0, propertyCode, actionType);
+			formatIdAfterGenerating = DataIndexUtil.generateFormatIdWith(tableType, 0, Integer.parseInt(companyId), propertyCode, actionType);
 			dataIndexInsert.setIndexType(indexType.getStatusCode());
 			dataIndexInsert.setIndexNo(formatIdAfterGenerating);
 			dataIndexInsert.setCreateDate(new Date());
