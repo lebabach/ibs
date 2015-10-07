@@ -120,6 +120,8 @@ public interface CardInfoService {
    
    public List<String> getListSortType(Integer userId);
    
+   public int updateContactDate(CardInfo cardInfo);
+
    public Long countPossessionCard(Integer userId);
 
 public CardInfo getNewestCardInfo(CardInfo cardInfo);

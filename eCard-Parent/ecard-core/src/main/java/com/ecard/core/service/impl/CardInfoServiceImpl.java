@@ -282,6 +282,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 		return cardInfoDAO.getListSortType(userId);
 	}
 	
+	public int updateContactDate(CardInfo cardInfo){
+		return cardInfoDAO.updateContactDate(cardInfo);
+	}
+	
 	public Long countPossessionCard(Integer userId){
 		return cardInfoDAO.countPossessionCard(userId);
 	}

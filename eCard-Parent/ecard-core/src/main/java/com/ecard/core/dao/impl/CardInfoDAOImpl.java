@@ -1166,12 +1166,21 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
        
 	}
 	
+	public int updateContactDate(CardInfo cardInfo){
+		Query query = getEntityManager().createQuery("UPDATE CardInfo c SET c.contactDate = :contactDate WHERE c.cardId = :cardId");
+		query.setParameter("contactDate", cardInfo.getContactDate());
+		query.setParameter("cardId", cardInfo.getCardId());
+		
+		return (int)query.executeUpdate();
+	}
+
 	public Long countPossessionCard(Integer userId){
 		String sqlStr = "SELECT count(*) FROM PossessionCard pos INNER JOIN pos.cardInfo "
                 + "WHERE pos.id.userId = :userId AND pos.cardInfo.approvalStatus = 1 ";
 		Query query = getEntityManager().createQuery(sqlStr);
 		query.setParameter("userId", userId);
         return (Long)getOrNull(query);
+
 	}
 
 	public CardInfo getNewestCardInfo(CardInfo cardInfo){

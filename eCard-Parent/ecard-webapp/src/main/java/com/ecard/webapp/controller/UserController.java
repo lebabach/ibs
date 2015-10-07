@@ -27,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,18 +38,29 @@ import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.CardTagId;
+import com.ecard.core.model.CompanyInfo;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.InquiryInfo;
 import com.ecard.core.model.UserInfo;
+import com.ecard.core.model.UserTag;
 import com.ecard.core.service.CardInfoService;
+import com.ecard.core.service.CardTagService;
+import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.GroupCompanyInfoService;
 import com.ecard.core.service.SettingsInfoService;
 import com.ecard.core.service.UserInfoService;
+import com.ecard.core.service.UserTagService;
 import com.ecard.core.service.converter.CardInfoConverter;
+import com.ecard.core.service.converter.CardTagConverter;
+import com.ecard.core.vo.CardAndUserTag;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoCSV;
 import com.ecard.core.vo.CardInfoUserVo;
+import com.ecard.core.vo.TagForCard;
 import com.ecard.core.vo.UserDownloadPermission;
+import com.ecard.core.vo.UserTagAndCardTag;
 import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardInfoPCVo;
@@ -65,6 +77,15 @@ public class UserController {
 
 	@Autowired
 	CardInfoService cardInfoService;
+	
+	@Autowired
+    UserTagService userTagService;
+    
+    @Autowired
+    CardTagService cardTagService;
+    
+    @Autowired
+    PossessionCardService possessionCardService;
 
 	@Autowired
 	GroupCompanyInfoService groupCompanyInfoService;
@@ -176,8 +197,8 @@ public class UserController {
 	}
 
 	@RequestMapping("getImageFile")
-	@ResponseBody
-	public String getFileImageSCP(@RequestParam(value = "fileImage") String fileImage) {
+	@ResponseBody	
+	public synchronized  String getFileImageSCP(@RequestParam(value = "fileImage") String fileImage) {
 		String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(fileImage, scpHostName, scpUser, scpPassword,
 				Integer.parseInt(scpPort));
 		return fileNameFromSCP;
@@ -338,7 +359,8 @@ public class UserController {
 		}
 
 	}
-
+	
+	@RequestMapping(value = "/card/detail/{id:[\\d]+}",  method = RequestMethod.GET)
 	private int parseIntParameter(String parameter, int defaultValue) {
 		try {
 			return Integer.parseInt(parameter);
@@ -347,28 +369,45 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/detail/{id:[\\d]+}", method = RequestMethod.GET)
+	@RequestMapping(value = "/card/details/{id:[\\d]+}",  method = RequestMethod.GET)
 	public ModelAndView detailPC(@PathVariable("id") int id) {
 		logger.debug("detailPC", UserController.class);
-
+		
 		ModelAndView modelAndView = new ModelAndView();
 		CardInfo cardInfo = null;
 		List<CardConnectModel> cardList = null;
-		try {
+		List<TagForCard> listCardTag = null;
+		List<TagForCard> listUserTag = null;
+		try{
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+			Integer userId = ecardUser.getUserId();
+			
 			cardInfo = cardInfoService.getCardInfoDetail(id);
-			String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser,
-					scpPassword, Integer.parseInt(scpPort));
+			String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
 			cardInfo.setImageFile(fileNameFromSCP);
-
-			// List card connected
-			cardList = cardInfoService.listCardConnect(cardInfo.getCardOwnerId(), cardInfo.getGroupCompanyId(),
-					cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
-		} catch (Exception ex) {
+			
+			//List card connected
+			cardList = cardInfoService.listCardConnect(cardInfo.getCardOwnerId(), cardInfo.getGroupCompanyId(), cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
+			
+			//List tag
+			listCardTag = cardTagService.listCardTagByCardId(userId);
+			modelAndView.addObject("cardTagList", listCardTag);
+            //listUserTag = cardTagService.listUserTagByUserId(userId);
+            /*if(listCardTag.size() == 0){
+            	modelAndView.addObject("listUserTag", listUserTag);
+            }
+            else{
+            	modelAndView.addObject("listCardTag", listCardTag);
+            }*/
+		}
+		catch(Exception ex){
 			logger.debug("Exception : ", ex.getMessage());
 		}
 		modelAndView.setViewName("detailPC");
 		modelAndView.addObject("cardInfo", cardInfo);
 		modelAndView.addObject("listCardConnect", cardList);
+		
 		return modelAndView;
 	}
 
@@ -451,4 +490,200 @@ public class UserController {
 		return new ModelAndView("redirect:home");
 	}
 
+	@RequestMapping (value = "editCardInfo", method = RequestMethod.POST)
+	public ModelAndView editCardInfo(CardInfo cardInfo) {
+		logger.debug("editCardInfo", UserController.class);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		try{
+			String name = cardInfo.getLastName();
+            String nameKana = cardInfo.getLastNameKana();
+            String addressFull = "";
+                            
+            if(cardInfo.getFirstName() != null){
+                name += " " + cardInfo.getFirstName();
+            }
+            
+            if(cardInfo.getFirstNameKana() != null){
+                nameKana += " " + cardInfo.getFirstNameKana();
+            }
+            
+            if(cardInfo.getAddress1() != null && cardInfo.getAddress2() != null 
+                    && cardInfo.getAddress3() != null && cardInfo.getAddress4() != null){
+                addressFull += addressFull = cardInfo.getAddress1() + " " + cardInfo.getAddress2() + " " + cardInfo.getAddress3() + " " + cardInfo.getAddress4();
+            }
+            else if(cardInfo.getAddress1() != null && cardInfo.getAddress2() != null && cardInfo.getAddress3() != null){
+                addressFull += addressFull = cardInfo.getAddress1() + " " + cardInfo.getAddress2() + " " + cardInfo.getAddress3();
+            }
+            else if(cardInfo.getAddress1() != null && cardInfo.getAddress2() != null){
+                addressFull += addressFull = cardInfo.getAddress1() + " " + cardInfo.getAddress2();
+            }
+            else if(cardInfo.getAddress1() != null){
+                addressFull += addressFull = cardInfo.getAddress1();
+            }
+            
+            if(cardInfo.getUpdateDate() == null){
+                cardInfo.setUpdateDate(new Date());
+            }
+            
+            if(cardInfo.getContactDate() == null){
+                cardInfo.setContactDate(new Date());
+            }
+            cardInfo.setDeletDate(null);
+            
+            cardInfo.setName(name);
+            cardInfo.setNameKana(nameKana);
+            cardInfo.setAddressFull(addressFull);
+          
+            CompanyInfo companyInfo = new CompanyInfo();
+            companyInfo.setCompanyId(0);
+            
+            cardInfo.setCompanyInfo(companyInfo);
+            
+            if(cardInfoService.editCardInfo(cardInfo)){
+            	modelAndView.addObject("isEdit", true);
+            }
+            else{
+            	modelAndView.addObject("isEdit", false);
+            }
+		}
+		catch(Exception ex){
+			logger.debug("Exception : ", ex.getMessage());
+		}
+		modelAndView.setViewName("redirect:/user/card/detail/"+cardInfo.getCardId());
+		return modelAndView;
+	}
+	
+	@RequestMapping (value = "editContactDate", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView editContactDate(String contactDate, HttpServletRequest request) {
+		logger.debug("editContactDate", UserController.class);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		try{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = sdf.parse(contactDate);
+			
+			CardInfo cardInfo = new CardInfo();
+			cardInfo.setContactDate(date);
+			cardInfo.setCardId(Integer.parseInt(request.getParameter("cardId")));
+			
+			if(cardInfoService.updateContactDate(cardInfo) > 0){
+				modelAndView.addObject("isEdit", true);
+			}
+			else{
+				modelAndView.addObject("isEdit", false);
+			}
+		}
+		catch(Exception ex){
+			logger.debug("Exception : ", ex.getMessage());
+		}
+		
+		modelAndView.setViewName("redirect:/user/card/detail/"+request.getParameter("cardId"));
+		return modelAndView;
+	}
+	
+	@RequestMapping (value = "addTag", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView addTag(CardAndUserTag cardAndUserTag, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("addTag", UserController.class);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		Integer userId = ecardUser.getUserId();
+		
+		try{
+			List<UserTagAndCardTag> listUserTagAndCardTag = userTagService.getListUserTagByUserId(userId);
+	        Integer tagId = 0;
+	        for(UserTagAndCardTag userTagTmp : listUserTagAndCardTag){
+	            if(userTagTmp.getTagName().equals(cardAndUserTag.getTagName())){
+	                tagId = userTagTmp.getTagId();
+	                break;
+	            }
+	        }                
+	        Integer isSame = 0;
+	        if(tagId != 0){
+	            List<Integer> cardId = cardTagService.listCardIdByTagId(tagId);                    
+	            for(Integer cardIdTmp : cardId){
+	                if(cardAndUserTag.getCardId() != null){
+	                    if(cardAndUserTag.getCardId().equals(cardIdTmp)){
+	                        isSame = 1;
+	                        break;
+	                    }
+	                }
+	            }
+	            if(isSame != 1 && (cardAndUserTag.getCardId() != null)){
+	                CardTagId cardTag = new CardTagId();
+	                cardTag.setCardId(cardAndUserTag.getCardId());
+	                cardTag.setTagId(tagId);
+	                cardTagService.addCardTag(cardTag);
+	            }                    
+	        } else {                    
+	            UserInfo userInfo = new UserInfo();
+	            userInfo.setUserId(userId);
+	
+	            UserTag userTag =new UserTag();
+	            userTag.setTagName(cardAndUserTag.getTagName());
+	            userTag.setUserInfo(userInfo);
+	            tagId = userTagService.registerUserTag(userTag);
+	            
+	            if (cardAndUserTag.getCardId() != null){
+	                CardTagId cardTag = new CardTagId();
+	                cardTag.setCardId(cardAndUserTag.getCardId());
+	                cardTag.setTagId(tagId);
+	                cardTagService.addCardTag(cardTag);
+	            }
+	        }
+		}
+		catch(Exception ex){
+			logger.debug("Exception :"+ ex.getMessage(), UserController.class);
+			response.setStatus(500, "Add tag error");
+		}
+		response.setStatus(200, "Add tag success");
+		modelAndView.setViewName("redirect:/user/card/detail/"+request.getParameter("cardId"));
+		return modelAndView;
+	}
+	
+	@RequestMapping (value = "deleteTag", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView deleteTag(CardTagId cardTag, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("deleteTag", UserController.class);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		try{
+			cardTagService.deleteCardTagByTagId(cardTag.getTagId());
+			userTagService.deleteUserTag(cardTag.getTagId());
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		response.setStatus(200, "Remove tag success");
+		modelAndView.setViewName("redirect:/user/card/detail/"+cardTag.getCardId());
+		return modelAndView;
+	}
+	
+	@RequestMapping (value = "delBusinessCard", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView delBusinessCard(PossessionCardId card, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("delBusinessCard", UserController.class);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		try{
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+			Integer userId = ecardUser.getUserId();
+			
+			possessionCardService.deletePossessionCard(userId, card.getCardId());
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		response.setStatus(200, "Remove card success");
+		modelAndView.setViewName("redirect:/user/card/detail/"+card.getCardId());
+		return modelAndView;
+	}
 }
+
+

@@ -384,7 +384,7 @@
       var id_manager = 1;
       var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
      
-      $(window).scroll(function() {
+      $(window).scroll(function() {    	  
     	  if(id_manager * 5 < parseInt(totalCardInfo)){
 	    	    if($(window).scrollTop() >= ($(document).height() - $(window).height())*0.7) {
 	    	    	// Call ajax here	    	   		
@@ -417,6 +417,7 @@
 				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 				    					+	'</div> </div> </div> </div>'
 				        	    	);
+									 reloadICheck();
 									 getImageFromSCP(v.imageFile); 
 								 });
 							 } else {
@@ -444,7 +445,8 @@
 						    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 						    					+	'</div> </div> </div> </div></div>'
 						        	    );
-											 getImageFromSCP(v.imageFile);
+										 reloadICheck();
+										 getImageFromSCP(v.imageFile);
 									 }else{
 										 $('.business_card_book #'+lastDate).append(
 							        	    		'<div class="list-group-item pointer">'
@@ -464,16 +466,14 @@
 							    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class="lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 							    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 							    					+	'</div> </div> </div> </div>'  );
+										 reloadICheck();
 										 getImageFromSCP(v.imageFile);
 									 }
 								 });
 							 }
 							 
 						});
-						$('.i-checks').iCheck({
-		       	          checkboxClass: 'icheckbox_square-green',
-		       	          radioClass: 'iradio_square-green',                
-		        	    });
+						
 						
 					}).fail(function(xhr, status, err) {
 						alert('Error');
@@ -484,7 +484,7 @@
     	}); 
 
       $(document).ready(function(){
-    	  
+    	     	  
     	$(".business_card_book .list-group").each(function() {
     		var id  = $(this).attr("id").replace('/', '');
     		$(this).attr("id",id);
@@ -655,10 +655,7 @@
                                       '<td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>'+
                                     '</tr>');
         
-          $('.i-checks').iCheck({
-            checkboxClass: 'icheckbox_square-green',
-            radioClass: 'iradio_square-green',                
-          });
+          reloadICheck();
         }
         // Clear
         $("#addLabel").parent().parent().find('input').val('');  
@@ -675,15 +672,12 @@
       
       $(".business_card_book .img-responsive").each(function () {
     		var target = $(this);
-    	    var fileImageName =$(this).parent().find('input[name=fileImageName]').val();
-    	    console.log('AAA= '+fileImageName);
+    	    var fileImageName =$(this).parent().find('input[name=fileImageName]').val();    	    
     	    $.ajax({
     	        type: 'POST',
     	        url: 'getImageFile',
-    	        data: 'fileImage='+fileImageName,
-    	        async: false
+    	        data: 'fileImage='+fileImageName
     	    }).done(function(resp, status, xhr){
-    	    	console.log('resp: '+ resp);
     	    	if(resp == ""){
     	    		target.attr('src','');    	  
         	        target.attr('src','/ecard-webapp/assets/img/card_08.png');
@@ -695,14 +689,13 @@
     	        alert('Error');
     	    });
     	});
-		function getImageFromSCP( fileImageName ){			
-			var target = $('img[name="'+fileImageName+'"]');
-			console.log('BBB = '+fileImageName);
+      
+		function getImageFromSCP(fileImageName){			
+			var target = $('img[name="'+fileImageName+'"]');			
 			$.ajax({
     	        type: 'POST',
     	        url: 'getImageFile',
-    	        data: 'fileImage='+fileImageName,
-    	        async: false
+    	        data: 'fileImage='+fileImageName,    	        
     	    }).done(function(resp, status, xhr){
     	    	if(resp == ""){
     	    		target.attr('src','');    	  
@@ -714,6 +707,14 @@
     	    	
     	    }).fail(function(resp, status, xhr){
     	        alert('Error');
-    	    });			
+    	    });						
 		}
+		
+		function reloadICheck(){
+			$('.i-checks').iCheck({
+     	          checkboxClass: 'icheckbox_square-green',
+     	          radioClass: 'iradio_square-green',                
+      	    });
+		}
+
     </script>
