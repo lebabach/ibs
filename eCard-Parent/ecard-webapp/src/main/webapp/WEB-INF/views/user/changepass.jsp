@@ -232,7 +232,6 @@
 				return false;
 			}
 			var pass=$("#newpass1").val();
-			debugger;
 			$.ajax({
 			    type: 'POST',
 			    url: 'updatePass',
@@ -291,24 +290,22 @@
 			$(".mesage_error").css("display", "block");
 		}
 		
-		if(checkValidation){
-			$.ajax({
-			    type: 'POST',
-			    url: 'checkPass',
-			    async: false,
-			    data: { 
-			        'oldpass': $("#oldpass").val()
-			    },
-			    success: function(data){
-			        if(data!=true){
-			        	$(".error_oldpass").text(
-						"<fmt:message key='user.profile.oldpass.not.match'/>");
-						checkValidation = false;
-						$(".mesage_error").css("display", "block");
-			        }
-			    }
-			});
-		} 
+		$.ajax({
+		    type: 'POST',
+		    url: 'checkPass',
+		    async: false,
+		    data: { 
+		        'oldpass': $("#oldpass").val()
+		    },
+		    success: function(data){
+		        if(data!=true){
+		        	$(".error_oldpass").text(
+					"<fmt:message key='user.profile.oldpass.not.match'/>");
+					checkValidation = false;
+					$(".mesage_error").css("display", "block");
+		        }
+		    }
+		});
 		return checkValidation;
 	}
 	function resetValidationForm() {
