@@ -263,4 +263,140 @@ public class UserController {
 		}
 		
 	}
+	
+	@RequestMapping("profile") 
+    public ModelAndView profile() {	
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<CardInfo> cardInfoDisp = new ArrayList<>();
+		List<CardInfoPCVo>  lstCardInfoPCVo = new ArrayList<>();
+		if (ecardUser != null) {
+			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
+			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId());
+			
+			for(String nameSort : lstNameSort) {
+			    for(CardInfoUserVo cardInfo :lstCardInfo ){
+			    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
+			    		cardInfoDisp.add(cardInfo.getCardInfo());
+			    	}
+			    }
+			    CardInfoPCVo cardInfoPCVo;
+				try {
+					cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
+					lstCardInfoPCVo.add(cardInfoPCVo);
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    
+			}
+			
+		}
+		return new ModelAndView("profile", "lstCardInfoPCVo", lstCardInfoPCVo);
+    }
+	
+	@RequestMapping("contact") 
+    public ModelAndView contact() {	
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<CardInfo> cardInfoDisp = new ArrayList<>();
+		List<CardInfoPCVo>  lstCardInfoPCVo = new ArrayList<>();
+		if (ecardUser != null) {
+			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
+			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId());
+			
+			for(String nameSort : lstNameSort) {
+			    for(CardInfoUserVo cardInfo :lstCardInfo ){
+			    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
+			    		cardInfoDisp.add(cardInfo.getCardInfo());
+			    	}
+			    }
+			    CardInfoPCVo cardInfoPCVo;
+				try {
+					cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
+					lstCardInfoPCVo.add(cardInfoPCVo);
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    
+			}
+			
+		}
+		return new ModelAndView("contact-us", "lstCardInfoPCVo", lstCardInfoPCVo);
+    }
+	
+	@RequestMapping("faq") 
+    public ModelAndView faq() {	
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<CardInfo> cardInfoDisp = new ArrayList<>();
+		List<CardInfoPCVo>  lstCardInfoPCVo = new ArrayList<>();
+		if (ecardUser != null) {
+			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
+			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId());
+			
+			for(String nameSort : lstNameSort) {
+			    for(CardInfoUserVo cardInfo :lstCardInfo ){
+			    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
+			    		cardInfoDisp.add(cardInfo.getCardInfo());
+			    	}
+			    }
+			    CardInfoPCVo cardInfoPCVo;
+				try {
+					cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
+					lstCardInfoPCVo.add(cardInfoPCVo);
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    
+			}
+			
+		}
+		return new ModelAndView("faq", "lstCardInfoPCVo", lstCardInfoPCVo);
+    }
+	
+	@RequestMapping("mailbox") 
+    public ModelAndView mailbox() {	
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<CardInfo> cardInfoDisp = new ArrayList<>();
+		List<CardInfoPCVo>  lstCardInfoPCVo = new ArrayList<>();
+		if (ecardUser != null) {
+			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
+			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId());
+			
+			for(String nameSort : lstNameSort) {
+			    for(CardInfoUserVo cardInfo :lstCardInfo ){
+			    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
+			    		cardInfoDisp.add(cardInfo.getCardInfo());
+			    	}
+			    }
+			    CardInfoPCVo cardInfoPCVo;
+				try {
+					cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
+					lstCardInfoPCVo.add(cardInfoPCVo);
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    
+			}
+			
+		}
+		return new ModelAndView("mailbox", "lstCardInfoPCVo", lstCardInfoPCVo);
+    }
 }
