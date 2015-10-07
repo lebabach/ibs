@@ -442,14 +442,15 @@
 							 }
 							 
 						});
+						$('.i-checks').iCheck({
+			       	          checkboxClass: 'icheckbox_square-green',
+			       	          radioClass: 'iradio_square-green',                
+			        	    });
 					}).fail(function(xhr, status, err) {
 						alert('Error');
 					});
 	        	    
-	        	    $('.i-checks').iCheck({
-	       	          checkboxClass: 'icheckbox_square-green',
-	       	          radioClass: 'iradio_square-green',                
-	        	    });
+	        	    
 	        	    id_manager++;
 	    	    }
     	  }
