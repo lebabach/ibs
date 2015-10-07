@@ -7,17 +7,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -39,8 +39,8 @@ import com.ecard.core.model.UserInfo;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.converter.CardInfoConverter;
+import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoCSV;
-import com.ecard.core.vo.CardInfoResponse;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.UserDownloadPermission;
 import com.ecard.webapp.security.EcardUser;
@@ -51,7 +51,8 @@ import com.ecard.webapp.vo.CardInfoPCVo;
 @Controller
 @RequestMapping("/user/*")
 public class UserController {
-		
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	
 	@Autowired
 	UserInfoService userInfoService;
 	
@@ -261,5 +262,29 @@ public class UserController {
 			csvWriter.close();
 		}
 		
+	}
+	
+	@RequestMapping(value = "/detail/{id:[\\d]+}",  method = RequestMethod.GET)
+	public ModelAndView detailPC(@PathVariable("id") int id) {
+		logger.debug("detailPC", UserController.class);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		CardInfo cardInfo = null;
+		List<CardConnectModel> cardList = null;
+		try{
+			cardInfo = cardInfoService.getCardInfoDetail(id);
+			String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
+			cardInfo.setImageFile(fileNameFromSCP);
+			
+			//List card connected
+			cardList = cardInfoService.listCardConnect(cardInfo.getCardOwnerId(), cardInfo.getGroupCompanyId(), cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
+		}
+		catch(Exception ex){
+			logger.debug("Exception : ", ex.getMessage());
+		}
+		modelAndView.setViewName("detailPC");
+		modelAndView.addObject("cardInfo", cardInfo);
+		modelAndView.addObject("listCardConnect", cardList);
+		return modelAndView;
 	}
 }
