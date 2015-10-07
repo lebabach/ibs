@@ -215,102 +215,19 @@
 	margin-bottom: 20px;
 	font-weight: normal;
 }
+
+.ui-mobile .ui-page-active {
+    display: block;
+    overflow: visible !important;
+    overflow-x: hidden !important;
+}
 </style>
+
 <div class="div-list">
 	<div class="box-1">
 		<div class="title-box-1">FAQ</div>
-		<div class="content-box-1" style="padding: 0">
-			<div class="category_title">用語</div>
-			<dl class="dl">
-				<dt>
-					<img src="img/icon-q.png">
-				</dt>
-				<dd>ãBC-RIBBONãã¨ã¯ã©ããªæå³ã§ããï¼</dd>
-				<dt>
-					<img src="img/icon-a.png">
-				</dt>
-				<dd class="dd-maB">BCã¨ã¯BUSINESS
-					CARD(ååº)ã®ç¥ã§ããRIBBONã¯ããã³ãã°ã«ã¼ãã®æ³äººãã¼ã¿ãã¼ã¹ã®ååããã¨ã£ã¦ãã¾ããæ³äººãã¼ã¿ãã¼ã¹ã®ãRIBBONãã¨åãããååº(ãå®¢æ§)ã¨ãã³ãã°ã«ã¼ããâçµã¶âãã°ã«ã¼ãåç¤¾åå£«ãâçµã¶âã¨ããæå³ãè¾¼ãã¦ãã¾ãã</dd>
-
-				<dt>
-					<img src="img/icon-q.png">
-				</dt>
-				<dd>ããã¼ã¿ç»é²ã»ã³ã¿ã¼ãã¨ã¯ä½ã§ããï¼</dd>
-				<dt>
-					<img src="img/icon-a.png">
-				</dt>
-				<dd class="dd-maB">ã¹ã­ã£ã³ããååºæå ±ã®ä¿®æ­£ã»ç¢ºèªãè¡ãã»ã³ã¿ã¼ã§ãããã­ã³ãã£ã¢ãã£ã¬ã³ã¸ã«ã¦éç¨ãè¡ã£ã¦ãã¾ãã</dd>
-
-				<dt>
-					<img src="img/icon-q.png">
-				</dt>
-				<dd>ãæè¿åãè¾¼ãã ååºããæè¿è¦ãååºããæè¿ç¹ãã£ãååºãã®ãæè¿ãã¨ã¯ãã¤ã¾ã§ã§ããï¼</dd>
-				<dt>
-					<img src="img/icon-a.png">
-				</dt>
-				<dd class="dd-maB">ç´è¿7æ¥éã§ã</dd>
-			</dl>
-
-			<div class="category_title">名刺撮影</div>
-			<dl class="dl">
-				<dt>
-					<img src="img/icon-q.png">
-				</dt>
-				<dd>æ®å½±ããååºãæ ãå°ãããã¦ãã¾ãã¾ãããããã¼ã¿åããã¾ããï¼</dd>
-				<dt>
-					<img src="img/icon-a.png">
-				</dt>
-				<dd class="dd-maB">æ®å½±ããç»åãæ ããããã¦ããããã¼ããã¦ããã¨æ­£ç¢ºã«ãã¼ã¿åããã¾ãããã§ããéãæ­£ç¢ºã«æ®å½±ããé¡ããã¾ãã</dd>
-			</dl>
+		<div class="content-box-1" style="padding: 0; height: 1000px; width:100%; overflow: hidden;">
+			<iframe src="https://bc-ribbon.temp-holdings.co.jp/qa.html" style="width: 104.2%; height: 100%"></iframe>
 		</div>
 	</div>
 </div>
-
-<!-- Mainly scripts -->
-<script src="js/jquery-2.1.1.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
-<!-- Custom and plugin javascript -->
-<script src="js/inspinia.js"></script>
-<script src="js/plugins/pace/pace.min.js"></script>
-
-<!-- Peity -->
-<script src="js/plugins/peity/jquery.peity.min.js"></script>
-
-<!-- Peity -->
-<script src="js/demo/peity-demo.js"></script>
-
-<!-- blueimp gallery -->
-<script src="js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
-<script>
-	$(document).ready(function() {
-	});
-
-	$('#delBusinessCard').click(function() {
-		console.log('Delete a Personal detail card');
-	});
-
-	$('#editPersonalInfo').click(function() {
-		console.log('Delete a Personal detail card 111111');
-	});
-	$(".more").toggle(function() {
-		$(this).text("less..").siblings(".complete").show();
-	}, function() {
-		$(this).text("more..").siblings(".complete").hide();
-	});
-
-	$("#addTag").click(function(e) {
-		if ($(".balloon").css('display') == 'block')
-			$(".balloon").css("display", "none");
-		else
-			$(".balloon").css("display", "block");
-	});
-
-	$("#popup").on("click", function() {
-		console.log('123');
-		$('#imagepreview').attr('src', $('#imageresource').attr('src'));
-		$('#imagemodal').modal('show');
-	});
-</script>
