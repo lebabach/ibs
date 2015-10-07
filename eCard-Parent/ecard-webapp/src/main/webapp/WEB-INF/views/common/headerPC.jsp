@@ -150,11 +150,11 @@
 							class="caret"></b></i>
 				</a>
 					<ul class="dropdown-menu animated fadeInRight m-t-xs">
-						<li><a href="Profile.html">プロフィール名刺</a></li>
+						<li><a href="profile">プロフィール名刺</a></li>
 						<li><a href="download.html">分の名刺をダウン</a></li>
-						<li><a href="contacts.html">ロード -パスワード 設定</a></li>
-						<li><a href="faq.html">FAQ</a></li>
-						<li><a href="mailbox.html">ご意見・不具合の連絡</a></li>
+						<li><a href="contact">ロード -パスワード 設定</a></li>
+						<li><a href="faq">FAQ</a></li>
+						<li><a href="mailbox">ご意見・不具合の連絡</a></li>
 						<!-- Profile -->
 						<li class="divider"></li>
 						<li><a href="<c:url value='/j_spring_security_logout'/>">ログアウト</a></li>						
