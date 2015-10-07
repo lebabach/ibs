@@ -369,7 +369,7 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/card/detail/{id:[\\d]+}",  method = RequestMethod.GET)
+	@RequestMapping(value = "/card/details/{id:[\\d]+}",  method = RequestMethod.GET)
 	public ModelAndView detailPC(@PathVariable("id") int id) {
 		logger.debug("detailPC", UserController.class);
 		
