@@ -115,5 +115,8 @@ public interface CardInfoService {
    public int updateCardType();
    
    public List<CardInfo> listCardInfoByCardType(Integer cardType);
+   
    public List<String> getListSortType(Integer userId);
+   
+   public int updateContactDate(CardInfo cardInfo);
 }

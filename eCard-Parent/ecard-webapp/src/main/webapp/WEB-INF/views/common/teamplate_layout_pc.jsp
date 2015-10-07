@@ -59,6 +59,20 @@
 	type="text/javascript" charset="UTF-8"></script>
 <link rel="icon" type="image/png"
 	href="<c:url value='/assets/img/logo_icon_favion.png'/>" />
+
+<link href="<c:url value='/assets/css/bootstrap-dialog.min.css'/>" rel="stylesheet" type="text/css" />
+<script src="<c:url value='/assets/js/bootstrap-dialog.min.js'/>"></script>
+
+<link rel="stylesheet"
+	href="<c:url value='/assets/css/plugins/datapicker/datepicker3.css'/>"
+	type="text/css" media="all" />
+<script
+	src="<c:url value='/assets/js/plugins/datapicker/bootstrap-datepicker.js'/>"
+	type="text/javascript"></script>
+<script
+	src="<c:url value='/assets/js/plugins/datapicker/locales/bootstrap-datepicker.ja.js'/>"
+	type="text/javascript"></script>
+
 <title><tiles:insertAttribute name="title" /></title>
 </head>
 <body class="gray-bg  pace-done">

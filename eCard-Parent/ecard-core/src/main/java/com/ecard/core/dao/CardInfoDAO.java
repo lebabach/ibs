@@ -114,4 +114,6 @@ public interface CardInfoDAO {
     
     public List<CardInfo> listCardInfoByCardType(Integer cardType);
     public List<String> getListSortType(Integer userId);
+    
+    public int updateContactDate(CardInfo cardInfo);
 }

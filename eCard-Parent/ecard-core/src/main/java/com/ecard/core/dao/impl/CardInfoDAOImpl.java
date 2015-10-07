@@ -1130,4 +1130,12 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         return  query.getResultList();
        
 	}
+	
+	public int updateContactDate(CardInfo cardInfo){
+		Query query = getEntityManager().createQuery("UPDATE CardInfo c SET c.contactDate = :contactDate WHERE c.cardId = :cardId");
+		query.setParameter("contactDate", cardInfo.getContactDate());
+		query.setParameter("cardId", cardInfo.getCardId());
+		
+		return (int)query.executeUpdate();
+	}
 }

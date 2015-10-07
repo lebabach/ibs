@@ -280,4 +280,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 		// TODO Auto-generated method stub
 		return cardInfoDAO.getListSortType(userId);
 	}
+	
+	public int updateContactDate(CardInfo cardInfo){
+		return cardInfoDAO.updateContactDate(cardInfo);
+	}
 }
