@@ -17,4 +17,6 @@ public interface ImportCsvDataDAO {
 	public void importListCardInfoFromCsv(List<CardInfo> cardInfoList);
 
 	public int bulkInsertUserInfo(List<UserInfo> subUserInfoList, List<String> subSanSanIdList);
+	
+	public int bulkInsertOperatorInfo(List<UserInfo> subUserInfoList);
 }

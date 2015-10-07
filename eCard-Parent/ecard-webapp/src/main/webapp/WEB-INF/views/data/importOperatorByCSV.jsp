@@ -20,15 +20,13 @@
      <div class="row bg-white box-shadow menu-top-header">
          <div class="col-sm-12 ch-check" id="ct1">
              <div class="float-left col-sm-6">
-                 <h4 class="h4-header">オペレータCSV登録</h4>
+                 <h4 class="h4-header"><fmt:message key="menu.import.operator.CSV"/></h4>
 
              </div>
-             <div class="col-sm-3" style = "float: right;margin: 0 auto;">
+             <div style = "float: right;margin: 0 auto;">
                     <h4 class="h4-header">
-                        <span><button type="button" class="btn btn-primary btn_cancle" 
-                                     data-dismiss="modal">キャンセル</button></span>
-                        <span><button type="button" class="btn btn-primary"
-                                     data-dismiss="modal" id="btnUploadUser">登録</button></span>
+                        <span><button type="button" class="btn btn-primary btn_cancle"
+                                        data-dismiss="modal" id="btnBack"><fmt:message key="team.allocation.cancel"/></button></span>
                      </h4>
               </div>
 
@@ -43,7 +41,7 @@
              <div class="col-md-12 col-xs-offset-5">
              	<form class="form-horizontal" role="form" id="upload" action = "/ecard-webapp/data/uploadOperatorCSV" enctype="multipart/form-data" method="post">
                  <div class="row" style="margin-bottom:5px">
-                      <select id="groupId" name = "roles" style=" width: 170px;height:32px;">
+                      <select id="groupId" name ="groupCompanyId" style=" width: 170px;height:32px;">
                       <option value=''>会社選択</option>
                       <c:forEach var="listGroupCompany" items="${listGroupCompany}" varStatus="loop">
                       	<option value = '${listGroupCompany.groupCompanyId}'><c:out value="${listGroupCompany.groupCompanyName}"/></option>                             
@@ -56,6 +54,9 @@
                      <input type="file" name="file" class="submit-1" id="files" >
                      <p class="mesage_error file_name"></p>
                      
+                 </div>
+                 <div class="row" style="margin-top:5px;">
+                 	<span><button type="button" class="btn btn-primary" id="btnUploadUser"><fmt:message key="team.allocation.register"/></button></span>
                  </div>
                  </form>
              </div>
@@ -131,6 +132,10 @@
 	$('.btn_cancle').click(function(){
 		document.location.href='/ecard-webapp/manager/home';
 	});
+	
+	$("#btnBack").click(function(){
+        document.location.href = '<c:url value="/manager/home"/>';
+    });
 	
 	$('select').on('change', function() {		
 		$('input[name=groupCompanyId]').val(this.value);
