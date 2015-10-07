@@ -74,15 +74,17 @@ public class UserController {
     public ModelAndView home() {	
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		List<CardInfo> cardInfoDisp = new ArrayList<>();
+		
 		List<CardInfoPCVo>  lstCardInfoPCVo = new ArrayList<>();
 		if (ecardUser != null) {
 			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
 			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId());
 			
 			for(String nameSort : lstNameSort) {
+				List<CardInfo> cardInfoDisp = new ArrayList<>();
 			    for(CardInfoUserVo cardInfo :lstCardInfo ){
 			    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
+			    		
 			    		cardInfoDisp.add(cardInfo.getCardInfo());
 			    	}
 			    }
