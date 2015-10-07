@@ -157,28 +157,28 @@
 
 <div class="div-list">
 	<div class="box-1">
-		<div class="title-box-1">プロフィール名刺</div>
+		<div class="title-box-1">プロフィール</div>
 		<div class="content-box-1">
 			<ul class="list-profile">
 				<li>
-					<p class="p-1">ä¼ç¤¾å</p>
-					<p class="p-2">nhap test vao</p>
+					<p class="p-1">会社名</p>
+					<p class="p-2">${user.companyName}</p>
 				</li>
 				<li>
-					<p class="p-1">é¨ç½²</p>
-					<p class="p-2">CEO</p>
+					<p class="p-1">部署</p>
+					<p class="p-2">${user.departmentName}</p>
 				</li>
 				<li>
-					<p class="p-1">å½¹è·</p>
-					<p class="p-2">iOS</p>
+					<p class="p-1">役職</p>
+					<p class="p-2">${user.positionName}</p>
 				</li>
 				<li>
-					<p class="p-1">æ°å</p>
-					<p class="p-2">Vidic phan thi</p>
+					<p class="p-1">氏名</p>
+					<p class="p-2">${user.name}</p>
 				</li>
 				<li style="border: none; padding-bottom: 0; margin-bottom: 0">
-					<p class="p-1">ã¡ã¼ã«ã¢ãã¬ã¹</p>
-					<p class="p-2">admin@test</p>
+					<p class="p-1">メールアドレス</p>
+					<p class="p-2">${user.email}</p>
 				</li>
 			</ul>
 		</div>
