@@ -1,28 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%> 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> 
+	pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta id="viewport" name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
-<link rel="stylesheet" href="<c:url value='/assets/css/style_ibs.css'/>" type="text/css" media="all" />
+<link rel="stylesheet" href="<c:url value='/assets/css/style_ibs.css'/>"
+	type="text/css" media="all" />
 <style type="text/css">
-.success{
-
- color:blue;
- text-align: left;
- width: 100%;
-  padding-top: 20px;
+.success {
+	color: blue;
+	text-align: left;
+	width: 100%;
+	padding-top: 20px;
 }
-.error{
-  color:red;
-  text-align: left;
-  width: 100%;
-  padding-top: 20px;
+
+.error {
+	color: red;
+	text-align: left;
+	width: 100%;
+	padding-top: 20px;
 }
 </style>
 <script type="text/javascript">
@@ -111,28 +113,28 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-    <div id="header">
-            <h1><a href="/">BC-RIBBON</a></h1>
-      </div>
-      <div id="content">
-           <div id="inner">
-           		<div class="box-1">
-                	<div class="title-box-1">
-                    	パスワードをお忘れの場合
-                    </div>
-                    <div class="content-box-1">
-                        <p class="p-box-1">パスワードをお忘れの場合、ログインIDを入力の上、送信してください。</p>
-                        <p class="p-box-1">登録されているメールアドレス宛に、パスワード発行メールをお送りします。</p>
-                        <form class="box-1-form">
-                        	<input type="text" class="input-1" id= "forgotpassword" value="" placeholder = "ID">
-                            <input type="button" class="submit-1 btn_forgot" value="送 信">
-                            </br>
-                            <div class = "message_ibs" id ="message_error"></div>
-                        </form>
-                        
-                    </div>    
-                </div>
-           </div>
-      </div>     
+	<div id="header">
+		<h1>
+			<a href="/">BC-RIBBON</a>
+		</h1>
+	</div>
+	<div id="content">
+		<div id="inner">
+			<div class="box-1">
+				<div class="title-box-1">パスワードをお忘れの場合</div>
+				<div class="content-box-1">
+					<p class="p-box-1">パスワードをお忘れの場合、ログインIDを入力の上、送信してください。</p>
+					<p class="p-box-1">登録されているメールアドレス宛に、パスワード発行メールをお送りします。</p>
+					<form class="box-1-form">
+						<input type="text" class="input-1" id="forgotpassword" value=""
+							placeholder="ID"> <input type="button"
+							class="submit-1 btn_forgot" value="送 信"> </br>
+						<div class="message_ibs" id="message_error"></div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

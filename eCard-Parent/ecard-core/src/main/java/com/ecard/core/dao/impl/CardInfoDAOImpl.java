@@ -3,20 +3,7 @@
  */
 package com.ecard.core.dao.impl;
 
-import com.ecard.core.dao.CardInfoDAO;
-import com.ecard.core.model.CardInfo;
-import com.ecard.core.model.DownloadCsv;
-
-import com.ecard.core.model.enums.PermissionType;
-import com.ecard.core.model.enums.SearchConditions;
-import com.ecard.core.vo.CardConnectModel;
-import com.ecard.core.vo.CardInfoAndPosCard;
-import com.ecard.core.vo.CardInfoConnectUser;
-import com.ecard.core.vo.CompanyCardListCount;
-import com.ecard.core.vo.CompanyCardModel;
 import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -26,11 +13,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.Query;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.ecard.core.dao.CardInfoDAO;
+import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.enums.PermissionType;
+import com.ecard.core.model.enums.SearchConditions;
+import com.ecard.core.vo.CardConnectModel;
+import com.ecard.core.vo.CardInfoAndPosCard;
+import com.ecard.core.vo.CardInfoConnectUser;
+import com.ecard.core.vo.CardInfoUserVo;
+import com.ecard.core.vo.CompanyCardListCount;
+import com.ecard.core.vo.CompanyCardModel;
 
 /**
  *
@@ -926,13 +926,21 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
     }
     
 	@Override
-	public List<CardInfo> getListPossesionCard(Integer userId) {
+	public List<CardInfoUserVo> getListPossesionCard(Integer userId,  int pageNumber) {
 		// TODO Auto-generated method stub
-		String sqlStr = "SELECT pos.cardInfo FROM PossessionCard pos INNER JOIN pos.cardInfo "
+		String sqlStr = "SELECT DATE_FORMAT( pos.id.contactDate,'%m/%Y') AS groupDate,pos.cardInfo FROM PossessionCard pos INNER JOIN pos.cardInfo "
                 + "WHERE pos.id.userId = :userId AND pos.cardInfo.approvalStatus = 1 ORDER BY pos.id.contactDate DESC";
 		Query query = getEntityManager().createQuery(sqlStr);
 		query.setParameter("userId", userId);
-        return query.getResultList();
+//		.setFirstResult(offet).setMaxResults(limit);
+		query.setFirstResult(pageNumber * 5).setMaxResults(5);
+        List<Object[]> listObj = query.getResultList();
+        List<CardInfoUserVo> lstcardInfoUserVo = new ArrayList<>();
+        for(Object[] object : listObj){
+        	CardInfoUserVo  cardInfoVo = new CardInfoUserVo((String)object[0], (CardInfo)object[1]);
+        	lstcardInfoUserVo.add(cardInfoVo);
+        }
+        return lstcardInfoUserVo;
 	}
 	
 	public void updateOldCardInfo(CardInfo cardInfo){
@@ -1145,8 +1153,26 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         query.setParameter("cardType", cardType);
         return (List<CardInfo>)query.getResultList();
     }
-    
-    public CardInfo getNewestCardInfo(CardInfo cardInfo){
+
+	@Override
+	public List<String> getListSortType(Integer userId) {
+		String sqlStr = "SELECT DATE_FORMAT( pos.id.contactDate,'%m/%Y') AS groupDate FROM PossessionCard pos INNER JOIN pos.cardInfo "
+                + "WHERE pos.id.userId = :userId AND pos.cardInfo.approvalStatus = 1  GROUP BY DATE_FORMAT( pos.id.contactDate,'%m/%Y') ORDER BY DATE_FORMAT( pos.id.contactDate,'%m/%Y') DESC";
+		Query query = getEntityManager().createQuery(sqlStr);
+		query.setParameter("userId", userId);
+        return  query.getResultList();
+       
+	}
+	
+	public Long countPossessionCard(Integer userId){
+		String sqlStr = "SELECT count(*) FROM PossessionCard pos INNER JOIN pos.cardInfo "
+                + "WHERE pos.id.userId = :userId AND pos.cardInfo.approvalStatus = 1 ";
+		Query query = getEntityManager().createQuery(sqlStr);
+		query.setParameter("userId", userId);
+        return (Long)getOrNull(query);
+	}
+
+	public CardInfo getNewestCardInfo(CardInfo cardInfo){
             Query query = getEntityManager().createQuery("SELECT c FROM CardInfo c "
                                 + " WHERE c.email = :email AND c.companyName = :companyName AND c.positionName = :positionName AND c.departmentName = :departmentName"
                                 + " AND c.mobileNumber = :mobileNumber AND c.addressFull = :addressFull"

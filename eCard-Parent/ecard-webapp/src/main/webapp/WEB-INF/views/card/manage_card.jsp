@@ -1,11 +1,11 @@
 ﻿<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="false"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+	session="false"%>
 <style>
-.hidden-column{
+.hidden-column {
 	display: none;
 }
-
 </style>
 <script type="text/javascript">
 function loadDataIsEditting(){
@@ -707,43 +707,49 @@ function loadDataIsEditting(){
 					<option value="0">Date sort</option>
 				</select> -->
 				<select name="statusSort" id="statusSort" class="select-style">
-				    <c:choose>
-								<c:when test="${pageContext.request.isUserInRole('ROLE_SUPERVISOR')}">
-					               <option value="" selected="selected">すべて</option>
-									<option value="2" >データ入力待ち</option>
-									<option value="3" >修正待ち</option>
-									<option value="4" >承認待ち</option>
-									<option value="1" >承認済み</option>
-								</c:when>
-								<c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
-									<option value="2" >データ入力待ち</option>
-									<option value="3" >修正待ち</option>
-									<option value="4" selected="selected">承認待ち</option>
-								</c:when>
-								<c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
-									<option value="2" selected="selected">データ入力待ち</option>
-						            <option value="3" >修正待ち</option>	
-								</c:when>
-						 </c:choose>
-				</select>
-				
-				<select name="dateSort" id="dateSort" class="select-style">
 					<c:choose>
-						<c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+						<c:when
+							test="${pageContext.request.isUserInRole('ROLE_SUPERVISOR')}">
+							<option value="" selected="selected">すべて</option>
+							<option value="2">データ入力待ち</option>
+							<option value="3">修正待ち</option>
+							<option value="4">承認待ち</option>
+							<option value="1">承認済み</option>
+						</c:when>
+						<c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
+							<option value="2">データ入力待ち</option>
+							<option value="3">修正待ち</option>
+							<option value="4" selected="selected">承認待ち</option>
+						</c:when>
+						<c:when
+							test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+							<option value="2" selected="selected">データ入力待ち</option>
+							<option value="3">修正待ち</option>
+						</c:when>
+					</c:choose>
+				</select> <select name="dateSort" id="dateSort" class="select-style">
+					<c:choose>
+						<c:when
+							test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
 							<c:forEach var="teamMember" items="${listUser}" varStatus="loop">
 								<c:if test="${teamMember.userId == userId}">
-									<option selected="selected" value='<c:out value="${teamMember.userId}" />'><c:out value="${teamMember.name}" /></option>
+									<option selected="selected"
+										value='<c:out value="${teamMember.userId}" />'><c:out
+											value="${teamMember.name}" /></option>
 								</c:if>
-							    <c:if test="${teamMember.userId != userId}">
-									<option value='<c:out value="${teamMember.userId}" />'><c:out value="${teamMember.name}" /></option>
+								<c:if test="${teamMember.userId != userId}">
+									<option value='<c:out value="${teamMember.userId}" />'><c:out
+											value="${teamMember.name}" /></option>
 								</c:if>
 							</c:forEach>
 						</c:when>
-						<c:when test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+						<c:when
+							test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
 							<option selected="selected" value='0'>メンバー一覧</option>
 							<c:forEach var="teamMember" items="${listUser}" varStatus="loop">
-								<option value='<c:out value="${teamMember.userId}" />'><c:out value="${teamMember.name}" /></option>
-							   <%-- <c:if test="${teamMember.userId == userId}">
+								<option value='<c:out value="${teamMember.userId}" />'><c:out
+										value="${teamMember.name}" /></option>
+								<%-- <c:if test="${teamMember.userId == userId}">
 									<option selected="selected" value='<c:out value="${teamMember.userId}" />'><c:out value="${teamMember.name}" /></option>
 								</c:if>
 							    <c:if test="${teamMember.userId != userId}">
@@ -752,8 +758,8 @@ function loadDataIsEditting(){
 							</c:forEach>
 						</c:when>
 					</c:choose>
-                </select>
-                    
+				</select>
+
 			</form>
 		</div>
 		<!-- END DATE SORT -->
@@ -774,32 +780,33 @@ function loadDataIsEditting(){
 	<!-- END LEFT SIDE -->
 	<!-- RIGHT SIDE -->
 	<div id="right-side" class="col-sm-10">
-	<!-- BAR TOP -->
+		<!-- BAR TOP -->
 		<div class="row bg-white box-shadow menu-top-header">
 			<div class="col-sm-12">
 				<div class="float-left">
-					<h4 class="h4-header"><fmt:message key="card.list.title"/></h4>
+					<h4 class="h4-header">
+						<fmt:message key="card.list.title" />
+					</h4>
 				</div>
 
-				<div class="float-right">
-					
-				</div>
+				<div class="float-right"></div>
 			</div>
 		</div>
 		<div class="row bg-white box-shadow box-marginTop5 padding-top-bottom">
 			<!-- <form> -->
-				<div class="col-sm-12">
-					<div class="input-group">
-					<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+			<div class="col-sm-12">
+				<div class="input-group">
+					<c:if
+						test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
 						<input type="text" class="form-control"
 							value="${cardSearchVO.criteriaSearch}" id="criteriaSearch"
-							placeholder="名前、会社名、電話番号など入力してください..."> <span
-							class="input-group-btn">
+							placeholder="名前、会社名、電話番号など入力してください...">
+						<span class="input-group-btn">
 							<button type="button" id="searchCard" class="btn btn-primary">検索</button>
 						</span>
 					</c:if>
-					</div>
 				</div>
+			</div>
 			<!-- </form> -->
 			<!-- END SEARCH -->
 			<!-- DATA TABLE -->
@@ -812,7 +819,7 @@ function loadDataIsEditting(){
 								<thead>
 									<tr role="row">
 										<th class="sorting_disabled" rowspan="1" colspan="1"
-											style="width: 105px;">カード ID</th> 
+											style="width: 105px;">カード ID</th>
 										<th class="sorting_disabled" rowspan="1" colspan="1"
 											style="width: 133px;">画像</th>
 										<th class="sorting_disabled" rowspan="1" colspan="1"
@@ -827,12 +834,13 @@ function loadDataIsEditting(){
 											style="width: 112px;">電話番号</th>
 										<th class="sorting_disabled" rowspan="1" colspan="1"
 											style="width: 93px;">作成日</th>
-										<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
-										<th class="sorting_disabled" rowspan="1" colspan="1"
-											style="width: 93px;">ステータス</th>
+										<c:if
+											test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+											<th class="sorting_disabled" rowspan="1" colspan="1"
+												style="width: 93px;">ステータス</th>
 										</c:if>
 										<th class="sorting_disabled" rowspan="1" colspan="1"
-											style="width: 93px;display:none">Is Editting</th>
+											style="width: 93px; display: none">Is Editting</th>
 										<th class="sorting_disabled" rowspan="1" colspan="1"
 											style="width: 163px;">アクション</th>
 									</tr>
