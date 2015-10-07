@@ -413,10 +413,11 @@
 				    					+	'<div class="col-md-6">'
 				    					+	'<div class="col-xs-5"></div>'	
 				    					+	'<div class="col-xs-7">'								
-				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'	
+				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 				    					+	'</div> </div> </div> </div>'
-				        	    );									 
+				        	    	);
+									 getImageFromSCP(v.imageFile); 
 								 });
 							 } else {
 								 $.each( value.lstCardInfo, function (k,v) {
@@ -439,10 +440,11 @@
 						    					+	'<div class="col-md-6">'
 						    					+	'<div class="col-xs-5"></div>'	
 						    					+	'<div class="col-xs-7">'								
-						    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'	
+						    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 						    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 						    					+	'</div> </div> </div> </div></div>'
-						        	    );	
+						        	    );
+											 getImageFromSCP(v.imageFile);
 									 }else{
 										 $('.business_card_book #'+lastDate).append(
 							        	    		'<div class="list-group-item pointer">'
@@ -459,19 +461,20 @@
 							    					+	'<div class="col-md-6">'
 							    					+	'<div class="col-xs-5"></div>'	
 							    					+	'<div class="col-xs-7">'								
-							    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'	
+							    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class="lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 							    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-							    					+	'</div> </div> </div> </div>'  );	
+							    					+	'</div> </div> </div> </div>'  );
+										 getImageFromSCP(v.imageFile);
 									 }
 								 });
 							 }
 							 
 						});
 						$('.i-checks').iCheck({
-
-			       	          checkboxClass: 'icheckbox_square-green',
-			       	          radioClass: 'iradio_square-green',                
-			        	    });
+		       	          checkboxClass: 'icheckbox_square-green',
+		       	          radioClass: 'iradio_square-green',                
+		        	    });
+						
 					}).fail(function(xhr, status, err) {
 						alert('Error');
 					});
@@ -679,13 +682,37 @@
     	        url: 'getImageFile',
     	        data: 'fileImage='+fileImageName
     	    }).done(function(resp, status, xhr){
-    	    	target.attr('src','');
-    	        console.log('A= '+resp);
-    	        target.attr('src','data:image/png;base64,'+resp);
+    	    	if(resp == ""){
+    	    		target.attr('src','');    	  
+        	        target.attr('src','/ecard-webapp/assets/img/card_08.png');
+    	    	} else {
+    	    		target.attr('src','');    	  
+        	        target.attr('src','data:image/png;base64,'+resp);	
+    	    	}
+    	    }).fail(function(resp, status, xhr){
+    	        alert('Error');
+    	    });    	  
+    	});
+		function getImageFromSCP( fileImageName ){
+			
+			//var fileImageName =$(self).parent().find('input[name=fileImageName]').val();
+			var target = $('img[name="'+fileImageName+'"]');
+			console.log('BBB = '+fileImageName);
+			$.ajax({
+    	        type: 'POST',
+    	        url: 'getImageFile',
+    	        data: 'fileImage='+fileImageName
+    	    }).done(function(resp, status, xhr){
+    	    	if(resp == ""){
+    	    		target.attr('src','');    	  
+        	        target.attr('src','/ecard-webapp/assets/img/card_08.png');
+    	    	} else {
+    	    		target.attr('src','');    	  
+        	        target.attr('src','data:image/png;base64,'+resp);	
+    	    	}
+    	    	
     	    }).fail(function(resp, status, xhr){
     	        alert('Error');
     	    });
-    	  
-    	});
-
+		}
     </script>
