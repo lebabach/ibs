@@ -214,64 +214,54 @@
 	width: 100%;
 	display: block;
 }
+
+.mesage_error {
+	color: red;
+	display: none;
+	width: 220px;
+	text-align: left
+}
 </style>
 <div class="div-list">
 	<div class="box-1">
 		<div class="title-box-1">ご意見・不具合の連絡</div>
 		<div class="content-box-1">
-			<form class="form">
-				<textarea class="textarea"></textarea>
-				<input type="submit" value="送信" class="submit">
+			<form class="form" id="submitForm" method="POST"
+				action="/ecard-webapp/user/mailbox"
+				accept-charset="UFT-8">
+				<textarea class="textarea" name="contents" id="contents"></textarea>
+				<span class="mesage_error error_contents"></span>
+				<input type="button" value="送信" class="submit" id="btnSend">
 			</form>
 		</div>
 	</div>
 </div>
 
-<!-- Mainly scripts -->
-<script src="js/jquery-2.1.1.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
-<!-- Custom and plugin javascript -->
-<script src="js/inspinia.js"></script>
-<script src="js/plugins/pace/pace.min.js"></script>
-
-<!-- Peity -->
-<script src="js/plugins/peity/jquery.peity.min.js"></script>
-
-<!-- Peity -->
-<script src="js/demo/peity-demo.js"></script>
-
-<!-- blueimp gallery -->
-<script src="js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
 <script>
 	$(document).ready(function() {
+		$("#btnSend").click(function() {
+			resetValidationForm();
+			if (!checkValidationForm()) {
+				return false;
+			}
+			$("#submitForm").submit();
+		});
+
 	});
 
-	$('#delBusinessCard').click(function() {
-		console.log('Delete a Personal detail card');
-	});
+	function checkValidationForm() {
+		var checkValidation = true;
+		var contents = $("#contents").val();
+		if (contents.length <= 0) {
+			$(".error_contents").text(
+					"<fmt:message key='edit.card.validate'/>");
+			checkValidation = false;
+			$(".mesage_error").css("display", "block");
+		} 
+		return checkValidation;
+	}
+	function resetValidationForm() {
+		$(".error_contents").text("");
 
-	$('#editPersonalInfo').click(function() {
-		console.log('Delete a Personal detail card 111111');
-	});
-	$(".more").toggle(function() {
-		$(this).text("less..").siblings(".complete").show();
-	}, function() {
-		$(this).text("more..").siblings(".complete").hide();
-	});
-
-	$("#addTag").click(function(e) {
-		if ($(".balloon").css('display') == 'block')
-			$(".balloon").css("display", "none");
-		else
-			$(".balloon").css("display", "block");
-	});
-
-	$("#popup").on("click", function() {
-		console.log('123');
-		$('#imagepreview').attr('src', $('#imageresource').attr('src'));
-		$('#imagemodal').modal('show');
-	});
+	}
 </script>

@@ -38,9 +38,11 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.InquiryInfo;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.GroupCompanyInfoService;
+import com.ecard.core.service.SettingsInfoService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.converter.CardInfoConverter;
 import com.ecard.core.vo.CardConnectModel;
@@ -52,56 +54,63 @@ import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardInfoPCVo;
 import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.UserInfoVO;
+
 @Controller
 @RequestMapping("/user/*")
 public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-	
+
 	@Autowired
 	UserInfoService userInfoService;
-	
+
 	@Autowired
 	CardInfoService cardInfoService;
-	
+
 	@Autowired
 	GroupCompanyInfoService groupCompanyInfoService;
-	
+
 	@Value("${scp.hostname}")
 	private String scpHostName;
-	    
+
 	@Value("${scp.user}")
-    private String scpUser;
-	    
+	private String scpUser;
+
 	@Value("${scp.password}")
 	private String scpPassword;
-	    
+
 	@Value("${scp.port}")
 	private String scpPort;
-	
-	@RequestMapping("home") 
-    public ModelAndView home() {	
+
+	@Autowired
+	SettingsInfoService settingsInfoService;
+
+	@RequestMapping("home")
+	public ModelAndView home() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		Long listTotalCardInfo = new Long(0); 
-		List<CardInfoPCVo>  lstCardInfoPCVo = new ArrayList<>();
+		Long listTotalCardInfo = new Long(0);
+		List<CardInfoPCVo> lstCardInfoPCVo = new ArrayList<>();
 		if (ecardUser != null) {
 			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
-			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(),0);
+			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), 0);
 			listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId());
 
-			for(String nameSort : lstNameSort) {
+			for (String nameSort : lstNameSort) {
 				List<CardInfo> cardInfoDisp = new ArrayList<>();
-			    for(CardInfoUserVo cardInfo :lstCardInfo ){
-			    	//String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getCardInfo().getImageFile(), scpHostName, scpUser, scpPassword,Integer.parseInt(scpPort));
-			    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
-			    		//cardInfo.getCardInfo().setImageFile(fileNameFromSCP);
-			    		cardInfoDisp.add(cardInfo.getCardInfo());
-			    	}
-			    }
-			    CardInfoPCVo cardInfoPCVo;
+				for (CardInfoUserVo cardInfo : lstCardInfo) {
+					// String fileNameFromSCP =
+					// UploadFileUtil.getImageFileFromSCP(cardInfo.getCardInfo().getImageFile(),
+					// scpHostName, scpUser,
+					// scpPassword,Integer.parseInt(scpPort));
+					if (nameSort.trim().equals(cardInfo.getSortType().trim())) {
+						// cardInfo.getCardInfo().setImageFile(fileNameFromSCP);
+						cardInfoDisp.add(cardInfo.getCardInfo());
+					}
+				}
+				CardInfoPCVo cardInfoPCVo;
 				try {
-					if(cardInfoDisp.size() > 0){
-						cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
+					if (cardInfoDisp.size() > 0) {
+						cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp));
 						lstCardInfoPCVo.add(cardInfoPCVo);
 					}
 				} catch (IllegalAccessException e) {
@@ -109,9 +118,9 @@ public class UserController {
 				} catch (InvocationTargetException e) {
 					e.printStackTrace();
 				}
-			    
+
 			}
-			
+
 		}
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("homePC");
@@ -119,33 +128,36 @@ public class UserController {
 		modelAndView.addObject("totalCardInfo", listTotalCardInfo);
 		return modelAndView;
 
-    }
+	}
+
 	@RequestMapping(value = "search", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public DataPagingJsonVO<CardInfoPCVo> search(HttpServletRequest request, HttpSession session){
+	public DataPagingJsonVO<CardInfoPCVo> search(HttpServletRequest request, HttpSession session) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		int limit = parseIntParameter(request.getParameter("page"), 0);
-		System.out.println("BBB = "+limit);
+		System.out.println("BBB = " + limit);
 		DataPagingJsonVO<CardInfoPCVo> dataTableResponse = new DataPagingJsonVO<CardInfoPCVo>();
 		List<CardInfoPCVo> cardInfoSearchResponses = new ArrayList<CardInfoPCVo>();
-		
+
 		List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
-		List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(),limit);
-		
-		for(String nameSort : lstNameSort) {
+		List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), limit);
+
+		for (String nameSort : lstNameSort) {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
-		    for(CardInfoUserVo cardInfo :lstCardInfo ){
-		    	//String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getCardInfo().getImageFile(), scpHostName, scpUser, scpPassword,Integer.parseInt(scpPort));
-		    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
-		    		//cardInfo.getCardInfo().setImageFile(fileNameFromSCP);
-		    		cardInfoDisp.add(cardInfo.getCardInfo());
-		    	}
-		    }
-		    CardInfoPCVo cardInfoPCVo;
+			for (CardInfoUserVo cardInfo : lstCardInfo) {
+				// String fileNameFromSCP =
+				// UploadFileUtil.getImageFileFromSCP(cardInfo.getCardInfo().getImageFile(),
+				// scpHostName, scpUser, scpPassword,Integer.parseInt(scpPort));
+				if (nameSort.trim().equals(cardInfo.getSortType().trim())) {
+					// cardInfo.getCardInfo().setImageFile(fileNameFromSCP);
+					cardInfoDisp.add(cardInfo.getCardInfo());
+				}
+			}
+			CardInfoPCVo cardInfoPCVo;
 			try {
-				if(cardInfoDisp.size() > 0){
-					cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
+				if (cardInfoDisp.size() > 0) {
+					cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp));
 					cardInfoSearchResponses.add(cardInfoPCVo);
 				}
 			} catch (IllegalAccessException e) {
@@ -155,24 +167,24 @@ public class UserController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		    
+
 		}
-		
+
 		dataTableResponse.setData(cardInfoSearchResponses);
 		return dataTableResponse;
-		
+
 	}
-	
-	
-	@RequestMapping("getImageFile") 
+
+	@RequestMapping("getImageFile")
 	@ResponseBody
-	public String getFileImageSCP(@RequestParam(value = "fileImage") String fileImage){
-		String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(fileImage, scpHostName, scpUser, scpPassword,Integer.parseInt(scpPort));
+	public String getFileImageSCP(@RequestParam(value = "fileImage") String fileImage) {
+		String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(fileImage, scpHostName, scpUser, scpPassword,
+				Integer.parseInt(scpPort));
 		return fileNameFromSCP;
 	}
-	
-	@RequestMapping("download") 
-    public ModelAndView DownloadCSV(HttpServletRequest request) {		
+
+	@RequestMapping("download")
+	public ModelAndView DownloadCSV(HttpServletRequest request) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		UserDownloadPermission permissionType = userInfoService.getPermisionDownloadByUserId(ecardUser.getUserId());
@@ -182,11 +194,11 @@ public class UserController {
 		modelAndView.addObject("permissionType", permissionType);
 		modelAndView.addObject("downloadCSVHistory", downloadCSVHistory);
 		return modelAndView;
-    }
-	
-	@RequestMapping(value = "/downloadCSV/{id:[\\d]+}",  method = RequestMethod.GET)
+	}
+
+	@RequestMapping(value = "/downloadCSV/{id:[\\d]+}", method = RequestMethod.GET)
 	@ResponseBody
-	public void downloadCSV(HttpServletResponse response,@PathVariable("id") int id) throws IOException {		
+	public void downloadCSV(HttpServletResponse response, @PathVariable("id") int id) throws IOException {
 		try {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			UserInfo userInfo = userInfoService.findUserByEmail(authentication.getName());
@@ -249,14 +261,16 @@ public class UserController {
 			ex.printStackTrace();
 		}
 	}
-	
-	@RequestMapping(value = "/downloadFileCSV/{fileName}",  method = RequestMethod.GET)
+
+	@RequestMapping(value = "/downloadFileCSV/{fileName}", method = RequestMethod.GET)
 	@ResponseBody
-	public void downloadFileCSV(HttpServletResponse response,@PathVariable("fileName") String fileName) throws IOException {		
+	public void downloadFileCSV(HttpServletResponse response, @PathVariable("fileName") String fileName)
+			throws IOException {
 		try {
 			fileName = fileName + ".csv";
 			// Connect to SCP and download File
-			byte[] myBytes = UploadFileUtil.getFileCSVFromSCP(fileName, scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
+			byte[] myBytes = UploadFileUtil.getFileCSVFromSCP(fileName, scpHostName, scpUser, scpPassword,
+					Integer.parseInt(scpPort));
 			// Set file response
 			response.setContentType("application/force-download");
 			String headerKey = "Content-Disposition";
@@ -281,8 +295,9 @@ public class UserController {
 			ex.printStackTrace();
 		}
 	}
-	
-	public void createCSVFile(HttpServletResponse response, String fileName,List<CardInfoCSV> listUserInfoCSV, Integer typeCSV) throws IOException{
+
+	public void createCSVFile(HttpServletResponse response, String fileName, List<CardInfoCSV> listUserInfoCSV,
+			Integer typeCSV) throws IOException {
 		String csvFileName = fileName;
 		// System.setProperty("user.data","/tmp/csv");
 
@@ -312,7 +327,8 @@ public class UserController {
 			csvWriter.close();
 		} else {
 			response.setContentType("text/html");
-			ICsvBeanWriter csvWriter = new CsvBeanWriter(new FileWriter(absoluteFilePath), CsvPreference.STANDARD_PREFERENCE);
+			ICsvBeanWriter csvWriter = new CsvBeanWriter(new FileWriter(absoluteFilePath),
+					CsvPreference.STANDARD_PREFERENCE);
 			csvWriter.writeHeader(header);
 
 			for (CardInfoCSV aCard : listUserInfoCSV) {
@@ -320,9 +336,9 @@ public class UserController {
 			}
 			csvWriter.close();
 		}
-		
+
 	}
-	
+
 	private int parseIntParameter(String parameter, int defaultValue) {
 		try {
 			return Integer.parseInt(parameter);
@@ -331,22 +347,23 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/detail/{id:[\\d]+}",  method = RequestMethod.GET)
+	@RequestMapping(value = "/detail/{id:[\\d]+}", method = RequestMethod.GET)
 	public ModelAndView detailPC(@PathVariable("id") int id) {
 		logger.debug("detailPC", UserController.class);
-		
+
 		ModelAndView modelAndView = new ModelAndView();
 		CardInfo cardInfo = null;
 		List<CardConnectModel> cardList = null;
-		try{
+		try {
 			cardInfo = cardInfoService.getCardInfoDetail(id);
-			String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
+			String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser,
+					scpPassword, Integer.parseInt(scpPort));
 			cardInfo.setImageFile(fileNameFromSCP);
-			
-			//List card connected
-			cardList = cardInfoService.listCardConnect(cardInfo.getCardOwnerId(), cardInfo.getGroupCompanyId(), cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
-		}
-		catch(Exception ex){
+
+			// List card connected
+			cardList = cardInfoService.listCardConnect(cardInfo.getCardOwnerId(), cardInfo.getGroupCompanyId(),
+					cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
+		} catch (Exception ex) {
 			logger.debug("Exception : ", ex.getMessage());
 		}
 		modelAndView.setViewName("detailPC");
@@ -355,14 +372,15 @@ public class UserController {
 		return modelAndView;
 	}
 
-	@RequestMapping("profile") 
-    public ModelAndView profile() {	
+	@RequestMapping("profile")
+	public ModelAndView profile() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		if (ecardUser != null) {
-			UserInfo user= userInfoService.getUserInfoByUserId(ecardUser.getUserId());
-			UserInfoVO userVO=new UserInfoVO();
-			userVO.setCompanyName(groupCompanyInfoService.getCompanyById(user.getGroupCompanyId()).getGroupCompanyName());
+			UserInfo user = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+			UserInfoVO userVO = new UserInfoVO();
+			userVO.setCompanyName(
+					groupCompanyInfoService.getCompanyById(user.getGroupCompanyId()).getGroupCompanyName());
 			userVO.setDepartmentName(user.getDepartmentName());
 			userVO.setName(user.getName());
 			userVO.setPositionName(user.getPositionName());
@@ -370,104 +388,67 @@ public class UserController {
 			return new ModelAndView("profile", "user", userVO);
 		}
 		return new ModelAndView("redirect:home");
-    }
-	
-	@RequestMapping("changepass") 
-    public ModelAndView changepass() {
+	}
+
+	@RequestMapping("changepass")
+	public ModelAndView changepass() {
 		return new ModelAndView("changepass");
-    }
-	
-	@RequestMapping (value = "checkPass", method = RequestMethod.POST)
+	}
+
+	@RequestMapping(value = "checkPass", method = RequestMethod.POST)
 	@ResponseBody
-    public boolean checkPass(String oldpass) {
+	public boolean checkPass(String oldpass) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		if (ecardUser != null) {
-			UserInfo user= userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+			UserInfo user = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
 			return ((new BCryptPasswordEncoder()).matches(oldpass, user.getPassword()));
 		}
 		return false;
-    }
-	
-	@RequestMapping (value = "updatePass", method = RequestMethod.POST)
+	}
+
+	@RequestMapping(value = "updatePass", method = RequestMethod.POST)
 	@ResponseBody
-    public boolean updatePass(@RequestParam(value = "newPass") String newPass) {
+	public boolean updatePass(@RequestParam(value = "newPass") String newPass) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		if (ecardUser != null) {
-			UserInfo user= userInfoService.getUserInfoByUserId(ecardUser.getUserId());
-			user.setPassword((new BCryptPasswordEncoder().encode(newPass))); 
+			UserInfo user = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+			user.setPassword((new BCryptPasswordEncoder().encode(newPass)));
 			userInfoService.updateProfileAdminAllocation(user);
 		}
 		return true;
-    }
-	
-	@RequestMapping("faq") 
-    public ModelAndView faq() {	
+	}
+
+	@RequestMapping("faq")
+	public ModelAndView faq() {
+		return new ModelAndView("faq");
+	}
+
+	@RequestMapping("mailbox")
+	public ModelAndView mailbox() {
+		return new ModelAndView("mailbox");
+	}
+
+	@RequestMapping(value = "mailbox", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView mailboxPost(@RequestParam(value = "contents") String contents) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		List<CardInfo> cardInfoDisp = new ArrayList<>();
-		List<CardInfoPCVo>  lstCardInfoPCVo = new ArrayList<>();
-		if (ecardUser != null) {
-			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
-			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(),0);
-			
-			for(String nameSort : lstNameSort) {
-			    for(CardInfoUserVo cardInfo :lstCardInfo ){
-			    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
-			    		cardInfoDisp.add(cardInfo.getCardInfo());
-			    	}
-			    }
-			    CardInfoPCVo cardInfoPCVo;
-				try {
-					cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
-					lstCardInfoPCVo.add(cardInfoPCVo);
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			    
-			}
-			
-		}
-		return new ModelAndView("faq", "lstCardInfoPCVo", lstCardInfoPCVo);
-    }
-	
-	@RequestMapping("mailbox") 
-    public ModelAndView mailbox() {	
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		List<CardInfo> cardInfoDisp = new ArrayList<>();
-		List<CardInfoPCVo>  lstCardInfoPCVo = new ArrayList<>();
-		if (ecardUser != null) {
-			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
-			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(),0);
-			
-			for(String nameSort : lstNameSort) {
-			    for(CardInfoUserVo cardInfo :lstCardInfo ){
-			    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
-			    		cardInfoDisp.add(cardInfo.getCardInfo());
-			    	}
-			    }
-			    CardInfoPCVo cardInfoPCVo;
-				try {
-					cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
-					lstCardInfoPCVo.add(cardInfoPCVo);
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			    
-			}
-			
-		}
-		return new ModelAndView("mailbox", "lstCardInfoPCVo", lstCardInfoPCVo);
-    }
+		InquiryInfo inquiryInfo = new InquiryInfo();
+		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+
+		inquiryInfo.setUserInfo(userInfo);
+		inquiryInfo.setTitle("");
+		inquiryInfo.setAnswerFlg(0);
+		inquiryInfo.setAnswerText("");
+		inquiryInfo.setCreateDate(new Date());
+		inquiryInfo.setUpdateDate(new Date());
+		inquiryInfo.setOperaterId(0);
+		inquiryInfo.setInquiryText(contents);
+		inquiryInfo.setInquiryType(1);
+		settingsInfoService.sendInquiry(inquiryInfo);
+		return new ModelAndView("redirect:home");
+	}
 
 }

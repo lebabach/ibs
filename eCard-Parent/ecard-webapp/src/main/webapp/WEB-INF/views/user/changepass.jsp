@@ -202,18 +202,17 @@
 		<div class="title-box-1">パスワード設定</div>
 		<div class="content-box-1">
 			<form id="updatePassForm" class="h-adr" method="POST"
-				action="/ecard-webapp/user/updatePass/newPass="
 				accept-charset="UFT-8">
 				<ul class="list-profile">
 					<li><label class="label-c">現在のパスワード</label> <input
 						class="input-c" value="" type="password" id="oldpass">
-					<p class="mesage_error error_oldpass">12121</p></li>
+					<p class="mesage_error error_oldpass"></p></li>
 					<li><label class="label-c">新しいパスワード</label> <input
 						class="input-c" value="" type="password" id="newpass1">
-					<p class="mesage_error error_newpass1">12121</p></li>
+					<p class="mesage_error error_newpass1"></p></li>
 					<li><label class="label-c">新しいパスワード（確認）</label> <input
 						class="input-c" value="" type="password" id="newpass2">
-					<p class="mesage_error error_newpass2">12121</p></li>
+					<p class="mesage_error error_newpass2"></p></li>
 					<li
 						style="border: none; padding-bottom: 0; text-align: center; margin: 0 auto;">
 
