@@ -7,7 +7,6 @@ import java.math.BigInteger;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.stat.internal.CategorizedStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,6 @@ import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.enums.ActionTypeEnum;
 import com.ecard.core.model.enums.IndexTypeEnum;
 import com.ecard.core.model.enums.PropertyCodeEnum;
-import com.ecard.core.model.enums.StatusCard;
 import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.util.DataIndexUtil;
@@ -222,8 +220,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 //	}
 
 	@Override
-	public List<CardInfoUserVo> getListPossesionCard(Integer userId) {
-		return cardInfoDAO.getListPossesionCard(userId);
+	public List<CardInfoUserVo> getListPossesionCard(Integer userId, int pageNumber) {
+		return cardInfoDAO.getListPossesionCard(userId, pageNumber);
 	}
 	public void updateOldCardInfo (CardInfo cardInfo){
 		cardInfoDAO.updateOldCardInfo(cardInfo);
@@ -277,7 +275,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 
 	@Override
 	public List<String> getListSortType(Integer userId) {
-		// TODO Auto-generated method stub
 		return cardInfoDAO.getListSortType(userId);
+	}
+	
+	public Long countPossessionCard(Integer userId){
+		return cardInfoDAO.countPossessionCard(userId);
 	}
 }

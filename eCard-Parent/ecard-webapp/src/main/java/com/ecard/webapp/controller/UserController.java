@@ -7,15 +7,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +39,12 @@ import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.converter.CardInfoConverter;
 import com.ecard.core.vo.CardInfoCSV;
-import com.ecard.core.vo.CardInfoResponse;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.UserDownloadPermission;
 import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardInfoPCVo;
+import com.ecard.webapp.vo.DataPagingJsonVO;
 
 
 @Controller
@@ -74,11 +73,12 @@ public class UserController {
     public ModelAndView home() {	
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		
+		Long listTotalCardInfo = new Long(0); 
 		List<CardInfoPCVo>  lstCardInfoPCVo = new ArrayList<>();
 		if (ecardUser != null) {
 			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
-			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId());
+			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(),0);
+			listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId());
 			
 			for(String nameSort : lstNameSort) {
 				List<CardInfo> cardInfoDisp = new ArrayList<>();
@@ -90,21 +90,67 @@ public class UserController {
 			    }
 			    CardInfoPCVo cardInfoPCVo;
 				try {
-					cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
-					lstCardInfoPCVo.add(cardInfoPCVo);
+					if(cardInfoDisp.size() > 0){
+						cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
+						lstCardInfoPCVo.add(cardInfoPCVo);
+					}
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			    
 			}
 			
 		}
-		return new ModelAndView("homePC", "lstCardInfoPCVo", lstCardInfoPCVo);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("homePC");
+		modelAndView.addObject("lstCardInfoPCVo", lstCardInfoPCVo);
+		modelAndView.addObject("totalCardInfo", listTotalCardInfo);
+		return modelAndView;
+
     }
+	@RequestMapping(value = "search", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public DataPagingJsonVO<CardInfoPCVo> search(HttpServletRequest request, HttpSession session){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		int limit = parseIntParameter(request.getParameter("page"), 0);
+		System.out.println("BBB = "+limit);
+		DataPagingJsonVO<CardInfoPCVo> dataTableResponse = new DataPagingJsonVO<CardInfoPCVo>();
+		List<CardInfoPCVo> cardInfoSearchResponses = new ArrayList<CardInfoPCVo>();
+		
+		List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
+		List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(),limit);
+		
+		for(String nameSort : lstNameSort) {
+			List<CardInfo> cardInfoDisp = new ArrayList<>();
+		    for(CardInfoUserVo cardInfo :lstCardInfo ){
+		    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
+		    		cardInfoDisp.add(cardInfo.getCardInfo());
+		    	}
+		    }
+		    CardInfoPCVo cardInfoPCVo;
+			try {
+				if(cardInfoDisp.size() > 0){
+					cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
+					cardInfoSearchResponses.add(cardInfoPCVo);
+				}
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    
+		}
+		
+		dataTableResponse.setData(cardInfoSearchResponses);
+		return dataTableResponse;
+		
+	}
+	
 	
 	@RequestMapping("getImageFile") 
 	@ResponseBody
@@ -263,5 +309,13 @@ public class UserController {
 			csvWriter.close();
 		}
 		
+	}
+	
+	private int parseIntParameter(String parameter, int defaultValue) {
+		try {
+			return Integer.parseInt(parameter);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
 	}
 }
