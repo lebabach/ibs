@@ -682,8 +682,13 @@
     	        url: 'getImageFile',
     	        data: 'fileImage='+fileImageName
     	    }).done(function(resp, status, xhr){
-    	    	target.attr('src','');    	  
-    	        target.attr('src','data:image/png;base64,'+resp);
+    	    	if(resp == ""){
+    	    		target.attr('src','');    	  
+        	        target.attr('src','/ecard-webapp/assets/img/card_08.png');
+    	    	} else {
+    	    		target.attr('src','');    	  
+        	        target.attr('src','data:image/png;base64,'+resp);	
+    	    	}
     	    }).fail(function(resp, status, xhr){
     	        alert('Error');
     	    });    	  
@@ -698,8 +703,14 @@
     	        url: 'getImageFile',
     	        data: 'fileImage='+fileImageName
     	    }).done(function(resp, status, xhr){
-    	    	target.attr('src','');    	  
-    	        target.attr('src','data:image/png;base64,'+resp);
+    	    	if(resp == ""){
+    	    		target.attr('src','');    	  
+        	        target.attr('src','/ecard-webapp/assets/img/card_08.png');
+    	    	} else {
+    	    		target.attr('src','');    	  
+        	        target.attr('src','data:image/png;base64,'+resp);	
+    	    	}
+    	    	
     	    }).fail(function(resp, status, xhr){
     	        alert('Error');
     	    });
