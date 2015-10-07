@@ -1,6 +1,7 @@
 package com.ecard.webapp.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +40,7 @@ import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.service.CardInfoService;
+import com.ecard.core.service.GroupCompanyInfoService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.converter.CardInfoConverter;
 import com.ecard.core.vo.CardConnectModel;
@@ -48,8 +51,7 @@ import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardInfoPCVo;
 import com.ecard.webapp.vo.DataPagingJsonVO;
-
-
+import com.ecard.webapp.vo.UserInfoVO;
 @Controller
 @RequestMapping("/user/*")
 public class UserController {
@@ -60,6 +62,9 @@ public class UserController {
 	
 	@Autowired
 	CardInfoService cardInfoService;
+	
+	@Autowired
+	GroupCompanyInfoService groupCompanyInfoService;
 	
 	@Value("${scp.hostname}")
 	private String scpHostName;
@@ -354,68 +359,47 @@ public class UserController {
     public ModelAndView profile() {	
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		List<CardInfo> cardInfoDisp = new ArrayList<>();
-		List<CardInfoPCVo>  lstCardInfoPCVo = new ArrayList<>();
 		if (ecardUser != null) {
-			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
-			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(),0);
-			
-			for(String nameSort : lstNameSort) {
-			    for(CardInfoUserVo cardInfo :lstCardInfo ){
-			    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
-			    		cardInfoDisp.add(cardInfo.getCardInfo());
-			    	}
-			    }
-			    CardInfoPCVo cardInfoPCVo;
-				try {
-					cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
-					lstCardInfoPCVo.add(cardInfoPCVo);
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			    
-			}
-			
+			UserInfo user= userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+			UserInfoVO userVO=new UserInfoVO();
+			userVO.setCompanyName(groupCompanyInfoService.getCompanyById(user.getGroupCompanyId()).getGroupCompanyName());
+			userVO.setDepartmentName(user.getDepartmentName());
+			userVO.setName(user.getName());
+			userVO.setPositionName(user.getPositionName());
+			userVO.setEmail(user.getEmail());
+			return new ModelAndView("profile", "user", userVO);
 		}
-		return new ModelAndView("profile", "lstCardInfoPCVo", lstCardInfoPCVo);
+		return new ModelAndView("redirect:home");
     }
 	
-	@RequestMapping("contact") 
-    public ModelAndView contact() {	
+	@RequestMapping("changepass") 
+    public ModelAndView changepass() {
+		return new ModelAndView("changepass");
+    }
+	
+	@RequestMapping (value = "checkPass", method = RequestMethod.POST)
+	@ResponseBody
+    public boolean checkPass(String oldpass) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		List<CardInfo> cardInfoDisp = new ArrayList<>();
-		List<CardInfoPCVo>  lstCardInfoPCVo = new ArrayList<>();
 		if (ecardUser != null) {
-			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
-			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(),0);
-			
-			for(String nameSort : lstNameSort) {
-			    for(CardInfoUserVo cardInfo :lstCardInfo ){
-			    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
-			    		cardInfoDisp.add(cardInfo.getCardInfo());
-			    	}
-			    }
-			    CardInfoPCVo cardInfoPCVo;
-				try {
-					cardInfoPCVo = new CardInfoPCVo(nameSort,CardInfoConverter.convertCardInforList(cardInfoDisp));
-					lstCardInfoPCVo.add(cardInfoPCVo);
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			    
-			}
-			
+			UserInfo user= userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+			return ((new BCryptPasswordEncoder()).matches(oldpass, user.getPassword()));
 		}
-		return new ModelAndView("contact-us", "lstCardInfoPCVo", lstCardInfoPCVo);
+		return false;
+    }
+	
+	@RequestMapping (value = "updatePass", method = RequestMethod.POST)
+	@ResponseBody
+    public boolean updatePass(@RequestParam(value = "newPass") String newPass) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		if (ecardUser != null) {
+			UserInfo user= userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+			user.setPassword((new BCryptPasswordEncoder().encode(newPass))); 
+			userInfoService.updateProfileAdminAllocation(user);
+		}
+		return true;
     }
 	
 	@RequestMapping("faq") 
