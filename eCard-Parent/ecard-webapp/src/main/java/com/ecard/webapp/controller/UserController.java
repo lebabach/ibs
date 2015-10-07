@@ -87,8 +87,9 @@ public class UserController {
 			for(String nameSort : lstNameSort) {
 				List<CardInfo> cardInfoDisp = new ArrayList<>();
 			    for(CardInfoUserVo cardInfo :lstCardInfo ){
+			    	//String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getCardInfo().getImageFile(), scpHostName, scpUser, scpPassword,Integer.parseInt(scpPort));
 			    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
-			    		
+			    		//cardInfo.getCardInfo().setImageFile(fileNameFromSCP);
 			    		cardInfoDisp.add(cardInfo.getCardInfo());
 			    	}
 			    }
@@ -130,7 +131,9 @@ public class UserController {
 		for(String nameSort : lstNameSort) {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
 		    for(CardInfoUserVo cardInfo :lstCardInfo ){
+		    	//String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getCardInfo().getImageFile(), scpHostName, scpUser, scpPassword,Integer.parseInt(scpPort));
 		    	if(nameSort.trim().equals(cardInfo.getSortType().trim())){
+		    		//cardInfo.getCardInfo().setImageFile(fileNameFromSCP);
 		    		cardInfoDisp.add(cardInfo.getCardInfo());
 		    	}
 		    }

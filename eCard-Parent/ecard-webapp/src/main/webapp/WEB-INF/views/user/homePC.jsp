@@ -346,7 +346,8 @@
 			              <div class="col-xs-5" style=" display: table;">
 			                </div>
 			                  <div class="col-xs-7">
-			                    <img src="img/namecard2.png" class="img-responsive img-thumb pull-right" alt="Responsive image">
+			                    <img src="<c:url value='/assets/img/loading.gif'/>" class="img-responsive img-thumb pull-right" alt="Responsive image">
+			                    <input class="hidden" name="fileImageName" value="${cardInfo.imageFile}">
 			                  </div> 
 			            </div>
 			          </div>          
@@ -412,44 +413,67 @@
 				    					+	'<div class="col-md-6">'
 				    					+	'<div class="col-xs-5"></div>'	
 				    					+	'<div class="col-xs-7">'								
-				    					+	'<img src="img/namecard2.png" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'							
+				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'	
+				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 				    					+	'</div> </div> </div> </div>'
 				        	    );									 
 								 });
 							 } else {
 								 $.each( value.lstCardInfo, function (k,v) {
-									 $('.business_card_book').append(
-										'<div class="list-group" id= "'+value.nameSort+'">'
-								        +'<div class="list-group-item-title">'+value.nameSort+'</div>'										 
-				        	    		+ '<div class="list-group-item pointer">'
-				    					+'<div class="row row-new">'
-				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
-				    					+	'<div class="col-md-5">'
-				    					+		'<div class="col-xs-11 mg-top">'
-				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
-				    					+			'<p class="livepass">'+v.companyName+'</p>'
-				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
-				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
-				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
-				    					+ '</div></div>'
-				    					+	'<div class="col-md-6">'
-				    					+	'<div class="col-xs-5"></div>'	
-				    					+	'<div class="col-xs-7">'								
-				    					+	'<img src="img/namecard2.png" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'							
-				    					+	'</div> </div> </div> </div></div>'
-				        	    );									 
+									 var lastDate = $('.business_card_book .list-group').last().attr("id");
+									if(value.nameSort.replace("/","").trim() != lastDate.trim()){
+											 $('.business_card_book').append(
+												'<div class="list-group" id= "'+value.nameSort.replace("/","").trim()+'">'
+										        +'<div class="list-group-item-title">'+value.nameSort+'</div>'										 
+						        	    		+ '<div class="list-group-item pointer">'
+						    					+'<div class="row row-new">'
+						    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
+						    					+	'<div class="col-md-5">'
+						    					+		'<div class="col-xs-11 mg-top">'
+						    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+						    					+			'<p class="livepass">'+v.companyName+'</p>'
+						    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+						    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+						    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+						    					+ '</div></div>'
+						    					+	'<div class="col-md-6">'
+						    					+	'<div class="col-xs-5"></div>'	
+						    					+	'<div class="col-xs-7">'								
+						    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'	
+						    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+						    					+	'</div> </div> </div> </div></div>'
+						        	    );	
+									 }else{
+										 $('.business_card_book #'+lastDate).append(
+							        	    		'<div class="list-group-item pointer">'
+							    					+'<div class="row row-new">'
+							    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
+							    					+	'<div class="col-md-5">'
+							    					+		'<div class="col-xs-11 mg-top">'
+							    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+							    					+			'<p class="livepass">'+v.companyName+'</p>'
+							    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+							    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+							    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+							    					+ '</div></div>'
+							    					+	'<div class="col-md-6">'
+							    					+	'<div class="col-xs-5"></div>'	
+							    					+	'<div class="col-xs-7">'								
+							    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'	
+							    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+							    					+	'</div> </div> </div> </div>'  );	
+									 }
 								 });
 							 }
 							 
 						});
+						  $('.i-checks').iCheck({
+			       	          checkboxClass: 'icheckbox_square-green',
+			       	          radioClass: 'iradio_square-green',                
+			        	    });
 					}).fail(function(xhr, status, err) {
 						alert('Error');
 					});
-	        	    
-	        	    $('.i-checks').iCheck({
-	       	          checkboxClass: 'icheckbox_square-green',
-	       	          radioClass: 'iradio_square-green',                
-	        	    });
 	        	    id_manager++;
 	    	    }
     	  }
@@ -644,6 +668,23 @@
       $("#notification").click(function(event) {
         // console.log($(this));
       });
-
+      
+      $(".business_card_book .img-responsive").each(function () {
+    		var target = $(this);
+    	    var fileImageName =$(this).parent().find('input[name=fileImageName]').val();
+    	    console.log('AAA= '+fileImageName);
+    	    $.ajax({
+    	        type: 'POST',
+    	        url: 'getImageFile',
+    	        data: 'fileImage='+fileImageName
+    	    }).done(function(resp, status, xhr){
+    	    	target.attr('src','');
+    	        console.log('A= '+resp);
+    	        target.attr('src','data:image/png;base64,'+resp);
+    	    }).fail(function(resp, status, xhr){
+    	        alert('Error');
+    	    });
+    	  
+    	});
 
     </script>
