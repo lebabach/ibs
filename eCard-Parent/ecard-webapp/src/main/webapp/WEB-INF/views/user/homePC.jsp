@@ -322,7 +322,7 @@
     <div class="business_card_book">
     <!-- for here  -->
     <c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">
-		      <div class="list-group">
+		      <div class="list-group" id= "<c:out value='${cardInfoPCVo.nameSort}' />">
 		        <div class="list-group-item-title"><c:out value="${cardInfoPCVo.nameSort}" /></div>
 		        <!-- for item here  -->
 		        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
@@ -379,41 +379,89 @@
     <!-- Peity -->
     <script src="js/demo/peity-demo.js"></script>
 <script>
-      var id_manager = 1;      
-     /*  $(window).scroll(function() {
-    	    if($(window).scrollTop() >= ($(document).height() - $(window).height())*0.7) {
-    	    	// Call ajax here
-    	   		console.log('aaa = '+id_manager);
-    	   		id_manager++;
-    	   		$('.business_card_book #list72015').append(
-        	    		'<div class="list-group-item pointer">'
-    					+'<div class="row">'
-    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" class="i-checks" name="bla"></div></div>'
-    					+	'<div class="col-md-5">'
-    					+		'<div class="col-xs-11 mg-top">'
-    					+ 			'<p class="name">寺本司 423423 = '+ id_manager +'</p>'
-    					+			'<p class="livepass">livepass株式会社</p>'
-    					+			'<p class="department_and_position">開発部 海外開発事業室長</p>'
-    					+			'<p class="num">0123456789</p>'
-    					+			'<p class="mail"><a href="#">abc@gmail.com</a></p>'
-    					+ '</div></div>'
-    					+	'<div class="col-md-6">'
-    					+	'<div class="col-xs-5"></div>'	
-    					+	'<div class="col-xs-7">'								
-    					+	'<img src="img/namecard2.png" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'							
-    					+	'</div> </div> </div> </div>'
-        	    );
-    	   		
-        	    $('.i-checks').iCheck({
-       	          checkboxClass: 'icheckbox_square-green',
-       	          radioClass: 'iradio_square-green',                
-        	    });        	    
-    	    }
-    	    
-    	}); */
+
+      var id_manager = 1;
+      var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
+     
+      $(window).scroll(function() {
+    	  if(id_manager * 5 < parseInt(totalCardInfo)){
+	    	    if($(window).scrollTop() >= ($(document).height() - $(window).height())*0.7) {
+	    	    	// Call ajax here	    	   		
+	        	    $.ajax({
+						type: 'POST',
+						url: 'search',
+						data: 'page=' +id_manager
+					}).done(function(resp, status, xhr) {
+						var lastDate = $('.business_card_book .list-group').last().attr("id");
+						$.each( resp.data, function( key, value ) {						
+							 console.log( key + ": " + value.nameSort);
+							 if(value.nameSort.replace("/","").trim() == lastDate.trim()){
+								 $.each( value.lstCardInfo, function (k,v) {
+									 $('.business_card_book #'+lastDate).append(
+				        	    		'<div class="list-group-item pointer">'
+				    					+'<div class="row row-new">'
+				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
+				    					+	'<div class="col-md-5">'
+				    					+		'<div class="col-xs-11 mg-top">'
+				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+				    					+			'<p class="livepass">'+v.companyName+'</p>'
+				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+				    					+ '</div></div>'
+				    					+	'<div class="col-md-6">'
+				    					+	'<div class="col-xs-5"></div>'	
+				    					+	'<div class="col-xs-7">'								
+				    					+	'<img src="img/namecard2.png" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'							
+				    					+	'</div> </div> </div> </div>'
+				        	    );									 
+								 });
+							 } else {
+								 $.each( value.lstCardInfo, function (k,v) {
+									 $('.business_card_book').append(
+										'<div class="list-group" id= "'+value.nameSort+'">'
+								        +'<div class="list-group-item-title">'+value.nameSort+'</div>'										 
+				        	    		+ '<div class="list-group-item pointer">'
+				    					+'<div class="row row-new">'
+				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
+				    					+	'<div class="col-md-5">'
+				    					+		'<div class="col-xs-11 mg-top">'
+				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+				    					+			'<p class="livepass">'+v.companyName+'</p>'
+				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+				    					+ '</div></div>'
+				    					+	'<div class="col-md-6">'
+				    					+	'<div class="col-xs-5"></div>'	
+				    					+	'<div class="col-xs-7">'								
+				    					+	'<img src="img/namecard2.png" class=" lazy img-responsive img-thumb pull-right" alt="Responsive image">'							
+				    					+	'</div> </div> </div> </div></div>'
+				        	    );									 
+								 });
+							 }
+							 
+						});
+						$('.i-checks').iCheck({
+			       	          checkboxClass: 'icheckbox_square-green',
+			       	          radioClass: 'iradio_square-green',                
+			        	    });
+					}).fail(function(xhr, status, err) {
+						alert('Error');
+					});
+	        	    
+	        	    
+	        	    id_manager++;
+	    	    }
+    	  }
+    	}); 
 
       $(document).ready(function(){
-    	 
+    	  
+    	$(".business_card_book .list-group").each(function() {
+    		var id  = $(this).attr("id").replace('/', '');
+    		$(this).attr("id",id);
+    	});
         $('.i-checks').iCheck({
           checkboxClass: 'icheckbox_square-green',
           radioClass: 'iradio_square-green',                
@@ -465,7 +513,7 @@
         // Click to personal details page
         $('.business_card_book .list-group-item').click( function() {
           console.log("Move to personal details page"); 
-          window.location.href = "personal_details.html"
+          window.location.href = '<c:url value="/user/detail/1048"/>';
         }).hover(function() {
           $(this).toggleClass('hover');
         });
