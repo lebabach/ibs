@@ -64,7 +64,14 @@
                 <beans:value>/WEB-INF/tiles.xml</beans:value>
             </beans:list>  
         </beans:property>  
-    </beans:bean>  
-    
+    </beans:bean>
+      
+    <interceptors>
+		<interceptor>
+			<mapping path="/user/**" />
+			<beans:bean class="com.ecard.webapp.interceptor.PCInterceptor" />
+		</interceptor>
+	</interceptors>
 	
+	<context:component-scan base-package="com.ecard.webapp.interceptor" />
 </beans:beans>

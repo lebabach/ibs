@@ -24,6 +24,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.LoggerFactory;
 
+import com.ecard.webapp.vo.NotificationOfUserVO;
+
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.SCPClient;
 import sun.misc.BASE64Decoder;
@@ -103,13 +105,6 @@ public class UploadFileUtil {
 				
 				if (result) {
 					SCPClient scpClient = conn.createSCPClient();
-					/*scpClient.get(saveFileUploaded + "/" + fileNameFromDB, outputStream);
-
-					inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-
-					BufferedImage img = ImageIO.read(inputStream);
-					fileNameBase64 = encodeToString(img, "jpg");*/
-					
 					files.forEach(file->{
 	                	try {
 	                		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -119,6 +114,47 @@ public class UploadFileUtil {
 			                BufferedImage img = ImageIO.read(inputStream);
 			                String fileNameBase64 = encodeToString(img, "jpg");
 			                file.setCardBackImgFile(fileNameBase64);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	                });
+				}
+			} catch (Exception e) {
+				LOG.debug("getImageFileFromSCP : " + e.getMessage());
+			} finally {
+				conn.close();
+			}
+		       
+    	} catch (Exception ex){
+			LOG.error("Error processing card image: " + ex.getMessage());
+		}
+    	 return files;
+    }
+    
+    public static List<NotificationOfUserVO> getImageFileFromSCPForNotification(List<NotificationOfUserVO> files, String scpHostName, String scpUser, String scpPassword, Integer scpPort) {
+		return processingCardForNotification(files, scpHostName, scpUser, scpPassword, scpPort);
+	}
+    
+    private static List<NotificationOfUserVO> processingCardForNotification(List<NotificationOfUserVO> files, String scpHostName, String scpUser, String scpPassword, Integer scpPort){
+    	try{
+			conn = new Connection(scpHostName);
+			try {
+				conn.connect();
+				boolean result = conn.authenticateWithPassword(scpUser, scpPassword);
+
+				
+				if (result) {
+					SCPClient scpClient = conn.createSCPClient();
+					files.forEach(file->{
+	                	try {
+	                		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+							scpClient.get(saveFileUploaded + "/" + file.getImage(), outputStream);
+							InputStream inputStream  = new ByteArrayInputStream(outputStream.toByteArray());
+			                
+			                BufferedImage img = ImageIO.read(inputStream);
+			                String fileNameBase64 = encodeToString(img, "jpg");
+			                file.setImage(fileNameBase64);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

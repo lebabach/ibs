@@ -930,12 +930,12 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	@Override
 	public List<CardInfoUserVo> getListPossesionCard(Integer userId,  int pageNumber) {
 		// TODO Auto-generated method stub
-		String sqlStr = "SELECT DATE_FORMAT( pos.id.contactDate,'%m/%Y') AS groupDate,pos.cardInfo FROM PossessionCard pos INNER JOIN pos.cardInfo "
-                + "WHERE pos.id.userId = :userId AND pos.cardInfo.approvalStatus = 1 ORDER BY pos.id.contactDate DESC";
+		String sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c "
+                      + "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 ORDER BY c.contactDate DESC ";
 		Query query = getEntityManager().createQuery(sqlStr);
 		query.setParameter("userId", userId);
 //		.setFirstResult(offet).setMaxResults(limit);
-		query.setFirstResult(pageNumber * 5).setMaxResults(5);
+		query.setFirstResult(pageNumber * this.maxResult).setMaxResults(this.maxResult);
         List<Object[]> listObj = query.getResultList();
         List<CardInfoUserVo> lstcardInfoUserVo = new ArrayList<>();
         for(Object[] object : listObj){
@@ -1158,8 +1158,8 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 
 	@Override
 	public List<String> getListSortType(Integer userId) {
-		String sqlStr = "SELECT DATE_FORMAT( pos.id.contactDate,'%m/%Y') AS groupDate FROM PossessionCard pos INNER JOIN pos.cardInfo "
-                + "WHERE pos.id.userId = :userId AND pos.cardInfo.approvalStatus = 1  GROUP BY DATE_FORMAT( pos.id.contactDate,'%m/%Y') ORDER BY DATE_FORMAT( pos.id.contactDate,'%m/%Y') DESC";
+		String sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate FROM CardInfo c "
+                      + "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 GROUP BY DATE_FORMAT(c.contactDate,'%m/%Y') ORDER BY c.contactDate DESC ";
 		Query query = getEntityManager().createQuery(sqlStr);
 		query.setParameter("userId", userId);
         return  query.getResultList();
@@ -1175,8 +1175,8 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	}
 
 	public Long countPossessionCard(Integer userId){
-		String sqlStr = "SELECT count(*) FROM PossessionCard pos INNER JOIN pos.cardInfo "
-                + "WHERE pos.id.userId = :userId AND pos.cardInfo.approvalStatus = 1 ";
+		String sqlStr = "SELECT count(*) FROM CardInfo c "
+                      + "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0";
 		Query query = getEntityManager().createQuery(sqlStr);
 		query.setParameter("userId", userId);
         return (Long)getOrNull(query);
