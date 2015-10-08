@@ -119,12 +119,7 @@ public class UserController {
 			for (String nameSort : lstNameSort) {
 				List<CardInfo> cardInfoDisp = new ArrayList<>();
 				for (CardInfoUserVo cardInfo : lstCardInfo) {
-					// String fileNameFromSCP =
-					// UploadFileUtil.getImageFileFromSCP(cardInfo.getCardInfo().getImageFile(),
-					// scpHostName, scpUser,
-					// scpPassword,Integer.parseInt(scpPort));
 					if (nameSort.trim().equals(cardInfo.getSortType().trim())) {
-						// cardInfo.getCardInfo().setImageFile(fileNameFromSCP);
 						cardInfoDisp.add(cardInfo.getCardInfo());
 					}
 				}
@@ -139,7 +134,6 @@ public class UserController {
 				} catch (InvocationTargetException e) {
 					e.printStackTrace();
 				}
-
 			}
 
 		}
@@ -157,21 +151,14 @@ public class UserController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		int limit = parseIntParameter(request.getParameter("page"), 0);
-		System.out.println("BBB = " + limit);
 		DataPagingJsonVO<CardInfoPCVo> dataTableResponse = new DataPagingJsonVO<CardInfoPCVo>();
 		List<CardInfoPCVo> cardInfoSearchResponses = new ArrayList<CardInfoPCVo>();
-
 		List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
 		List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), limit);
-
 		for (String nameSort : lstNameSort) {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
 			for (CardInfoUserVo cardInfo : lstCardInfo) {
-				// String fileNameFromSCP =
-				// UploadFileUtil.getImageFileFromSCP(cardInfo.getCardInfo().getImageFile(),
-				// scpHostName, scpUser, scpPassword,Integer.parseInt(scpPort));
 				if (nameSort.trim().equals(cardInfo.getSortType().trim())) {
-					// cardInfo.getCardInfo().setImageFile(fileNameFromSCP);
 					cardInfoDisp.add(cardInfo.getCardInfo());
 				}
 			}
@@ -182,13 +169,10 @@ public class UserController {
 					cardInfoSearchResponses.add(cardInfoPCVo);
 				}
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
 
 		dataTableResponse.setData(cardInfoSearchResponses);
