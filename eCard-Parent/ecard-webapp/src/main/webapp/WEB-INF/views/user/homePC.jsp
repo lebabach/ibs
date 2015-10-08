@@ -423,14 +423,13 @@
       var page = 1;
       var isLoading = 0;
       $(window).scroll(function() {     	  
-    	  if($('.row-new').length <= parseInt(totalCardInfo)){
-
+    	  if($('.row-new').length < parseInt(totalCardInfo)){
     		   var typeSort = $('#sort-card-cnd').val();
-    		   if(isLoading == 0 && $('.row-new').length < parseInt(totalCardInfo)){
+    		   /* if(isLoading != 0){    			   
     			   $('body').scrollTop($(window).height()*2);
-    			   
-    		   }
-	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height()) && isLoading == 0) {
+    			   return false;
+    		   }  */
+	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
 	    	    	// Call ajax here	    	   		
 	        		request = $.ajax({
 						type: 'POST',
@@ -467,7 +466,7 @@
 						
 						
 					}).fail(function(xhr, status, err) {
-						alert('Error');
+						//alert('Error');
 					});
 	        	    id_manager++;
 	    	    } 
@@ -476,234 +475,230 @@
 
  $(document).ready(function(){
     	     	  
-    	$(".business_card_book .list-group").each(function() {
-    		var id  = $(this).attr("id").replace('/', '');
-    		$(this).attr("id",id);
-    	});
-        $('.i-checks').iCheck({
-          checkboxClass: 'icheckbox_square-green',
-          radioClass: 'iradio_square-green',                
-        });
-        
-       /*  $(document).on('ifChecked','input[name=bla]',function(event) {
-          $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
-        });
-        
-        $(document).on('ifUnchecked','input',function(event){     
-          if($(".icheckbox_square-green").find('.checked').size() == 1){
-            $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
-            $(".addTagCard").css("display","none");  
-          }          
-        }); */
+   	$(".business_card_book .list-group").each(function() {
+   		var id  = $(this).attr("id").replace('/', '');
+   		$(this).attr("id",id);
+   	});
+       $('.i-checks').iCheck({
+         checkboxClass: 'icheckbox_square-green',
+         radioClass: 'iradio_square-green',                
+       });
+       
+      /*  $(document).on('ifChecked','input[name=bla]',function(event) {
+         $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
+       });
+       
+       $(document).on('ifUnchecked','input',function(event){     
+         if($(".icheckbox_square-green").find('.checked').size() == 1){
+           $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
+           $(".addTagCard").css("display","none");  
+         }          
+       }); */
 
-        // Process add tag and delete
-        $("#deletePeople").click(function(e){
+       // Process add tag and delete
+       $("#deletePeople").click(function(e){
+         
+       });
+
+    /*    $(document).on('click','#addTag',function(e){
+         if($(".balloon").css('display') == 'block')
+           $(".balloon").css("display","none");
+         else
+           $(".balloon").css("display","block");
+       }); */
+
+       $('.makefriend').click(function(e){
+         if($(this).find('button').hasClass('btn-success')){
+           $(this).find('button').removeClass('btn-success');
+           $(this).find('button').addClass('btn-default');
+           $(this).find('button').text("取り消す");
+           return false;
+         } 
           
-        });
+         if($(this).find('button').hasClass('btn-default')){
+           $(this).find('button').removeClass('btn-default');
+           $(this).find('button').addClass('btn-success');
+           $(this).find('button').text("追加");
+           return false;
+         }
 
-     /*    $(document).on('click','#addTag',function(e){
-          if($(".balloon").css('display') == 'block')
-            $(".balloon").css("display","none");
-          else
-            $(".balloon").css("display","block");
-        }); */
+       });
+       $('.mail').click(function(e) {
+         console.log('Go to mailbox');
+         e.stopPropagation();
+       });
 
-        $('.makefriend').click(function(e){
-          if($(this).find('button').hasClass('btn-success')){
-            $(this).find('button').removeClass('btn-success');
-            $(this).find('button').addClass('btn-default');
-            $(this).find('button').text("取り消す");
-            return false;
-          } 
-           
-          if($(this).find('button').hasClass('btn-default')){
-            $(this).find('button').removeClass('btn-default');
-            $(this).find('button').addClass('btn-success');
-            $(this).find('button').text("追加");
-            return false;
-          }
+       // Click to personal details page
+       
 
-        });
-        $('.mail').click(function(e) {
-          console.log('Go to mailbox');
-          e.stopPropagation();
-        });
+       // Sort name card
+       $('.clearfix a').click(function(e) {
+         $(this).parent().find('a').removeClass("active");
+         $(this).addClass("active");
 
-        // Click to personal details page
-        $('.business_card_book .list-group-item').click( function() {
-        	cardId = parseInt($(this).find('input[name=bla]').val());
-            window.location.href = '<c:url value="/user/card/details/'+cardId+'"/>';
-        }).hover(function() {
-          $(this).toggleClass('hover');
-        });
+         // Process with Business Card List
+         if($(".BusinessCardList").hasClass("active")) {                
+           $(".business_card_book").css("display", "block");
+           $(".peopleSearchResults").css("display", "none");
+           $(".network_card_book").css("display", "none");                
+           $(".setDisplayTerm").css("display","block");
+           $(".network_card_book").css("display", "none");
+           $(".manager_search_card").css("display","none");
+           $(".ManagerSearch_box").css("display","none");
+         }
 
-        // Sort name card
-        $('.clearfix a').click(function(e) {
-          $(this).parent().find('a').removeClass("active");
-          $(this).addClass("active");
+         // Process with IBS Card List
+         if($(".IBSNetworkCardList").hasClass("active")) {              
+           $(".business_card_book").css("display", "none");
+           $(".peopleSearchResults").css("display", "block");
+           $(".network_card_book").css("display", "none");
+           $(".setDisplayTerm").css("display","none");
+           $(".IBSNetworkCardList_popup").css("display","none");
+           $(".manager_search_card").css("display","none");
+           $(".ManagerSearch_box").css("display","none");
+         }
 
-          // Process with Business Card List
-          if($(".BusinessCardList").hasClass("active")) {                
-            $(".business_card_book").css("display", "block");
-            $(".peopleSearchResults").css("display", "none");
-            $(".network_card_book").css("display", "none");                
-            $(".setDisplayTerm").css("display","block");
-            $(".network_card_book").css("display", "none");
-            $(".manager_search_card").css("display","none");
-            $(".ManagerSearch_box").css("display","none");
-          }
-
-          // Process with IBS Card List
-          if($(".IBSNetworkCardList").hasClass("active")) {              
-            $(".business_card_book").css("display", "none");
-            $(".peopleSearchResults").css("display", "block");
-            $(".network_card_book").css("display", "none");
-            $(".setDisplayTerm").css("display","none");
-            $(".IBSNetworkCardList_popup").css("display","none");
-            $(".manager_search_card").css("display","none");
-            $(".ManagerSearch_box").css("display","none");
-          }
-
-          // if($(".ManagerSearch").hasClass("active")) {
-          //   // $(".business_card_book").css("display", "none");
-          //   // $(".peopleSearchResults").css("display", "none");
-          //   // $(".setDisplayTerm").css("display","none");
-          //   // $(".manager_search_card").css("display","block");
-          //   // $(".searchTargetSwitcher").css("display", "none");
-          // }
-        });
-        // Remove tag
-        
-        
-        $('#sort-card-cnd').on('change', function() {
-        	var typeSort = $(this).val();
-        	id_manager = 0;
-           $.ajax({
-				type: 'POST',
-				url: 'search',
-				data: 'page=' +id_manager + "&typeSort=" +typeSort
-			}).done(function(resp, status, xhr) {
-				 $('.business_card_book').html("");
-				   var str = "";
-					$.each( resp.data, function( key, value ) {	
-						str = $('.business_card_book').append(
-							'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 20px !important;" id= "'+value.nameSort.replace("/","").trim()+'">'
-					        +'<div class="list-group-item-title">'+value.nameSort+'</div>');
-						 $.each( value.lstCardInfo, function (k,v) {
-								isLoading = isLoading + 1;							 		
-									str.append(	'<div class="list-group-item pointer">'
-					    					+'<div class="row row-new">'
-					    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
-					    					+	'<div class="col-md-5">'
-					    					+		'<div class="col-xs-11 mg-top">'
-					    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
-					    					+			'<p class="livepass">'+v.companyName+'</p>'
-					    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
-					    					+			'<p class="num">'+v.telNumberCompany+'</p>'
-					    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
-					    					+ '</div></div>'
-					    					+	'<div class="col-md-6">'
-					    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
-					    					+	'<div class="col-xs-7">'								
-					    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
-					    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-					    					+	'</div> </div> </div> </div></div>'
-					        	    );
-								 isLoading++;
-								 reloadICheck();
-								 getImageFromSCP(v.imageFile);
-						 });
-					});
-					id_manager++;
-			}).fail(function(xhr, status, err) {
-				alert('Error');
-			});
-        });
-        
-           $( "#btn-success" ).click(function() {
-        	   resetValidationForm();
-               $.ajax({
-       			type: 'POST',
-       			url: 'listSearchText/',
-       			dataType: 'json', 
-       			contentType: 'application/json',
-       			mimeType: 'application/json',
-       			success: function(data) {
-       				//called when successful
-     				debugger;
-       				if(data.hasData){
-       					$('.modal-content').hide(); 
-       	               $('.modal-content-new').show(); 
-       	               DisplayContents(data.userSearchs);
-       				}else{
-       					$(".error_common").text("保存されている検索条件はありません");
-  					     $(".mesage_error").css("display", "block");
-       				}
-     			  },
-     			  error: function(e) {
-     				//called when there is an error
-     				//console.log(e.message);
-     			  }
-	       		});
-               
-           });
-           $( "#btn-success2, #btn-success3, #close-x" ).click(function() {
-   	         $('.modal-content').show(); 
-   	         $('.modal-content-new').hide(); 
-           });
-           
-           $( "#parameterFlg" ).click(function() {
-               if($(this).val()==0){
-              	 $("#owner").closest(".form-group").attr("style","display:none");
-               }
-               if($(this).val()==1){
-              	 $("#owner").closest(".form-group").removeAttr("style");
-               }
-           });
-           
-           $( ".btn-info" ).click(function() {
-	           	resetValidationForm();
-	   			if (!checkValidationForm()) {
-	   				return false;
-	   			}
-	   			var freeText = $("#freeText").val();
-	   	   		var owner = $("#owner").val();
-	   	   		var company = $("#company").val();
-	   	   		var department = $("#department").val();
-	   	   		var position = $("#position").val();
-	   	   		var name = $("#name").val();
-	   	   		var parameterFlg = $("#parameterFlg").val()
-	   	   		
-	   			if($("#parameterFlg").val()==0){
-	   				owner="";	
-	   	        }
-	   			
-	   			$.ajax({
-	   			    type: 'POST',
-	   			    url: 'addUserSearch',
-	   			    dataType: 'json', 
-	   				 contentType: 'application/json',
-	   				 mimeType: 'application/json',
-	   			    data: JSON.stringify({ 
-	   			        'freeText':freeText,
-	   			        'owner':owner,
-	   			        'company':company,
-	   			        'department':department,
-	   			        'position':position,
-	   			        'name':name,
-	   			        'parameterFlg':parameterFlg
-	   			    }),
-	   			    success: function(msg){
-	   			        if(msg==true){
-	   			        	 $(".error_common").text("検索条件を登録しました");
-	   					     $(".mesage_error").css("display", "block");
-	   			        }else{
-	   			        	$(".error_common").text("検索条件を保存できるのは5件までです。");
-	   					     $(".mesage_error").css("display", "block");
-	   			        }
-	   			    }
-	   			});
-           });
+         // if($(".ManagerSearch").hasClass("active")) {
+         //   // $(".business_card_book").css("display", "none");
+         //   // $(".peopleSearchResults").css("display", "none");
+         //   // $(".setDisplayTerm").css("display","none");
+         //   // $(".manager_search_card").css("display","block");
+         //   // $(".searchTargetSwitcher").css("display", "none");
+         // }
+       });
+       // Remove tag
+       
+       
+       $('#sort-card-cnd').on('change', function() {
+       	$.xhrPool.abortAll();
+       	var typeSort = $(this).val();
+       	id_manager = 0;
+          $.ajax({
+			type: 'POST',
+			url: 'search',
+			data: 'page=' +id_manager + "&typeSort=" +typeSort
+		}).done(function(resp, status, xhr) {
+			 $('.business_card_book').html("");
+			   var str = "";
+				$.each( resp.data, function( key, value ) {	
+					str = $('.business_card_book').append(
+						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 20px !important;" id= "'+value.nameSort.replace("/","").trim()+'">'
+				        +'<div class="list-group-item-title">'+value.nameSort+'</div>');
+					 $.each( value.lstCardInfo, function (k,v) {
+							isLoading = isLoading + 1;							 		
+								str.append(	'<div class="list-group-item pointer">'
+				    					+'<div class="row row-new">'
+				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
+				    					+	'<div class="col-md-5">'
+				    					+		'<div class="col-xs-11 mg-top">'
+				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+				    					+			'<p class="livepass">'+v.companyName+'</p>'
+				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+				    					+ '</div></div>'
+				    					+	'<div class="col-md-6">'
+				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+				    					+	'<div class="col-xs-7">'								
+				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+				    					+	'</div> </div> </div> </div></div>'
+				        	    );
+							 isLoading++;
+							 reloadICheck();
+							 getImageFromSCP(v.imageFile);
+					 });
+				});
+				id_manager++;
+		}).fail(function(xhr, status, err) {
+			//alert('Error');
+		});
+       });
+       
+          $( "#btn-success" ).click(function() {
+       	   resetValidationForm();
+              $.ajax({
+      			type: 'POST',
+      			url: 'listSearchText/',
+      			dataType: 'json', 
+      			contentType: 'application/json',
+      			mimeType: 'application/json',
+      			success: function(data) {
+      				//called when successful
+    				debugger;
+      				if(data.hasData){
+      					$('.modal-content').hide(); 
+      	               $('.modal-content-new').show(); 
+      	               DisplayContents(data.userSearchs);
+      				}else{
+      					$(".error_common").text("保存されている検索条件はありません");
+ 					     $(".mesage_error").css("display", "block");
+      				}
+    			  },
+    			  error: function(e) {
+    				//called when there is an error
+    				//console.log(e.message);
+    			  }
+       		});
+              
+          });
+          $( "#btn-success2, #btn-success3, #close-x" ).click(function() {
+  	         $('.modal-content').show(); 
+  	         $('.modal-content-new').hide(); 
+          });
+          
+          $( "#parameterFlg" ).click(function() {
+              if($(this).val()==0){
+             	 $("#owner").closest(".form-group").attr("style","display:none");
+              }
+              if($(this).val()==1){
+             	 $("#owner").closest(".form-group").removeAttr("style");
+              }
+          });
+          
+          $( ".btn-info" ).click(function() {
+           	resetValidationForm();
+   			if (!checkValidationForm()) {
+   				return false;
+   			}
+   			var freeText = $("#freeText").val();
+   	   		var owner = $("#owner").val();
+   	   		var company = $("#company").val();
+   	   		var department = $("#department").val();
+   	   		var position = $("#position").val();
+   	   		var name = $("#name").val();
+   	   		var parameterFlg = $("#parameterFlg").val()
+   	   		
+   			if($("#parameterFlg").val()==0){
+   				owner="";	
+   	        }
+   			
+   			$.ajax({
+   			    type: 'POST',
+   			    url: 'addUserSearch',
+   			    dataType: 'json', 
+   				 contentType: 'application/json',
+   				 mimeType: 'application/json',
+   			    data: JSON.stringify({ 
+   			        'freeText':freeText,
+   			        'owner':owner,
+   			        'company':company,
+   			        'department':department,
+   			        'position':position,
+   			        'name':name,
+   			        'parameterFlg':parameterFlg
+   			    }),
+   			    success: function(msg){
+   			        if(msg==true){
+   			        	 $(".error_common").text("検索条件を登録しました");
+   					     $(".mesage_error").css("display", "block");
+   			        }else{
+   			        	$(".error_common").text("検索条件を保存できるのは5件までです。");
+   					     $(".mesage_error").css("display", "block");
+   			        }
+   			    }
+   			});
+          });
            
            
            
@@ -818,7 +813,7 @@
     	    	}
     	    	isLoading=isLoading-1;
     	    }).fail(function(resp, status, xhr){
-    	        alert('Error');
+    	        //alert('Error');
     	    });
     	});
       
@@ -838,7 +833,7 @@
     	    	}
     	    	isLoading=isLoading-1;
     	    }).fail(function(resp, status, xhr){
-    	        alert('Error');
+    	        //alert('Error');
     	    });						
 		}
 		/*  Util function */
@@ -925,29 +920,52 @@
 
 	   	}
 	   	
+	   	$(document).on('click', '.business_card_book .list-group-item', function() {
+        	cardId = parseInt($(this).find('input[name=bla]').val());
+            window.location.href = '<c:url value="/user/card/details/'+cardId+'"/>';
+	       }).hover(function() {
+	         $(this).toggleClass('hover');
+        });
 
-	       $(document).on('ifChecked','input[name=bla]',function(event) {
-	          $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
-	        });
-	        
-	        $(document).on('ifUnchecked','input',function(event){     
-	          if($(".icheckbox_square-green").find('.checked').size() == 1){
-	            $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
-	            $(".addTagCard").css("display","none");  
-	          }          
-	        });
+       $(document).on('ifChecked','input[name=bla]',function(event) {
+          $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
+        });
+        
+        $(document).on('ifUnchecked','input',function(event){     
+          if($(".icheckbox_square-green").find('.checked').size() == 1){
+            $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
+            $(".addTagCard").css("display","none");  
+          }          
+        });
 
-	        // Process add tag and delete
-	        $("#deletePeople").click(function(e){
-	          
-	        });
+        // Process add tag and delete
+        $("#deletePeople").click(function(e){
+          
+        });
 
-	        $(document).on('click','#addTag',function(e){
-	          if($(".balloon").css('display') == 'block')
-	            $(".balloon").css("display","none");
-	          else
-	            $(".balloon").css("display","block");
-	        });
+        $(document).on('click','#addTag',function(e){
+          if($(".balloon").css('display') == 'block')
+            $(".balloon").css("display","none");
+          else
+            $(".balloon").css("display","block");
+        });
+        
+        $(function() {
+            $.xhrPool = [];
+            $.xhrPool.abortAll = function() {
+                $(this).each(function(i, jqXHR) {   //  cycle through list of recorded connection
+                    jqXHR.abort();  //  aborts connection
+                    $.xhrPool.splice(i, 1); //  removes from list by index
+                });
+            }
+            $.ajaxSetup({
+                beforeSend: function(jqXHR) { $.xhrPool.push(jqXHR); }, //  annd connection to list
+                complete: function(jqXHR) {
+                    var i = $.xhrPool.indexOf(jqXHR);   //  get index for current connection completed
+                    if (i > -1) $.xhrPool.splice(i, 1); //  removes from list by index
+                }
+            });
+        })
 	   	function DisplayContents(obj){
 	   		$(".modal-body.userSearchs").remove();
 	   		$.each( obj, function( key, value ) {
