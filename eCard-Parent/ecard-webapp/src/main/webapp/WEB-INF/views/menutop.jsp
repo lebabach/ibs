@@ -14,8 +14,10 @@
 			</div>
 
 			<div class="float-right">
-				<a href="<c:url value='/user/home'/>" data-toggle="tooltip"
-					title="View as User"><i class="fa fa-user icon-rounded"></i></a>
+				<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+					<a href="<c:url value='/user/home'/>" data-toggle="tooltip"
+						title="View as User"><i class="fa fa-user icon-rounded"></i></a>
+				</c:if>
 			</div>
 
 		</div>
