@@ -154,9 +154,11 @@
 	<!-- End banner -->
 
 	<div class="row" style="margin-top: 25px">
+		<c:if test="${ isMyCard == true }">
 		<button id="addTag" class="btn btn-primary " type="button">
 			<i class="fa fa-tag"></i>
 		</button>
+		</c:if>
 
 		<a href="#" class="a-new-pc">セールスフォース連携</a>
 
@@ -165,18 +167,33 @@
 			<div class="">
 				<div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;">
 					
-						<table class="table" id="paging">
+						<table class="table" id="tags">
 							<col width="10%">
 							<col width="80%">
 							<col width="10%">
 							<tbody>
 							<c:forEach var="cardTag" items="${cardTagList}" varStatus="loop">
 								<tr id="rowData">
-									<td><input type="checkbox" class="i-checks" id="${ cardTag.tagId }" value="${ cardTag.tagId }" name="tagId"></td>
+									<td>
+										<input type="checkbox" class="i-checks" id="${ cardTag.tagId }" value="${ cardTag.tagId }" name="checkTag">
+										<input id="hCardId" type='hidden' value="${ cardTag.cardId }" class="card-Id" />
+									</td>
 									<td><c:out value="${ cardTag.tagName }"></c:out></td>
 									<td><a href="javascript:void(0);" class="delTag" id="${ cardTag.tagId }"><i class="fa fa-trash"></i></a></td>
 								</tr>
 							</c:forEach>
+							<c:if test="${ userTag.size > 0 }">
+								<c:forEach var="userTag" items="${listUserTag}" varStatus="loop">
+									<tr id="rowData">
+										<td>
+											<input type="checkbox" class="i-checks" id="${ cardTag.tagId }" value="${ cardTag.tagId }" name="checkTag">
+											<input id="hCardId" type='hidden' value="${ cardTag.cardId }" class="card-Id" />
+										</td>
+										<td><c:out value="${ cardTag.tagName }"></c:out></td>
+										<td><a href="javascript:void(0);" class="delTag" id="${ cardTag.tagId }"><i class="fa fa-trash"></i></a></td>
+									</tr>
+								</c:forEach>
+							</c:if>
 							</tbody>
 						</table>
 					
@@ -185,7 +202,7 @@
 
 			<div class="">
 				<div class="input-group lbl" style="padding: 15px 15px 10px 15px; display:inline-block; width:400px">
-					<form name="addTag">
+					<form name="addTag" id="addTag">
 						<input type="hidden" value="${ cardInfo.cardId }" name="cardId" />
 						<input type="text" class="form-control" placeholder="新規タグを追加" style="margin:0; width:317px;" name="tagName" id="tagName">
 						<span class="input-group-btn">
@@ -206,12 +223,14 @@
 							<h5>名刺交換日</h5>
 						</div>
 
+						<c:if test="${ isMyCard == true }">
 						<div class="div-pen" style="float: right">
 							<a> <i class="fa fa-pencil"></i>
 							</a>
 						</div>
+						</c:if>
 					</div>
-					<style type="text/css">
+<style type="text/css">
 .div-pen-ac {
 	background: #dfdfdf;
 	padding: 1px 8px;
@@ -325,16 +344,6 @@
 	                                  }
 	                              });     
                               
-                              	$('.p-date').datepicker({
-	      							language : 'en',
-	      							todayHighlight : true,
-	      							keyboardNavigation : false,
-	      							format : 'yyyy-mm-dd',
-	      							forceParse : true,
-	      							autoclose : true,
-	      							calendarWeeks : true
-      					     	});
-                              
                               	$("#editContactDate").click(function(){
                               		$.ajax({
 										  type: "POST",
@@ -357,6 +366,22 @@
                           });   
                           
                       </script>
+                      <c:if test="${ isMyCard == true }">
+	                      <script type="text/javascript">
+	                          $(document).ready(function(){
+	                        	  $('.p-date').datepicker({
+		      							language : 'en',
+		      							todayHighlight : true,
+		      							keyboardNavigation : false,
+		      							format : 'yyyy-mm-dd',
+		      							forceParse : true,
+		      							autoclose : true,
+		      							calendarWeeks : true
+	    					     	});
+	                          });
+	                      </script>
+                      </c:if>
+                      
 					<div class="panel-body" style="padding: 12px 0 0 0;">
 						<form name="frmEditContactDate" id="frmEditContactDate">
 							<input type="hidden" value="${ cardInfo.cardId }" name="cardId" />
@@ -371,6 +396,7 @@
                        <button class="btn btn-sm btn-primary" type="submit">Save</button>
                        </div> -->
 				</div>
+				<c:if test="${ isMyCard == true }">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h5>メモ</h5>
@@ -423,16 +449,14 @@
 					<script type="text/javascript">
                           $(document).ready(function(){
                               $('.click-memo').click(function(){
-                                
                                      var memo = $('#textarea-memo').val();
+                                     
                                      if(memo == ""){
                                           alert("保存するメモがありません");
                                      }
                                      else{
-                                          
-                                          $('.ul-memo').show();
-                                          $('.panel-body').addClass('panel-body-memo');
-                                          $(".ul-memo").append("<li><p style='font-size:1.4em;'>"+ memo +"</p><p class='p-date-n'>2015/10/06</p><span id='aaa' class='span-close'>x</span></li>");
+                                          var json = {"memo" : memo, "cardId" : $("input[name=cardId]").val()};
+                                          addCardMemo(json);
                                      }
                               });    
                              
@@ -447,12 +471,17 @@
 						<button class="btn btn-sm btn-primary pull-right click-memo">保存</button>
 
 					</div>
-
-					<ul class="ul-memo" style="display: none">
-
+					
+					<ul class="ul-memo">
+					<c:forEach var="cardMemo" items="${listCardMemo}" varStatus="loop">
+						<li>
+							<p style="font-size:1.4em;"><c:out value="${ cardMemo.memo }"></c:out> </p>
+							<p class="p-date-n"><fmt:formatDate value='${ cardMemo.create_date }' pattern="yyyy-MM-dd"/></p><span class="delMemo" id="${ cardMemo.seq }" class='span-close'>x</span>
+						</li>
+					</c:forEach>
 					</ul>
-
 				</div>
+				</c:if>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h5>刺交換日</h5>
@@ -512,10 +541,12 @@
 					</div>
 				</div>
 			</div>
+			<c:if test="${ isMyCard == true }">
 			<button id="delBusinessCard" type="button"
 				class="btn btn-block btn-outline btn-primary">
 				<i class="fa fa-trash"></i> この名刺を削除する
 			</button>
+			</c:if>
 		</div>
 
 		<!-- End Left side -->
@@ -528,11 +559,12 @@
 						<div style="float: left">
 							<h5>名刺情報</h5>
 						</div>
-
+						<c:if test="${ isMyCard == true }">
 						<div class="edit2" style="float: right">
 							<a id="editPersonalInfo"> <i class="fa fa-pencil"></i>
 							</a>
 						</div>
+						</c:if>
 					</div>
 				</div>
 				<style type="text/css">
@@ -582,6 +614,7 @@
 				<div class="panel-body" style="padding: 15px 15px 0 15px;">
 					<form action="<c:url value='/user/editCardInfo' />" method="post">
 						<input type="hidden" name="cardId" value="${ cardInfo.cardId }" />
+						<input type="hidden" name="imageFile" value="${cardInfo.imageFile}" />
 						<div class="section">
 							<dl>
 								<dt>
@@ -767,7 +800,12 @@
 <script>
      var id_manager = 1;
      $(document).ready(function(){
-    	 
+    	 var locationURL = ""+window.location;
+         var arrParam = locationURL.split("/");
+         var cardIdParam = arrParam[7];
+         //Find get cardId
+         var hCardId = $("#rowData").find('.card-Id').val();
+             	 
     	 //Delete card bussiness
     	 $("#delBusinessCard").click(function(){
     		 $.ajax({
@@ -785,8 +823,17 @@
 	   			  }
    			});
     	 });
+    	 
+    	 //Delete card memo
+    	 $(document).on("click",".delMemo",function(e){
+			console.log(this.id);    		 
+    		 var json = {"cardId" : $("input[name=cardId]").val(), "seq" : this.id};    		 
+    		 delCardMemo(json);
+    	 });
+    	 
     	//Delete card tag
-         $(".delTag").click(function(){
+         //$(".delTag").click(function(){
+       	 $(document).on("click",".delTag",function(e){
         	 $.ajax({
     			  type: "POST",
     			  url: "<c:url value='/user/deleteTag' />",
@@ -826,14 +873,16 @@
          radioClass: 'iradio_square-green',                
        });
 
-       $("input[name=bla]").on('ifChecked', function(event){
-         $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
+       $("input[name=checkTag]").on('ifChecked', function(event){
+         	//console.log("tagId "+ $(this).val());
+         	var json = {"tagId" : $(this).val(), "cardId" : $("input[name=cardId]").val()};
+    	    addCardTag(json);
        });
+       
        $("input").on('ifUnchecked', function(event){     
-         if($(".icheckbox_square-green").find('.checked').size() == 1){
-           $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
-           $(".addTagCard").css("display","none");  
-         }          
+	         //console.log("uncheck aaaa 111");
+           var json = {"tagId" : $(this).val(), "cardId" : $("input[name=cardId]").val()};
+           deleteCardTag(json);
        });
 
        // Process add tag and delete
@@ -976,8 +1025,44 @@
        return false;
      });
 
+     $(document).on('mouseover', '#tags .icheckbox_square-green', function(e) {
+    	 $(this).addClass("icheckbox_square-green hover");
+   	 });
+     
+     $(document).on('mouseout', '#tags .icheckbox_square-green', function(e) {
+       	$(this).removeClass("icheckbox_square-green hover");
+     	$(this).addClass("icheckbox_square-green");
+     });
+     
+     var isClick = false;
+     $(document).on('click', '#tags .icheckbox_square-green', function(e) {
+    	 isClick = !isClick;
+		 //console.log($(this).attr('id'));
+    	 if(isClick){
+			 $(this).removeClass("icheckbox_square-green hover");
+        	 $(this).removeClass("icheckbox_square-green");
+        	 $(this).addClass("icheckbox_square-green checked");
+        	 
+        	 //Add card tag
+        	 var json = {"tagId" : this.id, "cardId" : $("input[name=cardId]").val()};
+     	     addCardTag(json);
+    	 }
+    	 else{
+    		 $(this).removeClass("icheckbox_square-green checked");
+    		 $(this).addClass("icheckbox_square-green");
+    		 
+    		//Delete card tag
+        	 var json = {"tagId" : this.id, "cardId" : $("input[name=cardId]").val()};
+     	     deleteCardTag(json);
+    	 }
+     });
+          
      // Add card tag
      $('#addLabel').click(function(event) {
+    	var tagName = $("input[name=tagName]").val();
+    	var cardId = $("input[name=cardId]").val();
+    	var json = {"tagName" : $("input[name=tagName]").val(), "cardId" : $("input[name=cardId]").val()};
+	   	 
 		if($("#tagName").val() == ""){
 			BootstrapDialog.show({
 				title: 'Warning',
@@ -986,23 +1071,36 @@
 		}
 		else{
 			$.ajax({
-				  type: "POST",
-				  url: "<c:url value='/user/addTag' />",
-				  data: 'tagName='+ $("input[name=tagName]").val() + '&cardId='+$("input[name=cardId]").val(),
-				  success: function(){
-					  BootstrapDialog.show({
-          				title: 'Information',
-         	             	message: 'Add tag success'
-          	      		});
-					  window.location.href = "<c:url value='/user/card/details' />/"+$("input[name=cardId]").val();
-				  },
-				  error: function(){
-					  BootstrapDialog.show({
-          				title: 'Information',
-         	             	message: 'Add tag failed'
-          	      		});
-				  }
-			});
+	        	url: "<c:url value='/user/addTag' />",
+	        	data: JSON.stringify(json),
+	        	type: "POST",
+	        	
+	        	beforeSend: function(xhr) {
+	        		xhr.setRequestHeader("Accept", "application/json");
+	        		xhr.setRequestHeader("Content-Type", "application/json");
+	        	},
+	        	success: function(response) {
+	        		var resp = "";
+	        		$.each(response, function(index, value){
+	        			//console.log("tagId: "+value["tagId"]+" tagName : "+value["tagName"]);
+	        			resp += "<tr id='rowData'>"
+        					+ "<td><div style='position: relative;' class='icheckbox_square-green' id='"+value["tagId"]+"'>"
+	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+        					+ "</td>"
+        					+ "<td>"+value["tagName"]+"</td>"
+        					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>"; 
+	        		});
+	        		$("#tagName").val('');
+	        		$("#tags tbody").html(resp);    		
+	        	},
+	        	error: function(){
+				  BootstrapDialog.show({
+       				title: 'Information',
+      	             	message: 'Add tag failed'
+       	      		});
+			  	}
+	        });
 		}
 		
      });
@@ -1027,4 +1125,150 @@
 	        }
 	    }
 	};
+	
+	function addCardTag(json){
+     	$.ajax({
+        	url: "<c:url value='/user/addCardTag' />",
+        	data: JSON.stringify(json),
+        	type: "POST",
+        	
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(response) {
+        		var resp = "";
+        		$.each(response, function(index, value){
+        			//console.log("tagId: "+value["tagId"]+" tagName : "+value["tagName"]);
+        			resp += "<tr id='rowData'>"
+    					+ "<td><div style='position: relative;' class='icheckbox_square-green' id='"+value["tagId"]+"'>"
+        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+    					+ "</td>"
+    					+ "<td>"+value["tagName"]+"</td>"
+    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>"; 
+        		});
+        		$("#tagName").val('');
+        		$("#tags tbody").html(resp);    		
+        	},
+        	error: function(){
+			  BootstrapDialog.show({
+   				title: 'Information',
+  	             	message: 'Add card tag failed'
+   	      		});
+		  	}
+        });	
+	}
+	
+	function deleteCardTag(json){
+     	$.ajax({
+        	url: "<c:url value='/user/deleteCardTag' />",
+        	data: JSON.stringify(json),
+        	type: "POST",
+        	
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(response) {
+        		var resp = "";
+        		$.each(response, function(index, value){
+        			//console.log("tagId: "+value["tagId"]+" tagName : "+value["tagName"]);
+        			resp += "<tr id='rowData'>"
+    					+ "<td><div style='position: relative;' class='icheckbox_square-green' id='"+value["tagId"]+"'>"
+        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+    					+ "</td>"
+    					+ "<td>"+value["tagName"]+"</td>"
+    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>"; 
+        		});
+        		$("#tagName").val('');
+        		$("#tags tbody").html(resp);    		
+        	},
+        	error: function(){
+			  BootstrapDialog.show({
+   				title: 'Information',
+  	             	message: 'Delete card tag failed'
+   	      		});
+		  	}
+        });	
+	}
+	
+	function addCardMemo(json){
+		$.ajax({
+        	url: "<c:url value='/user/addCardMemo' />",
+        	data: JSON.stringify(json),
+        	type: "POST",
+        	
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(response) {
+        		var resp = "";
+        		$.each(response, function(index, value){
+        			//console.log(value);
+        			resp += "<li><p style='font-size:1.4em;'>"+ value["memo"] +"</p><p class='p-date-n'>"+formatDate(value["create_date"])+"</p><span class='delMemo' id='"+value["seq"]+"' class='span-close'>x</span></li>"; 
+        		});
+        		console.log(resp);
+        		$(".ul-memo").append(resp);
+        		$('.ul-memo').show();
+                $('.panel-body').addClass('panel-body-memo');
+        	},
+        	error: function(){
+			  BootstrapDialog.show({
+   				title: 'Information',
+  	             	message: 'Add card memo failed'
+   	      		});
+		  	}
+        });	
+		$("#textarea-memo").val('');
+	}
+	
+	function delCardMemo(json){
+		$.ajax({
+        	url: "<c:url value='/user/deleteCardMemo' />",
+        	data: JSON.stringify(json),
+        	type: "POST",
+        	
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(response) {
+	       		var resp = "";
+        		$.each(response, function(index, value){
+        			resp += "<li><p style='font-size:1.4em;'>"+ value["memo"] +"</p><p class='p-date-n'>"+formatDate(value["create_date"])+"</p><span class='delMemo' id='"+value["seq"]+"' class='span-close'>x</span></li>"; 
+        		});
+        		
+        		$(".ul-memo").append(resp);
+        		$('.ul-memo').show();
+                $('.panel-body').addClass('panel-body-memo'); 
+        		/* BootstrapDialog.show({
+       				title: 'Information',
+      	             	message: 'Delete card memo success'
+       	      		});
+        		window.location.href = "<c:url value='/user/card/details' />/"+$("input[name=cardId]").val(); */
+        	},
+        	error: function(){
+			  BootstrapDialog.show({
+   				title: 'Warning',
+  	             	message: 'Delete card memo failed'
+   	      		});
+		  	}
+        });	
+		$("#textarea-memo").val('');
+	}
+	
+	function formatDate(date) {
+	    var d = new Date(date),
+	        month = '' + (d.getMonth() + 1),
+	        day = '' + d.getDate(),
+	        year = d.getFullYear();
+
+	    if (month.length < 2) month = '0' + month;
+	    if (day.length < 2) day = '0' + day;
+
+	    return [year, month, day].join('-');
+	}
    </script>
