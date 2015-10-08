@@ -7,6 +7,13 @@ public class NotificationOfUserVO {
 	private Date date;
 	private int id;
 	private String image;
+	private Integer read_flg;
+	public Integer getRead_flg() {
+		return read_flg;
+	}
+	public void setRead_flg(Integer read_flg) {
+		this.read_flg = read_flg;
+	}
 	public String getContents() {
 		return contents;
 	}
