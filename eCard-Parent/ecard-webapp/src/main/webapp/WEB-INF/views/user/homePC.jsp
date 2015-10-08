@@ -186,16 +186,16 @@
             
           </div>
           <div class="col-md-2 m-b-xs setDisplayTerm" style="width:188px; display:inline-block">
-            <select id="selectSortBox" class="input-sm form-control input-s-sm inline">
-              <option value="0">ラベルで絞り込み</option>
+            <select id="selectSortBox" class="input-sm form-control input-s-sm inline" id="sort-card-connect">
+              <option value="0" selected>ラベルで絞り込み</option>
               <option value="1">​つ​な​が​っ​て​い​る​人​</option>
               <option value="2">​ラ​ベ​ル​な​し​</option>                          
             </select>
           </div>
          
           <div class="col-md-2 setDisplayTerm" style="float:right; margin-right:0;">
-              <select class="input-sm form-control input-s-sm inline">
-                <option value="0">名刺交換日順</option>
+              <select class="input-sm form-control input-s-sm inline" id = "sort-card-cnd" >
+                <option value="5" selected>名刺交換日順</option>
                 <option value="1">氏名順</option>
                 <option value="2">会社名順</option>                          
             </select>
@@ -387,16 +387,16 @@
      
       $(window).scroll(function() {    	  
     	  if(id_manager * 5 < parseInt(totalCardInfo)){
+    		   var typeSort = $('#sort-card-cnd').val();
 	    	    if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
 	    	    	// Call ajax here	    	   		
 	        	    $.ajax({
 						type: 'POST',
 						url: 'search',
-						data: 'page=' +id_manager
+						data: 'page=' +id_manager + "&typeSort=" +typeSort
 					}).done(function(resp, status, xhr) {
 						var lastDate = $('.business_card_book .list-group').last().attr("id");
-						$.each( resp.data, function( key, value ) {						
-							 console.log( key + ": " + value.nameSort);
+						$.each( resp.data, function( key, value ) {
 							 if(value.nameSort.replace("/","").trim() == lastDate.trim()){
 								 $.each( value.lstCardInfo, function (k,v) {
 									 $('.business_card_book #'+lastDate).append(
@@ -484,7 +484,7 @@
     	  }
     	}); 
 
-      $(document).ready(function(){
+ $(document).ready(function(){
     	     	  
     	$(".business_card_book .list-group").each(function() {
     		var id  = $(this).attr("id").replace('/', '');
@@ -583,7 +583,53 @@
         });
         // Remove tag
         
-      });
+        
+        $('#sort-card-cnd').on('change', function() {
+        	var typeSort = $(this).val();
+        	var id_manager = 0;
+        	$.ajax({
+				type: 'POST',
+				url: 'search',
+				data: 'page=' +id_manager + "&typeSort=" +typeSort
+			}).done(function(resp, status, xhr) {
+				 $('.business_card_book').html("");
+					$.each( resp.data, function( key, value ) {	
+						 $.each( value.lstCardInfo, function (k,v) {
+								 $('.business_card_book').append(
+											'<div class="list-group" id= "'+value.nameSort.replace("/","").trim()+'">'
+									        +'<div class="list-group-item-title">'+value.nameSort+'</div>'										 
+					        	    		+ '<div class="list-group-item pointer">'
+					    					+'<div class="row row-new">'
+					    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
+					    					+	'<div class="col-md-5">'
+					    					+		'<div class="col-xs-11 mg-top">'
+					    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+					    					+			'<p class="livepass">'+v.companyName+'</p>'
+					    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+					    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+					    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+					    					+ '</div></div>'
+					    					+	'<div class="col-md-6">'
+					    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+					    					+	'<div class="col-xs-7">'								
+					    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+					    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+					    					+	'</div> </div> </div> </div></div>'
+					        	    );
+								 reloadICheck();
+								 getImageFromSCP(v.imageFile);
+						 });
+					});
+					
+			}).fail(function(xhr, status, err) {
+				alert('Error');
+			});
+        });
+        
+});/* END READY DOCUMENT  */
+ 
+ 
+ 
       // Manager Search 
       $(".ManagerSearch").click(function(event) {        
         if($(".ManagerSearch").hasClass("active")) {
