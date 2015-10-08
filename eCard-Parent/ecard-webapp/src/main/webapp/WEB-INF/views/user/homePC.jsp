@@ -380,7 +380,7 @@
     <!-- Peity -->
     <script src="js/demo/peity-demo.js"></script>
 <script>
-
+     var request = null;
       var id_manager = 1;
       var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
       var page = 1;
@@ -390,7 +390,7 @@
     		   var typeSort = $('#sort-card-cnd').val();
 	    	    if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
 	    	    	// Call ajax here	    	   		
-	        	    $.ajax({
+	        	request = $.ajax({
 						type: 'POST',
 						url: 'search',
 						data: 'page=' +id_manager + "&typeSort=" +typeSort
@@ -587,18 +587,19 @@
         $('#sort-card-cnd').on('change', function() {
         	var typeSort = $(this).val();
         	var id_manager = 0;
-        	$.ajax({
+           $.ajax({
 				type: 'POST',
 				url: 'search',
 				data: 'page=' +id_manager + "&typeSort=" +typeSort
 			}).done(function(resp, status, xhr) {
 				 $('.business_card_book').html("");
+				   var str = "";
 					$.each( resp.data, function( key, value ) {	
+						str = $('.business_card_book').append(
+							'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 20px !important;" id= "'+value.nameSort.replace("/","").trim()+'">'
+					        +'<div class="list-group-item-title">'+value.nameSort+'</div>');
 						 $.each( value.lstCardInfo, function (k,v) {
-								 $('.business_card_book').append(
-											'<div class="list-group" id= "'+value.nameSort.replace("/","").trim()+'">'
-									        +'<div class="list-group-item-title">'+value.nameSort+'</div>'										 
-					        	    		+ '<div class="list-group-item pointer">'
+									str.append(	'<div class="list-group-item pointer">'
 					    					+'<div class="row row-new">'
 					    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
 					    					+	'<div class="col-md-5">'
@@ -616,6 +617,7 @@
 					    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 					    					+	'</div> </div> </div> </div></div>'
 					        	    );
+								
 								 reloadICheck();
 								 getImageFromSCP(v.imageFile);
 						 });

@@ -168,7 +168,7 @@ public class UserController {
 		  lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
 		  lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), limit);
 		}else if (typeSort == SearchConditions.NAME.getValue()){
-			listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(),null, SearchConditions.NAME.name(), limit);
+			listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(),null, SearchConditions.NAME.name().toLowerCase(), limit);
 			lstCardInfo = new ArrayList<>();
 			lstNameSort = new ArrayList<>();
 			 for(CardInfo cardInfoModel :listCardSortNameCompany ){
@@ -178,7 +178,7 @@ public class UserController {
 				 lstCardInfo.add(cardInfoUserVo);
 			 }
 		}else{
-			listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(),null, SearchConditions.COMPANY.name(), limit);
+			listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(),null, SearchConditions.COMPANY.name().toLowerCase(), limit);
 			lstCardInfo = new ArrayList<>();
 			lstNameSort = new ArrayList<>();
 			 for(CardInfo cardInfoModel :listCardSortNameCompany ){
