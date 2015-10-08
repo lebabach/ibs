@@ -629,7 +629,6 @@
        			mimeType: 'application/json',
        			success: function(data) {
        				//called when successful
-     				debugger;
        				if(data.hasData){
        					$('.modal-content').hide(); 
        	               $('.modal-content-new').show(); 
@@ -646,10 +645,30 @@
 	       		});
                
            });
-           $( "#btn-success2, #btn-success3, #close-x" ).click(function() {
+           $( "#btn-success2" ).click(function() {
    	         $('.modal-content').show(); 
    	         $('.modal-content-new').hide(); 
+   	     	var freeText="",owner="",company="",department="",position="",name="",parameterFlg="";
+	   		$(".modal-content-new .i-checks").each(function() {
+	   			if($(this).is(':checked')){
+	   				freeText=$(this).closest(".row.row-new").find(".hidden.freeText").val();
+	   				owner=$(this).closest(".row.row-new").find(".hidden.owner").val();
+	   				company=$(this).closest(".row.row-new").find(".hidden.company").val();
+	   				department=$(this).closest(".row.row-new").find(".hidden.department").val();
+	   				position=$(this).closest(".row.row-new").find(".hidden.position").val();
+	   				name=$(this).closest(".row.row-new").find(".hidden.name").val();
+	   				parameterFlg=$(this).closest(".row.row-new").find(".hidden.parameterFlg").val();
+	   				setDisplayResearch(freeText,owner,company,department,position,name,parameterFlg);
+	   				return false;
+	   			}
+	   		});
+	   		setDisplayResearch(freeText,owner,company,department,position,name,0);
            });
+           
+           $( "#close-x" ).click(function() {
+     	         $('.modal-content').show(); 
+     	         $('.modal-content-new').hide(); 
+             });
            
            $( "#parameterFlg" ).click(function() {
                if($(this).val()==0){
@@ -927,16 +946,44 @@
 	   	function DisplayContents(obj){
 	   		$(".modal-body.userSearchs").remove();
 	   		$.each( obj, function( key, value ) {
-	   	   		$("#lsUserSearchs").append(setModalBody(value.freeText,value.owner,value.company,value.department,value.position,value.name));
+	   	   		$("#lsUserSearchs").append(setModalBody(value.freeText,value.owner,value.company,value.department,value.position,value.name,value.seq,value.parameterFlg));
 	   		});
 		   	 $('.modal-content-new .i-checks').iCheck({
 	            checkboxClass : 'icheckbox_square-green',
 	            radioClass : 'iradio_square-green'
 
 	         });
+		   	 
+		   	 $("#btn-success3").click(function(){
+		   		$('.modal-content').hide(); 
+	            $('.modal-content-new').show(); 
+		   		var id="";
+		   		$(".modal-content-new .i-checks").each(function() {
+		   			if($(this).is(':checked')){
+		   				id=$(this).closest(".row.row-new").find(".hidden.id").val();
+		   				return false;
+		   			}
+		   		});
+		   		$.ajax({
+	   			    type: 'POST',
+	   			    url: 'deleteUserSearch',
+	   			    data: { 
+	   			        'id':id
+	   			    },
+	   			    success: function(data){
+	   			    	if(data.hasData){
+	   			         	DisplayContents(data.userSearchs);
+	   			        }else{
+	   			        	$(".error_common").text("検索条件を保存できるのは5件までです。");
+	   					     $(".mesage_error").css("display", "block");
+	   			        }
+	   			    }
+	   			});
+		   		
+		   	 })
 	   	}
 	   	
-	   	function setModalBody(freeText,owner,company,department,position,name){
+	   	function setModalBody(freeText,owner,company,department,position,name,seq,parameterFlg){
 	   		var modal=	'<div class="modal-body userSearchs" style="border-bottom: 1px solid #b1b1b1">'
 		   	   	+	'<label for="exampleInputEmail1">自分の名刺検索で使用可能</label>'
 		   	   	+   '<div class="row row-new">'
@@ -945,6 +992,14 @@
 		   	   	+				'<input type="radio" class="i-checks" name="bla">'
 		   	   	+					'</div>'
 		   	   	+		'</div>'
+		   	   	+       '<input class="hidden id" name="seq" value="'+seq+'">'
+		   	   	+       '<input class="hidden freeText" name="freeText" value="'+freeText+'">'
+		   	   	+       '<input class="hidden owner" name="owner" value="'+owner+'">'
+		   	   	+       '<input class="hidden company" name="company" value="'+company+'">'
+		   	   	+       '<input class="hidden department" name="department" value="'+department+'">'
+		   	   	+       '<input class="hidden position" name="position" value="'+position+'">'
+		   	   	+       '<input class="hidden name" name="name" value="'+name+'">'
+		   	    +       '<input class="hidden parameterFlg" name="parameterFlg" value="'+parameterFlg+'">'
 		   	   	+		'<div class="col-md-5">'
 		   	   	+			'<p>フリーワード:'+freeText+'</p>'
 		   	   	+			'<p>所有者:'+owner+'</p>'
@@ -958,4 +1013,14 @@
 	   		return modal;
 	   	}
 
+	   	function setDisplayResearch(freeText,owner,company,department,position,name,parameterFlg){
+	   		$("#freeText").val(freeText);
+	   		$("#owner").val(owner);
+	   		$("#company").val(company);
+	   		$("#department").val(department);
+	   		$("#position").val(position);
+	   		$("#name").val(name);
+	   		$("#parameterFlg").val(parameterFlg);
+	   		return modal;
+	   	}
     </script>
