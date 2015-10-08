@@ -14,4 +14,6 @@ public class CommonConstants {
     public static final String TITLE_RECOVERPASS_MAIL="BC-RIBBON ID／パスワード通知";
     public static final int CO_LTD_FRONTIER_CHALLENGE = 4;
     
+    //URL
+    public static final String REDIRECT_CARD_DETAIL = "/user/card/details/";
 }
