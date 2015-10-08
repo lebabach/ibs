@@ -385,12 +385,17 @@
       var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
       var page = 1;
       var isLoading = 0;
-      $(window).scroll(function() {    	  
-    	  if(id_manager * 5 < parseInt(totalCardInfo)){
+      $(window).scroll(function() {     	  
+    	  if($('.row-new').length <= parseInt(totalCardInfo)){
+
     		   var typeSort = $('#sort-card-cnd').val();
-	    	    if($(window).scrollTop() + $(window).height()  >= ($(document).height()) && isLoading == 0) {
+    		   if(isLoading == 0 && $('.row-new').length < parseInt(totalCardInfo)){
+    			   $('body').scrollTop($(window).height()*2);
+    			   
+    		   }
+	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height()) && isLoading == 0) {
 	    	    	// Call ajax here	    	   		
-	        	request = $.ajax({
+	        		request = $.ajax({
 						type: 'POST',
 						url: 'search',
 						data: 'page=' +id_manager + "&typeSort=" +typeSort
@@ -428,7 +433,7 @@
 						alert('Error');
 					});
 	        	    id_manager++;
-	    	    }
+	    	    } 
     	  }
     	}); 
 
@@ -534,7 +539,7 @@
         
         $('#sort-card-cnd').on('change', function() {
         	var typeSort = $(this).val();
-        	var id_manager = 0;
+        	id_manager = 0;
            $.ajax({
 				type: 'POST',
 				url: 'search',
@@ -547,6 +552,7 @@
 							'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 20px !important;" id= "'+value.nameSort.replace("/","").trim()+'">'
 					        +'<div class="list-group-item-title">'+value.nameSort+'</div>');
 						 $.each( value.lstCardInfo, function (k,v) {
+								isLoading = isLoading + 1;							 		
 									str.append(	'<div class="list-group-item pointer">'
 					    					+'<div class="row row-new">'
 					    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
@@ -570,7 +576,7 @@
 								 getImageFromSCP(v.imageFile);
 						 });
 					});
-					
+					id_manager++;
 			}).fail(function(xhr, status, err) {
 				alert('Error');
 			});
@@ -589,7 +595,7 @@
         }        
       });
 
-      $('.search_tag_index').change(function(event) {
+      /* $('.search_tag_index').change(function(event) {
         $('#rowData_'+id_manager).find(".nametag").html(this.value);
         if(id_manager >=5)
           id_manager = 1;
@@ -597,7 +603,7 @@
           id_manager =id_manager + 1;          
         this.value = '';        
         return false;
-      });
+      }); */
       $('.ac').click(function(event) {
         var command = $( event.target ).html();        
         if (command == '選択した検索条件を使用する') {
@@ -624,7 +630,7 @@
       });
 
       // Search function
-      $('#search-card').change(function(event) {
+      /* $('#search-card').change(function(event) {
         if($('.ManagerSearch').hasClass('active')) {
           $('#managercard_'+id_manager+' form input').val();
           $('#managercard_'+id_manager+' form input').val(this.value);
@@ -640,7 +646,7 @@
         }
         return false;
       });
-
+ */
       // Process with Label
       $('#addLabel').click(function(event) {
         // Get value from input and append to list
