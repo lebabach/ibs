@@ -172,6 +172,9 @@
 						<li><a href="changepass">ロード -パスワード 設定</a></li>
 						<li><a href="faq">FAQ</a></li>
 						<li><a href="mailbox">ご意見・不具合の連絡</a></li>
+						<c:if test="${pageContext.request.isUserInRole('ROLE_LEADER') or pageContext.request.isUserInRole('ROLE_OPERATOR') or pageContext.request.isUserInRole('ROLE_SUPERVISOR') or pageContext.request.isUserInRole('ROLE_ADMIN') or pageContext.request.isUserInRole('ROLE_AUTHORITY_USER') or pageContext.request.isUserInRole('ROLE_OPERATOR_MANAGER') }">
+						    <li><a href="<c:url value='/manager/home'/>">管理ページ</a></li>
+					     </c:if>
 						<!-- Profile -->
 						<li class="divider"></li>
 						<li><a href="<c:url value='/j_spring_security_logout'/>">ログアウト</a></li>						
