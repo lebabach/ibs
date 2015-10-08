@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.ecard.core.model.CardInfo;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.NotificationInfoService;
 import com.ecard.core.service.UserInfoService;
@@ -53,24 +54,33 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 		if (!ajax) {
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-			List<NotificationList> listUpdate = notificationInfoService.listAllNofiticationUser(ecardUser.getUserId());
-			List<NotificationOfUserVO> notifications=new ArrayList<NotificationOfUserVO>();
-			for(NotificationList item:listUpdate){
-				NotificationOfUserVO notification=new NotificationOfUserVO();
-				notification.setContents(item.getNotify_message());
-				notification.setDate(item.getNotice_date());
-				notification.setId(item.getNotice_id());
-				notification.setImage(cardInfoService.getCardInfoDetail(item.getCard_id()).getImageFile());
-				notifications.add(notification);
+			try{
+				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+				EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+				List<NotificationList> listUpdate = notificationInfoService.listAllNofiticationUser(ecardUser.getUserId());
+				List<NotificationOfUserVO> notifications=new ArrayList<NotificationOfUserVO>();
+				CardInfo card=null;
+				for(NotificationList item:listUpdate){
+					NotificationOfUserVO notification=new NotificationOfUserVO();
+					notification.setContents(item.getNotify_message());
+					notification.setDate(item.getNotice_date());
+					notification.setId(item.getNotice_id());
+					card=cardInfoService.getCardInfoDetail(item.getCard_id());
+					notification.setImage(card!=null?card.getImageFile():"");
+					notifications.add(notification);
+				}
+					
+				notifications=UploadFileUtil.getImageFileFromSCPForNotification(notifications, scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
+				ObjectNotification objectNotification=new ObjectNotification();
+				objectNotification.setNotifications(notifications);
+				objectNotification.setNumberOfNotification(listUpdate.stream().filter(x->x.getRead_flg()==0).collect(Collectors.toList()).size());
+				request.setAttribute("objectNotification", objectNotification);
+			}catch(Exception e){
+				e.printStackTrace();
+				System.out.println("=======================PCInterceptor fail=========================: ");
+				return false;
 			}
-				
-			notifications=UploadFileUtil.getImageFileFromSCPForNotification(notifications, scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
-			ObjectNotification objectNotification=new ObjectNotification();
-			objectNotification.setNotifications(notifications);
-			objectNotification.setNumberOfNotification(listUpdate.stream().filter(x->x.getRead_flg()==0).collect(Collectors.toList()).size());
-			request.setAttribute("objectNotification", objectNotification);
+			
 		}
 		return true;
 	}
