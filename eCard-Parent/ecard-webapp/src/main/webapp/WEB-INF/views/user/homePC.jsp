@@ -384,11 +384,11 @@
       var id_manager = 1;
       var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
       var page = 1;
-     
+      var isLoading = 0;
       $(window).scroll(function() {    	  
     	  if(id_manager * 5 < parseInt(totalCardInfo)){
     		   var typeSort = $('#sort-card-cnd').val();
-	    	    if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
+	    	    if($(window).scrollTop() + $(window).height()  >= ($(document).height()) && isLoading == 0) {
 	    	    	// Call ajax here	    	   		
 	        	request = $.ajax({
 						type: 'POST',
@@ -398,76 +398,24 @@
 						var lastDate = $('.business_card_book .list-group').last().attr("id");
 						$.each( resp.data, function( key, value ) {
 							 if(value.nameSort.replace("/","").trim() == lastDate.trim()){
-								 $.each( value.lstCardInfo, function (k,v) {
-									 $('.business_card_book #'+lastDate).append(
-				        	    		'<div class="list-group-item pointer">'
-				    					+'<div class="row row-new">'
-				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
-				    					+	'<div class="col-md-5">'
-				    					+		'<div class="col-xs-11 mg-top">'
-				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
-				    					+			'<p class="livepass">'+v.companyName+'</p>'
-				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
-				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
-				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
-				    					+ '</div></div>'
-				    					+	'<div class="col-md-6">'
-				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
-				    					+	'<div class="col-xs-7">'								
-				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
-				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-				    					+	'</div> </div> </div> </div>'
-				        	    	);
+								 $.each( value.lstCardInfo, function (k,v) {									 
+									 createTableHasGroup(lastDate, v);
 									 reloadICheck();
+									 isLoading=isLoading+1;
 									 getImageFromSCP(v.imageFile); 
 								 });
 							 } else {
 								 $.each( value.lstCardInfo, function (k,v) {
 									 var lastDate = $('.business_card_book .list-group').last().attr("id");
-									if(value.nameSort.replace("/","").trim() != lastDate.trim()){
-											 $('.business_card_book').append(
-												'<div class="list-group" id= "'+value.nameSort.replace("/","").trim()+'">'
-										        +'<div class="list-group-item-title">'+value.nameSort+'</div>'										 
-						        	    		+ '<div class="list-group-item pointer">'
-						    					+'<div class="row row-new">'
-						    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
-						    					+	'<div class="col-md-5">'
-						    					+		'<div class="col-xs-11 mg-top">'
-						    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
-						    					+			'<p class="livepass">'+v.companyName+'</p>'
-						    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
-						    					+			'<p class="num">'+v.telNumberCompany+'</p>'
-						    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
-						    					+ '</div></div>'
-						    					+	'<div class="col-md-6">'
-						    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
-						    					+	'<div class="col-xs-7">'								
-						    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
-						    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-						    					+	'</div> </div> </div> </div></div>'
-						        	    );
+									if(value.nameSort.replace("/","").trim() != lastDate.trim()){											
+										 createTableNoGroup(value.nameSort, v);	 
 										 reloadICheck();
+										 isLoading=isLoading+1;
 										 getImageFromSCP(v.imageFile);
-									 }else{
-										 $('.business_card_book #'+lastDate).append(
-							        	    		'<div class="list-group-item pointer">'
-							    					+'<div class="row row-new">'
-							    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
-							    					+	'<div class="col-md-5">'
-							    					+		'<div class="col-xs-11 mg-top">'
-							    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
-							    					+			'<p class="livepass">'+v.companyName+'</p>'
-							    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
-							    					+			'<p class="num">'+v.telNumberCompany+'</p>'
-							    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
-							    					+ '</div></div>'
-							    					+	'<div class="col-md-6">'
-							    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
-							    					+	'<div class="col-xs-7">'								
-							    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class="lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
-							    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-							    					+	'</div> </div> </div> </div>'  );
+									 }else{										 
+										 createTableHasGroup(lastDate, v);
 										 reloadICheck();
+										 isLoading=isLoading+1;
 										 getImageFromSCP(v.imageFile);
 									 }
 								 });
@@ -540,8 +488,8 @@
 
         // Click to personal details page
         $('.business_card_book .list-group-item').click( function() {
-          console.log("Move to personal details page"); 
-          window.location.href = '<c:url value="/user/detail/1048"/>';
+        	cardId = parseInt($(this).find('input[name=bla]').val());
+            window.location.href = '<c:url value="/user/card/details/'+cardId+'"/>';
         }).hover(function() {
           $(this).toggleClass('hover');
         });
@@ -720,6 +668,7 @@
       });
       
       $(".business_card_book .img-responsive").each(function () {
+    	  	isLoading=isLoading+1;
     		var target = $(this);
     	    var fileImageName =$(this).parent().find('input[name=fileImageName]').val();    	    
     	    $.ajax({
@@ -734,6 +683,7 @@
     	    		target.attr('src','');    	  
         	        target.attr('src','data:image/png;base64,'+resp);	
     	    	}
+    	    	isLoading=isLoading-1;
     	    }).fail(function(resp, status, xhr){
     	        alert('Error');
     	    });
@@ -753,17 +703,62 @@
     	    		target.attr('src','');    	  
         	        target.attr('src','data:image/png;base64,'+resp);	
     	    	}
-    	    	
+    	    	isLoading=isLoading-1;
     	    }).fail(function(resp, status, xhr){
     	        alert('Error');
     	    });						
 		}
-		
+		/*  Util function */
 		function reloadICheck(){
 			$('.i-checks').iCheck({
      	          checkboxClass: 'icheckbox_square-green',
      	          radioClass: 'iradio_square-green',                
       	    });
+		}
+		
+		function createTableHasGroup(lastDate, v){
+			$('.business_card_book #'+lastDate).append(
+    	    		'<div class="list-group-item pointer">'
+					+'<div class="row row-new">'
+					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
+					+	'<div class="col-md-5">'
+					+		'<div class="col-xs-11 mg-top">'
+					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+					+			'<p class="livepass">'+v.companyName+'</p>'
+					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+					+			'<p class="num">'+v.telNumberCompany+'</p>'
+					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+					+ '</div></div>'
+					+	'<div class="col-md-6">'
+					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+					+	'<div class="col-xs-7">'								
+					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class="lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+					+	'</div> </div> </div> </div>'  );
+		}
+		
+		function createTableNoGroup(nameSort, v){
+			 $('.business_card_book').append(
+						'<div class="list-group" id= "'+nameSort.replace("/","").trim()+'">'
+				        +'<div class="list-group-item-title">'+nameSort+'</div>'										 
+    	    		+ '<div class="list-group-item pointer">'
+					+'<div class="row row-new">'
+					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
+					+	'<div class="col-md-5">'
+					+		'<div class="col-xs-11 mg-top">'
+					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+					+			'<p class="livepass">'+v.companyName+'</p>'
+					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+					+			'<p class="num">'+v.telNumberCompany+'</p>'
+					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+					+ '</div></div>'
+					+	'<div class="col-md-6">'
+					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+					+	'<div class="col-xs-7">'								
+					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+					+	'</div> </div> </div> </div></div>'
+    	    );
 		}
 
     </script>
