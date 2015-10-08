@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -41,26 +42,29 @@ import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.CardTagId;
 import com.ecard.core.model.CompanyInfo;
 import com.ecard.core.model.DownloadCsv;
-import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.InquiryInfo;
+import com.ecard.core.model.PossessionCardId;
+import com.ecard.core.model.UserCardMemoId;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.UserTag;
 import com.ecard.core.service.CardInfoService;
+import com.ecard.core.service.CardMemoService;
 import com.ecard.core.service.CardTagService;
-import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.GroupCompanyInfoService;
+import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.SettingsInfoService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.UserTagService;
 import com.ecard.core.service.converter.CardInfoConverter;
-import com.ecard.core.service.converter.CardTagConverter;
 import com.ecard.core.vo.CardAndUserTag;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoCSV;
+import com.ecard.core.vo.CardInfoMemo;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.TagForCard;
 import com.ecard.core.vo.UserDownloadPermission;
 import com.ecard.core.vo.UserTagAndCardTag;
+import com.ecard.webapp.constant.CommonConstants;
 import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardInfoPCVo;
@@ -83,6 +87,9 @@ public class UserController {
     
     @Autowired
     CardTagService cardTagService;
+    
+    @Autowired
+    CardMemoService cardMemoService;
     
     @Autowired
     PossessionCardService possessionCardService;
@@ -391,19 +398,30 @@ public class UserController {
 			cardList = cardInfoService.listCardConnect(cardInfo.getCardOwnerId(), cardInfo.getGroupCompanyId(), cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
 			
 			//List tag
-			listCardTag = cardTagService.listCardTagByCardId(userId);
-			modelAndView.addObject("cardTagList", listCardTag);
+			listCardTag = getAllTagForCard(userId);
+			//modelAndView.addObject("cardTagList", listCardTag);
             //listUserTag = cardTagService.listUserTagByUserId(userId);
-            /*if(listCardTag.size() == 0){
+            if(listCardTag.size() == 0){
             	modelAndView.addObject("listUserTag", listUserTag);
             }
             else{
-            	modelAndView.addObject("listCardTag", listCardTag);
-            }*/
+            	modelAndView.addObject("cardTagList", listCardTag);
+            }
+            
+            List<CardInfoMemo> listCardMemo = getListCardMemo(cardInfo.getCardId());
+            modelAndView.addObject("listCardMemo", listCardMemo);
+            
+            if(!cardInfo.getCardOwnerId().equals(userId)){
+            	modelAndView.addObject("isMyCard", false);
+            }
+            else{
+            	modelAndView.addObject("isMyCard", true);
+            }
 		}
 		catch(Exception ex){
 			logger.debug("Exception : ", ex.getMessage());
 		}
+
 		modelAndView.setViewName("detailPC");
 		modelAndView.addObject("cardInfo", cardInfo);
 		modelAndView.addObject("listCardConnect", cardList);
@@ -550,7 +568,7 @@ public class UserController {
 		catch(Exception ex){
 			logger.debug("Exception : ", ex.getMessage());
 		}
-		modelAndView.setViewName("redirect:/user/card/detail/"+cardInfo.getCardId());
+		modelAndView.setViewName("redirect:" + CommonConstants.REDIRECT_CARD_DETAIL + cardInfo.getCardId());
 		return modelAndView;
 	}
 	
@@ -579,16 +597,16 @@ public class UserController {
 			logger.debug("Exception : ", ex.getMessage());
 		}
 		
-		modelAndView.setViewName("redirect:/user/card/detail/"+request.getParameter("cardId"));
+		modelAndView.setViewName("redirect:" + CommonConstants.REDIRECT_CARD_DETAIL + request.getParameter("cardId"));
 		return modelAndView;
 	}
 	
-	@RequestMapping (value = "addTag", method = RequestMethod.POST)
+	@RequestMapping (value = "addTag", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ModelAndView addTag(CardAndUserTag cardAndUserTag, HttpServletRequest request, HttpServletResponse response) {
+	public List<TagForCard> addTag(@RequestBody CardAndUserTag cardAndUserTag, HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("addTag", UserController.class);
 		
-		ModelAndView modelAndView = new ModelAndView();
+		//ModelAndView modelAndView = new ModelAndView();
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
@@ -641,9 +659,84 @@ public class UserController {
 			logger.debug("Exception :"+ ex.getMessage(), UserController.class);
 			response.setStatus(500, "Add tag error");
 		}
-		response.setStatus(200, "Add tag success");
-		modelAndView.setViewName("redirect:/user/card/detail/"+request.getParameter("cardId"));
-		return modelAndView;
+		List<TagForCard> listTagForCard = getAllTagForCard(userId);
+		return listTagForCard;
+	}
+	
+	@RequestMapping (value = "addCardTag", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TagForCard> addCardTag(@RequestBody TagForCard cardAndUserTag, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("addCardTag", UserController.class);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		Integer userId = ecardUser.getUserId();
+		try{
+			cardTagService.registerCardTag(cardAndUserTag.getCardId(), cardAndUserTag.getTagId());
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		List<TagForCard> listTagForCard = getAllTagForCard(userId);
+		return listTagForCard;
+	}
+	
+	@RequestMapping (value = "addCardMemo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<CardInfoMemo> addCardMemo(@RequestBody UserCardMemoId userCardMemo, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("addCardMemo", UserController.class);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		Integer userId = ecardUser.getUserId();
+		try{
+			userCardMemo.setCreateDate(new Date());
+			userCardMemo.setUserId(userId);
+			cardMemoService.createCardMemo(userCardMemo);
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		List<CardInfoMemo> listCardMemo = getListCardMemo(userCardMemo.getCardId());
+		return listCardMemo;
+	}
+	
+	@RequestMapping (value = "deleteCardMemo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<CardInfoMemo> deleteCardMemo(@RequestBody UserCardMemoId userCardMemo, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("deleteCardMemo", UserController.class);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		Integer userId = ecardUser.getUserId();
+		try{
+			userCardMemo.setCreateDate(new Date());
+			userCardMemo.setUserId(userId);
+			cardMemoService.deleteCardMemo(userCardMemo);
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		List<CardInfoMemo> listCardMemo = getListCardMemo(userCardMemo.getCardId());
+		return listCardMemo;
+	}
+	
+	@RequestMapping (value = "deleteCardTag", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TagForCard> deleteCardTag(@RequestBody TagForCard cardAndUserTag, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("deleteCardTag", UserController.class);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		Integer userId = ecardUser.getUserId();
+		try{
+			cardTagService.deleteCardTag(cardAndUserTag.getCardId(), cardAndUserTag.getTagId());
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		List<TagForCard> listTagForCard = getAllTagForCard(userId);
+		return listTagForCard;
 	}
 	
 	@RequestMapping (value = "deleteTag", method = RequestMethod.POST)
@@ -660,7 +753,7 @@ public class UserController {
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
 		response.setStatus(200, "Remove tag success");
-		modelAndView.setViewName("redirect:/user/card/detail/"+cardTag.getCardId());
+		modelAndView.setViewName("redirect:" + CommonConstants.REDIRECT_CARD_DETAIL + cardTag.getCardId());
 		return modelAndView;
 	}
 	
@@ -681,8 +774,30 @@ public class UserController {
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
 		response.setStatus(200, "Remove card success");
-		modelAndView.setViewName("redirect:/user/card/detail/"+card.getCardId());
+		modelAndView.setViewName("redirect:" + CommonConstants.REDIRECT_CARD_DETAIL + card.getCardId());
 		return modelAndView;
+	}
+	
+	private List<TagForCard> getAllTagForCard(Integer userId){
+		List<TagForCard> listCardTag = null;
+		try{
+			listCardTag = cardTagService.listCardTagByCardId(userId);
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		return listCardTag;
+	}
+	
+	private List<CardInfoMemo> getListCardMemo(Integer cardId){
+		List<CardInfoMemo> listCardMemo = null;
+		try{
+			listCardMemo = cardMemoService.getMemoCard(cardId);
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		return listCardMemo;
 	}
 }
 

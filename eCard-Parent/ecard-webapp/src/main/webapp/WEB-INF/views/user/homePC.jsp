@@ -327,7 +327,7 @@
 		        <!-- for item here  -->
 		        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
 			        <div class="list-group-item pointer">
-			          <div class="row row-new">
+			          <div class="row row-new" id="<c:out value='${cardInfo.cardId}' />">
 			            <div class="col-md-1 col-xs-1">
 			              <div class="icheckbox_square-green">
 			                <input type="checkbox" class="i-checks" name="bla" value="<c:out value='${cardInfo.cardId}' />">
@@ -400,7 +400,7 @@
 								 $.each( value.lstCardInfo, function (k,v) {
 									 $('.business_card_book #'+lastDate).append(
 				        	    		'<div class="list-group-item pointer">'
-				    					+'<div class="row row-new">'
+				    					+'<div class="row row-new" id="'+v.cardId+'">'
 				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
 				    					+	'<div class="col-md-5">'
 				    					+		'<div class="col-xs-11 mg-top">'
@@ -540,7 +540,7 @@
         // Click to personal details page
         $('.business_card_book .list-group-item').click( function() {
           console.log("Move to personal details page"); 
-          window.location.href = '<c:url value="/user/detail/1048"/>';
+          window.location.href = '<c:url value="/user/card/details/"/>'+this.id;
         }).hover(function() {
           $(this).toggleClass('hover');
         });
