@@ -46,11 +46,13 @@ import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.InquiryInfo;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.UserNotification;
+import com.ecard.core.model.UserSearch;
 import com.ecard.core.model.UserTag;
 import com.ecard.core.model.enums.SearchConditions;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.CardTagService;
 import com.ecard.core.service.PossessionCardService;
+import com.ecard.core.service.SearchInfoService;
 import com.ecard.core.service.GroupCompanyInfoService;
 import com.ecard.core.service.NotificationInfoService;
 import com.ecard.core.service.SettingsInfoService;
@@ -62,6 +64,7 @@ import com.ecard.core.vo.CardAndUserTag;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoCSV;
 import com.ecard.core.vo.CardInfoUserVo;
+import com.ecard.core.vo.SearchInfo;
 import com.ecard.core.vo.TagForCard;
 import com.ecard.core.vo.UserDownloadPermission;
 import com.ecard.core.vo.UserTagAndCardTag;
@@ -70,6 +73,7 @@ import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardInfoPCVo;
 import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.UserInfoVO;
+import com.ecard.webapp.vo.UserSearchVO;
 
 @Controller
 @RequestMapping("/user/*")
@@ -111,6 +115,9 @@ public class UserController {
 
 	@Autowired
     NotificationInfoService notificationInfoService;
+	
+	@Autowired
+    SearchInfoService searchInfoService;
 	
 	@RequestMapping("home")
 	public ModelAndView home(HttpServletRequest request) {
@@ -710,6 +717,71 @@ public class UserController {
 		modelAndView.setViewName("redirect:/user/card/detail/"+card.getCardId());
 		return modelAndView;
 	}
+	
+	@RequestMapping(value = "addUserSearch", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean addUserSearch(@RequestBody final  UserSearchVO userSearchVO) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserSearch us=new UserSearch();
+		UserInfo u=new UserInfo();
+		u.setUserId(ecardUser.getUserId());
+		
+		us.setUserId(ecardUser.getUserId());
+		us.setUserInfo(u);
+		us.setFreeText(userSearchVO.getFreeText());
+		us.setOwner(userSearchVO.getOwner());
+		us.setCompany(userSearchVO.getCompany());
+		us.setDepartment(userSearchVO.getDepartment());
+		us.setPosition(userSearchVO.getPosition());
+		us.setName(userSearchVO.getName());
+		us.setParameterFlg(userSearchVO.getParameterFlg());
+		us.setTitle("");
+		
+        List<SearchInfo> listSearchInfo = searchInfoService.listSearchText(ecardUser.getUserId());
+        List<Integer> seqList = new ArrayList<Integer>();
+        for (SearchInfo s : listSearchInfo){
+            seqList.add(s.getSeq());
+        }
+        int seq = getSequeceFromList(seqList);
+        if(seq >= 6){                
+            return false;
+        } else {
+            us.setSeq(seq);
+        }      
+        try{
+            if(searchInfoService.registerSearchText(us)==0)
+                searchInfoService.createSearchText(us);
+        }catch(Exception e){
+        	e.printStackTrace();
+        	return false;
+        }
+		
+		return true;
+	}
+	
+	private int getSequeceFromList(List<Integer> myCoord){
+        List<Integer> myCoords = new ArrayList<Integer>();
+        myCoords.add(1);
+        myCoords.add(2);
+        myCoords.add(3);
+        myCoords.add(4);
+        myCoords.add(5);   
+
+        List<Integer> matches = new ArrayList<Integer>();
+        int i = 1;
+        for (Integer s : myCoords)
+            matches.add(myCoord.contains(s) ? 1 : 0);        
+        int seq = myCoord.size()+1;
+        for (Integer s : matches){            
+            if(s.equals(0)){
+                seq = i;
+                return seq;
+            }
+            i++;
+        }  
+        return seq;
+    }
 }
 
 
