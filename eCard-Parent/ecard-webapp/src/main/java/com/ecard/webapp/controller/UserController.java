@@ -551,7 +551,7 @@ public class UserController {
 			return new ModelAndView("redirect:../home");
 		}
 		
-		return new ModelAndView("redirect:/user/card/detail/"+item.getCard_id());
+		return new ModelAndView("redirect:" + CommonConstants.REDIRECT_CARD_DETAIL + item.getCard_id());
 	}
 
 	@RequestMapping (value = "editCardInfo", method = RequestMethod.POST)
