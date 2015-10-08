@@ -520,28 +520,29 @@
           checkboxClass: 'icheckbox_square-green',
           radioClass: 'iradio_square-green',                
         });
-
-        $("input[name=bla]").on('ifChecked', function(event){
+        
+       /*  $(document).on('ifChecked','input[name=bla]',function(event) {
           $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
         });
-        $("input").on('ifUnchecked', function(event){     
+        
+        $(document).on('ifUnchecked','input',function(event){     
           if($(".icheckbox_square-green").find('.checked').size() == 1){
             $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
             $(".addTagCard").css("display","none");  
           }          
-        });
+        }); */
 
         // Process add tag and delete
         $("#deletePeople").click(function(e){
           
         });
 
-        $("#addTag").click(function(e){
+     /*    $(document).on('click','#addTag',function(e){
           if($(".balloon").css('display') == 'block')
             $(".balloon").css("display","none");
           else
             $(".balloon").css("display","block");
-        });
+        }); */
 
         $('.makefriend').click(function(e){
           if($(this).find('button').hasClass('btn-success')){
@@ -935,5 +936,28 @@
 	   		$(".error_common").text("");
 
 	   	}
+	   	
+	       $(document).on('ifChecked','input[name=bla]',function(event) {
+	          $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
+	        });
+	        
+	        $(document).on('ifUnchecked','input',function(event){     
+	          if($(".icheckbox_square-green").find('.checked').size() == 1){
+	            $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
+	            $(".addTagCard").css("display","none");  
+	          }          
+	        });
+
+	        // Process add tag and delete
+	        $("#deletePeople").click(function(e){
+	          
+	        });
+
+	        $(document).on('click','#addTag',function(e){
+	          if($(".balloon").css('display') == 'block')
+	            $(".balloon").css("display","none");
+	          else
+	            $(".balloon").css("display","block");
+	        });
 
     </script>
