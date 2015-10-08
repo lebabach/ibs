@@ -5,6 +5,12 @@
 	pageEncoding="utf-8"%>
 
 <style>
+.mesage_error {
+	color: red;
+	margin-top: 10px !important;
+	display: none;
+}
+
 .btn-lg{
     padding: 2px 16px;  
   }
@@ -108,75 +114,158 @@
                 <div class="icon-addon addon-md">
                     <!-- <form name="myform">  -->
 						<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-example">検索画面</button>
-						<!-- modal -->
-							<div class="modal" id="modal-example" tabindex="-1">
-								<div class="modal-dialog">
-
-									<!-- modal content -->
-										<div class="modal-content">
-											<!-- modal header -->
-												<div class="modal-header">
-													<button type="button" class="close" data-dismiss="modal">
-														<span aria-hidden="true">&times;</span>
-													</button>
-													<h4 class="modal-title" id="modal-label">検索条件を入力してください</h4>
-            									</div>
-												<!-- modal body -->
-													<div class="modal-body">
-														<label for="exampleInputEmail1">検索対象</label>
-															<select class="form-control">
-                                                                <option>自分の名刺</option>
-                                                                <option>グループネットワーク</option>
-															</select>
-																<div class="form-group">
-																	<label for="exampleInputEmail1">フリーワード</label>
-																	<input type="email" class="form-control" id="exampleInputEmail1" placeholder="会社名・氏名・emailを入力 * or * でOR検索">
-																</div>
-														<button type="button" class="btn btn-primary btn-lg">検索</button>
-														<h4 class="modal-title" id="modal-label">必要に応じて入力してください</h4>
-														<div class="form-group">
-															<label for="exampleInputEmail1">会社名</label>
-																<input type="email" class="form-control" id="exampleInputEmail1" placeholder="例：田中物産株式会社">
-														</div>
-														<div class="form-group">
-															<label for="exampleInputEmail1">氏名</label>
-																<input type="email" class="form-control" id="exampleInputEmail1" placeholder="例：田中　太郎">
-														</div>
-														<div class="form-group">
-															<label for="exampleInputEmail1">email</label>
-																<input type="email" class="form-control" id="exampleInputEmail1" placeholder="例：tanaka@gmail.com">
-														</div>
-														<div class="form-group">
-															<label for="exampleInputEmail1">部署</label>
-																<input type="email" class="form-control" id="exampleInputEmail1" placeholder="例：管理部">
-														</div>
-														<div class="form-group">
-															<label for="exampleInputEmail1">役職</label>
-																<input type="email" class="form-control" id="exampleInputEmail1" placeholder="例：部長">
-														</div>
-														<div class="form-group">
-															<label for="exampleInputEmail1">住所</label>
-																<input type="email" class="form-control" id="exampleInputEmail1" placeholder="例：東京都千代田区神田">
-														</div>
-        											</div>
-													<!-- modal footer -->
-														<div class="modal-footer">
-															<div class="col-md-3">
-															<select class="form-control">
-																<option>1</option>
-																<option>2</option>
-																<option>3</option>
-																<option>4</option>
-																<option>5</option>
-															</select>
-															</div>
-															←
-															<button type="button" class="btn btn-success" data-dismiss="modal">保存済みの検索条件を呼び出す</button>
-															<button type="button" class="btn btn-info">検索条件を保存する</button>
-            											</div>
-        											</div>
-    											</div>
-											</div>
+                                <!-- modal -->
+                                <div class="modal" id="modal-example" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        
+                                        <!-- modal content -->
+                                        <style type="text/css">
+                                            .modal-content-new{
+                                                background-clip: padding-box;
+                                                background-color: #FFFFFF;
+                                                border: 1px solid rgba(0, 0, 0, 0);
+                                                border-radius: 4px;
+                                                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+                                                outline: 0 none;
+                                                position: relative;
+                                                margin-top: 180px;
+                                            }
+                                        .list-new-n{
+                                            display: table;
+                                            width: 100%;
+                                            margin: 0;
+                                            padding: 0;
+                                        }
+                                        .checkbox-new{
+                                            display: table-cell;
+                                            vertical-align: middle;
+                                            width: 50px;
+                                        }
+                                        .list-contetn{
+                                            display: table-cell;
+                                            vertical-align: middle;
+                                            text-align: left;
+                                        }
+                                        .list-contetn p{
+                                            display: block;
+                                            width: auto;
+                                            
+                                        }
+                                        .a-new-n{
+                                            background:#dc0069;
+                                            display: inline-block;
+                                            border:none;
+                                        }
+                                        </style>
+                                        
+                                        
+                                        <div class="modal-content-new" style="display:none">
+                                            <div class="modal-header">
+                                                <a class="close" id="close-x">
+                                                    <span aria-hidden="true">×</span>
+                                                </a>
+                                                
+                                                <h4 class="modal-title" id="modal-label">検索条件管理</h4>
+                                            </div>
+                                            <div class="modal-body" style="border-bottom: 1px solid #b1b1b1">
+                                                <label for="exampleInputEmail1">自分の名刺検索で使用可能</label>
+                                                <div class="row row-new">
+                                                    <div class="col-md-1 col-xs-1">
+                                                        <div class="iradio_square-green">
+                                                            <input type="radio" class="i-checks" name="bla">
+                                                                </div>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <p>フリーワード:</p>
+                                                        <p>所有者:</p>
+                                                        <p>会社名: </p>
+                                                        <p>部署: </p>
+                                                        <p>役職: </p>
+                                                        <p>名前:</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="exampleInputEmail1">自分の名刺検索で使用可能</label>
+                                                <div class="row row-new">
+                                                    <div class="col-md-1 col-xs-1">
+                                                        <div class="iradio_square-green">
+                                                            <input type="radio" class="i-checks" name="bla">
+                                                                </div>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <p>フリーワード:</p>
+                                                        <p>所有者:</p>
+                                                        <p>会社名: </p>
+                                                        <p>部署: </p>
+                                                        <p>役職: </p>
+                                                        <p>名前:</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer" style="width: 100%;
+                                                display: inline-block;
+                                                margin: 0 auto;
+                                                text-align: center;">
+                                                
+                                                <a id="btn-success2" class="btn btn-success a-new-n">選択した検索条件を使用する</a>
+                                                
+                                                <a id="btn-success3" class="btn btn-success a-new-n">選択した検索条件を削除</a>
+                                            </div>
+                                        </div>
+                                        <div class="modal-content">
+                                            <!-- modal header -->
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                <h4 class="modal-title" id="modal-label">検索条件を入力してください</h4>
+                                            </div>
+                                            <!-- modal body -->
+                                            <div class="modal-body">
+                                                <label for="parameterFlg">検索対象</label>
+                                                <select class="form-control" id="parameterFlg" name="parameterFlg">
+                                                    <option value="0">自分の名刺</option>
+                                                    <option value="1">グループネットワーク</option>
+                                                </select>
+                                                <div class="form-group">
+                                                    <label for="freeText">フリーワード</label>
+                                                    <input type="email" class="form-control" name="freeText" id="freeText" placeholder="会社名・氏名・emailを入力 * and * でAND検索">
+                                                        </div>
+                                                <h4 class="modal-title" id="modal-label">必要に応じて入力してください</h4>
+                                                <div class="form-group" style="display:none">
+                                                    <label for="owner">所有者</label>
+                                                    <input type="email" class="form-control" name="owner" id="owner" placeholder="">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="company">会社名</label>
+                                                    <input type="email" class="form-control" name="company" id="company" placeholder="">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="department">部署</label>
+                                                    <input type="email" class="form-control" name="department" id="department" placeholder="">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="position">役職</label>
+                                                    <input type="email" class="form-control" name="position" id="position" placeholder="">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="name">氏名</label>
+                                                    <input type="email" class="form-control" name="name" id="name" placeholder="">
+                                                    <p class="mesage_error error_common">121121</p>
+                                                        </div>
+                                            </div>
+                                            <!-- modal footer -->
+                                            <div class="modal-footer">
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-primary btn-lg">検索</button>
+                                                </div>
+                                                <a id="btn-success" class="btn btn-success" >保存済みの検索条件を呼び出す</a>
+                                                <button type="button" class="btn btn-info">検索条件を保存する</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                     <!-- </form> -->
                     
                     <!-- <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>  -->
@@ -362,23 +451,7 @@
 <!--  End Header -->
 
   <!-- End Container -->
-    <script src="js/jquery-2.1.1.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
-    <!-- Custom and plugin javascript -->
-    <script src="js/inspinia.js"></script>
-    <script src="js/plugins/pace/pace.min.js"></script>
-
-    <!-- Peity -->
-    <script src="js/plugins/peity/jquery.peity.min.js"></script>
-
-    <!-- iCheck -->
-    <script src="js/plugins/iCheck/icheck.min.js"></script>
-
-    <!-- Peity -->
-    <script src="js/demo/peity-demo.js"></script>
+    
 <script>
      var request = null;
       var id_manager = 1;
@@ -571,7 +644,7 @@
 					    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 					    					+	'</div> </div> </div> </div></div>'
 					        	    );
-								
+								 isLoading++;
 								 reloadICheck();
 								 getImageFromSCP(v.imageFile);
 						 });
@@ -582,10 +655,75 @@
 			});
         });
         
+           $( "#btn-success" ).click(function() {
+               $('.modal-content').hide(); 
+               $('.modal-content-new').show(); 
+           });
+           $( "#btn-success2, #btn-success3, #close-x" ).click(function() {
+   	         $('.modal-content').show(); 
+   	         $('.modal-content-new').hide(); 
+           });
+           
+           $( "#parameterFlg" ).click(function() {
+               if($(this).val()==0){
+              	 $("#owner").closest(".form-group").attr("style","display:none");
+               }
+               if($(this).val()==1){
+              	 $("#owner").closest(".form-group").removeAttr("style");
+               }
+           });
+           
+           $( ".btn-info" ).click(function() {
+           	resetValidationForm();
+   			if (!checkValidationForm()) {
+   				return false;
+   			}
+   			var freeText = $("#freeText").val();
+   	   		var owner = $("#owner").val();
+   	   		var company = $("#company").val();
+   	   		var department = $("#department").val();
+   	   		var position = $("#position").val();
+   	   		var name = $("#name").val();
+   	   		var parameterFlg = $("#parameterFlg").val()
+   	   		
+   			if($("#parameterFlg").val()==0){
+   				owner="";	
+   	        }
+   			
+   			$.ajax({
+   			    type: 'POST',
+   			    url: 'addUserSearch',
+   			    dataType: 'json', 
+   				 contentType: 'application/json',
+   				 mimeType: 'application/json',
+   			    data: JSON.stringify({ 
+   			        'freeText':freeText,
+   			        'owner':owner,
+   			        'company':company,
+   			        'department':department,
+   			        'position':position,
+   			        'name':name,
+   			        'parameterFlg':parameterFlg
+   			    }),
+   			    success: function(msg){
+   			        if(msg==true){
+   			        	 $(".error_common").text("検索条件を登録しました");
+   					     $(".mesage_error").css("display", "block");
+   			        }else{
+   			        	$(".error_common").text("検索条件を保存できるのは5件までです。");
+   					     $(".mesage_error").css("display", "block");
+   			        }
+   			    }
+   			});
+   			
+   			
+   			
+           });
+        
 });/* END READY DOCUMENT  */
  
  
- 
+ 		
       // Manager Search 
       $(".ManagerSearch").click(function(event) {        
         if($(".ManagerSearch").hasClass("active")) {
@@ -745,7 +883,7 @@
 		
 		function createTableNoGroup(nameSort, v){
 			 $('.business_card_book').append(
-						'<div class="list-group" id= "'+nameSort.replace("/","").trim()+'">'
+						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 20px !important;" id= "'+nameSort.replace("/","").trim()+'">'
 				        +'<div class="list-group-item-title">'+nameSort+'</div>'										 
     	    		+ '<div class="list-group-item pointer">'
 					+'<div class="row row-new">'
@@ -766,5 +904,36 @@
 					+	'</div> </div> </div> </div></div>'
     	    );
 		}
+		
+		function checkValidationForm() {
+	   		var checkValidation = true;
+	   		var freeText = $("#freeText").val();
+	   		var owner = $("#owner").val();
+	   		var company = $("#company").val();
+	   		var department = $("#department").val();
+	   		var position = $("#position").val();
+	   		var name = $("#name").val();
+	   		if($("#parameterFlg").val()==1){
+	        	 if(freeText=="" &&company=="" &&department=="" &&position=="" &&name=="" &&owner==""){
+	        		 $(".error_common").text(
+							"<fmt:message key='edit.card.validate'/>");
+					checkValidation = false;
+					$(".mesage_error").css("display", "block");
+	        	 }
+	        }else{
+	        	if(freeText=="" &&company=="" &&department=="" &&position=="" &&name==""){
+		      		 $(".error_common").text(
+							"<fmt:message key='edit.card.validate'/>");
+					checkValidation = false;
+					$(".mesage_error").css("display", "block");
+		      	 }
+	        }
+	   		
+	   		return checkValidation;
+	   	}
+	   	function resetValidationForm() {
+	   		$(".error_common").text("");
+
+	   	}
 
     </script>
