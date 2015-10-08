@@ -383,10 +383,11 @@
 
       var id_manager = 1;
       var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
+      var page = 1;
      
       $(window).scroll(function() {    	  
     	  if(id_manager * 5 < parseInt(totalCardInfo)){
-	    	    if($(window).scrollTop() >= ($(document).height() - $(window).height())*0.7) {
+	    	    if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
 	    	    	// Call ajax here	    	   		
 	        	    $.ajax({
 						type: 'POST',
