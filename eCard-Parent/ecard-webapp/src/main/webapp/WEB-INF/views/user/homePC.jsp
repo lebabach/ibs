@@ -383,10 +383,11 @@
 
       var id_manager = 1;
       var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
+      var page = 1;
      
-      $(window).scroll(function() {
+      $(window).scroll(function() {    	  
     	  if(id_manager * 5 < parseInt(totalCardInfo)){
-	    	    if($(window).scrollTop() >= ($(document).height() - $(window).height())*0.7) {
+	    	    if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
 	    	    	// Call ajax here	    	   		
 	        	    $.ajax({
 						type: 'POST',
@@ -411,12 +412,13 @@
 				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
 				    					+ '</div></div>'
 				    					+	'<div class="col-md-6">'
-				    					+	'<div class="col-xs-5"></div>'	
+				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
 				    					+	'<div class="col-xs-7">'								
 				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 				    					+	'</div> </div> </div> </div>'
 				        	    	);
+									 reloadICheck();
 									 getImageFromSCP(v.imageFile); 
 								 });
 							 } else {
@@ -438,13 +440,14 @@
 						    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
 						    					+ '</div></div>'
 						    					+	'<div class="col-md-6">'
-						    					+	'<div class="col-xs-5"></div>'	
+						    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
 						    					+	'<div class="col-xs-7">'								
 						    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 						    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 						    					+	'</div> </div> </div> </div></div>'
 						        	    );
-											 getImageFromSCP(v.imageFile);
+										 reloadICheck();
+										 getImageFromSCP(v.imageFile);
 									 }else{
 										 $('.business_card_book #'+lastDate).append(
 							        	    		'<div class="list-group-item pointer">'
@@ -459,21 +462,19 @@
 							    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
 							    					+ '</div></div>'
 							    					+	'<div class="col-md-6">'
-							    					+	'<div class="col-xs-5"></div>'	
+							    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
 							    					+	'<div class="col-xs-7">'								
 							    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class="lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 							    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 							    					+	'</div> </div> </div> </div>'  );
+										 reloadICheck();
 										 getImageFromSCP(v.imageFile);
 									 }
 								 });
 							 }
 							 
 						});
-						$('.i-checks').iCheck({
-		       	          checkboxClass: 'icheckbox_square-green',
-		       	          radioClass: 'iradio_square-green',                
-		        	    });
+						
 						
 					}).fail(function(xhr, status, err) {
 						alert('Error');
@@ -484,7 +485,7 @@
     	}); 
 
       $(document).ready(function(){
-    	  
+    	     	  
     	$(".business_card_book .list-group").each(function() {
     		var id  = $(this).attr("id").replace('/', '');
     		$(this).attr("id",id);
@@ -655,10 +656,7 @@
                                       '<td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>'+
                                     '</tr>');
         
-          $('.i-checks').iCheck({
-            checkboxClass: 'icheckbox_square-green',
-            radioClass: 'iradio_square-green',                
-          });
+          reloadICheck();
         }
         // Clear
         $("#addLabel").parent().parent().find('input').val('');  
@@ -675,15 +673,12 @@
       
       $(".business_card_book .img-responsive").each(function () {
     		var target = $(this);
-    	    var fileImageName =$(this).parent().find('input[name=fileImageName]').val();
-    	    console.log('AAA= '+fileImageName);
+    	    var fileImageName =$(this).parent().find('input[name=fileImageName]').val();    	    
     	    $.ajax({
     	        type: 'POST',
     	        url: 'getImageFile',
-    	        data: 'fileImage='+fileImageName,
-    	        async: false
+    	        data: 'fileImage='+fileImageName
     	    }).done(function(resp, status, xhr){
-    	    	console.log('resp: '+ resp);
     	    	if(resp == ""){
     	    		target.attr('src','');    	  
         	        target.attr('src','/ecard-webapp/assets/img/card_08.png');
@@ -695,14 +690,13 @@
     	        alert('Error');
     	    });
     	});
-		function getImageFromSCP( fileImageName ){			
-			var target = $('img[name="'+fileImageName+'"]');
-			console.log('BBB = '+fileImageName);
+      
+		function getImageFromSCP(fileImageName){			
+			var target = $('img[name="'+fileImageName+'"]');			
 			$.ajax({
     	        type: 'POST',
     	        url: 'getImageFile',
-    	        data: 'fileImage='+fileImageName,
-    	        async: false
+    	        data: 'fileImage='+fileImageName,    	        
     	    }).done(function(resp, status, xhr){
     	    	if(resp == ""){
     	    		target.attr('src','');    	  
@@ -714,6 +708,14 @@
     	    	
     	    }).fail(function(resp, status, xhr){
     	        alert('Error');
-    	    });			
+    	    });						
 		}
+		
+		function reloadICheck(){
+			$('.i-checks').iCheck({
+     	          checkboxClass: 'icheckbox_square-green',
+     	          radioClass: 'iradio_square-green',                
+      	    });
+		}
+
     </script>
