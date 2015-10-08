@@ -44,11 +44,13 @@ import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.InquiryInfo;
 import com.ecard.core.model.UserInfo;
+import com.ecard.core.model.UserNotification;
 import com.ecard.core.model.UserTag;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.CardTagService;
 import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.GroupCompanyInfoService;
+import com.ecard.core.service.NotificationInfoService;
 import com.ecard.core.service.SettingsInfoService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.UserTagService;
@@ -105,6 +107,9 @@ public class UserController {
 	@Autowired
 	SettingsInfoService settingsInfoService;
 
+	@Autowired
+    NotificationInfoService notificationInfoService;
+	
 	@RequestMapping("home")
 	public ModelAndView home() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -475,7 +480,10 @@ public class UserController {
 	}
 	@RequestMapping(value = "/notificationDetail/{id:[\\d]+}", method = RequestMethod.GET)
 	public ModelAndView notificationDetail(@PathVariable("id") int id) {
-		
+		UserNotification notify=new UserNotification();
+		notify.setNoticeId(id);
+		notify.setReadFlg(1);
+		notificationInfoService.updateReadFlgById(notify);
 		return new ModelAndView("redirect:../home");
 	}
 

@@ -97,7 +97,7 @@
 			<li class="dropdown"><a class="dropdown-toggle count-info"
 				data-toggle="dropdown" href="#"> <i class="fa fa-flag"></i> 
 				 <c:if test="${objectNotification.numberOfNotification>=1}">
-				      <span class="label label-warning">1</span>
+				      <span class="label label-warning">${objectNotification.numberOfNotification}</span>
 			      </c:if>
 				
 			</a>
@@ -115,15 +115,25 @@
 								
 								<c:forEach var="notification" items="${objectNotification.notifications}" varStatus="loop">
 									<tr class="pointer">
+									 <c:if test="${notification.image!=''}">
+									      <td style="vertical-align: middle" width="30%"><img alt="image"
+											style="width: 100%" src="data:image/png;base64,${notification.image}"></td>
+								      </c:if>
 									
-									<td style="vertical-align: middle" width="30%"><img alt="image"
-										style="width: 100%" src="data:image/png;base64,${notification.image}"></td>
 									<td style="vertical-align: middle"  width="60%" >
 										<div class="content_notice">${notification.contents}</div>
 										<div class="date">${notification.date}</div>
 									</td>
-									<td style="vertical-align: middle"  width="10%"><a href="notificationDetail/${notification.id}" class=""><i
+									<c:choose>
+									  <c:when test="${notification.image!=''}">
+									   <td style="vertical-align: middle"  width="10%"><a href="notificationDetail/${notification.id}" class=""><i
 											class="fa fa-angle-right"></i></a></td>
+									  </c:when>
+									  <c:otherwise>
+									   <td style="vertical-align: middle"  width="10%"><a href="https://bc-ribbon.temp-holdings.co.jp/" class=""><i
+											class="fa fa-angle-right"></i></a></td>
+									  </c:otherwise>
+									</c:choose>
 									</tr>
 								</c:forEach>
 							</tbody>

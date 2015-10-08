@@ -2,6 +2,7 @@ package com.ecard.webapp.interceptor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,7 +69,7 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 			notifications=UploadFileUtil.getImageFileFromSCPForNotification(notifications, scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
 			ObjectNotification objectNotification=new ObjectNotification();
 			objectNotification.setNotifications(notifications);
-			objectNotification.setNumberOfNotification(notifications.size());
+			objectNotification.setNumberOfNotification(listUpdate.stream().filter(x->x.getRead_flg()==0).collect(Collectors.toList()).size());
 			request.setAttribute("objectNotification", objectNotification);
 		}
 		return true;
