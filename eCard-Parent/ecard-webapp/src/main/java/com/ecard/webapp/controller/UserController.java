@@ -450,5 +450,10 @@ public class UserController {
 		settingsInfoService.sendInquiry(inquiryInfo);
 		return new ModelAndView("redirect:home");
 	}
+	@RequestMapping(value = "/notificationDetail/{id:[\\d]+}", method = RequestMethod.GET)
+	public ModelAndView notificationDetail(@PathVariable("id") int id) {
+		
+		return new ModelAndView("redirect:../home");
+	}
 
 }
