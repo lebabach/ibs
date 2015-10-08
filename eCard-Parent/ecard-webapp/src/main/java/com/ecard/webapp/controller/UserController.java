@@ -64,6 +64,7 @@ import com.ecard.core.vo.CardAndUserTag;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoCSV;
 import com.ecard.core.vo.CardInfoUserVo;
+import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.SearchInfo;
 import com.ecard.core.vo.TagForCard;
 import com.ecard.core.vo.UserDownloadPermission;
@@ -72,6 +73,7 @@ import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardInfoPCVo;
 import com.ecard.webapp.vo.DataPagingJsonVO;
+import com.ecard.webapp.vo.ObjectListSearchUsers;
 import com.ecard.webapp.vo.UserInfoVO;
 import com.ecard.webapp.vo.UserSearchVO;
 
@@ -520,7 +522,18 @@ public class UserController {
 		notify.setNoticeId(id);
 		notify.setReadFlg(1);
 		notificationInfoService.updateReadFlgById(notify);
-		return new ModelAndView("redirect:../home");
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<NotificationList> listUpdate = notificationInfoService.listAllNofiticationUser(ecardUser.getUserId());
+		NotificationList item=null;
+		try{
+			item=listUpdate.stream().filter(x->x.getNotice_id()==id).findFirst().get();	
+		}catch(Exception e){
+			return new ModelAndView("redirect:../home");
+		}
+		
+		return new ModelAndView("redirect:/user/card/detail/"+item.getCard_id());
 	}
 
 	@RequestMapping (value = "editCardInfo", method = RequestMethod.POST)
@@ -782,6 +795,18 @@ public class UserController {
         }  
         return seq;
     }
+	
+	@RequestMapping(value = "listSearchText", method = RequestMethod.POST)
+	@ResponseBody
+	public ObjectListSearchUsers listSearchText() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<SearchInfo> listSearchInfo = searchInfoService.listSearchText(ecardUser.getUserId());
+		ObjectListSearchUsers obj=new ObjectListSearchUsers();
+		obj.setUserSearchs(listSearchInfo);
+		obj.setHasData(listSearchInfo.size()>0?true:false);
+		return obj;
+	}
 }
 
 
