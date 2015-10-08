@@ -565,7 +565,7 @@
 					    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 					    					+	'</div> </div> </div> </div></div>'
 					        	    );
-								
+								 isLoading++;
 								 reloadICheck();
 								 getImageFromSCP(v.imageFile);
 						 });
@@ -739,7 +739,7 @@
 		
 		function createTableNoGroup(nameSort, v){
 			 $('.business_card_book').append(
-						'<div class="list-group" id= "'+nameSort.replace("/","").trim()+'">'
+						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 20px !important;" id= "'+nameSort.replace("/","").trim()+'">'
 				        +'<div class="list-group-item-title">'+nameSort+'</div>'										 
     	    		+ '<div class="list-group-item pointer">'
 					+'<div class="row row-new">'
