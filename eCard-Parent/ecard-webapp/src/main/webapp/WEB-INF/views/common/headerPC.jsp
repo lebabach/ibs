@@ -121,7 +121,17 @@
 								      </c:if>
 									
 									<td style="vertical-align: middle"  width="60%" >
-										<div class="content_notice">${notification.contents}</div>
+									
+									     <c:choose>
+										  <c:when test="${notification.read_flg==0}">
+										   	<div class="content_notice" style="font-weight: bold">${notification.contents}</div>
+										  </c:when>
+										  <c:otherwise>
+										   	<div class="content_notice">${notification.contents}</div>
+										  </c:otherwise>
+										</c:choose>
+										
+										
 										<div class="date">${notification.date}</div>
 									</td>
 									<c:choose>
