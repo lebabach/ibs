@@ -160,48 +160,12 @@
                                         
                                         
                                         <div class="modal-content-new" style="display:none">
-                                            <div class="modal-header">
+                                            <div class="modal-header" id="lsUserSearchs">
                                                 <a class="close" id="close-x">
                                                     <span aria-hidden="true">×</span>
                                                 </a>
                                                 
                                                 <h4 class="modal-title" id="modal-label">検索条件管理</h4>
-                                            </div>
-                                            <div class="modal-body" style="border-bottom: 1px solid #b1b1b1">
-                                                <label for="exampleInputEmail1">自分の名刺検索で使用可能</label>
-                                                <div class="row row-new">
-                                                    <div class="col-md-1 col-xs-1">
-                                                        <div class="iradio_square-green">
-                                                            <input type="radio" class="i-checks" name="bla">
-                                                                </div>
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <p>フリーワード:</p>
-                                                        <p>所有者:</p>
-                                                        <p>会社名: </p>
-                                                        <p>部署: </p>
-                                                        <p>役職: </p>
-                                                        <p>名前:</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-body">
-                                                <label for="exampleInputEmail1">自分の名刺検索で使用可能</label>
-                                                <div class="row row-new">
-                                                    <div class="col-md-1 col-xs-1">
-                                                        <div class="iradio_square-green">
-                                                            <input type="radio" class="i-checks" name="bla">
-                                                                </div>
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <p>フリーワード:</p>
-                                                        <p>所有者:</p>
-                                                        <p>会社名: </p>
-                                                        <p>部署: </p>
-                                                        <p>役職: </p>
-                                                        <p>名前:</p>
-                                                    </div>
-                                                </div>
                                             </div>
                                             <div class="modal-footer" style="width: 100%;
                                                 display: inline-block;
@@ -657,8 +621,31 @@
         });
         
            $( "#btn-success" ).click(function() {
-               $('.modal-content').hide(); 
-               $('.modal-content-new').show(); 
+        	   resetValidationForm();
+               $.ajax({
+       			type: 'POST',
+       			url: 'listSearchText/',
+       			dataType: 'json', 
+       			contentType: 'application/json',
+       			mimeType: 'application/json',
+       			success: function(data) {
+       				//called when successful
+     				debugger;
+       				if(data.hasData){
+       					$('.modal-content').hide(); 
+       	               $('.modal-content-new').show(); 
+       	               DisplayContents(data.userSearchs);
+       				}else{
+       					$(".error_common").text("保存されている検索条件はありません");
+  					     $(".mesage_error").css("display", "block");
+       				}
+     			  },
+     			  error: function(e) {
+     				//called when there is an error
+     				//console.log(e.message);
+     			  }
+	       		});
+               
            });
            $( "#btn-success2, #btn-success3, #close-x" ).click(function() {
    	         $('.modal-content').show(); 
@@ -675,51 +662,52 @@
            });
            
            $( ".btn-info" ).click(function() {
-           	resetValidationForm();
-   			if (!checkValidationForm()) {
-   				return false;
-   			}
-   			var freeText = $("#freeText").val();
-   	   		var owner = $("#owner").val();
-   	   		var company = $("#company").val();
-   	   		var department = $("#department").val();
-   	   		var position = $("#position").val();
-   	   		var name = $("#name").val();
-   	   		var parameterFlg = $("#parameterFlg").val()
-   	   		
-   			if($("#parameterFlg").val()==0){
-   				owner="";	
-   	        }
-   			
-   			$.ajax({
-   			    type: 'POST',
-   			    url: 'addUserSearch',
-   			    dataType: 'json', 
-   				 contentType: 'application/json',
-   				 mimeType: 'application/json',
-   			    data: JSON.stringify({ 
-   			        'freeText':freeText,
-   			        'owner':owner,
-   			        'company':company,
-   			        'department':department,
-   			        'position':position,
-   			        'name':name,
-   			        'parameterFlg':parameterFlg
-   			    }),
-   			    success: function(msg){
-   			        if(msg==true){
-   			        	 $(".error_common").text("検索条件を登録しました");
-   					     $(".mesage_error").css("display", "block");
-   			        }else{
-   			        	$(".error_common").text("検索条件を保存できるのは5件までです。");
-   					     $(".mesage_error").css("display", "block");
-   			        }
-   			    }
-   			});
-   			
-   			
-   			
+	           	resetValidationForm();
+	   			if (!checkValidationForm()) {
+	   				return false;
+	   			}
+	   			var freeText = $("#freeText").val();
+	   	   		var owner = $("#owner").val();
+	   	   		var company = $("#company").val();
+	   	   		var department = $("#department").val();
+	   	   		var position = $("#position").val();
+	   	   		var name = $("#name").val();
+	   	   		var parameterFlg = $("#parameterFlg").val()
+	   	   		
+	   			if($("#parameterFlg").val()==0){
+	   				owner="";	
+	   	        }
+	   			
+	   			$.ajax({
+	   			    type: 'POST',
+	   			    url: 'addUserSearch',
+	   			    dataType: 'json', 
+	   				 contentType: 'application/json',
+	   				 mimeType: 'application/json',
+	   			    data: JSON.stringify({ 
+	   			        'freeText':freeText,
+	   			        'owner':owner,
+	   			        'company':company,
+	   			        'department':department,
+	   			        'position':position,
+	   			        'name':name,
+	   			        'parameterFlg':parameterFlg
+	   			    }),
+	   			    success: function(msg){
+	   			        if(msg==true){
+	   			        	 $(".error_common").text("検索条件を登録しました");
+	   					     $(".mesage_error").css("display", "block");
+	   			        }else{
+	   			        	$(".error_common").text("検索条件を保存できるのは5件までです。");
+	   					     $(".mesage_error").css("display", "block");
+	   			        }
+	   			    }
+	   			});
            });
+           
+           
+           
+           
         
 });/* END READY DOCUMENT  */
  
@@ -937,6 +925,7 @@
 
 	   	}
 	   	
+
 	       $(document).on('ifChecked','input[name=bla]',function(event) {
 	          $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
 	        });
@@ -959,5 +948,39 @@
 	          else
 	            $(".balloon").css("display","block");
 	        });
+	   	function DisplayContents(obj){
+	   		$(".modal-body.userSearchs").remove();
+	   		$.each( obj, function( key, value ) {
+	   	   		$("#lsUserSearchs").append(setModalBody(value.freeText,value.owner,value.company,value.department,value.position,value.name));
+	   		});
+		   	 $('.modal-content-new .i-checks').iCheck({
+	            checkboxClass : 'icheckbox_square-green',
+	            radioClass : 'iradio_square-green'
+
+	         });
+	   	}
+	   	
+	   	function setModalBody(freeText,owner,company,department,position,name){
+	   		var modal=	'<div class="modal-body userSearchs" style="border-bottom: 1px solid #b1b1b1">'
+		   	   	+	'<label for="exampleInputEmail1">自分の名刺検索で使用可能</label>'
+		   	   	+   '<div class="row row-new">'
+		   	   	+		'<div class="col-md-1 col-xs-1">'
+		   	   	+			'<div class="iradio_square-green">'
+		   	   	+				'<input type="radio" class="i-checks" name="bla">'
+		   	   	+					'</div>'
+		   	   	+		'</div>'
+		   	   	+		'<div class="col-md-5">'
+		   	   	+			'<p>フリーワード:'+freeText+'</p>'
+		   	   	+			'<p>所有者:'+owner+'</p>'
+		   	   	+			'<p>会社名:'+company+' </p>'
+		   	   	+			'<p>部署:'+department+' </p>'
+		   	   	+			'<p>役職:'+position+' </p>'
+		   	   	+			'<p>名前:'+name+' </p>'
+		   	   	+		'</div>'
+		   	   	+	'</div>'
+		   	   	+'</div>'
+	   		return modal;
+	   	}
+
 
     </script>
