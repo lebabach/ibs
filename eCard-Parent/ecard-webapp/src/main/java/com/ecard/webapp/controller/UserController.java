@@ -963,6 +963,30 @@ public class UserController {
 		}
 		return listTagGroup;
 	}
+	
+	@RequestMapping(value = "deleteUserSearch", method = RequestMethod.POST)
+	@ResponseBody
+	public ObjectListSearchUsers deleteUserSearch(@RequestParam(value = "id") String id) {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<Integer> liSeq=new ArrayList<Integer>();
+		liSeq.add(Integer.parseInt(id));
+		try{
+			searchInfoService.deleteSearchText(ecardUser.getUserId(), liSeq);	
+		}catch(Exception e){
+			e.printStackTrace();
+			ObjectListSearchUsers obj=new ObjectListSearchUsers();
+			obj.setHasData(false);
+			return obj;
+		}
+		
+		List<SearchInfo> listSearchInfo = searchInfoService.listSearchText(ecardUser.getUserId());
+		ObjectListSearchUsers obj=new ObjectListSearchUsers();
+		obj.setUserSearchs(listSearchInfo);
+		obj.setHasData(listSearchInfo.size()>0?true:false);
+		return obj;
+	}
 }
 
 

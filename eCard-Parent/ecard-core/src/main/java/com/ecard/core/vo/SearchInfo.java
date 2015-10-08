@@ -17,7 +17,7 @@ public class SearchInfo {
     private String name;         
     private int seq;
     private int parameterFlg;
-    
+    private int id;
     public SearchInfo(){}
     
     public SearchInfo(String freeText, String title, String owner, String company, String department,String position, String name, int seq, int parameterFlg){
@@ -31,7 +31,7 @@ public class SearchInfo {
         this.seq = seq;
         this.parameterFlg = parameterFlg;        
     }
-
+    
     /**
      * @return the freeText
      */
@@ -164,5 +164,13 @@ public class SearchInfo {
     public void setParameterFlg(int parameterFlg) {
         this.parameterFlg = parameterFlg;
     }
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
    
 }
