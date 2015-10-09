@@ -1214,9 +1214,9 @@
 	   	}
 	   	
 	   	function disableBtnSort(){
-	   		$("#selectSortBox").prop('disabled', true);
-	   		$(".btn-group").prop('disabled', true);
-	   		$("#sort-card-cnd").prop('disabled', true);
+	   		$("#selectSortBox").attr('style', "display:none !important");
+	   		$(".btn-group").attr('style', "display:none !important");
+	   		$("#sort-card-cnd").attr('style', "display:none !important");
 	   	}
 
     </script>
