@@ -371,7 +371,7 @@
   <!--  End Header -->
 
   <!-- Start Container -->
-  <div id="container" class="container">
+  <div id="container" class="container" style= "padding-top: 20px !important;" >
     <div class="business_card_book">
     <!-- for here  -->
     <c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">
@@ -582,7 +582,7 @@
 			   var str = "";
 				$.each( resp.data, function( key, value ) {	
 					str = $('.business_card_book').append(
-						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 20px !important;" id= "'+value.nameSort.replace("/","").trim()+'">'
+						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id= "'+value.nameSort.replace("/","").trim()+'">'
 				        +'<div class="list-group-item-title">'+value.nameSort+'</div>');
 					 $.each( value.lstCardInfo, function (k,v) {
 							isLoading = isLoading + 1;							 		
@@ -867,7 +867,7 @@
 		
 		function createTableNoGroup(nameSort, v){
 			 $('.business_card_book').append(
-						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 20px !important;" id= "'+nameSort.replace("/","").trim()+'">'
+						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id= "'+nameSort.replace("/","").trim()+'">'
 				        +'<div class="list-group-item-title">'+nameSort+'</div>'										 
     	    		+ '<div class="list-group-item pointer">'
 					+'<div class="row row-new">'
