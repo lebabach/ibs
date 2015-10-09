@@ -5,6 +5,13 @@
 	pageEncoding="utf-8"%>
 
 <style type="text/css">
+.a-new-pc {
+    float: right;
+    text-align: center;
+    padding: 5px 10px;
+    color: #000;
+    font-weight: bold;
+}
 a {
     color: #E3157A;
 }
@@ -880,25 +887,28 @@ label.error {
          
     	 //Delete card bussiness
     	 $("#delBusinessCard").click(function(){
-    		 $.ajax({
-	   			  type: "POST",
-	   			  url: "<c:url value='/user/delBusinessCard' />",
-	   			  data: 'cardId='+ $("input[name=cardId]").val(),
-	   			  success: function(){
-	   				  window.location.href = "<c:url value='/user/home' />";
-	   			  },
-	   			  error: function(){
-	   				  BootstrapDialog.show({
-	        				title: 'Information',
-	       	             	message: 'Remove card failed'
-	        	      		});
-	   			  }
-   			});
+    		 var confirm = window.confirm("Are you sure ?");
+    	     if(confirm){
+	    		 $.ajax({
+		   			  type: "POST",
+		   			  url: "<c:url value='/user/delBusinessCard' />",
+		   			  data: 'cardId='+ $("input[name=cardId]").val(),
+		   			  success: function(){
+		   				  window.location.href = "<c:url value='/user/home' />";
+		   			  },
+		   			  error: function(){
+		   				  BootstrapDialog.show({
+		        				title: 'Information',
+		       	             	message: 'Remove card failed'
+		        	      		});
+		   			  }
+	   			});
+    	     }
     	 });
     	 
     	 //Delete card memo
     	 $(document).on("click",".delMemo",function(e){
-			console.log(this.id);    		 
+			//console.log(this.id);    		 
     		 var json = {"cardId" : $("input[name=cardId]").val(), "seq" : this.id};    		 
     		 delCardMemo(json);
     	 });
@@ -1156,7 +1166,7 @@ label.error {
 	        		var respHTML = "";
 	        		var isChecked = "";
 	        		$.each(response, function(index, value){
-	        			console.log(JSON.stringify(value));
+	        			//console.log(JSON.stringify(value));
 	        			//console.log(JSON.stringify(value["listCardIds"]));
 	        			isChecked = "";
 	        			$.each(value["listCardIds"], function(idx, v){
@@ -1241,67 +1251,7 @@ label.error {
         		var respHTML = "";
         		var isChecked = "";
         		$.each(response, function(index, value){
-        			console.log(JSON.stringify(value));
-        			//console.log(JSON.stringify(value["listCardIds"]));
-        			isChecked = "";
-        			$.each(value["listCardIds"], function(idx, v){
-        				//console.log("v : "+ v);
-        				if(v == $("input[name=cardId]").val()){
-        					//console.log("v : "+ v + " tagId : "+tagId);
-        					isChecked = "checked";
-        					return false;
-        				}
-        				
-        				if(v != $("input[name=cardId]").val()){
-        					isChecked = "";
-        				}
-        			});
-        			if(isChecked == "checked")
-        				{respHTML += "<tr id='rowData'>"
-	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
-	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
-	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
-	    					+ "</td>"
-	    					+ "<td>"+value["tagName"]+"</td>"
-	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
-        			else
-        				{respHTML += "<tr id='rowData'>"
-	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
-	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
-	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
-	    					+ "</td>"
-	    					+ "<td>"+value["tagName"]+"</td>"
-	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
-        		});
-        		$("#tags tbody").html('');
-        		$("#tagName").val('');
-        		$("#tags tbody").html(respHTML);    		
-        	},
-        	error: function(){
-			  BootstrapDialog.show({
-   				title: 'Information',
-  	             	message: 'Add card tag failed'
-   	      		});
-		  	}
-        });	
-	}
-	
-	function deleteCardTag(json){
-     	$.ajax({
-        	url: "<c:url value='/user/deleteCardTag' />",
-        	data: JSON.stringify(json),
-        	type: "POST",
-        	
-        	beforeSend: function(xhr) {
-        		xhr.setRequestHeader("Accept", "application/json");
-        		xhr.setRequestHeader("Content-Type", "application/json");
-        	},
-        	success: function(response) {
-        		//console.log(JSON.stringify(response));
-        		var respHTML = "";
-        		var isChecked = "";
-        		$.each(response, function(index, value){
-        			console.log(JSON.stringify(value));
+        			//console.log(JSON.stringify(value));
         			//console.log(JSON.stringify(value["listCardIds"]));
         			isChecked = "";
         			$.each(value["listCardIds"], function(idx, v){
@@ -1334,7 +1284,66 @@ label.error {
 	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
         		});
         		
-        		$("#tags tbody").html('');
+        		$("#tagName").val('');
+        		$("#tags tbody").html(respHTML);    		
+        	},
+        	error: function(){
+			  BootstrapDialog.show({
+   				title: 'Information',
+  	             	message: 'Add card tag failed'
+   	      		});
+		  	}
+        });	
+	}
+	
+	function deleteCardTag(json){
+     	$.ajax({
+        	url: "<c:url value='/user/deleteCardTag' />",
+        	data: JSON.stringify(json),
+        	type: "POST",
+        	
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(response) {
+        		//console.log(JSON.stringify(response));
+        		var respHTML = "";
+        		var isChecked = "";
+        		$.each(response, function(index, value){
+        			//console.log(JSON.stringify(value));
+        			//console.log(JSON.stringify(value["listCardIds"]));
+        			isChecked = "";
+        			$.each(value["listCardIds"], function(idx, v){
+        				//console.log("v : "+ v);
+        				if(v == $("input[name=cardId]").val()){
+        					//console.log("v : "+ v + " tagId : "+tagId);
+        					isChecked = "checked";
+        					return false;
+        				}
+        				
+        				if(v != $("input[name=cardId]").val()){
+        					isChecked = "";
+        				}
+        			});
+        			if(isChecked == "checked")
+        				{respHTML += "<tr id='rowData'>"
+	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+	    					+ "</td>"
+	    					+ "<td>"+value["tagName"]+"</td>"
+	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+        			else
+        				{respHTML += "<tr id='rowData'>"
+	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+	    					+ "</td>"
+	    					+ "<td>"+value["tagName"]+"</td>"
+	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+        		});
+        		
         		$("#tagName").val('');
         		$("#tags tbody").html(respHTML);    		
         	},
@@ -1421,7 +1430,7 @@ label.error {
         		var respHTML = "";
         		var isChecked = "";
         		$.each(response, function(index, value){
-        			console.log(JSON.stringify(value));
+        			//console.log(JSON.stringify(value));
         			//console.log(JSON.stringify(value["listCardIds"]));
         			isChecked = "";
         			$.each(value["listCardIds"], function(idx, v){
