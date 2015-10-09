@@ -104,6 +104,7 @@
     width: 290px;
     float: none;
 }
+
 </style>
 <!-- START HEADER -->
 <div class="" style="border: solid 1px #f3f3f4;background: #e3e3e3;">
@@ -269,8 +270,8 @@
                   </dl>
                 </div>-->
                 <div class="">
-                  <div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;">
-                    <table class="table" id="paging" >
+                  <div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;overflow-y: auto; max-height: 280px;">
+                    <table class="table tagNameTable" id="paging" >
                     <!-- <table class="" id="paging" style="width: 100%;max-width: 100%;margin-bottom:10px">                      -->
                       <col width="10%">
                       <col width="80%">
@@ -459,13 +460,6 @@
  				});
     	   }
        });
-
-    /*    $(document).on('click','#addTag',function(e){
-         if($(".balloon").css('display') == 'block')
-           $(".balloon").css("display","none");
-         else
-           $(".balloon").css("display","block");
-       }); */
 
        $('#sort-card-cnd').on('change', function() {
        	$.xhrPool.abortAll();
@@ -718,13 +712,7 @@
     	        //alert('Error');
     	    });						
 		}
-		/*  Util function */
-		function reloadICheck(){
-			$('.i-checks').iCheck({
-     	          checkboxClass: 'icheckbox_square-green',
-     	          radioClass: 'iradio_square-green',                
-      	    });
-		}
+		
 		
 		function createTableHasGroup(lastDate, v){
 			$('.business_card_book #'+lastDate).append(
@@ -821,10 +809,18 @@
         });
 
         $(document).on('click','#addTag',function(e){
+        	
           if($(".balloon").css('display') == 'block')
             $(".balloon").css("display","none");
           else
             $(".balloon").css("display","block");
+        });
+        
+        $(document).mouseup(function (e){
+     		    var container = $(".balloon");
+     		    if (!container.is(e.target) && container.has(e.target).length === 0) {
+     		    	$(".balloon").css("display","none");
+     		     }
         });
         
         $(function() {
@@ -962,45 +958,50 @@
 					        	success: function(response) {
 					        		var respHTML = "";
 					        		var isChecked = "";
-					        		console.log("hsfkshfksfhs : " +listCardId.cardId );
+					        		var listCardId = [];
+				        			$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+				           	            cardId = $(this).find('input[name=bla]').val();
+				           	            listCardId.push(parseInt(cardId));    	         
+				           			});
+				        			console.log(listCardId);
 					        		$.each(response, function(index, value){
 					        			isChecked = "";
 					        			$.each(value["listCardIds"], function(idx, v){
-					        				//console.log("v : "+ v);
-					        				if(v == $("input[name=cardId]").val()){
-					        					//console.log("v : "+ v + " tagId : "+tagId);
+					        				if(v == 2242){
 					        					isChecked = "checked";
 					        					return false;
 					        				}
-					        				
-					        				if(v != $("input[name=cardId]").val()){
+					        				if(v != 2242){
 					        					isChecked = "";
 					        				}
 					        			});
-					        			if(isChecked == "checked")
-					        				{respHTML += "<tr id='rowData'>"
-						    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
-						        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+					        			if(isChecked == "checked"){
+					        				respHTML += "<tr id='rowData'>"
+						    					+ "<td><input type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag1' style='position: absolute; opacity: 0;'>"
 						        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
 				                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
-						        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+						        				+ "</div>"
 						    					+ "</td>"
 						    					+ "<td class='nametag'>"+value["tagName"]+"</td>"
-						    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
-					        			else
-					        				{respHTML += "<tr id='rowData'>"
-						    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
-						        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+						    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
+						    			}else{
+						    				respHTML += "<tr id='rowData'>"
+						    					+ "<td><input type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag2' style='position: absolute; opacity: 0;'>"
 						        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
 				                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
-						        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+						        				+ "</div>"
 						    					+ "</td>"
 						    					+ "<td class='nametag' >"+value["tagName"]+"</td>"
-						    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+						    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
+				        				}
 					        		});
 					        		$("#tagCardName").val('');
 					        		$("#paging tbody").html("");  
-					        		$("#paging tbody").html(respHTML);    		
+					        		$("#paging tbody").html(respHTML);
+					        		$('.i-checks').iCheck({
+				    			         checkboxClass: 'icheckbox_square-green',
+				    			         radioClass: 'iradio_square-green',                
+				    			       });
 					        	},
 					        	error: function(){
 								  BootstrapDialog.show({
@@ -1011,10 +1012,11 @@
 					        });
 						}
 						
-						isClick = true;
-						console.log("isClick : "+isClick);
+
 					}
 	     });
+	    
+	    
 	
 	   	function resetFreeText() {
 	   		$("#freeText").text("");
@@ -1080,5 +1082,12 @@
 	   			+'</div>'
    			return data;
 	   	}
+	   	/*  Util function */
+		function reloadICheck(){
+			$('.i-checks').iCheck({
+     	          checkboxClass: 'icheckbox_square-green',
+     	          radioClass: 'iradio_square-green',                
+      	    });
+		}
 
     </script>
