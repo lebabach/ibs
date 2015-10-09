@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class CardInfoMemoResponse extends AbstractCommonRes{
     private List<CardInfoMemo> searchTextList;
+    private int seq;
 
 //    /**
 //     * @return the searchTextList
@@ -39,6 +40,14 @@ public class CardInfoMemoResponse extends AbstractCommonRes{
     public void setSearchTextList(List<CardInfoMemo> searchTextList) {
         this.searchTextList = searchTextList;
     }
+
+	public int getSeq() {
+		return seq;
+	}
+
+	public void setSeq(int seq) {
+		this.seq = seq;
+	}
     
     
 }

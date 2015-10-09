@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ecard.core.dao.DataIndexIdDAO;
 import com.ecard.core.dao.GroupCompanyInfoDAO;
 import com.ecard.core.model.GroupCompanyDepartment;
 import com.ecard.core.model.GroupCompanyInfo;
@@ -18,10 +17,7 @@ import com.ecard.core.vo.GroupDepartmentVO;
 public class GroupCompanyInfoServiceImpl implements GroupCompanyInfoService {
     @Autowired
 	GroupCompanyInfoDAO groupCompanyInfoDAO;
-	
-    @Autowired
-    DataIndexIdDAO dataIndexIdDAO;
-    
+	    
 	@Override
 	public List<GroupCompanyInfo> getListCompany() {
 		return groupCompanyInfoDAO.getListCompany();

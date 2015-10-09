@@ -4,6 +4,8 @@
 package com.ecard.core.dao.impl;
 
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -944,11 +946,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	}
 	
 	public void updateOldCardInfo(CardInfo cardInfo){
-		Query query = getEntityManager().createQuery("UPDATE CardInfo ci SET ci.newestCardFlg = 0 WHERE ci.email = :email"
-				+ " AND ci.companyName = :companyName AND ci.positionName = :positionName "
+		Query query = getEntityManager().createQuery("UPDATE CardInfo ci SET ci.newestCardFlg = (CASE WHEN ci.cardId = :cardId  THEN 1 ELSE 0 END) "
+				+ " WHERE ci.email = :email AND ci.companyName = :companyName AND ci.positionName = :positionName "
 				+ " AND ci.departmentName = :departmentName AND ci.mobileNumber = :mobileNumber "
-				+ " AND ci.addressFull = :addressFull"
-				+ " AND ci.cardId != :cardId");
+				+ " AND ci.addressFull = :addressFull");
 		query.setParameter("email", cardInfo.getEmail());
 		query.setParameter("companyName", cardInfo.getCompanyName());
 		query.setParameter("positionName", cardInfo.getPositionName());
@@ -979,23 +980,55 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         return query.getResultList();
     }
     
-    public List<Integer> getListOwnerIdByCard(CardInfo cardInfo){
+    public List<Integer> getListUserPushToByCard(CardInfo cardInfo){
     	String sqlStr="SELECT DISTINCT ci.card_owner_id"
-    				+ " FROM card_info ci "
-    				+ "	WHERE ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName))" 
-    				+ " AND ci.old_card_flg = 0  AND ci.approval_status = 1 AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";
-    	if(cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 ||cardInfo.getGroupCompanyId() == 3 ||cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5){
-    		sqlStr += "AND ( ci.group_company_id IN (1,2,3,4,5)  OR ( ci.group_company_id NOT IN(1,2,3,4,5) AND ci.contact_date >= '"+ this.complianceDate +"' ))";
-    	} else {
-    		sqlStr += "AND ( ci.group_company_id = "+cardInfo.getGroupCompanyId() 
-    				+" OR ( ci.group_company_id <> "+cardInfo.getGroupCompanyId() +" AND ci.contact_date >= '"+ this.complianceDate +"' ))";
-    	}
-    	Query query = getEntityManager().createNativeQuery(sqlStr);
-    	query.setParameter("name", cardInfo.getName());
-    	query.setParameter("email", cardInfo.getEmail());
-    	query.setParameter("companyName", cardInfo.getCompanyName());
-    	query.setParameter("cardOwnerId", cardInfo.getCardOwnerId());
-        return query.getResultList();
+				+ " FROM card_info ci "
+				+ "	WHERE ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName))" 
+				+ " AND ci.old_card_flg = 0  AND ci.approval_status = 1 AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date comDate=new Date();
+		try {
+			comDate = formatter.parse(this.complianceDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		if(cardInfo.getContactDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(comDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate())){
+			if(cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 ||cardInfo.getGroupCompanyId() == 3 ||cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5){
+	    		sqlStr += "AND ( ci.group_company_id IN (1,2,3,4,5) OR ( ci.group_company_id NOT IN(1,2,3,4,5) AND ci.contact_date >= '"+ this.complianceDate +"' ))";
+	    	} else {
+	    		sqlStr += "AND ( ci.group_company_id = "+cardInfo.getGroupCompanyId() +""
+	    				+ " OR ( ci.group_company_id <> "+cardInfo.getGroupCompanyId() +" AND ci.contact_date >= '"+ this.complianceDate +"' ))";
+	    	}			
+		}
+		
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		query.setParameter("name", cardInfo.getName());
+		query.setParameter("email", cardInfo.getEmail());
+		query.setParameter("companyName", cardInfo.getCompanyName());
+		query.setParameter("cardOwnerId", cardInfo.getCardOwnerId());
+		
+	    return query.getResultList();
+    }
+    
+    public List<Integer> getListUserPushFromByCard(CardInfo cardInfo){
+    	String sqlStr="SELECT DISTINCT ci.card_owner_id"
+				+ " FROM card_info ci "
+				+ "	WHERE ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName))" 
+				+ " AND ci.old_card_flg = 0  AND ci.approval_status = 1 AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";
+		if(cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 ||cardInfo.getGroupCompanyId() == 3 ||cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5){
+	    		sqlStr += "AND ( ci.group_company_id IN (1,2,3,4,5)  OR ( ci.group_company_id NOT IN(1,2,3,4,5) AND ci.contact_date >= '"+ this.complianceDate +"' ))";
+	    	} else {
+	    		sqlStr += "AND ( ci.group_company_id = "+cardInfo.getGroupCompanyId() 
+	    				+" OR ( ci.group_company_id <> "+cardInfo.getGroupCompanyId() +" AND ci.contact_date >= '"+ this.complianceDate +"' ))";
+	    	}	
+		
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		query.setParameter("name", cardInfo.getName());
+		query.setParameter("email", cardInfo.getEmail());
+		query.setParameter("companyName", cardInfo.getCompanyName());
+		query.setParameter("cardOwnerId", cardInfo.getCardOwnerId());
+		
+	    return query.getResultList();
     }
     
     public int updateCardDeleted(Integer cardId){
@@ -1149,4 +1182,19 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         return (Long)getOrNull(query);
 
 	}
+
+	public CardInfo getNewestCardInfo(CardInfo cardInfo){
+            Query query = getEntityManager().createQuery("SELECT c FROM CardInfo c "
+                                + " WHERE c.email = :email AND c.companyName = :companyName AND c.positionName = :positionName AND c.departmentName = :departmentName"
+                                + " AND c.mobileNumber = :mobileNumber AND c.addressFull = :addressFull"
+                                + " ORDER BY c.contactDate DESC, c.createDate DESC");
+            query.setParameter("email", cardInfo.getEmail());
+            query.setParameter("companyName", cardInfo.getCompanyName());
+            query.setParameter("positionName", cardInfo.getPositionName());
+            query.setParameter("departmentName", cardInfo.getDepartmentName());
+            query.setParameter("mobileNumber", cardInfo.getMobileNumber());
+            query.setParameter("addressFull", cardInfo.getAddressFull());
+            query.setMaxResults(1);
+            return (CardInfo)query.getSingleResult();    
+    }
 }

@@ -3,8 +3,8 @@
  */
 package com.ecard.core.service.impl;
 
-import com.ecard.core.dao.DataIndexIdDAO;
-import com.ecard.core.model.enums.ActionTypeEnum;
+import com.ecard.core.dao.DataIndexDAO;
+import com.ecard.core.model.enums.*;
 import com.ecard.core.model.enums.IndexTypeEnum;
 import com.ecard.core.model.enums.PropertyCodeEnum;
 import com.ecard.core.model.enums.TableTypeEnum;
@@ -22,9 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class DataIndexServiceImpl implements DataIndexService{
     
     @Autowired
-    DataIndexIdDAO dataIndexIdDAO;
+    DataIndexDAO dataIndexDAO;
     
     public String generateDataIndex(IndexTypeEnum indexTypeEnum, ActionTypeEnum actionTypeEnum, TableTypeEnum tableTypeEnum, PropertyCodeEnum propertyCodeEnum){
-        return dataIndexIdDAO.insertDataIndexBy(indexTypeEnum, actionTypeEnum, tableTypeEnum, propertyCodeEnum);
+        return dataIndexDAO.insertDataIndexBy(indexTypeEnum, actionTypeEnum, tableTypeEnum, propertyCodeEnum);
     }
 }

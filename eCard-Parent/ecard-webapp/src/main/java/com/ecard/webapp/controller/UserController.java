@@ -70,6 +70,7 @@ import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.SearchInfo;
 import com.ecard.core.vo.TagForCard;
+import com.ecard.core.vo.TagGroup;
 import com.ecard.core.vo.UserDownloadPermission;
 import com.ecard.core.vo.UserTagAndCardTag;
 import com.ecard.webapp.constant.CommonConstants;
@@ -410,8 +411,6 @@ public class UserController {
 		ModelAndView modelAndView = new ModelAndView();
 		CardInfo cardInfo = null;
 		List<CardConnectModel> cardList = null;
-		List<TagForCard> listCardTag = null;
-		List<TagForCard> listUserTag = null;
 		try{
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
@@ -424,17 +423,6 @@ public class UserController {
 			//List card connected
 			cardList = cardInfoService.listCardConnect(cardInfo.getCardOwnerId(), cardInfo.getGroupCompanyId(), cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
 			
-			//List tag
-			listCardTag = getAllTagForCard(userId);
-			//modelAndView.addObject("cardTagList", listCardTag);
-            //listUserTag = cardTagService.listUserTagByUserId(userId);
-            if(listCardTag.size() == 0){
-            	modelAndView.addObject("listUserTag", listUserTag);
-            }
-            else{
-            	modelAndView.addObject("cardTagList", listCardTag);
-            }
-            
             List<CardInfoMemo> listCardMemo = getListCardMemo(cardInfo.getCardId());
             modelAndView.addObject("listCardMemo", listCardMemo);
             
@@ -711,20 +699,19 @@ public class UserController {
 	
 	@RequestMapping (value = "addCardTag", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<TagForCard> addCardTag(@RequestBody TagForCard cardAndUserTag, HttpServletRequest request, HttpServletResponse response) {
+	public List<TagGroup> addCardTag(@RequestBody CardTagId cardTag, HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("addCardTag", UserController.class);
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		Integer userId = ecardUser.getUserId();
 		try{
-			cardTagService.registerCardTag(cardAndUserTag.getCardId(), cardAndUserTag.getTagId());
+			cardTagService.addCardTag(cardTag);
 		}
 		catch(Exception ex){
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
-		List<TagForCard> listTagForCard = getAllTagForCard(userId);
-		return listTagForCard;
+		return getCardTag();
 	}
 	
 	@RequestMapping (value = "addCardMemo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -769,7 +756,7 @@ public class UserController {
 	
 	@RequestMapping (value = "deleteCardTag", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<TagForCard> deleteCardTag(@RequestBody TagForCard cardAndUserTag, HttpServletRequest request, HttpServletResponse response) {
+	public List<TagGroup> deleteCardTag(@RequestBody TagForCard cardAndUserTag, HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("deleteCardTag", UserController.class);
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -781,8 +768,8 @@ public class UserController {
 		catch(Exception ex){
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
-		List<TagForCard> listTagForCard = getAllTagForCard(userId);
-		return listTagForCard;
+		//List<TagForCard> listTagForCard = getAllTagForCard(userId);
+		return getCardTag();
 	}
 	
 	@RequestMapping (value = "deleteTag", method = RequestMethod.POST)
@@ -923,6 +910,60 @@ public class UserController {
 		return obj;
 	}
 	
+	private List<TagGroup> convertCardTagIdList(List<TagForCard> cardTagModelList){
+		List<TagGroup> tagGroups = new ArrayList<TagGroup>();
+        TagForCard cardTagId;
+        
+        if (cardTagModelList.size() != 0){            
+            tagGroups= cardTagModelList.stream().collect(Collectors.groupingBy(g->g.getTagId())).entrySet().stream().map(t->{
+               TagGroup tg = new TagGroup();
+               List<Integer> cardIds = new ArrayList<Integer>();
+               
+               tg.setTagId(t.getKey());
+               tg.setUserId(t.getValue().stream().map(x->x.getUserId()).findFirst().get());
+               if(t.getValue().get(0).getCardId() != null){
+                   tg.setListCardIds(t.getValue().stream().map(x->x.getCardId()).collect(Collectors.toList()));
+               } 
+               else{
+                   tg.setListCardIds(cardIds);
+               }
+               tg.setTagName(t.getValue().stream().map(x->x.getTagName()).findFirst().get());               
+            return tg;  
+           }).collect(Collectors.toList());           
+        }
+        
+        return tagGroups;
+	}
+	
+	@RequestMapping (value = "listCardTag", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TagGroup> listCardTag(){
+		return getCardTag();
+	}
+	
+	private List<TagGroup> getCardTag(){
+		List<TagGroup> listTagGroup = null;
+		try{
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+			Integer userId = ecardUser.getUserId();
+			
+			//List tag
+			List<TagForCard> listCardTag = getAllTagForCard(userId);
+			List<TagForCard> listUserTag = cardTagService.listUserTagByUserId(userId);
+            if(listCardTag.size() == 0){
+            	listTagGroup = convertCardTagIdList(listUserTag);
+            }
+            else{
+            	listTagGroup = convertCardTagIdList(listCardTag);
+            }
+		}
+		catch(Exception ex){
+			logger.debug("Exception : ", ex.getMessage());
+		}
+		return listTagGroup;
+	}
+	
 	@RequestMapping(value = "deleteUserSearch", method = RequestMethod.POST)
 	@ResponseBody
 	public ObjectListSearchUsers deleteUserSearch(@RequestParam(value = "id") String id) {
@@ -939,8 +980,6 @@ public class UserController {
 			obj.setHasData(false);
 			return obj;
 		}
-		
-		
 		
 		List<SearchInfo> listSearchInfo = searchInfoService.listSearchText(ecardUser.getUserId());
 		ObjectListSearchUsers obj=new ObjectListSearchUsers();

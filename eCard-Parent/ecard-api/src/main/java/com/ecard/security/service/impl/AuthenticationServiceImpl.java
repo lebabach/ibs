@@ -8,7 +8,9 @@ import com.ecard.api.controller.handler.RestExceptionHandler;
 import com.ecard.core.model.AutoLogin;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
@@ -115,7 +117,8 @@ public class AuthenticationServiceImpl extends RestExceptionHandler implements A
     public StatusInfo authLogin(String email, String password){
         StatusInfo statusInfo = new StatusInfo();
         UserInfo userInfo = userInfoService.findUserByEmail(email);
-        System.out.println("userInfoSerivce"+userInfo);
+        //System.out.println("userInfoSerivce"+userInfo);
+        
         if (userInfo.getEmail() == null || userInfo.getLeaveFlg() == 1 || userInfo.getDeleteFlg() == 1){
             statusInfo.setStatus(1);
             statusInfo.setCode("401");
@@ -123,6 +126,22 @@ public class AuthenticationServiceImpl extends RestExceptionHandler implements A
             statusInfo.setToken("");
             return statusInfo;
         }
+        
+        Date curDate = new Date();
+        boolean isValidDate = false;
+        
+        if(userInfo.getUseDate().getTime() <= curDate.getTime() && curDate.getTime() <= userInfo.getEndDate().getTime()){
+        	isValidDate = true;
+        }
+        
+        if(!isValidDate){
+        	statusInfo.setStatus(1);
+            statusInfo.setCode("401");
+            statusInfo.setMsg("InValid login");
+            statusInfo.setToken("");
+            return statusInfo;
+        }
+        
         try {		
             if ((new BCryptPasswordEncoder()).matches(password, userInfo.getPassword())){
                 // create new token

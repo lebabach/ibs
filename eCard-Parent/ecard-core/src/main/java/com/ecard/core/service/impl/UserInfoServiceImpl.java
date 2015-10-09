@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecard.core.dao.AutoLoginDAO;
-import com.ecard.core.dao.DataIndexIdDAO;
+import com.ecard.core.dao.DataIndexDAO;
 import com.ecard.core.dao.UserInfoDAO;
 import com.ecard.core.model.ActionLog;
 import com.ecard.core.model.AutoLogin;
@@ -47,7 +47,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	AutoLoginDAO autoLoginDAO;
 
 	@Autowired
-    DataIndexIdDAO dataIndexIdDAO;
+    DataIndexDAO dataIndexDAO;
 	
 	public List<UserInfo> getAllUserInfo() {
 
@@ -106,7 +106,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 			String userIndexNo=dataIndexIdDAO.updateDataIndexBy(IndexTypeEnum.UserInfor, ActionTypeEnum.Update, TableTypeEnum.User, PropertyCodeEnum.ManualPC,userInfo.getUserIndexNo(),userInfo.getGroupCompanyId().toString());
 			userInfo.setUserIndexNo(userIndexNo);	
 		}*/
-		String indexId = dataIndexIdDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.UserInfor, ActionTypeEnum.Update, TableTypeEnum.User, PropertyCodeEnum.ManualPC, userInfo.getUserIndexNo(), userInfo.getGroupCompanyId().toString());
+		String indexId = dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.UserInfor, ActionTypeEnum.Update, TableTypeEnum.User, PropertyCodeEnum.ManualPC, userInfo.getUserIndexNo(), userInfo.getGroupCompanyId().toString());
 		userInfo.setUserIndexNo(indexId);	
 		return userInfoDAO.updateProfileAdmin(userInfo);
 	}
@@ -118,7 +118,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	public int registerProfileAdmin(UserInfo userInfo) {
 		/*String userIndexNo=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.UserInfor, ActionTypeEnum.Insert, TableTypeEnum.User, PropertyCodeEnum.ManualPC,userInfo.getGroupCompanyId().toString());
 		userInfo.setUserIndexNo(userIndexNo);*/
-		String indexId = dataIndexIdDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.UserInfor, ActionTypeEnum.Insert, TableTypeEnum.User, PropertyCodeEnum.ManualPC,userInfo.getUserIndexNo(), userInfo.getGroupCompanyId().toString());
+		String indexId = dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.UserInfor, ActionTypeEnum.Insert, TableTypeEnum.User, PropertyCodeEnum.ManualPC,userInfo.getUserIndexNo(), userInfo.getGroupCompanyId().toString());
 		userInfo.setUserIndexNo(indexId);	
 		return userInfoDAO.registerProfileAdmin(userInfo);
 	}
@@ -307,4 +307,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     public List<UserInfoVo> getListUserAllTeam(){
 		return userInfoDAO.getListUserAllTeam();
 	}
+    
+    public boolean checkUseDateEndDate(String email){
+    	return userInfoDAO.checkUseDateEndDate(email);
+    }
 }

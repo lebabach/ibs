@@ -166,37 +166,13 @@
 		<div class="balloon lbl_balloon" style="display: none; margin-top: 10px">
 			<div class="">
 				<div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;">
-					
-						<table class="table" id="tags">
-							<col width="10%">
-							<col width="80%">
-							<col width="10%">
-							<tbody>
-							<c:forEach var="cardTag" items="${cardTagList}" varStatus="loop">
-								<tr id="rowData">
-									<td>
-										<input type="checkbox" class="i-checks" id="${ cardTag.tagId }" value="${ cardTag.tagId }" name="checkTag">
-										<input id="hCardId" type='hidden' value="${ cardTag.cardId }" class="card-Id" />
-									</td>
-									<td><c:out value="${ cardTag.tagName }"></c:out></td>
-									<td><a href="javascript:void(0);" class="delTag" id="${ cardTag.tagId }"><i class="fa fa-trash"></i></a></td>
-								</tr>
-							</c:forEach>
-							<c:if test="${ userTag.size > 0 }">
-								<c:forEach var="userTag" items="${listUserTag}" varStatus="loop">
-									<tr id="rowData">
-										<td>
-											<input type="checkbox" class="i-checks" id="${ cardTag.tagId }" value="${ cardTag.tagId }" name="checkTag">
-											<input id="hCardId" type='hidden' value="${ cardTag.cardId }" class="card-Id" />
-										</td>
-										<td><c:out value="${ cardTag.tagName }"></c:out></td>
-										<td><a href="javascript:void(0);" class="delTag" id="${ cardTag.tagId }"><i class="fa fa-trash"></i></a></td>
-									</tr>
-								</c:forEach>
-							</c:if>
-							</tbody>
-						</table>
-					
+					<table class="table" id="tags">
+						<col width="10%">
+						<col width="80%">
+						<col width="10%">
+						<tbody>
+						</tbody>
+					</table>
 				</div>
 			</div>
 
@@ -762,7 +738,6 @@
 
 			</div>
 			<!-- List card connected -->
-			<c:if test="${listCardConnected.size > 0}">
 			<div class="panel panel-default">
 				<div class="panel-heading" style="height: 40px;">
 					<div style="float: left">
@@ -790,7 +765,6 @@
 					</c:forEach>
 				</div>
 			</div>
-			</c:if>
 			<!-- List card connected -->
 		</div>
 		<!-- End Right side -->
@@ -806,6 +780,9 @@
          //Find get cardId
          var hCardId = $("#rowData").find('.card-Id').val();
              	 
+         //Get tag for card
+         getTagForCard();
+         
     	 //Delete card bussiness
     	 $("#delBusinessCard").click(function(){
     		 $.ajax({
@@ -1137,16 +1114,36 @@
         		xhr.setRequestHeader("Content-Type", "application/json");
         	},
         	success: function(response) {
-        		var resp = "";
+        		var respHTML = "";
+        		var isChecked = "";
         		$.each(response, function(index, value){
-        			//console.log("tagId: "+value["tagId"]+" tagName : "+value["tagName"]);
-        			resp += "<tr id='rowData'>"
-    					+ "<td><div style='position: relative;' class='icheckbox_square-green' id='"+value["tagId"]+"'>"
-        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
-        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
-    					+ "</td>"
-    					+ "<td>"+value["tagName"]+"</td>"
-    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>"; 
+        			//console.log(JSON.stringify(value));
+        			//console.log(JSON.stringify(value["listCardIds"]));
+        			$.each(value["listCardIds"], function(idx, v){
+        				//console.log("v : "+ v);
+        				if(v == $("input[name=cardId]").val()){
+        					//console.log("v : "+ v + " tagId : "+tagId);
+        					isChecked = "checked";
+        					respHTML += "<tr id='rowData'>"
+    	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+    	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+    	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+    	    					+ "</td>"
+    	    					+ "<td>"+value["tagName"]+"</td>"
+    	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
+        				}
+        				
+        				if(v != $("input[name=cardId]").val()){
+        					isChecked = "";
+                			respHTML += "<tr id='rowData'>"
+        	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+        	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+        	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+        	    					+ "</td>"
+        	    					+ "<td>"+value["tagName"]+"</td>"
+        	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
+        				}
+        			});
         		});
         		$("#tagName").val('');
         		$("#tags tbody").html(resp);    		
@@ -1171,17 +1168,38 @@
         		xhr.setRequestHeader("Content-Type", "application/json");
         	},
         	success: function(response) {
-        		var resp = "";
+        		var respHTML = "";
+        		var isChecked = "";
         		$.each(response, function(index, value){
-        			//console.log("tagId: "+value["tagId"]+" tagName : "+value["tagName"]);
-        			resp += "<tr id='rowData'>"
-    					+ "<td><div style='position: relative;' class='icheckbox_square-green' id='"+value["tagId"]+"'>"
-        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
-        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
-    					+ "</td>"
-    					+ "<td>"+value["tagName"]+"</td>"
-    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>"; 
+        			//console.log(JSON.stringify(value));
+        			//console.log(JSON.stringify(value["listCardIds"]));
+        			$.each(value["listCardIds"], function(idx, v){
+        				//console.log("v : "+ v);
+        				if(v == $("input[name=cardId]").val()){
+        					//console.log("v : "+ v + " tagId : "+tagId);
+        					isChecked = "checked";
+        					respHTML += "<tr id='rowData'>"
+    	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+    	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+    	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+    	    					+ "</td>"
+    	    					+ "<td>"+value["tagName"]+"</td>"
+    	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
+        				}
+        				
+        				if(v != $("input[name=cardId]").val()){
+        					isChecked = "";
+                			respHTML += "<tr id='rowData'>"
+        	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+        	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+        	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+        	    					+ "</td>"
+        	    					+ "<td>"+value["tagName"]+"</td>"
+        	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
+        				}
+        			});
         		});
+        		
         		$("#tagName").val('');
         		$("#tags tbody").html(resp);    		
         	},
@@ -1211,7 +1229,7 @@
         			resp += "<li><p style='font-size:1.4em;'>"+ value["memo"] +"</p><p class='p-date-n'>"+formatDate(value["create_date"])+"</p><span class='delMemo' id='"+value["seq"]+"' class='span-close'>x</span></li>"; 
         		});
         		console.log(resp);
-        		$(".ul-memo").append(resp);
+        		$(".ul-memo").html(resp);
         		$('.ul-memo').show();
                 $('.panel-body').addClass('panel-body-memo');
         	},
@@ -1241,7 +1259,7 @@
         			resp += "<li><p style='font-size:1.4em;'>"+ value["memo"] +"</p><p class='p-date-n'>"+formatDate(value["create_date"])+"</p><span class='delMemo' id='"+value["seq"]+"' class='span-close'>x</span></li>"; 
         		});
         		
-        		$(".ul-memo").append(resp);
+        		$(".ul-memo").html(resp);
         		$('.ul-memo').show();
                 $('.panel-body').addClass('panel-body-memo'); 
         		/* BootstrapDialog.show({
@@ -1258,6 +1276,59 @@
 		  	}
         });	
 		$("#textarea-memo").val('');
+	}
+	
+	function getTagForCard(){
+     	$.ajax({
+        	url: "<c:url value='/user/listCardTag' />",
+        	type: "GET",
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(response) {
+        		//console.log(JSON.stringify(response));
+        		var respHTML = "";
+        		var isChecked = "";
+        		$.each(response, function(index, value){
+        			//console.log(JSON.stringify(value));
+        			//console.log(JSON.stringify(value["listCardIds"]));
+        			$.each(value["listCardIds"], function(idx, v){
+        				//console.log("v : "+ v);
+        				if(v == $("input[name=cardId]").val()){
+        					//console.log("v : "+ v + " tagId : "+tagId);
+        					isChecked = "checked";
+        					respHTML += "<tr id='rowData'>"
+    	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+    	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+    	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+    	    					+ "</td>"
+    	    					+ "<td>"+value["tagName"]+"</td>"
+    	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
+        				}
+        				
+        				if(v != $("input[name=cardId]").val()){
+        					isChecked = "";
+                			respHTML += "<tr id='rowData'>"
+        	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+        	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+        	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+        	    					+ "</td>"
+        	    					+ "<td>"+value["tagName"]+"</td>"
+        	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
+        				}
+        			});
+        		});
+        		
+        		$("#tags tbody").html(respHTML);
+        	},
+        	error: function(){
+			  BootstrapDialog.show({
+   				title: 'Information',
+  	             	message: 'List card tag failed'
+   	      		});
+		  	}
+        });	
 	}
 	
 	function formatDate(date) {

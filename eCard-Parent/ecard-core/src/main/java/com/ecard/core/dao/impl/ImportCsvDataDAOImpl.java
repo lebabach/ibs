@@ -11,6 +11,7 @@ import javax.persistence.Query;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -174,4 +175,37 @@ public class ImportCsvDataDAOImpl extends GenericDao implements ImportCsvDataDAO
 		
 		return formatIdAfterGenerating;
 	}
+	
+	@Transactional
+	public int bulkInsertOperatorInfo(List<UserInfo> userInfoList) {
+		int totalInsertUser = 0;
+		for (int i = 0; i < userInfoList.size(); i++) {			
+			UserInfo userInfo = userInfoList.get(i);
+			if(checkEmailExist(userInfo.getEmail())){
+				System.out.println("uploadCardCsv err=checkEmailExist importDAO ");
+				continue;
+			}
+			totalInsertUser++;
+			String indexNo = processingDataIndex(IndexTypeEnum.UserInfor, ActionTypeEnum.Insert, TableTypeEnum.User, PropertyCodeEnum.Migration, userInfo.getUserIndexNo(), userInfo.getGroupCompanyId());
+			userInfo.setUserIndexNo(indexNo);
+			getEntityManager().persist(userInfo);
+		}
+		getEntityManager().flush();
+		getEntityManager().clear();
+        return totalInsertUser;
+	}
+	
+	public Boolean checkEmailExist(String email){
+        Validate.notNull(email, "Email not null");
+        Query query = getEntityManager().createQuery("SELECT u FROM UserInfo u WHERE u.email = :email");
+        query.setParameter("email", email);
+        
+        Object result = getOrNull(query);
+        if(result!=null){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
