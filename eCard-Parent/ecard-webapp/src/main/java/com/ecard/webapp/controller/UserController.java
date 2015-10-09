@@ -77,12 +77,13 @@ import com.ecard.core.vo.UserTagAndCardTag;
 import com.ecard.webapp.constant.CommonConstants;
 import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.util.UploadFileUtil;
+import com.ecard.webapp.vo.CardAndUserTagHome;
 import com.ecard.webapp.vo.CardInfoPCVo;
 import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.ListCardDelete;
 import com.ecard.webapp.vo.ObjectCards;
 import com.ecard.webapp.vo.ObjectListSearchUsers;
-import com.ecard.webapp.vo.ObjectTeamVO;
+import com.ecard.webapp.vo.TagUserHome;
 import com.ecard.webapp.vo.UserInfoVO;
 import com.ecard.webapp.vo.UserSearchVO;
 
@@ -165,6 +166,13 @@ public class UserController {
 				}
 			}
 
+		}
+		for(TagGroup tagGroup : listTagGroup){
+			 String str = "";
+			 for(Integer cardId : tagGroup.getListCardIds()){
+				  str = str + "," + cardId;
+			 }
+			 tagGroup.setCardId(str.substring(1,str.length()));
 		}
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("homePC");
@@ -696,6 +704,7 @@ public class UserController {
 		Integer userId = ecardUser.getUserId();
 		
 		try{
+		
 			List<UserTagAndCardTag> listUserTagAndCardTag = userTagService.getListUserTagByUserId(userId);
 	        Integer tagId = 0;
 	        for(UserTagAndCardTag userTagTmp : listUserTagAndCardTag){
@@ -737,6 +746,7 @@ public class UserController {
 	                cardTagService.addCardTag(cardTag);
 	            }
 	        }
+	        
 		}
 		catch(Exception ex){
 			logger.debug("Exception :"+ ex.getMessage(), UserController.class);
@@ -1052,6 +1062,54 @@ public class UserController {
 		obj.setHasData(listSearchInfo.size()>0?true:false);
 		return obj;
 	}
+	
+
+	@RequestMapping (value = "addTagHome", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TagGroup> addTagHome(@RequestBody CardAndUserTagHome cardAndUserTagHome, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("addTag", UserController.class);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(ecardUser.getUserId());
+        Integer tagId = 0;
+        UserTag userTag =new UserTag();
+        userTag.setTagName(cardAndUserTagHome.getTagName());
+        userTag.setUserInfo(userInfo);
+        tagId = userTagService.registerUserTag(userTag);
+        
+      for(TagUserHome tagUserHome : cardAndUserTagHome.getListCardId()){
+            CardTagId cardTag = new CardTagId();
+            cardTag.setCardId(tagUserHome.getCardId());
+            cardTag.setTagId(tagId);
+            cardTagService.addCardTag(cardTag);
+        }
+		
+		List<TagGroup> listTagGroup = getCardTag();
+		for(TagGroup tagGroup : listTagGroup){
+			 String str = "";
+			 for(Integer cardId : tagGroup.getListCardIds()){
+				  str = str + "," + cardId;
+			 }
+			 tagGroup.setCardId(str.substring(1,str.length()));
+		}
+		return listTagGroup;
+    }
+	@RequestMapping(value = "searchCards", method = RequestMethod.POST)
+	@ResponseBody
+	public List<com.ecard.core.vo.CardInfo>  searchCards(@RequestBody final  UserSearchVO userSearchVO) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+		List<com.ecard.core.vo.CardInfo> cardInfo=null;
+        if(userSearchVO.getParameterFlg()==0){
+        	cardInfo = cardInfoService.getListCardSearch(userInfo.getUserId(), null, userSearchVO.getName(), userSearchVO.getPosition(), userSearchVO.getDepartment(), userSearchVO.getCompany(),0, userInfo.getGroupCompanyId());
+        }else{
+        	cardInfo = cardInfoService.getListCardSearchAll(null, userSearchVO.getFreeText(), null,null, null, null, 0, userInfo.getGroupCompanyId());
+        }
+		return cardInfo;
+	}
+
 	@RequestMapping(value = "deleteListCard", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public int deleteListCard(@RequestBody final  ListCardDelete listCardDelete){

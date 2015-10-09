@@ -16,6 +16,7 @@ public class TagGroup {
     private Integer tagId;
     private String tagName;
     private Integer userId;
+    private String cardId;
 
     /**
      * @return the ListCardIds
@@ -72,4 +73,13 @@ public class TagGroup {
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+
+	public String getCardId() {
+		return cardId;
+	}
+
+	public void setCardId(String cardId) {
+		this.cardId = cardId;
+	}
+    
 }
