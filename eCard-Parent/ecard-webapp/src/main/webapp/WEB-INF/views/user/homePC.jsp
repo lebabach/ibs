@@ -424,17 +424,6 @@
          radioClass: 'iradio_square-green',                
        });
        
-      /*  $(document).on('ifChecked','input[name=bla]',function(event) {
-         $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
-       });
-       
-       $(document).on('ifUnchecked','input',function(event){     
-         if($(".icheckbox_square-green").find('.checked').size() == 1){
-           $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
-           $(".addTagCard").css("display","none");  
-         }          
-       }); */
-
        // Process add tag and delete
        $("#deletePeople").click(function(e){
     	   if (confirm('<fmt:message key="card.delete.confirm"/>')) {
