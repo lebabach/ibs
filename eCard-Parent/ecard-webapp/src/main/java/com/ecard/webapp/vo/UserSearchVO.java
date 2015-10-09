@@ -45,6 +45,14 @@ public class UserSearchVO {
     private String position;
     private String name;
     private int parameterFlg;
+    
+    private int page;
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
 	public int getParameterFlg() {
 		return parameterFlg;
 	}

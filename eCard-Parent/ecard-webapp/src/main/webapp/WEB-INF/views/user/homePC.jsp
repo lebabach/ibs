@@ -560,6 +560,55 @@
    			    }
    			});
           });
+          
+          $("#freeText").change(function(){
+        	  resetOthersInputText();
+          });
+          
+          $("#owner,#company,#department,#position,#name").change(function(){
+        	  resetFreeText()
+          });
+       
+          
+          $(".modal-content .btn-lg").click(function() {
+             	resetValidationForm();
+       			if (!checkValidationForm()) {
+       				return false;
+       			}
+       			var freeText = $("#freeText").val();
+       	   		var owner = $("#owner").val();
+       	   		var company = $("#company").val();
+       	   		var department = $("#department").val();
+       	   		var position = $("#position").val();
+       	   		var name = $("#name").val();
+       	   		var parameterFlg = $("#parameterFlg").val()
+       	   		
+       			if($("#parameterFlg").val()==0){
+       				owner="";	
+       	        }
+       	   		$(".modal-header button").click();
+       			$.ajax({
+       			    type: 'POST',
+       			    url: 'searchCards',
+       			    dataType: 'json', 
+       				 contentType: 'application/json',
+       				 mimeType: 'application/json',
+       			    data: JSON.stringify({ 
+       			        'freeText':freeText,
+       			        'owner':owner,
+       			        'company':company,
+       			        'department':department,
+       			        'position':position,
+       			        'name':name,
+       			        'parameterFlg':parameterFlg,
+       			        'page':1
+       			    }),
+       			    success: function(data){
+       			    	debugger;
+       			    	setDataSearch(data);
+       			    }
+       			});
+              });
 });/* END READY DOCUMENT  */
  
       // Process with Label
@@ -838,5 +887,70 @@
 	   		$("#name").val(name);
 	   		$("#parameterFlg").val(parameterFlg);
 	   		return modal;
+	   	}
+	   	
+	   	function resetFreeText() {
+	   		$("#freeText").text("");
+	   		$("#freeText").val("");
+	   	}
+	   	
+	   	function resetOthersInputText() {
+	   		$("#owner").text("");
+   	   		$("#company").text("");
+   	   		$("#department").text("");
+   	   		$("#position").text("");
+   	   		$("#name").text("");
+	   		
+	   		$("#owner").val("");
+   	   		$("#company").val("");
+   	   		$("#department").val("");
+   	   		$("#position").val("");
+   	   		$("#name").val("");
+   	   		
+	   	}
+	   	
+	   	function setListSearch(cardId,firstName,lastName,companyName,departmentName,positionName,telNumberCompany,imageFile,email){
+	   		var modal=	'<div class="list-group-item pointer">'
+	   			+  '<div class="row row-new">'
+	   			+	'<div class="col-md-1 col-xs-1">'
+	   			+	 '<div class="icheckbox_square-green" style="display:none">'
+	   			+		'<input type="checkbox" class="i-checks" name="bla" value="'+cardId+'">'
+	   			+	 '</div>'
+	   			+	'</div>'
+	   			+	'<div class="col-md-5">'
+	   			+	 '<div class="col-xs-11 mg-top">'
+	   			+		'<p class="name">'+lastName +  firstName+'</p>'
+	   			+		'<p class="livepass">"'+companyName+'"</p>'
+	   			+		'<p class="department_and_position">"'+departmentName+'" "'+positionName+'"</p>'
+	   			+		'<p class="num">"'+telNumberCompany+'"</p>'
+	   			+		'<p class="mail"><a href="#">"'+email+'"</a></p>'
+	   			+	 '</div>'
+	   			+	'</div>'
+	   			+	'<div class="col-md-6">'
+	   			+	 '<div class="col-xs-5" style=" display: table;">'
+	   			+		'</div>'
+	   			+           '<div class="col-xs-7">'
+	   			+			'<img src="" class="img-responsive img-thumb pull-right" alt="Responsive image">'
+	   			+			'<input class="hidden" name="fileImageName" value="'+imageFile+'">'
+	   			+'</div> '
+	   			+	'</div>'
+	   			+ '</div>'
+	   			+'</div>'
+	   		return modal;
+	   	}
+	   	
+	   	function setDataSearch(cards){
+	   		$(".business_card_book .list-group").remove();
+	   		var listGroup=$(".business_card_book").append(SetListGroupSearch());
+	   		$.each( cards, function( key, data ) {
+	   			$(".business_card_book .list-group").append(setListSearch(data.cardId,data.firstName,data.lastName,data.companyName,data.departmentName,data.positionName,data.telNumberCompany,data.imageFile,data.email));
+	   		});
+	   	}
+	   	
+	   	function SetListGroupSearch(){
+	   		var data='<div class="list-group" style="margin-bottom: 10px !important;" id= "titleOfSearch">'
+	   			+'<div class="list-group-item-title">Title</div>'
+	   			+'</div>'
+   			return data;
 	   	}
     </script>

@@ -986,6 +986,21 @@ public class UserController {
 		obj.setHasData(listSearchInfo.size()>0?true:false);
 		return obj;
 	}
+	
+	@RequestMapping(value = "searchCards", method = RequestMethod.POST)
+	@ResponseBody
+	public List<com.ecard.core.vo.CardInfo>  searchCards(@RequestBody final  UserSearchVO userSearchVO) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+		List<com.ecard.core.vo.CardInfo> cardInfo=null;
+        if(userSearchVO.getParameterFlg()==0){
+        	cardInfo = cardInfoService.getListCardSearch(userInfo.getUserId(), null, userSearchVO.getName(), userSearchVO.getPosition(), userSearchVO.getDepartment(), userSearchVO.getCompany(),0, userInfo.getGroupCompanyId());
+        }else{
+        	cardInfo = cardInfoService.getListCardSearchAll(null, userSearchVO.getFreeText(), null,null, null, null, 0, userInfo.getGroupCompanyId());
+        }
+		return cardInfo;
+	}
 }
 
 
