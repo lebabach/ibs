@@ -424,6 +424,68 @@
          checkboxClass: 'icheckbox_square-green',
          radioClass: 'iradio_square-green',                
        });
+       
+       // Process add tag and delete
+       $("#deletePeople").click(function(e){
+    	   if (confirm('<fmt:message key="card.delete.confirm"/>')) {
+    		   var listCardId=[];
+    			$(".icheckbox_square-green").find('.checked').each(function(){
+    	         cardId = $(this).find('input[name=bla]').val();
+    	         listCardId.push({"cardId":cardId});    	         
+    			});
+    			$.ajax({
+ 					type: 'POST',
+ 					url: 'deleteListCard',
+ 					 dataType: 'json', 
+ 					 contentType: 'application/json',
+ 					 mimeType: 'application/json',
+ 					data:JSON.stringify({"listCardId":listCardId}) 
+ 				}).done(function(resp, status, xhr) { 					
+ 					if(resp != 0){
+ 						$(".list-group-item .checked").closest('.list-group-item').each(function(){
+ 						$(this).removeClass("checked")
+ 	 					  if($(this).parents('.list-group').find('.row-new').length==1){
+ 	 					    $(this).parents('.list-group').remove();
+ 	 					  } else {
+ 	 					    $(this).remove();
+ 	 					  }
+ 	 					});	
+ 					}
+ 					reloadICheck();
+ 				}).fail(function(xhr, status, err) {
+ 					console.log('BBB='+err);
+ 				});
+    	   }
+       });
+
+    /*    $(document).on('click','#addTag',function(e){
+         if($(".balloon").css('display') == 'block')
+           $(".balloon").css("display","none");
+         else
+           $(".balloon").css("display","block");
+       }); */
+
+       $('.makefriend').click(function(e){
+         if($(this).find('button').hasClass('btn-success')){
+           $(this).find('button').removeClass('btn-success');
+           $(this).find('button').addClass('btn-default');
+           $(this).find('button').text("取り消す");
+           return false;
+         } 
+          
+         if($(this).find('button').hasClass('btn-default')){
+           $(this).find('button').removeClass('btn-default');
+           $(this).find('button').addClass('btn-success');
+           $(this).find('button').text("追加");
+           return false;
+         }
+
+       });
+       $('.mail').click(function(e) {
+         console.log('Go to mailbox');
+         e.stopPropagation();
+       });
+
        // Click to personal details page
 
        $('#sort-card-cnd').on('change', function() {
@@ -555,6 +617,55 @@
    			    }
    			});
           });
+          
+          $("#freeText").change(function(){
+        	  resetOthersInputText();
+          });
+          
+          $("#owner,#company,#department,#position,#name").change(function(){
+        	  resetFreeText()
+          });
+       
+          
+          $(".modal-content .btn-lg").click(function() {
+             	resetValidationForm();
+       			if (!checkValidationForm()) {
+       				return false;
+       			}
+       			var freeText = $("#freeText").val();
+       	   		var owner = $("#owner").val();
+       	   		var company = $("#company").val();
+       	   		var department = $("#department").val();
+       	   		var position = $("#position").val();
+       	   		var name = $("#name").val();
+       	   		var parameterFlg = $("#parameterFlg").val()
+       	   		
+       			if($("#parameterFlg").val()==0){
+       				owner="";	
+       	        }
+       	   		$(".modal-header button").click();
+       			$.ajax({
+       			    type: 'POST',
+       			    url: 'searchCards',
+       			    dataType: 'json', 
+       				 contentType: 'application/json',
+       				 mimeType: 'application/json',
+       			    data: JSON.stringify({ 
+       			        'freeText':freeText,
+       			        'owner':owner,
+       			        'company':company,
+       			        'department':department,
+       			        'position':position,
+       			        'name':name,
+       			        'parameterFlg':parameterFlg,
+       			        'page':1
+       			    }),
+       			    success: function(data){
+       			    	debugger;
+       			    	setDataSearch(data);
+       			    }
+       			});
+              });
 });/* END READY DOCUMENT  */
  
       // Process with Label
@@ -835,6 +946,7 @@
 	   		return modal;
 	   	}
 	   	
+
 	    // Add card tag
 	     $('#addLabel').click(function(event) {
 	    	var listCardId = [];
@@ -925,8 +1037,70 @@
 						console.log("isClick : "+isClick);
 					}
 	     });
-	    
+	
+	   	function resetFreeText() {
+	   		$("#freeText").text("");
+	   		$("#freeText").val("");
+	   	}
+	   	
+	   	function resetOthersInputText() {
+	   		$("#owner").text("");
+   	   		$("#company").text("");
+   	   		$("#department").text("");
+   	   		$("#position").text("");
+   	   		$("#name").text("");
+	   		
+	   		$("#owner").val("");
+   	   		$("#company").val("");
+   	   		$("#department").val("");
+   	   		$("#position").val("");
+   	   		$("#name").val("");
+   	   		
+	   	}
+	   	
+	   	function setListSearch(cardId,firstName,lastName,companyName,departmentName,positionName,telNumberCompany,imageFile,email){
+	   		var modal=	'<div class="list-group-item pointer">'
+	   			+  '<div class="row row-new">'
+	   			+	'<div class="col-md-1 col-xs-1">'
+	   			+	 '<div class="icheckbox_square-green" style="display:none">'
+	   			+		'<input type="checkbox" class="i-checks" name="bla" value="'+cardId+'">'
+	   			+	 '</div>'
+	   			+	'</div>'
+	   			+	'<div class="col-md-5">'
+	   			+	 '<div class="col-xs-11 mg-top">'
+	   			+		'<p class="name">'+lastName +  firstName+'</p>'
+	   			+		'<p class="livepass">"'+companyName+'"</p>'
+	   			+		'<p class="department_and_position">"'+departmentName+'" "'+positionName+'"</p>'
+	   			+		'<p class="num">"'+telNumberCompany+'"</p>'
+	   			+		'<p class="mail"><a href="#">"'+email+'"</a></p>'
+	   			+	 '</div>'
+	   			+	'</div>'
+	   			+	'<div class="col-md-6">'
+	   			+	 '<div class="col-xs-5" style=" display: table;">'
+	   			+		'</div>'
+	   			+           '<div class="col-xs-7">'
+	   			+			'<img src="" class="img-responsive img-thumb pull-right" alt="Responsive image">'
+	   			+			'<input class="hidden" name="fileImageName" value="'+imageFile+'">'
+	   			+'</div> '
+	   			+	'</div>'
+	   			+ '</div>'
+	   			+'</div>'
+	   		return modal;
+	   	}
+	   	
+	   	function setDataSearch(cards){
+	   		$(".business_card_book .list-group").remove();
+	   		var listGroup=$(".business_card_book").append(SetListGroupSearch());
+	   		$.each( cards, function( key, data ) {
+	   			$(".business_card_book .list-group").append(setListSearch(data.cardId,data.firstName,data.lastName,data.companyName,data.departmentName,data.positionName,data.telNumberCompany,data.imageFile,data.email));
+	   		});
+	   	}
+	   	
+	   	function SetListGroupSearch(){
+	   		var data='<div class="list-group" style="margin-bottom: 10px !important;" id= "titleOfSearch">'
+	   			+'<div class="list-group-item-title">Title</div>'
+	   			+'</div>'
+   			return data;
+	   	}
 
-	    
-	    	
     </script>
