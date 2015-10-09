@@ -959,13 +959,14 @@
 	   		$(".modal-body.userSearchs").remove();
 	   		$.each( obj, function( key, value ) {
 	   	   		$("#lsUserSearchs").append(setModalBody(value.freeText,value.owner,value.company,value.department,value.position,value.name,value.seq,value.parameterFlg));
+		   	   	
 	   		});
 		   	 $('.modal-content-new .i-checks').iCheck({
 	            checkboxClass : 'icheckbox_square-green',
 	            radioClass : 'iradio_square-green'
 
 	         });
-		   	 
+		   	
 		   	 $("#btn-success3").click(function(){
 		   		$('.modal-content').hide(); 
 	            $('.modal-content-new').show(); 
@@ -996,8 +997,14 @@
 	   	}
 	   	
 	   	function setModalBody(freeText,owner,company,department,position,name,seq,parameterFlg){
+	   		var label="";
+	   		if(parameterFlg==0){
+	   			label="自分の名刺検索で使用可能";
+   	        }else{
+   	        	label="グループネットワーク検索で使用可能";
+   	        }
 	   		var modal=	'<div class="modal-body userSearchs" style="border-bottom: 1px solid #b1b1b1">'
-		   	   	+	'<label for="exampleInputEmail1">自分の名刺検索で使用可能</label>'
+		   	   	+	'<label for="exampleInputEmail1">'+label+'</label>'
 		   	   	+   '<div class="row row-new">'
 		   	   	+		'<div class="col-md-1 col-xs-1">'
 		   	   	+			'<div class="iradio_square-green">'
