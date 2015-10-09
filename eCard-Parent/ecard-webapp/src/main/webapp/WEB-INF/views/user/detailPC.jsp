@@ -1275,7 +1275,7 @@ label.error {
 	    					+ "<td>"+value["tagName"]+"</td>"
 	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
         		});
-        		$("#tags tbody").html('');
+        		
         		$("#tagName").val('');
         		$("#tags tbody").html(respHTML);    		
         	},
@@ -1303,7 +1303,7 @@ label.error {
         		var respHTML = "";
         		var isChecked = "";
         		$.each(response, function(index, value){
-        			console.log(JSON.stringify(value));
+        			//console.log(JSON.stringify(value));
         			//console.log(JSON.stringify(value["listCardIds"]));
         			isChecked = "";
         			$.each(value["listCardIds"], function(idx, v){
@@ -1336,7 +1336,6 @@ label.error {
 	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
         		});
         		
-        		$("#tags tbody").html('');
         		$("#tagName").val('');
         		$("#tags tbody").html(respHTML);    		
         	},
