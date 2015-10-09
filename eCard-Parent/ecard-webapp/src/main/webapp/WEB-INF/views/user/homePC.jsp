@@ -483,92 +483,9 @@
          checkboxClass: 'icheckbox_square-green',
          radioClass: 'iradio_square-green',                
        });
-       
-      /*  $(document).on('ifChecked','input[name=bla]',function(event) {
-         $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
-       });
-       
-       $(document).on('ifUnchecked','input',function(event){     
-         if($(".icheckbox_square-green").find('.checked').size() == 1){
-           $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
-           $(".addTagCard").css("display","none");  
-         }          
-       }); */
-
-       // Process add tag and delete
-       $("#deletePeople").click(function(e){
-         
-       });
-
-    /*    $(document).on('click','#addTag',function(e){
-         if($(".balloon").css('display') == 'block')
-           $(".balloon").css("display","none");
-         else
-           $(".balloon").css("display","block");
-       }); */
-
-       $('.makefriend').click(function(e){
-         if($(this).find('button').hasClass('btn-success')){
-           $(this).find('button').removeClass('btn-success');
-           $(this).find('button').addClass('btn-default');
-           $(this).find('button').text("取り消す");
-           return false;
-         } 
-          
-         if($(this).find('button').hasClass('btn-default')){
-           $(this).find('button').removeClass('btn-default');
-           $(this).find('button').addClass('btn-success');
-           $(this).find('button').text("追加");
-           return false;
-         }
-
-       });
-       $('.mail').click(function(e) {
-         console.log('Go to mailbox');
-         e.stopPropagation();
-       });
-
        // Click to personal details page
        
 
-       // Sort name card
-       $('.clearfix a').click(function(e) {
-         $(this).parent().find('a').removeClass("active");
-         $(this).addClass("active");
-
-         // Process with Business Card List
-         if($(".BusinessCardList").hasClass("active")) {                
-           $(".business_card_book").css("display", "block");
-           $(".peopleSearchResults").css("display", "none");
-           $(".network_card_book").css("display", "none");                
-           $(".setDisplayTerm").css("display","block");
-           $(".network_card_book").css("display", "none");
-           $(".manager_search_card").css("display","none");
-           $(".ManagerSearch_box").css("display","none");
-         }
-
-         // Process with IBS Card List
-         if($(".IBSNetworkCardList").hasClass("active")) {              
-           $(".business_card_book").css("display", "none");
-           $(".peopleSearchResults").css("display", "block");
-           $(".network_card_book").css("display", "none");
-           $(".setDisplayTerm").css("display","none");
-           $(".IBSNetworkCardList_popup").css("display","none");
-           $(".manager_search_card").css("display","none");
-           $(".ManagerSearch_box").css("display","none");
-         }
-
-         // if($(".ManagerSearch").hasClass("active")) {
-         //   // $(".business_card_book").css("display", "none");
-         //   // $(".peopleSearchResults").css("display", "none");
-         //   // $(".setDisplayTerm").css("display","none");
-         //   // $(".manager_search_card").css("display","block");
-         //   // $(".searchTargetSwitcher").css("display", "none");
-         // }
-       });
-       // Remove tag
-       
-       
        $('#sort-card-cnd').on('change', function() {
        	$.xhrPool.abortAll();
        	var typeSort = $(this).val();
@@ -625,7 +542,6 @@
       			mimeType: 'application/json',
       			success: function(data) {
       				//called when successful
-    				debugger;
       				if(data.hasData){
       					$('.modal-content').hide(); 
       	               $('.modal-content-new').show(); 
@@ -699,15 +615,8 @@
    			    }
    			});
           });
-           
-           
-           
-           
-        
 });/* END READY DOCUMENT  */
  
- 
- 		
       // Manager Search 
       $(".ManagerSearch").click(function(event) {        
         if($(".ManagerSearch").hasClass("active")) {
@@ -716,59 +625,7 @@
           $(".ManagerSearch_box").css("display","block");
         }        
       });
-
-      /* $('.search_tag_index').change(function(event) {
-        $('#rowData_'+id_manager).find(".nametag").html(this.value);
-        if(id_manager >=5)
-          id_manager = 1;
-        else
-          id_manager =id_manager + 1;          
-        this.value = '';        
-        return false;
-      }); */
-      $('.ac').click(function(event) {
-        var command = $( event.target ).html();        
-        if (command == '選択した検索条件を使用する') {
-          // Save values and return IBSNetworkCardList
-          $(".BusinessCardList").addClass("active");
-          $(".searchTargetSwitcher").css("display", "block");
-          $(".ManagerSearch").removeClass("active");
-          $(".business_card_book").css("display", "block");
-          $(".peopleSearchResults").css("display", "none");
-          $(".network_card_book").css("display", "none");                
-          $(".setDisplayTerm").css("display","block");
-          $(".network_card_book").css("display", "none");
-          $(".manager_search_card").css("display","none");
-          $(".ManagerSearch_box").css("display","none");
-        } 
-        if (command == '選択した検索条件を削除') {
-          // Clear text and disable checkbox     
-          $("#mSearch").find("td .i-checks").iCheck('uncheck');
-          // $(".ManagerSearch_box").css("display","none");
-          // $(".BusinessCardList").addClass("active");
-          // $(".ManagerSearch").removeClass("active");
-          
-        }
-      });
-
-      // Search function
-      /* $('#search-card').change(function(event) {
-        if($('.ManagerSearch').hasClass('active')) {
-          $('#managercard_'+id_manager+' form input').val();
-          $('#managercard_'+id_manager+' form input').val(this.value);
-          
-          if(id_manager >=5)
-            id_manager = 1;
-          else
-            id_manager =id_manager + 1;          
-          this.value = '';
-        } else {
-          console.log('AA',this.value);  
-          this.value = '';
-        }
-        return false;
-      });
- */
+      
       // Process with Label
       $('#addLabel').click(function(event) {
         // Get value from input and append to list
