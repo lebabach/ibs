@@ -65,7 +65,12 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 					notification.setContents(item.getNotify_message());
 					notification.setDate(item.getNotice_date());
 					notification.setId(item.getNotice_id());
-					card=cardInfoService.getCardInfoDetail(item.getCard_id());
+					try{
+						card=cardInfoService.getCardInfoDetail(item.getCard_id());	
+					}catch (Exception e){
+						card=null;
+					}
+					
 					notification.setImage(card!=null?card.getImageFile():"");
 					notification.setRead_flg(item.getRead_flg());
 					notifications.add(notification);

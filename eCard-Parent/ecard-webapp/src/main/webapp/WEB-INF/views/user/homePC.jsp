@@ -274,21 +274,16 @@
                       <col width="80%">
                       <col width="10%">
                       <tbody>
+                      <c:forEach var="cardTag" items="${listTagGroup}">
                           <tr id="rowData">
-                            <td><input type="checkbox" class="i-checks" id="1"></td>                  
-                            <td class="nametag">Mark111111111</td>
+                            <td>
+                                 <input type="checkbox"  class="i-checks" id="1" value="<c:out value='${cardTag.tagId}'/>">
+                                 <input type="hidden" name= "userId"  value="<c:out value='${cardTag.userId}'/>">
+                            </td>                  
+                            <td class="nametag"><c:out value="${cardTag.tagName}" /></td>
                             <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
                           </tr>
-                          <tr id="rowData">
-                            <td><input type="checkbox" class="i-checks" id="1"></td>                  
-                            <td class="nametag">22222222222222222244444444222244444</td>
-                            <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
-                          </tr>
-                          <tr id="rowData">
-                            <td><input type="checkbox" class="i-checks " id="1"></td>                  
-                            <td>33333</td>
-                            <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
-                          </tr>
+                       </c:forEach>
                       </tbody>
                     </table>
                 </div>
@@ -312,70 +307,15 @@
      
       </div>
     </div>
-
-    <div class="searchTargetSwitcher">
-      <div class="clearfix">
-      <a href="javascript:void(0)" class="BusinessCardList active"> あなたの名刺 </a>
-      <div class="ManagerSearch_box" style="display: none;">
-        <div class="lbl_srh">
-          <dl class="srhbox_round">
-            <dt><a class="search_tag_index_btn" href="javascript: void(0);"></a><i class="fa fa-search"></i></dt>
-            <dd><span class="iptxt"><input type="text" class="search_tag_index" value="" style="color: rgb(171, 171, 171);"></span></dd>
-          </dl>
-        </div>
-        <div class="">
-          <div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;">
-            <table class="table" id="mSearch">
-              <col width="10%">
-              <col width="90%">              
-              <tbody>
-                  <tr id="rowData_1">
-                    <td><input type="checkbox" class="i-checks"></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-                  <tr id="rowData_2">
-                    <td><input type="checkbox" class="i-checks"></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-                  <tr id="rowData_3">
-                    <td><input type="checkbox" class="i-checks "></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-                  <tr id="rowData_4">
-                    <td><input type="checkbox" class="i-checks "></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-                  <tr id="rowData_5">
-                    <td><input type="checkbox" class="i-checks "></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-              </tbody>
-            </table>
-        </div>
-        </div>
-        
-        <div class="" style="margin-top:5px">
-          <div class="ac">
-            <p><a href="#">選択した検索条件を使用する</a></p>
-            <p><a href="#">選択した検索条件を削除</a></p>
-          </div>
-        </div>
-      </div> 
-      <!-- <a class="export"> Export CSV</a> -->
-    </div>
-    </div>
-    
- 
-
   
   <!--  End Header -->
 
   <!-- Start Container -->
-  <div id="container" class="container">
+  <div id="container" class="container" style= "padding-top: 20px !important;" >
     <div class="business_card_book">
     <!-- for here  -->
     <c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">
-		      <div class="list-group" id= "<c:out value='${cardInfoPCVo.nameSort}' />">
+		      <div class="list-group" style="margin-bottom: 10px !important;" id= "<c:out value='${cardInfoPCVo.nameSort}' />">
 		        <div class="list-group-item-title"><c:out value="${cardInfoPCVo.nameSort}" /></div>
 		        <!-- for item here  -->
 		        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
@@ -475,10 +415,10 @@
 
  $(document).ready(function(){
     	     	  
-   	$(".business_card_book .list-group").each(function() {
-   		var id  = $(this).attr("id").replace('/', '');
-   		$(this).attr("id",id);
-   	});
+	   	$(".business_card_book .list-group").each(function() {
+	   		var id  = $(this).attr("id").replace('/', '');
+	   		$(this).attr("id",id);
+	   	});
        $('.i-checks').iCheck({
          checkboxClass: 'icheckbox_square-green',
          radioClass: 'iradio_square-green',                
@@ -559,44 +499,6 @@
        // Click to personal details page
        
 
-       // Sort name card
-       $('.clearfix a').click(function(e) {
-         $(this).parent().find('a').removeClass("active");
-         $(this).addClass("active");
-
-         // Process with Business Card List
-         if($(".BusinessCardList").hasClass("active")) {                
-           $(".business_card_book").css("display", "block");
-           $(".peopleSearchResults").css("display", "none");
-           $(".network_card_book").css("display", "none");                
-           $(".setDisplayTerm").css("display","block");
-           $(".network_card_book").css("display", "none");
-           $(".manager_search_card").css("display","none");
-           $(".ManagerSearch_box").css("display","none");
-         }
-
-         // Process with IBS Card List
-         if($(".IBSNetworkCardList").hasClass("active")) {              
-           $(".business_card_book").css("display", "none");
-           $(".peopleSearchResults").css("display", "block");
-           $(".network_card_book").css("display", "none");
-           $(".setDisplayTerm").css("display","none");
-           $(".IBSNetworkCardList_popup").css("display","none");
-           $(".manager_search_card").css("display","none");
-           $(".ManagerSearch_box").css("display","none");
-         }
-
-         // if($(".ManagerSearch").hasClass("active")) {
-         //   // $(".business_card_book").css("display", "none");
-         //   // $(".peopleSearchResults").css("display", "none");
-         //   // $(".setDisplayTerm").css("display","none");
-         //   // $(".manager_search_card").css("display","block");
-         //   // $(".searchTargetSwitcher").css("display", "none");
-         // }
-       });
-       // Remove tag
-       
-       
        $('#sort-card-cnd').on('change', function() {
        	$.xhrPool.abortAll();
        	var typeSort = $(this).val();
@@ -610,7 +512,7 @@
 			   var str = "";
 				$.each( resp.data, function( key, value ) {	
 					str = $('.business_card_book').append(
-						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 20px !important;" id= "'+value.nameSort.replace("/","").trim()+'">'
+						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id= "'+value.nameSort.replace("/","").trim()+'">'
 				        +'<div class="list-group-item-title">'+value.nameSort+'</div>');
 					 $.each( value.lstCardInfo, function (k,v) {
 							isLoading = isLoading + 1;							 		
@@ -653,7 +555,6 @@
       			mimeType: 'application/json',
       			success: function(data) {
       				//called when successful
-    				debugger;
       				if(data.hasData){
       					$('.modal-content').hide(); 
       	               $('.modal-content-new').show(); 
@@ -727,76 +628,8 @@
    			    }
    			});
           });
-           
-           
-           
-           
-        
 });/* END READY DOCUMENT  */
  
- 
- 		
-      // Manager Search 
-      $(".ManagerSearch").click(function(event) {        
-        if($(".ManagerSearch").hasClass("active")) {
-          $(".ManagerSearch_box").css("display","none");
-        } else {
-          $(".ManagerSearch_box").css("display","block");
-        }        
-      });
-
-      /* $('.search_tag_index').change(function(event) {
-        $('#rowData_'+id_manager).find(".nametag").html(this.value);
-        if(id_manager >=5)
-          id_manager = 1;
-        else
-          id_manager =id_manager + 1;          
-        this.value = '';        
-        return false;
-      }); */
-      $('.ac').click(function(event) {
-        var command = $( event.target ).html();        
-        if (command == '選択した検索条件を使用する') {
-          // Save values and return IBSNetworkCardList
-          $(".BusinessCardList").addClass("active");
-          $(".searchTargetSwitcher").css("display", "block");
-          $(".ManagerSearch").removeClass("active");
-          $(".business_card_book").css("display", "block");
-          $(".peopleSearchResults").css("display", "none");
-          $(".network_card_book").css("display", "none");                
-          $(".setDisplayTerm").css("display","block");
-          $(".network_card_book").css("display", "none");
-          $(".manager_search_card").css("display","none");
-          $(".ManagerSearch_box").css("display","none");
-        } 
-        if (command == '選択した検索条件を削除') {
-          // Clear text and disable checkbox     
-          $("#mSearch").find("td .i-checks").iCheck('uncheck');
-          // $(".ManagerSearch_box").css("display","none");
-          // $(".BusinessCardList").addClass("active");
-          // $(".ManagerSearch").removeClass("active");
-          
-        }
-      });
-
-      // Search function
-      /* $('#search-card').change(function(event) {
-        if($('.ManagerSearch').hasClass('active')) {
-          $('#managercard_'+id_manager+' form input').val();
-          $('#managercard_'+id_manager+' form input').val(this.value);
-          
-          if(id_manager >=5)
-            id_manager = 1;
-          else
-            id_manager =id_manager + 1;          
-          this.value = '';
-        } else {
-          console.log('AA',this.value);  
-          this.value = '';
-        }
-        return false;
-      });
- */
       // Process with Label
       $('#addLabel').click(function(event) {
         // Get value from input and append to list
@@ -895,7 +728,7 @@
 		
 		function createTableNoGroup(nameSort, v){
 			 $('.business_card_book').append(
-						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 20px !important;" id= "'+nameSort.replace("/","").trim()+'">'
+						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id= "'+nameSort.replace("/","").trim()+'">'
 				        +'<div class="list-group-item-title">'+nameSort+'</div>'										 
     	    		+ '<div class="list-group-item pointer">'
 					+'<div class="row row-new">'
