@@ -1197,4 +1197,13 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
             query.setMaxResults(1);
             return (CardInfo)query.getSingleResult();    
     }
+	
+	public int deleteListCard(List<Integer> listCard){
+		Query query = getEntityManager().createNativeQuery("UPDATE card_info ci "
+				+ " SET ci.delete_flg = 1, ci.delet_date = NOW() "
+				+ " WHERE ci.card_id in (:listCard)");
+		query.setParameter("listCard",listCard);
+		return  query.executeUpdate();
+		
+	}
 }

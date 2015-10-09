@@ -1,7 +1,6 @@
 package com.ecard.webapp.controller;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -78,7 +79,10 @@ import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardInfoPCVo;
 import com.ecard.webapp.vo.DataPagingJsonVO;
+import com.ecard.webapp.vo.ListCardDelete;
+import com.ecard.webapp.vo.ObjectCards;
 import com.ecard.webapp.vo.ObjectListSearchUsers;
+import com.ecard.webapp.vo.ObjectTeamVO;
 import com.ecard.webapp.vo.UserInfoVO;
 import com.ecard.webapp.vo.UserSearchVO;
 
@@ -134,12 +138,13 @@ public class UserController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		Long listTotalCardInfo = new Long(0);
+		List<TagGroup> listTagGroup  = null;
 		List<CardInfoPCVo> lstCardInfoPCVo = new ArrayList<>();
 		if (ecardUser != null) {
 			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
 			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), 0);
 			listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId());
-
+			listTagGroup = getCardTag();
 			for (String nameSort : lstNameSort) {
 				List<CardInfo> cardInfoDisp = new ArrayList<>();
 				for (CardInfoUserVo cardInfo : lstCardInfo) {
@@ -165,6 +170,7 @@ public class UserController {
 		modelAndView.setViewName("homePC");
 		modelAndView.addObject("lstCardInfoPCVo", lstCardInfoPCVo);
 		modelAndView.addObject("totalCardInfo", listTotalCardInfo);
+		modelAndView.addObject("listTagGroup",listTagGroup);
 		return modelAndView;
 
 	}
@@ -724,7 +730,24 @@ public class UserController {
 		try{
 			userCardMemo.setCreateDate(new Date());
 			userCardMemo.setUserId(userId);
-			cardMemoService.createCardMemo(userCardMemo);
+			
+			int seq;
+            if(userCardMemo.getSeq() != 0){
+            	cardMemoService.registerCardMemo(userCardMemo);
+            }
+            else{
+            	try{
+            		seq = cardMemoService.getMaxSeqByUserId(userId);
+            	}
+            	catch(Exception e){
+            		seq = 1;
+            	}
+            	
+            	if(userCardMemo.getSeq() == 0){
+            		userCardMemo.setSeq(seq);
+                }
+                cardMemoService.createCardMemo(userCardMemo);
+            }
 		}
 		catch(Exception ex){
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
@@ -1000,6 +1023,26 @@ public class UserController {
         	cardInfo = cardInfoService.getListCardSearchAll(null, userSearchVO.getFreeText(), null,null, null, null, 0, userInfo.getGroupCompanyId());
         }
 		return cardInfo;
+	}
+
+	@RequestMapping(value = "deleteListCard", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public int deleteListCard(@RequestBody final  ListCardDelete listCardDelete){
+		System.out.println("I am here");	
+		List<Integer> listCard = new ArrayList<>();
+		int result = 0;
+		try{
+			for(ObjectCards cardId : listCardDelete.getListCardId()){
+				System.out.println("BBBB = "+cardId.getCardId());
+				listCard.add(Integer.parseInt(cardId.getCardId()));				
+			}
+			result = cardInfoService.deleteListCard(listCard);
+		} catch(Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+		
+		return result;
 	}
 }
 

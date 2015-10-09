@@ -274,21 +274,16 @@
                       <col width="80%">
                       <col width="10%">
                       <tbody>
+                      <c:forEach var="cardTag" items="${listTagGroup}">
                           <tr id="rowData">
-                            <td><input type="checkbox" class="i-checks" id="1"></td>                  
-                            <td class="nametag">Mark111111111</td>
+                            <td>
+                                 <input type="checkbox"  class="i-checks" id="1" value="<c:out value='${cardTag.tagId}'/>">
+                                 <input type="hidden" name= "userId"  value="<c:out value='${cardTag.userId}'/>">
+                            </td>                  
+                            <td class="nametag"><c:out value="${cardTag.tagName}" /></td>
                             <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
                           </tr>
-                          <tr id="rowData">
-                            <td><input type="checkbox" class="i-checks" id="1"></td>                  
-                            <td class="nametag">22222222222222222244444444222244444</td>
-                            <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
-                          </tr>
-                          <tr id="rowData">
-                            <td><input type="checkbox" class="i-checks " id="1"></td>                  
-                            <td>33333</td>
-                            <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
-                          </tr>
+                       </c:forEach>
                       </tbody>
                     </table>
                 </div>
@@ -420,14 +415,87 @@
 
  $(document).ready(function(){
     	     	  
-   	$(".business_card_book .list-group").each(function() {
-   		var id  = $(this).attr("id").replace('/', '');
-   		$(this).attr("id",id);
-   	});
+	   	$(".business_card_book .list-group").each(function() {
+	   		var id  = $(this).attr("id").replace('/', '');
+	   		$(this).attr("id",id);
+	   	});
        $('.i-checks').iCheck({
          checkboxClass: 'icheckbox_square-green',
          radioClass: 'iradio_square-green',                
        });
+       
+      /*  $(document).on('ifChecked','input[name=bla]',function(event) {
+         $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
+       });
+       
+       $(document).on('ifUnchecked','input',function(event){     
+         if($(".icheckbox_square-green").find('.checked').size() == 1){
+           $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
+           $(".addTagCard").css("display","none");  
+         }          
+       }); */
+
+       // Process add tag and delete
+       $("#deletePeople").click(function(e){
+    	   if (confirm('<fmt:message key="card.delete.confirm"/>')) {
+    		   var listCardId=[];
+    			$(".icheckbox_square-green").find('.checked').each(function(){
+    	         cardId = $(this).find('input[name=bla]').val();
+    	         listCardId.push({"cardId":cardId});    	         
+    			});
+    			$.ajax({
+ 					type: 'POST',
+ 					url: 'deleteListCard',
+ 					 dataType: 'json', 
+ 					 contentType: 'application/json',
+ 					 mimeType: 'application/json',
+ 					data:JSON.stringify({"listCardId":listCardId}) 
+ 				}).done(function(resp, status, xhr) { 					
+ 					if(resp != 0){
+ 						$(".list-group-item .checked").closest('.list-group-item').each(function(){
+ 						$(this).removeClass("checked")
+ 	 					  if($(this).parents('.list-group').find('.row-new').length==1){
+ 	 					    $(this).parents('.list-group').remove();
+ 	 					  } else {
+ 	 					    $(this).remove();
+ 	 					  }
+ 	 					});	
+ 					}
+ 					reloadICheck();
+ 				}).fail(function(xhr, status, err) {
+ 					console.log('BBB='+err);
+ 				});
+    	   }
+       });
+
+    /*    $(document).on('click','#addTag',function(e){
+         if($(".balloon").css('display') == 'block')
+           $(".balloon").css("display","none");
+         else
+           $(".balloon").css("display","block");
+       }); */
+
+       $('.makefriend').click(function(e){
+         if($(this).find('button').hasClass('btn-success')){
+           $(this).find('button').removeClass('btn-success');
+           $(this).find('button').addClass('btn-default');
+           $(this).find('button').text("取り消す");
+           return false;
+         } 
+          
+         if($(this).find('button').hasClass('btn-default')){
+           $(this).find('button').removeClass('btn-default');
+           $(this).find('button').addClass('btn-success');
+           $(this).find('button').text("追加");
+           return false;
+         }
+
+       });
+       $('.mail').click(function(e) {
+         console.log('Go to mailbox');
+         e.stopPropagation();
+       });
+
        // Click to personal details page
        
 
