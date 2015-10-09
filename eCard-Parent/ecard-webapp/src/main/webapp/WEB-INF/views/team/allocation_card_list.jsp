@@ -39,6 +39,26 @@ thead, tbody {
 	width: 1201px;
 }
 </style>
+<style type="text/css">
+	.table-1{
+		width:380px;
+	}
+	.td-1{ width: 90px; text-align: left;}
+	.td-2{ width: 120px;
+			text-align: left;
+	}
+	.td-3{ width: 120px;
+		text-align: right;
+	}
+	.td-4{
+		width:  20px;
+		text-align: right;
+	}
+	
+	.table-1 tbody{
+		height: auto !important;
+	}
+</style>
 <script>
 
 function checkNumber(number){
@@ -103,46 +123,85 @@ function listAllication(teamId) {
 			$('.target_count1').val(0);
 		    $('.target_count2').val(0);
 		}
-		if(parseInt($('.current_count').text()) != 0){
-			$('.btn-add').css('display','none');
-		} else {
-			$('.btn-add').css('display','inline-block');
-		}
+
 		$.each( resp, function( key, value ) {
 			if(value.name != null && value.name1 != null && value.name2 != null){						
-            	$('.content-user').append($('<tr  class="tr1">').append(
-	                                      $('<td class="table-column">').text(value.name).append(
-	                                    		  $('<input type="hidden" name="userId" value="'+value.userId+'"> <input type="text" name="teamdivide" class="txt-table" value="'+value.teamdivide+'">')
-	                                    		  ),
-	                                      $('<td class="non-lpadding">').text('<fmt:message key="team.allocation.card"/>'),
-	                                      $('<td class="table-column">').text(value.name1).append(
-	                                    		  $('<input type="hidden" name="userId" value="'+value.userId1+'"> <input type="text" name="teamdivide" class="txt-table" value="'+value.teamdivide1+'">')
-	                                    		  ),
-	                                      $('<td class="non-lpadding">').text('<fmt:message key="team.allocation.card"/>'),
-	                                      $('<td class="table-column">').text(value.name2).append(
-	                                    		  $('<input type="hidden" name="userId" value="'+value.userId2+'"> <input type="text" name="teamdivide" class="txt-table" value="'+value.teamdivide2+'">')
-	                                    		  ),
-	                                      $('<td class="non-lpadding">').text('<fmt:message key="team.allocation.card"/>')
-		                        		
-	                        	
-        
-		                    ));
+
+					$('.content-user').append($('<tr  class="tr1">').append(
+							$('<td class="table-column"><table class="table-1">').append(
+									'<tr><td class="td-1">'+value.name+'</td>'
+									+'<input type="hidden" name="userId" value="'+value.userId+'">'
+									+'<td class="td-2">現在の割り振り数</td>'
+									+'<td class="td-3" align="right">'+value.teamdivide+'</td>'
+									+'<td class="td-4">枚</td></tr><tr>'
+									+ '<td class="td-1"></td>'	
+									+ '<td class="td-2">追加割り振り数</td>'
+									+ '<td class="td-3"><input type="text" name="teamdivide" class="txt-table"></td></td>'
+									+ '<td class="td-4">枚</td></tr>'
+							),
+							$('<td class="table-column"><table class="table-1">').append(
+									'<tr><td class="td-1">'+value.name1+'</td>'
+									+'<input type="hidden" name="userId" value="'+value.userId1+'">'
+									+'<td class="td-2">現在の割り振り数</td>'
+									+'<td class="td-3" align="right">'+value.teamdivide1+'</td>'
+									+'<td class="td-4"><fmt:message key="team.allocation.card"/></td></tr><tr>'
+									+ '<td class="td-1"></td>'	
+									+ '<td class="td-2">追加割り振り数</td>'
+									+ '<td class="td-3"><input type="text" name="teamdivide" class="txt-table"></td></td>'
+									+ '<td class="td-4"><fmt:message key="team.allocation.card"/></td></tr>'
+							),
+							$('<td class="table-column"><table class="table-1">').append(
+									'<tr><td class="td-1">'+value.name2+'</td>'
+									+'<input type="hidden" name="userId" value="'+value.userId2+'">'
+									+'<td class="td-2">現在の割り振り数</td>'
+									+'<td class="td-3" align="right">'+value.teamdivide2+'</td>'
+									+'<td class="td-4"><fmt:message key="team.allocation.card"/></td></tr><tr>'
+									+ '<td class="td-1"></td>'	
+									+ '<td class="td-2">追加割り振り数</td>'
+									+ '<td class="td-3"><input type="text" name="teamdivide" class="txt-table"></td></td>'
+									+ '<td class="td-4"><fmt:message key="team.allocation.card"/></td></tr>'
+							)
+					));		                    
 			}else if(value.name != null && value.name1 != null){
+				console.log('123123123');
 				$('.content-user').append($('<tr  class="tr1">').append(
-                        $('<td class="table-column">').text(value.name).append(
-                      		  $('<input type="hidden" name="userId" value="'+value.userId+'"> <input type="text" name="teamdivide" class="txt-table" value="'+value.teamdivide+'">')
-                      		  ),
-                        $('<td class="non-lpadding">').text('<fmt:message key="team.allocation.card"/>'),
-                        $('<td class="table-column">').text(value.name1).append(
-                      		  $('<input type="hidden" name="userId" value="'+value.userId1+'"> <input type="text" name="teamdivide" class="txt-table" value="'+value.teamdivide1+'">')
-                      		  ),
-                        $('<td class="non-lpadding">').text('<fmt:message key="team.allocation.card"/>') ));
-			}else if (value.name != null){
+						$('<td class="table-column"><table class="table-1">').append(
+								'<tr><td class="td-1">'+value.name+'</td>'
+								+'<input type="hidden" name="userId" value="'+value.userId+'">'
+								+'<td class="td-2">現在の割り振り数</td>'
+								+'<td class="td-3" align="right">'+value.teamdivide+'</td>'
+								+'<td class="td-4">枚</td></tr><tr>'
+								+ '<td class="td-1"></td>'	
+								+ '<td class="td-2">追加割り振り数</td>'
+								+ '<td class="td-3"><input type="text" name="teamdivide" class="txt-table"></td></td>'
+								+ '<td class="td-4">枚</td></tr>'
+						),
+						$('<td class="table-column"><table class="table-1">').append(
+								'<tr><td class="td-1">'+value.name1+'</td>'
+								+'<input type="hidden" name="userId" value="'+value.userId1+'">'
+								+'<td class="td-2">現在の割り振り数</td>'
+								+'<td class="td-3" align="right">'+value.teamdivide1+'</td>'
+								+'<td class="td-4">枚</td></tr><tr>'
+								+ '<td class="td-1"></td>'	
+								+ '<td class="td-2">追加割り振り数</td>'
+								+ '<td class="td-3"><input type="text" name="teamdivide" class="txt-table"></td></td>'
+								+ '<td class="td-4">枚</td></tr>'
+						)
+				));
+			}else if (value.name != null){				
 				$('.content-user').append($('<tr  class="tr1">').append(
-                        $('<td class="table-column">').text(value.name).append(
-                      		  $('<input type="hidden" name="userId" value="'+value.userId+'"> <input type="text" name="teamdivide" class="txt-table" value="'+value.teamdivide+'">')
-                      		  ),
-                        $('<td class="non-lpadding">').text('<fmt:message key="team.allocation.card"/>') ));
+						$('<td class="table-column"><table class="table-1">').append(
+								'<tr><td class="td-1">'+value.name+'</td>'
+								+'<input type="hidden" name="userId" value="'+value.userId+'">'
+								+'<td class="td-2">現在の割り振り数</td>'
+								+'<td class="td-3" align="right">'+value.teamdivide+'</td>'
+								+'<td class="td-4">枚</td></tr><tr>'
+								+ '<td class="td-1"></td>'	
+								+ '<td class="td-2">追加割り振り数</td>'
+								+ '<td class="td-3"><input type="text" name="teamdivide" class="txt-table"></td></td>'
+								+ '<td class="td-4">枚</td></tr>'
+						)
+				));                        
 			}
 			
 			$("#paging1 input.txt-table").each(function() {
@@ -172,8 +231,7 @@ $(function() {
 		$('.content-user').html("");
 		$('.target_count1').val(0)
 		$('.target_count2').val(0)
-		$('.current_count').text('0');
-		$('.btn-add').css('display','none');
+		$('.current_count').text('0');	
 	}
 	if(parseInt($("#listTeam option:selected" ).val()) == 0){
 		$('.content-user').html("");
@@ -197,7 +255,7 @@ $(function() {
 	
 	$("#listTeam").on('change', function() {
 		var teamId  = $(this).val();
-		
+		listAllication(teamId);
 		var totalCurrent = $('input[name=total-card]').val();
 		// resetTeamAllocation
 		if (teamId != 0 ) {
@@ -220,7 +278,6 @@ $(function() {
 			$('.target_count1').val(0)
 			$('.target_count2').val(0)
 			$('.current_count').text('0');
-			$('.btn-add').css('display','none');
 		}		
 	});
 	
@@ -274,10 +331,9 @@ $(function() {
 					data:JSON.stringify({"listUser":listUser,"teamId":teamId,"target_count":target_count,"current_count":target_count}) 
 				}).done(function(resp, status, xhr) {
 					if(resp){
-						console.log(resp);
 						$('.card_number').text(resp.totalCard + '枚');
 						$('.total-card').val(resp.totalCard);
-						$('.btn-add').css('display','none');
+						$("#listTeam").trigger("change");
 					}
 				}).fail(function(xhr, status, err) {
 					alert('Error');
@@ -295,17 +351,16 @@ $(function() {
 					data:JSON.stringify({"listUser":listUser,"teamId":teamId,"target_count":target_count,"current_count":target_count}) 
 				}).done(function(resp, status, xhr) {
 					if(resp){
-						console.log(resp);
+						
 						$('.card_number').text(resp.totalCard + '枚');
 						$('.total-card').val(resp.totalCard);
-						$('.btn-add').css('display','none');
+						$("#listTeam").trigger("change");
 					}
 				}).fail(function(xhr, status, err) {
 					alert('Error');
 				});
 			}
 		}else{
-		
 				$.ajax({
 					type: 'POST',
 					url: 'saveAllocation',
@@ -315,10 +370,9 @@ $(function() {
 					data:JSON.stringify({"listUser":listUser,"teamId":teamId,"target_count":target_count,"current_count":target_count}) 
 				}).done(function(resp, status, xhr) {
 					if(resp){
-						console.log(resp);
 						$('.card_number').text(resp.totalCard + '枚');
 						$('.total-card').val(resp.totalCard);
-						$('.btn-add').css('display','none');
+						$("#listTeam").trigger("change");
 					}
 				}).fail(function(xhr, status, err) {
 					alert('Error');
@@ -429,8 +483,69 @@ $(function() {
 			</div>
 			<!-- END SEARCH -->
 			<!-- DATA TABLE -->
-
 			<div class="col-sm-12 table-list-operator">
+					<div class="row " id="data-table">
+						<div class="ibox-content " >
+							<div class="title-abc" ><fmt:message key="team.allocation.team.list" /></div>
+							<table class="table" id="paging1" style="margin-left: 0px;">
+								<tbody class="content-user">
+								<tr id="rowData">
+									<td class="table-column"> 
+										<table class="table-1">											
+											<tr>
+												<td class="td-1">名刺A子</td>
+												<td class="td-2">現在の割り振り数</td>
+												<td class="td-3">10</td>
+												<td class="td-4">枚</td>
+											</tr>
+											<tr>
+												<td class="td-1"></td>	
+												<td class="td-2">追加割り振り数</td>
+												<td class="td-3"><input type="text" name="card1" class="txt-table"></td></td>
+												<td class="td-4">枚</td>
+											</tr>											
+										</table>	
+									</td>
+									<td class="table-column">
+										<table class="table-1">
+											<tr>
+												<td class="td-1">名刺B子</td>
+												<td class="td-2">現在の割り振り数</td>
+												<td class="td-3">10</td>
+												<td class="td-4">枚</td>
+											</tr>
+											<tr>
+												<td class="td-1"></td>	
+												<td class="td-2">追加割り振り数</td>
+												<td class="td-3"><input type="text" name="card2" class="txt-table"></td></td>
+												<td class="td-4">枚</td>
+											</tr>
+										</table>				
+									</td>
+									<td class="table-column">
+										<table class="table-1">
+											<tr>
+												<td class="td-1">名刺C子</td>
+												<td class="td-2">現在の割り振り数</td>
+												<td class="td-3">10</td>
+												<td class="td-4">枚</td>
+											</tr>
+											<tr>
+												<td class="td-1"></td>	
+												<td class="td-2">追加割り振り数</td>
+												<td class="td-3"><input type="text" name="card3" class="txt-table"></td></td>
+												<td class="td-4">枚</td>
+											</tr>
+										</table>				
+									</td>
+								</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			<%-- <div class="col-sm-12 table-list-operator">
 				<div class="row " id="data-table">
 					<div class="ibox-content ">
 						<div class="title-abc">
@@ -472,7 +587,7 @@ $(function() {
 						</table>
 					</div>
 				</div>
-			</div>
+			</div> --%>
 			<!-- END DATA TABLE -->
 		</div>
 		<!-- BAR BODY -->

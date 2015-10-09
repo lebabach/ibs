@@ -2,79 +2,75 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+    pageEncoding="utf-8"%>
 
 <style>
-.mesage_error {
-	color: red;
-	display: none;
-}
+	.mesage_error{
+	 color:red;
+	 display:none;
+	}
 </style>
 
 <div class="container-fluid padding-top20 bg-container height100per">
 
 
-	<!-- CENTER SIDE -->
-	<div id="center-side" class="col-sm-12">
-		<!-- BAR TOP -->
-		<div class="row bg-white box-shadow menu-top-header">
-			<div class="col-sm-12 ch-check" id="ct1">
-				<div class="float-left col-sm-6">
-					<h4 class="h4-header">オペレータCSV登録</h4>
+        <!-- CENTER SIDE -->
+ <div id="center-side" class="col-sm-12">
+     <!-- BAR TOP -->
+     <div class="row bg-white box-shadow menu-top-header">
+         <div class="col-sm-12 ch-check" id="ct1">
+             <div class="float-left col-sm-6">
+                 <h4 class="h4-header"><fmt:message key="menu.import.operator.CSV"/></h4>
 
-				</div>
-				<div class="col-sm-3" style="float: right; margin: 0 auto;">
-					<h4 class="h4-header">
-						<span><button type="button"
-								class="btn btn-primary btn_cancle" data-dismiss="modal">キャンセル</button></span>
-						<span><button type="button" class="btn btn-primary"
-								data-dismiss="modal" id="btnUploadUser">登録</button></span>
-					</h4>
-				</div>
+             </div>
+             <div style = "float: right;margin: 0 auto;">
+                    <h4 class="h4-header">
+                        <span><button type="button" class="btn btn-primary btn_cancle"
+                                        data-dismiss="modal" id="btnBack"><fmt:message key="team.allocation.cancel"/></button></span>
+                     </h4>
+              </div>
 
 
-			</div>
+         </div>
 
-		</div>
+     </div>
 
-		<!-- END BAR TOP -->
-		<div class="row bg-white box-shadow box-marginTop5 padding-top-bottom">
-			<div style="margin: 0 auto">
-				<div class="col-md-12 col-xs-offset-5">
-					<form class="form-horizontal" role="form" id="upload"
-						action="/ecard-webapp/data/uploadOperatorCSV"
-						enctype="multipart/form-data" method="post">
-						<div class="row" style="margin-bottom: 5px">
-							<select id="groupId" name="roles"
-								style="width: 170px; height: 32px;">
-								<option value=''>会社選択</option>
-								<c:forEach var="listGroupCompany" items="${listGroupCompany}"
-									varStatus="loop">
-									<option value='${listGroupCompany.groupCompanyId}'><c:out
-											value="${listGroupCompany.groupCompanyName}" /></option>
-								</c:forEach>
-							</select>
-							<p class="mesage_error group_company"></p>
-							<input type="text" name="groupCompanyId" class="hidden" value="">
-						</div>
-						<div class="row">
-							<input type="file" name="file" class="submit-1" id="files">
-							<p class="mesage_error file_name"></p>
+     <!-- END BAR TOP -->
+     <div class="row bg-white box-shadow box-marginTop5 padding-top-bottom" >
+        <div style="margin: 0 auto">
+             <div class="col-md-12 col-xs-offset-5">
+             	<form class="form-horizontal" role="form" id="upload" action = "/ecard-webapp/data/uploadOperatorCSV" enctype="multipart/form-data" method="post">
+                 <div class="row" style="margin-bottom:5px">
+                      <select id="groupId" name ="groupCompanyId" style=" width: 170px;height:32px;">
+                      <option value=''>会社選択</option>
+                      <c:forEach var="listGroupCompany" items="${listGroupCompany}" varStatus="loop">
+                      	<option value = '${listGroupCompany.groupCompanyId}'><c:out value="${listGroupCompany.groupCompanyName}"/></option>                             
+                      </c:forEach>                             
+                      </select>
+                      <p class="mesage_error group_company"></p>
+                      <input type="text" name="groupCompanyId" class="hidden" value="">
+                 </div>
+                 <div class="row">                     
+                     <input type="file" name="file" class="submit-1" id="files" >
+                     <p class="mesage_error file_name"></p>
+                     
+                 </div>
+                 <div class="row" style="margin-top:5px;">
+                 	<span><button type="button" class="btn btn-primary" id="btnUploadUser"><fmt:message key="team.allocation.register"/></button></span>
+                 </div>
+                 </form>
+             </div>
+             <div class="row" style="text-align: center;margin: 25px;">
+             	<p class="mesage_error error_exception"></p>
+             </div>
+         </div>
+     </div>
+     </div>
+     <!-- BAR BODY -->
 
-						</div>
-					</form>
-				</div>
-				<div class="row" style="text-align: center; margin: 25px;">
-					<p class="mesage_error error_exception"></p>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- BAR BODY -->
-
-</div>
-
-
+ </div>
+ 
+ 
 <script type="text/javascript">
 	$(document).ready(function(){
 	    $('.i-checks').iCheck({
@@ -136,6 +132,10 @@
 	$('.btn_cancle').click(function(){
 		document.location.href='/ecard-webapp/manager/home';
 	});
+	
+	$("#btnBack").click(function(){
+        document.location.href = '<c:url value="/manager/home"/>';
+    });
 	
 	$('select').on('change', function() {		
 		$('input[name=groupCompanyId]').val(this.value);

@@ -363,10 +363,7 @@ public class CardController {
 
 			cardInfo.setName(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastName(), cardInfo.getFirstName(), " "));
 			cardInfo.setNameKana(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastNameKana(), cardInfo.getFirstNameKana(), " "));
-			//cardInfo.setContactDate(new Date());
-			cardInfo.setNewestCardFlg(1);
-			cardInfo.setGroupCompanyId(0);
-
+			
 			// bach.le https://livepass.backlog.jp/view/MEISHI-575
 			List<String> listAddress = new ArrayList<String>(Arrays.asList(cardInfo.getAddressFull().trim().split(" ")));
 			cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
@@ -388,6 +385,7 @@ public class CardController {
 			cardInfo.setCardIndexNo(nCardInfo.getCardIndexNo());
 			cardInfo.setIsEditting(0);
 			cardInfo.setDateEditting(new Date());
+			cardInfo.setGroupCompanyId(nCardInfo.getGroupCompanyId());
 			result = cardInfoService.updateCardInfoAdmin(cardInfo);
 
 			UserInfo userInfo = null;
@@ -397,14 +395,15 @@ public class CardController {
 				ex.printStackTrace();
 				return new ModelAndView("redirect:list");
 			}
-			List<Integer> listOwnerId = cardInfoService.getListOwnerIdByCard(nCardInfo);
-			UserInfo noticeUser = new UserInfo();;
+			
+			// Push to other users
+			List<Integer> listOwnerId = cardInfoService.getListUserPushToByCard(cardInfo);
+			UserInfo noticeUser = new UserInfo();
 			for (Integer listOwner : listOwnerId) {
 				if(listUserInfo.stream().filter(u-> u.getUserId() == listOwner).collect(Collectors.toList()).size()<=0){
 					continue;
-				}
-				System.out.println("BEGIN ======================= PUSHNOTIFICATION ==============");
-				UserInfo userInfoPush = listUserInfo.stream().filter(u-> u.getUserId() == listOwner).findFirst().get();
+				}				
+				System.out.println("UserId = "+listOwner + " ======================= PUSH NOTIFICATION TO OTHER USERS ============== :"+userInfo.getName());
 //				String strPushFROM = userInfoPush.getName() + " さんの名刺を通して、" + userInfo.getName() + " さんと繋がりました";
 				String strPushFROM = cardInfo.getName() + " さんの名刺を通して、" + userInfo.getName() + " さんと繋がりました。";
 				pushNoticeConnectUser(listOwner, cardInfo.getCardId(),strPushFROM, 2);
@@ -418,33 +417,33 @@ public class CardController {
             	userNotification.setNoticeType(NoticeType.NOTIFICATION_TO_OTHER_USER.getValue());
             	userNotification.setNotifyMessage(strPushFROM);            	
             	userInfoService.saveHistoryNotification(userNotification);
-            	
-				String strPushTO =  cardInfo.getName() + " さんの名刺を通して、" + userInfoPush.getName() + " さんと繋がりました。";				
-//				String strPushTO =  userInfo.getName() + " さんの名刺を通して、" + userInfoPush.getName() + " さんと繋がりました";
-				pushNoticeConnectUser(userInfo.getUserId(), cardInfo.getCardId(),strPushTO, 2);
-				UserNotification userNotificationTO = new UserNotification();
-				noticeUser.setUserId(userInfo.getUserId());
-				userNotificationTO.setUserInfo(noticeUser);
-				userNotificationTO.setCardId(cardInfo.getCardId());
-				userNotificationTO.setNoticeDate(new Date());
-				userNotificationTO.setReadFlg(0);				
-				userNotificationTO.setChangeParamType(1);            	
-				userNotificationTO.setNoticeType(NoticeType.NOTIFICATION_TO_OTHER_USER.getValue());
-				userNotificationTO.setNotifyMessage(strPushTO);            	
-            	userInfoService.saveHistoryNotification(userNotificationTO);
-				/*PossessionCard possessionCard = new PossessionCard();
-				PossessionCardId possessionCardId = new PossessionCardId();
-				possessionCardId.setCardId(cardInfo.getCardId());
-				possessionCardId.setUserId(listOwner);
-				possessionCardId.setContactDate(new Date());
-				possessionCardId.setCreateDate(new Date());
-				possessionCard.setId(possessionCardId);
-				possessionCardService.registerPosCard(possessionCard);		*/		
-				
 			}
-
-			cardInfoService.updateOldCardInfo(cardInfo);
-
+			
+//			Push to me
+			listOwnerId = cardInfoService.getListUserPushFromByCard(cardInfo);
+			noticeUser = new UserInfo();
+			for (Integer listOwner : listOwnerId) {
+				if(listUserInfo.stream().filter(u-> u.getUserId() == listOwner).collect(Collectors.toList()).size()<=0){
+					continue;
+				}				
+				UserInfo userInfoPush = listUserInfo.stream().filter(u-> u.getUserId() == listOwner).findFirst().get();
+				System.out.println("======================= PUSH NOTIFICATION TO ME ============== :"+userInfoPush.getName());
+				String strPushTO =  cardInfo.getName() + " さんの名刺を通して、" + userInfoPush.getName() + " さんと繋がりました。";								
+				pushNoticeConnectUser(userInfo.getUserId(), cardInfo.getCardId(),strPushTO, 2);
+				UserNotification userNotificationTOME = new UserNotification();
+				noticeUser.setUserId(userInfo.getUserId());
+				userNotificationTOME.setUserInfo(noticeUser);
+				userNotificationTOME.setCardId(cardInfo.getCardId());
+				userNotificationTOME.setNoticeDate(new Date());
+				userNotificationTOME.setReadFlg(0);				
+				userNotificationTOME.setChangeParamType(1);            	
+				userNotificationTOME.setNoticeType(NoticeType.NOTIFICATION_TO_OTHER_USER.getValue());
+				userNotificationTOME.setNotifyMessage(strPushTO);            	
+	        	userInfoService.saveHistoryNotification(userNotificationTOME);				
+			}
+			CardInfo newestCardInfo = cardInfoService.getNewestCardInfo(cardInfo);
+			System.out.println("AAA = "+newestCardInfo.getCardId());
+			cardInfoService.updateOldCardInfo(newestCardInfo);
 		}
 		if (result == 1)
 			return new ModelAndView("redirect:list");
@@ -576,6 +575,7 @@ public class CardController {
 	            if(!fileUploadModel.isStatus()){
 	            	statusOfResult=UploadFileUtil.writeLostImage(imageData, cardInfoObject.getImageFile());
 	            	if(statusOfResult==3){
+	            		cardInfoService.deleteCardInfo(cardInfoObject.getCardId());
 	            		return statusOfResult;
 	            	}
 				}

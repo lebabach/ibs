@@ -261,20 +261,21 @@ public class DataProcessController {
 		if (file.isEmpty()){
 			return new ModelAndView("redirect:importOperatorByCSV", "error", "Error");
 		}
-		
+		int recordCnt = 0;
 		Integer groupCompanyId = Integer.parseInt(request.getParameter("groupCompanyId").toString());
-		List<Roles> listRoles = masterService.getAllRoles();
-
+		
 		try {
 			InputStreamReader inputStreamReader = new InputStreamReader(file.getInputStream());
 			OperatorInfoFromCSV operatorInfoFromCSV = new OperatorInfoFromCSV();
+			List<UserInfo> userInfoList = new ArrayList<UserInfo>();
 			List<OperatorInfoFromCSV> listUserInfoCSV;
 			try {
 				final CellProcessor[] processors = getProcessorsOperator();
-				final String[] headerUser = new String[] { "companyId", "department", "position", "name",
-						"firstName", "lastName", "email", "useDate", "groupDataDlFlg", "allDataDlFlg",
-						"groupDataDlRequestFlg", "allDataDlRequestFlg", "helpdeskFlg", "sfManualLinkFlg",
-						"adminFlg", "supervisor", "leader", "sansanId" };
+//				final String[] headerUser = new String[] {"email", "department", "position", "lastName", "firstName", "lastNameKana","firstNameKana","useDate", "groupDataDlFlg", "allDataDlFlg",
+//						"groupDataDlRequestFlg", "allDataDlRequestFlg", "helpdeskFlg", "sfManualLinkFlg",
+//						"adminFlg", "supervisor", "leader", "sansanId" };
+				final String[] headerUser = new String[] {"email", "department", "position", "lastName", "firstName", "lastNameKana", "firstNameKana", "useDate", "endDate", 
+						"roleID", "roleAdminID", "salesforce" };
 
 				listUserInfoCSV = (List<OperatorInfoFromCSV>) (Object) CsvFileReader.readCsvMapHeader(inputStreamReader, operatorInfoFromCSV, processors, headerUser);
 			} catch (Exception e) {
@@ -283,43 +284,46 @@ public class DataProcessController {
 			}
 
 			for (OperatorInfoFromCSV listUser : listUserInfoCSV) {
-				UserInfo userInfo = new UserInfo();
-				userInfo.setDepartmentName(listUser.getDepartment());
-				userInfo.setPositionName(listUser.getPosition());
-				userInfo.setName(listUser.getName());
-				userInfo.setFirstName(listUser.getFirstName());
-				userInfo.setLastName(listUser.getLastName());
-				userInfo.setEmail(listUser.getEmail());
-				// userInfo.setUseDate(listUser.getUseDate());
-				userInfo.setUseDate(new SimpleDateFormat("yyyy-MM-dd").parse(CommonConstants.DEFAULT_USEDATE));
-				userInfo.setGroupDataDlFlg(listUser.getGroupDataDlFlg());
-				userInfo.setGroupDataDlRequestFlg(listUser.getGroupDataDlRequestFlg());
-				userInfo.setAllDataDlFlg(listUser.getAllDataDlFlg());
-				userInfo.setAllDataDlRequestFlg(listUser.getAllDataDlRequestFlg());
-				userInfo.setHelpdeskFlg(listUser.getHelpdeskFlg());
-				userInfo.setSfManualLinkFlg(listUser.getSfManualLinkFlg());
-				userInfo.setAdminFlg(listUser.getAdminFlg());
-				userInfo.setGroupCompanyId(groupCompanyId);
-				userInfo.setPassword(CommonConstants.PASSWORD_DEFAULT);
-				Roles role = new Roles();					
-				int roleId = getRoleIdByPermissionType(listRoles, String.valueOf(RoleType.ROLE_USER.getValue()));					
-				if (listUser.getSupervisor() == 0 && listUser.getLeader() == 0) {
-					roleId = getRoleIdByPermissionType(listRoles, String.valueOf(RoleType.ROLE_OPERATOR.getValue()));
-				} else {
-					if (listUser.getLeader() == 1) {
-						roleId = getRoleIdByPermissionType(listRoles, String.valueOf(RoleType.ROLE_LEADER.getValue()));
-					}
-					if (listUser.getSupervisor() == 1) {
-						roleId = getRoleIdByPermissionType(listRoles, String.valueOf(RoleType.ROLE_SUPERVISOR.getValue()));
-					}
+				recordCnt++;
+				if (listUser.getEmail() != null && userInfoService.checkEmailExist(listUser.getEmail())) {
+					System.out.println("uploadCardCsv err=checkEmailExist line=" + recordCnt);
+					continue;
 				}
 
-				role.setRoleId(roleId);
+				UserInfo userInfo = new UserInfo();
+				userInfo.setEmail(listUser.getEmail());				
+				userInfo.setDepartmentName(listUser.getDepartment());
+				userInfo.setPositionName(listUser.getPosition());
+				userInfo.setLastName(listUser.getLastName());
+				userInfo.setFirstName(listUser.getFirstName());
+				userInfo.setLastNameKana(listUser.getLastNameKana());
+				userInfo.setFirstNameKana(listUser.getFirstNameKana());
+								
+				// userInfo.setUseDate(listUser.getUseDate());				
+				userInfo.setUseDate(new SimpleDateFormat("yyyy/MM/dd").parse(listUser.getUseDate()));
+				
+				userInfo.setEndDate(new SimpleDateFormat("yyyy/MM/dd").parse(listUser.getEndDate()));
+				
+				String password = new BigInteger(130, new SecureRandom()).toString(32);
+				userInfo.setPassword(new BCryptPasswordEncoder().encode(password));
+				// Set roleID and roleAdminID
+				
+				Roles role = new Roles();
+				role.setRoleId(getRoleId(listUser.getRoleID()));
 				userInfo.setRoles(role);
-				userInfo.setMailSendFlg(0);
-				userInfo.setMailNewsFlg(0);
-				userInfo.setMailNoticeFlg(0);
-				userInfo.setMailUseAssistFlg(0);
+				userInfo.setRoleAdminId(getRoleAdminId(listUser.getRoleAdminID()));
+				
+				// End set roleID
+				userInfo.setSfManualLinkFlg(checkFlg(listUser.getSalesforce()));
+				
+				userInfo.setName(listUser.getLastName()+ ' '+ listUser.getFirstName());
+				userInfo.setNameKana(listUser.getLastNameKana()+ ' '+listUser.getLastNameKana());
+				userInfo.setGroupCompanyId(groupCompanyId);
+				
+				userInfo.setMailSendFlg(1);
+				userInfo.setMailNewsFlg(1);
+				userInfo.setMailNoticeFlg(1);
+				userInfo.setMailUseAssistFlg(1);
 				userInfo.setFirstLoginF(0);
 				userInfo.setLeaveFlg(0);
 				userInfo.setUseStopFlg(0);
@@ -328,16 +332,10 @@ public class DataProcessController {
 				userInfo.setOperaterId(0);
 				userInfo.setLastChangePasswordDate(new Date());
 				userInfo.setDeleteFlg(0);
-				Integer userId = userInfoService.registerProfileAdmin(userInfo);
-				if (userId != null) {
-					UserMigration userMigration = new UserMigration();
-					userMigration.setUserInfo(userInfo);
-					UserMigrationId userMigrationId = new UserMigrationId();
-					userMigrationId.setSansanUserId(listUser.getSansanId());
-					userMigrationId.setUserId(userId);
-					userMigration.setId(userMigrationId);
-					userInfoService.registerUserMigration(userMigration);
-				}
+				userInfoList.add(userInfo);
+			}
+			if(CollectionUtils.isNotEmpty(userInfoList)){
+				importCsvDataService.importListOperatorInfo(userInfoList);
 			}
 			return new ModelAndView("redirect:/operators/list");
 		} catch (Exception e) {
@@ -582,17 +580,6 @@ public class DataProcessController {
 					
 					cardModelList.add(cardModel);
 				}				
-				
-				// import data to database
-				if (CollectionUtils.isNotEmpty(cardModelList)){
-                                    List<CardInfo> importSuccessList = importCsvDataService.importListCardInfoFromCsv(cardModelList);
-                                    recordSuccess = importSuccessList.size();
-                                    recordError += cardModelList.size() - recordSuccess;
-
-                                    // Start new thread to upload default card for list of success importing card
-                                    //UploadDefaultCardThread uploadThread = new UploadDefaultCardThread(importSuccessList);
-                                    //uploadThread.start();
-				}
 
 				// import data to database
 				if (CollectionUtils.isNotEmpty(cardModelList)){
@@ -661,24 +648,19 @@ public class DataProcessController {
     
     private static CellProcessor[] getProcessorsOperator(){
         return new CellProcessor[] {
-            new Optional(new ParseInt()) , // companyId
+            new NotNull(), // email
             null, // department
             null, // position
-            new NotNull(), // name
-            new NotNull(), // firstName
-            new NotNull(), // lastName
-            new NotNull(), // email
-            new ParseDate ("mm/dd/yyyy"), // useDate
-            new Optional(new ParseInt()), // groupDataDlFlg
-            new Optional(new ParseInt()), // allDataDlFlg
-            new Optional(new ParseInt()), // groupDataDlRequestFlg
-            new Optional(new ParseInt()), // allDataDlRequestFlg
-            new Optional(new ParseInt()), // helpdeskFlg
-            new Optional(new ParseInt()), // sfManualLinkFlg
-            new Optional(new ParseInt()), //adminFlg
-            new Optional(new ParseInt()), // supervisor
-            new Optional(new ParseInt()), // leader
-            new NotNull() //sansanId
+            null, // lastName
+            null, // firstName
+            null, // lastNameKana
+            null, // firstNameKana
+            null, // useDate
+            null, // endDate
+            null, // roleID
+            null, // roleAdminID
+            null // salesforce
+            
         };
     }
     

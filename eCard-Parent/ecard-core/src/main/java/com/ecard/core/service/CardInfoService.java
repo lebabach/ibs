@@ -93,14 +93,16 @@ public interface CardInfoService {
    public List<CardInfoUserVo> getListPossesionCard(Integer userId, int pageNumber);
    
    public void updateOldCardInfo (CardInfo cardInfo);
-   
+
    public CardInfo importCardInfoFromCsv(CardInfo cardInfo);
    
    public int getCardIdByCardIndexNo(String cardIndexNo);
    
    public List<CardInfo> getListCardInfoByUserId(Integer userId);
    
-   public List<Integer> getListOwnerIdByCard(CardInfo cardInfo);
+   public List<Integer> getListUserPushToByCard(CardInfo cardInfo);
+   
+   public List<Integer> getListUserPushFromByCard(CardInfo cardInfo);
    
    public int updateCardDeleted(Integer cardId);
    
@@ -122,4 +124,5 @@ public interface CardInfoService {
 
    public Long countPossessionCard(Integer userId);
 
+public CardInfo getNewestCardInfo(CardInfo cardInfo);
 }

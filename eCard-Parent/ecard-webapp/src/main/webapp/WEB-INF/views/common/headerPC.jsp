@@ -90,7 +90,7 @@
 	style="text-align: center; background: #fff;">
 	<div
 		style="display: inline-block; width: 770px; margin: 0 auto; padding: 0; position: relative;">
-		<a href=""><img src="<c:url value='/assets/img/login_logo_pc.png'/>" style="float: left; width: 80px; margin: 5px 0;"></a>
+		<a href="<c:url value="/user/home"/>"><img src="<c:url value='/assets/img/login_logo_pc.png'/>" style="float: left; width: 80px; margin: 5px 0;"></a>
 
 
 		<ul class="nav navbar-top-links navbar-left">
@@ -167,9 +167,9 @@
 							class="caret"></b></i>
 				</a>
 					<ul class="dropdown-menu animated fadeInRight m-t-xs">
-						<li><a href="profile">プロフィール名刺</a></li>
+						<li><a href="profile">プロフィール</a></li>
 						<li><a href="download.html">分の名刺をダウン</a></li>
-						<li><a href="changepass">ロード -パスワード 設定</a></li>
+						<li><a href="changepass">パスワード設定</a></li>
 						<li><a href="faq">FAQ</a></li>
 						<li><a href="mailbox">ご意見・不具合の連絡</a></li>
 						<c:if test="${pageContext.request.isUserInRole('ROLE_LEADER') or pageContext.request.isUserInRole('ROLE_OPERATOR') or pageContext.request.isUserInRole('ROLE_SUPERVISOR') or pageContext.request.isUserInRole('ROLE_ADMIN') or pageContext.request.isUserInRole('ROLE_AUTHORITY_USER') or pageContext.request.isUserInRole('ROLE_OPERATOR_MANAGER') }">

@@ -19,7 +19,6 @@ import com.ecard.core.model.PushInfoId;
 import com.ecard.core.model.Roles;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.UserMigration;
-import com.ecard.core.model.UserMigrationId;
 import com.ecard.core.model.UserNotification;
 import com.ecard.core.vo.UserDownloadPermission;
 import com.ecard.core.vo.UserInfoVo;
@@ -803,4 +802,15 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
         }
         return result;	
 	}
+    
+    public boolean checkUseDateEndDate(String email){
+    	Query query = getEntityManager().createNativeQuery("SELECT * FROM user_info u WHERE u.email = :email AND (DATE_FORMAT(NOW(),'%Y-%m-%d') BETWEEN DATE_FORMAT(u.use_date,'%Y-%m-%d') AND DATE_FORMAT(u.end_date,'%Y-%m-%d'))");
+    	query.setParameter("email", email.trim());
+    	
+    	int result = query.getFirstResult();
+    	if(result == 1)
+    		return true;
+    	else
+    		return false;
+    }
 }

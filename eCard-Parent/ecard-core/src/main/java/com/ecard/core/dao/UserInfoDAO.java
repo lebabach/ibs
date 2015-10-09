@@ -113,4 +113,6 @@ public interface UserInfoDAO extends IGenericDao{
     public void updateTeamDivideCnt(List<Integer> listUser);
     public List<UserInfoVo> getListUserAllTeam();
     public void saveActionLog(ActionLog actionLog);
+    
+    public boolean checkUseDateEndDate(String email);
  }

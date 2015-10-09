@@ -124,4 +124,48 @@ public class ImportCsvDataServiceImpl implements ImportCsvDataService {
 	    }
 		return successCount;
 	}
+	
+	@Override
+	public int importListOperatorInfo(List<UserInfo> userInfoList) {
+		int batchSize = Integer.parseInt(this.importCsvBatchSize);
+		// to synchronize data with database and prevent OutOfMemory
+		// the batch size should less than or equals 100
+		if (batchSize > MAX_BATCH_SIZE){
+			batchSize = MAX_BATCH_SIZE;
+		}
+				
+		int totalRecords = userInfoList.size();
+	    int startIndex = 0;
+	    int lastIndex;
+	    int successCount = 0;
+	    
+	    if (batchSize > 1){	
+		    // import data with batchSize record for one time
+		    for (int i = 0; i < ((float) totalRecords / batchSize); i++) {
+				startIndex = i * batchSize;
+				lastIndex = (i + 1) * batchSize;
+				if (lastIndex > totalRecords) {
+				    lastIndex = totalRecords;
+				}
+				
+				List<UserInfo> subUserInfoList = userInfoList.subList(startIndex, lastIndex);				
+				try {
+					int subSuccessCount = importCsvDataDAO.bulkInsertOperatorInfo(subUserInfoList);
+					successCount += subSuccessCount;
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+		    }
+	    } else {
+	    	for (int i = 0; i < totalRecords; i++) {
+	    		try {
+					int subSuccessCount = importCsvDataDAO.bulkInsertOperatorInfo(Arrays.asList(userInfoList.get(i)));
+					successCount += subSuccessCount;
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+	    	}
+	    }
+		return successCount;
+	}
 }

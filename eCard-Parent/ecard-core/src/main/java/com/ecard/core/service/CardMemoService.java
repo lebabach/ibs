@@ -24,4 +24,6 @@ public interface CardMemoService {
     
     public void deleteCardMemo(UserCardMemoId cardMemo);
     
+    public int getMaxSeqByUserId(Integer userId);
+    
 }
