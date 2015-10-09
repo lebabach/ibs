@@ -175,9 +175,9 @@ var dataTables;
 
 				<div class="float-right">
 					<a href="<c:url value="/operators/register"/>" id="add"><i
-						class="fa fa-plus icon-rounded icon-white"></i></a> <a
-						href="<c:url value="/data/importUserByCSV"/>" id="addUser"><i
-						class="fa fa fa-upload icon-rounded icon-white"></i></a>
+						class="fa fa-plus icon-rounded icon-white"></i></a> <%-- <a
+						href="<c:url value="/data/importOperatorByCSV"/>" id="addUser"><i
+						class="fa fa fa-upload icon-rounded icon-white"></i></a> --%>
 				</div>
 			</div>
 		</div>

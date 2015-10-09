@@ -263,7 +263,7 @@ public class DataProcessController {
 		}
 		int recordCnt = 0;
 		Integer groupCompanyId = Integer.parseInt(request.getParameter("groupCompanyId").toString());
-		
+		GroupCompanyInfo groupCompanyInfo =  groupCompnayInfoService.getCompanyById(groupCompanyId);
 		try {
 			InputStreamReader inputStreamReader = new InputStreamReader(file.getInputStream());
 			OperatorInfoFromCSV operatorInfoFromCSV = new OperatorInfoFromCSV();
@@ -318,7 +318,10 @@ public class DataProcessController {
 				
 				userInfo.setName(listUser.getLastName()+ ' '+ listUser.getFirstName());
 				userInfo.setNameKana(listUser.getLastNameKana()+ ' '+listUser.getLastNameKana());
-				userInfo.setGroupCompanyId(groupCompanyId);
+				
+				userInfo.setGroupCompanyId(groupCompanyId);				
+				userInfo.setCompanyName(groupCompanyInfo.getGroupCompanyName());
+				userInfo.setCompanyNameKana(groupCompanyInfo.getGroupCompanyNameKana());
 				
 				userInfo.setMailSendFlg(1);
 				userInfo.setMailNewsFlg(1);
