@@ -105,7 +105,7 @@
 					style="padding: 0">
 					<li>
 						<div class="dropdown-messages-box">
-							<p style="padding: 10px 10px 0 10px;">アップデート</p>
+							<p style="padding: 10px 10px 0 10px;">お知らせ</p>
 						</div>
 					</li>
 					<li>
