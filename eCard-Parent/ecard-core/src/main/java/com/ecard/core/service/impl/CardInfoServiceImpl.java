@@ -297,4 +297,20 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public List<CardInfo> getOldCardInfor(){
 		return cardInfoDAO.getOldCardInfor();
 	}
+
+	public int deleteListCard(List<Integer> listCard){
+		return cardInfoDAO.deleteListCard(listCard);
+	}
+	
+	public List<CardInfo> getListPossessionCardByTag(Integer userId, Integer tagId, String sort, int pageNumber){
+		return cardInfoDAO.getListPossessionCardByTag(userId, tagId, sort, pageNumber);
+	}
+	
+	public List<CardInfoUserVo> getListPossessionCardByTag(Integer userId, Integer tagId, int pageNumber){
+		return cardInfoDAO.getListPossessionCardByTag(userId, tagId, pageNumber);
+	}
+	
+	public List<String> getListSortTypeByTag(Integer userId, Integer tagId){
+		return cardInfoDAO.getListSortTypeByTag(userId, tagId);
+	}
 }

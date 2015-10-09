@@ -123,6 +123,15 @@ public interface CardInfoDAO {
     public Long countPossessionCard(Integer userId);
 
     public CardInfo getNewestCardInfo(CardInfo cardInfo);
-    
+
     public List<CardInfo> getOldCardInfor();
+
+    public int deleteListCard(List<Integer> listCard);
+    
+    public List<CardInfo> getListPossessionCardByTag(Integer userId, Integer tagId, String sort, int pageNumber);
+    
+    public List<CardInfoUserVo> getListPossessionCardByTag(Integer userId, Integer tagId, int pageNumber);
+    
+    public List<String> getListSortTypeByTag(Integer userId, Integer tagId);
+
 }
