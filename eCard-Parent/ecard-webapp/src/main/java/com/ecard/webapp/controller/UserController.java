@@ -637,7 +637,7 @@ public class UserController {
 	
 	@RequestMapping (value = "addTag", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<TagForCard> addTag(@RequestBody CardAndUserTag cardAndUserTag, HttpServletRequest request, HttpServletResponse response) {
+	public List<TagGroup> addTag(@RequestBody CardAndUserTag cardAndUserTag, HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("addTag", UserController.class);
 		
 		//ModelAndView modelAndView = new ModelAndView();
@@ -693,8 +693,7 @@ public class UserController {
 			logger.debug("Exception :"+ ex.getMessage(), UserController.class);
 			response.setStatus(500, "Add tag error");
 		}
-		List<TagForCard> listTagForCard = getAllTagForCard(userId);
-		return listTagForCard;
+		return getCardTag();
 	}
 	
 	@RequestMapping (value = "addCardTag", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

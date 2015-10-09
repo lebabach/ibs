@@ -740,13 +740,45 @@
 			<!-- List card connected -->
 			<div class="panel panel-default">
 				<div class="panel-heading" style="height: 40px;">
-					<div style="float: left">
+					<div style="float: left; font-weight: bold;">
 						<h5>この名刺で繋がっている人</h5>
 					</div>
 				</div>
 				
-				<div class="panel-body"
-					style="padding: 15px 0; overflow: auto; height: 184px;">
+				<div class="panel-body" style="padding: 15px 0; overflow: auto; height: 184px;">
+				<style type="text/css">
+                  .div-new{
+                           padding: 0 10px 10px 10px !important;
+                           margin-bottom: 10px !important;
+                           border-left: none !important;
+                            border-right: none !important;
+                             border-top: none !important;
+                           border-bottom: 1px solid #e7eaec !important;
+                           border-radius:1px;
+                  	}
+                   .col-md-5-n{
+                       width: 60%;
+                       
+                   }
+                   .col-md-5-n .col-xs-11{width: 100%; padding: 0 !important;}
+                   .col-md-5-n .col-xs-11 p{margin: 0 !important}
+                   .col-md-5-n .col-xs-11 p.num{height: auto;}
+                   .col-md-6{width:40%;  padding: 0 !important;}
+                   .col-md-6-n .col-xs-5 { width: 60%; position: relative;}
+                   .col-md-6-n .col-xs-5 img{
+                       left: 0;
+                       right: inherit;
+                   }
+                   .col-md-6-n .col-xs-7 { width: 40%;}
+                   img.img-thumb-n{     max-width: 123px;
+                       height: 74px;
+                       margin-top: 18px;}
+                   img.img-1{ margin-top: 40px; width: 28px;}
+                   img.img-2{ width: 26px; margin-top: 71px;}
+                   .mg-top {
+					    margin-top: 5px;
+					}
+                </style>
 					<c:forEach var="listCardConnected" items="${listCardConnect}" varStatus="loop">
 						<div class="list-group-item pointer div-new">
 							<div class="row" style="margin-right: 0">
@@ -1022,6 +1054,7 @@
         	 
         	 //Add card tag
         	 var json = {"tagId" : this.id, "cardId" : $("input[name=cardId]").val()};
+        	 $("#tags tbody").html('');
      	     addCardTag(json);
     	 }
     	 else{
@@ -1057,19 +1090,39 @@
 	        		xhr.setRequestHeader("Content-Type", "application/json");
 	        	},
 	        	success: function(response) {
-	        		var resp = "";
+	        		var respHTML = "";
+	        		var isChecked = "";
 	        		$.each(response, function(index, value){
-	        			//console.log("tagId: "+value["tagId"]+" tagName : "+value["tagName"]);
-	        			resp += "<tr id='rowData'>"
-        					+ "<td><div style='position: relative;' class='icheckbox_square-green' id='"+value["tagId"]+"'>"
-	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
-	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
-        					+ "</td>"
-        					+ "<td>"+value["tagName"]+"</td>"
-        					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>"; 
+	        			//console.log(JSON.stringify(value));
+	        			//console.log(JSON.stringify(value["listCardIds"]));
+	        			$.each(value["listCardIds"], function(idx, v){
+	        				//console.log("v : "+ v);
+	        				if(v == $("input[name=cardId]").val()){
+	        					//console.log("v : "+ v + " tagId : "+tagId);
+	        					isChecked = "checked";
+	        					respHTML += "<tr id='rowData'>"
+	    	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+	    	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+	    	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+	    	    					+ "</td>"
+	    	    					+ "<td>"+value["tagName"]+"</td>"
+	    	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
+	        				}
+	        				
+	        				if(v != $("input[name=cardId]").val()){
+	        					isChecked = "";
+	                			respHTML += "<tr id='rowData'>"
+	        	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+	        	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+	        	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+	        	    					+ "</td>"
+	        	    					+ "<td>"+value["tagName"]+"</td>"
+	        	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
+	        				}
+	        			});
 	        		});
 	        		$("#tagName").val('');
-	        		$("#tags tbody").html(resp);    		
+	        		$("#tags tbody").html(respHTML);    		
 	        	},
 	        	error: function(){
 				  BootstrapDialog.show({
@@ -1145,8 +1198,9 @@
         				}
         			});
         		});
+        		$("#tags tbody").html('');
         		$("#tagName").val('');
-        		$("#tags tbody").html(resp);    		
+        		$("#tags tbody").html(respHTML);    		
         	},
         	error: function(){
 			  BootstrapDialog.show({
@@ -1200,8 +1254,9 @@
         			});
         		});
         		
+        		$("#tags tbody").html('');
         		$("#tagName").val('');
-        		$("#tags tbody").html(resp);    		
+        		$("#tags tbody").html(respHTML);    		
         	},
         	error: function(){
 			  BootstrapDialog.show({
