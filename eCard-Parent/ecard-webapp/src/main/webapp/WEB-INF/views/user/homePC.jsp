@@ -268,7 +268,7 @@
                 </div>-->
                 <div class="">
                   <div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;">
-                    <table class="table" id="paging">
+                    <table class="table" id="paging" >
                     <!-- <table class="" id="paging" style="width: 100%;max-width: 100%;margin-bottom:10px">                      -->
                       <col width="10%">
                       <col width="80%">
@@ -279,6 +279,7 @@
                             <td>
                                  <input type="checkbox"  class="i-checks" id="1" value="<c:out value='${cardTag.tagId}'/>">
                                  <input type="hidden" name= "userId"  value="<c:out value='${cardTag.userId}'/>">
+                                 <input type="hidden" name= "cardId"  value="<c:out value='${cardTag.cardId}'/>"> 
                             </td>                  
                             <td class="nametag"><c:out value="${cardTag.tagName}" /></td>
                             <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
@@ -291,7 +292,7 @@
                 
                 <div class="">
                   <div class="input-group lbl" style="padding: 15px;">
-                    <input type="text" class="form-control" placeholder="新規タグを追加">
+                    <input type="text" class="form-control" id ="tagCardName" placeholder="新規タグを追加">
                       <span class="input-group-btn"> 
                       <button id="addLabel" type="button" class="btn btn-success">作成</button> 
                       </span>
@@ -424,7 +425,6 @@
          radioClass: 'iradio_square-green',                
        });
        // Click to personal details page
-       
 
        $('#sort-card-cnd').on('change', function() {
        	$.xhrPool.abortAll();
@@ -558,7 +558,7 @@
 });/* END READY DOCUMENT  */
  
       // Process with Label
-      $('#addLabel').click(function(event) {
+  /*     $('#addLabel').click(function(event) {
         // Get value from input and append to list
         var label = $("#addLabel").parent().parent().find('input').val();        
         if(label.trim() != ""){
@@ -572,7 +572,7 @@
         }
         // Clear
         $("#addLabel").parent().parent().find('input').val('');  
-      });
+      }); */
 
       $(".balloon").on('click', '.delTag', function() {
         $(this).parent().parent().remove();
@@ -834,4 +834,99 @@
 	   		$("#parameterFlg").val(parameterFlg);
 	   		return modal;
 	   	}
+	   	
+	    // Add card tag
+	     $('#addLabel').click(function(event) {
+	    	var listCardId = [];
+	    	var cardId = 0 ;
+	    	$(".icheckbox_square-green").find('.checked').each(function(){
+   	            cardId = $(this).find('input[name=bla]').val();
+   	            listCardId.push({"cardId":cardId});    	         
+   			});
+	    	//var cardId = $("input[name=cardId]").val();
+	    	var tagName = $("#tagCardName").val();
+			if(tagName =="" ){
+				BootstrapDialog.show({
+					title: 'Warning',
+	             	message: 'Please enter tag name'
+		        });			
+			}else{
+				   var check = true;
+					$(".nametag").each(function(){
+			    		if($(this).text().trim() == tagName.trim()){
+			    			BootstrapDialog.show({
+								title: 'Error',
+				             	message: '既に作成されているラベルです'});
+			    			check = false;
+			    		}
+			    	});
+					if(check){
+							$.ajax({
+					        	url: "<c:url value='/user/addTagHome' />",
+					        	data: JSON.stringify({"tagName" : tagName, "listCardId" : listCardId}),
+					        	type: "POST",
+					        	beforeSend: function(xhr) {
+					        		xhr.setRequestHeader("Accept", "application/json");
+					        		xhr.setRequestHeader("Content-Type", "application/json");
+					        	},
+					        	success: function(response) {
+					        		var respHTML = "";
+					        		var isChecked = "";
+					        		console.log("hsfkshfksfhs : " +listCardId.cardId );
+					        		$.each(response, function(index, value){
+					        			isChecked = "";
+					        			$.each(value["listCardIds"], function(idx, v){
+					        				//console.log("v : "+ v);
+					        				if(v == $("input[name=cardId]").val()){
+					        					//console.log("v : "+ v + " tagId : "+tagId);
+					        					isChecked = "checked";
+					        					return false;
+					        				}
+					        				
+					        				if(v != $("input[name=cardId]").val()){
+					        					isChecked = "";
+					        				}
+					        			});
+					        			if(isChecked == "checked")
+					        				{respHTML += "<tr id='rowData'>"
+						    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+						        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+						        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
+				                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
+						        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+						    					+ "</td>"
+						    					+ "<td class='nametag'>"+value["tagName"]+"</td>"
+						    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+					        			else
+					        				{respHTML += "<tr id='rowData'>"
+						    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+						        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+						        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
+				                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
+						        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+						    					+ "</td>"
+						    					+ "<td class='nametag' >"+value["tagName"]+"</td>"
+						    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+					        		});
+					        		$("#tagCardName").val('');
+					        		$("#paging tbody").html("");  
+					        		$("#paging tbody").html(respHTML);    		
+					        	},
+					        	error: function(){
+								  BootstrapDialog.show({
+				       				title: 'Information',
+				      	             	message: 'Add tag failed'
+				       	      		});
+							  	}
+					        });
+						}
+						
+						isClick = true;
+						console.log("isClick : "+isClick);
+					}
+	     });
+	    
+
+	    
+	    	
     </script>
