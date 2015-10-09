@@ -72,7 +72,9 @@
 <script
 	src="<c:url value='/assets/js/plugins/datapicker/locales/bootstrap-datepicker.ja.js'/>"
 	type="text/javascript"></script>
-
+<script src="<c:url value='/assets/js/jquery.validate.min.js'/>"
+	type="text/javascript"></script>
+	
 <title><tiles:insertAttribute name="title" /></title>
 </head>
 <body class="gray-bg  pace-done">

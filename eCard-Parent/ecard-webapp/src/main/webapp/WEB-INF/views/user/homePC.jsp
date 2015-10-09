@@ -240,9 +240,11 @@
           </div>
           <div class="col-md-2 m-b-xs setDisplayTerm" style="width:188px; display:inline-block">
             <select id="selectSortBox" class="input-sm form-control input-s-sm inline" id="sort-card-connect">
-              <option value="0" selected>ラベルで絞り込み</option>
-              <option value="1">​つ​な​が​っ​て​い​る​人​</option>
-              <option value="2">​ラ​ベ​ル​な​し​</option>                          
+              <option value="0" selected>すべて</option>
+              <c:forEach var="cardTag" items="${listTagGroup}">
+              	<option value="${cardTag.tagId}"><c:out value="${cardTag.tagName}"/></option>
+              </c:forEach>
+                                        
             </select>
           </div>
          
@@ -268,7 +270,7 @@
                 </div>-->
                 <div class="">
                   <div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;">
-                    <table class="table" id="paging">
+                    <table class="table" id="paging" >
                     <!-- <table class="" id="paging" style="width: 100%;max-width: 100%;margin-bottom:10px">                      -->
                       <col width="10%">
                       <col width="80%">
@@ -279,6 +281,7 @@
                             <td>
                                  <input type="checkbox"  class="i-checks" id="1" value="<c:out value='${cardTag.tagId}'/>">
                                  <input type="hidden" name= "userId"  value="<c:out value='${cardTag.userId}'/>">
+                                 <input type="hidden" name= "cardId"  value="<c:out value='${cardTag.cardId}'/>"> 
                             </td>                  
                             <td class="nametag"><c:out value="${cardTag.tagName}" /></td>
                             <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
@@ -291,7 +294,7 @@
                 
                 <div class="">
                   <div class="input-group lbl" style="padding: 15px;">
-                    <input type="text" class="form-control" placeholder="新規タグを追加">
+                    <input type="text" class="form-control" id ="tagCardName" placeholder="新規タグを追加">
                       <span class="input-group-btn"> 
                       <button id="addLabel" type="button" class="btn btn-success">作成</button> 
                       </span>
@@ -365,6 +368,7 @@
       $(window).scroll(function() {     	  
     	  if($('.row-new').length < parseInt(totalCardInfo)){
     		   var typeSort = $('#sort-card-cnd').val();
+    		   var typeSearch = $("#selectSortBox option:selected").val();
     		   /* if(isLoading != 0){    			   
     			   $('body').scrollTop($(window).height()*2);
     			   return false;
@@ -460,10 +464,9 @@
          checkboxClass: 'icheckbox_square-green',
          radioClass: 'iradio_square-green',                
        });
-       
-       // Process add tag and delete
+
        $("#deletePeople").click(function(e){
-    	   if (confirm('<fmt:message key="card.delete.confirm"/>')) {
+    	   if (confirm('<fmt:message key="card.list.confirmDelete"/>')) {
     		   var listCardId=[];
     			$(".icheckbox_square-green").find('.checked').each(function(){
     	         cardId = $(this).find('input[name=bla]').val();
@@ -501,39 +504,16 @@
            $(".balloon").css("display","block");
        }); */
 
-       $('.makefriend').click(function(e){
-         if($(this).find('button').hasClass('btn-success')){
-           $(this).find('button').removeClass('btn-success');
-           $(this).find('button').addClass('btn-default');
-           $(this).find('button').text("取り消す");
-           return false;
-         } 
-          
-         if($(this).find('button').hasClass('btn-default')){
-           $(this).find('button').removeClass('btn-default');
-           $(this).find('button').addClass('btn-success');
-           $(this).find('button').text("追加");
-           return false;
-         }
-
-       });
-       $('.mail').click(function(e) {
-         console.log('Go to mailbox');
-         e.stopPropagation();
-       });
-
-       // Click to personal details page
-       
-
        $('#sort-card-cnd').on('change', function() {
        	$.xhrPool.abortAll();
        	var typeSort = $(this).val();
+       	var typeSearch = $("#selectSortBox option:selected").val();
        	id_manager = 0;
           $.ajax({
 			type: 'POST',
 			url: 'search',
-			data: 'page=' +id_manager + "&typeSort=" +typeSort
-		}).done(function(resp, status, xhr) {
+			data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch
+		  }).done(function(resp, status, xhr) {
 			 $('.business_card_book').html("");
 			   var str = "";
 				$.each( resp.data, function( key, value ) {	
@@ -566,50 +546,102 @@
 					 });
 				});
 				id_manager++;
-		}).fail(function(xhr, status, err) {
-			//alert('Error');
-		});
+			}).fail(function(xhr, status, err) {
+				//alert('Error');
+			});
        });
        
-          $( "#btn-success" ).click(function() {
-       	   resetValidationForm();
-              $.ajax({
-      			type: 'POST',
-      			url: 'listSearchText/',
-      			dataType: 'json', 
-      			contentType: 'application/json',
-      			mimeType: 'application/json',
-      			success: function(data) {
-      				//called when successful
-      				if(data.hasData){
-      					$('.modal-content').hide(); 
-      	               $('.modal-content-new').show(); 
-      	               DisplayContents(data.userSearchs);
-      				}else{
-      					$(".error_common").text("保存されている検索条件はありません");
- 					     $(".mesage_error").css("display", "block");
-      				}
-    			  },
-    			  error: function(e) {
-    				//called when there is an error
-    				//console.log(e.message);
-    			  }
-       		});
-              
-          });
-          $( "#btn-success2, #btn-success3, #close-x" ).click(function() {
-  	         $('.modal-content').show(); 
-  	         $('.modal-content-new').hide(); 
-          });
-          
-          $( "#parameterFlg" ).click(function() {
-              if($(this).val()==0){
-             	 $("#owner").closest(".form-group").attr("style","display:none");
-              }
-              if($(this).val()==1){
-             	 $("#owner").closest(".form-group").removeAttr("style");
-              }
-          });
+       $('#selectSortBox').on('change', function(event) {
+    	   $.xhrPool.abortAll();
+    	   var tagName = $("#selectSortBox option:selected").text(); 
+    	   var typeSort = $("#sort-card-cnd option:selected").val();
+          	var typeSearch = $("#selectSortBox option:selected").val();    	   
+    	   // If tagId == 0 => sortAll
+		   // tagId != 0 => sortByTagName
+		   id_manager= 0;
+		   $.ajax({
+			type: 'POST',
+			url: 'search',
+			data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch
+		  }).done(function(resp, status, xhr) {
+			 $('.business_card_book').html("");
+			   var str = "";
+				$.each( resp.data, function( key, value ) {	
+					str = $('.business_card_book').append(
+						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id= "'+value.nameSort.replace("/","").trim()+'">'
+				        +'<div class="list-group-item-title">'+value.nameSort+'</div>');
+					 $.each( value.lstCardInfo, function (k,v) {
+							isLoading = isLoading + 1;							 		
+								str.append(	'<div class="list-group-item pointer">'
+				    					+'<div class="row row-new">'
+				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
+				    					+	'<div class="col-md-5">'
+				    					+		'<div class="col-xs-11 mg-top">'
+				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+				    					+			'<p class="livepass">'+v.companyName+'</p>'
+				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+				    					+ '</div></div>'
+				    					+	'<div class="col-md-6">'
+				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+				    					+	'<div class="col-xs-7">'								
+				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+				    					+	'</div> </div> </div> </div></div>'
+				        	    );
+							 isLoading++;
+							 reloadICheck();
+							 getImageFromSCP(v.imageFile);
+					 });
+				});
+				id_manager++;
+			}).fail(function(xhr, status, err) {
+				//alert('Error');
+			});
+    	   
+       });
+       
+       $( "#btn-success" ).click(function() {
+    	   resetValidationForm();
+           $.ajax({
+   			type: 'POST',
+   			url: 'listSearchText/',
+   			dataType: 'json', 
+   			contentType: 'application/json',
+   			mimeType: 'application/json',
+   			success: function(data) {
+   				//called when successful
+   				if(data.hasData){
+   					$('.modal-content').hide(); 
+   	               $('.modal-content-new').show(); 
+   	               DisplayContents(data.userSearchs);
+   				}else{
+   					$(".error_common").text("保存されている検索条件はありません");
+			     $(".mesage_error").css("display", "block");
+   				}
+ 			  },
+ 			  error: function(e) {
+ 				//called when there is an error
+ 				//console.log(e.message);
+ 			  }
+    		});
+           
+       });
+       
+       $( "#btn-success2, #btn-success3, #close-x" ).click(function() {
+         $('.modal-content').show(); 
+         $('.modal-content-new').hide(); 
+       });
+       
+       $( "#parameterFlg" ).click(function() {
+           if($(this).val()==0){
+          	 $("#owner").closest(".form-group").attr("style","display:none");
+           }
+           if($(this).val()==1){
+          	 $("#owner").closest(".form-group").removeAttr("style");
+           }
+       });
           
           $( ".btn-info" ).click(function() {
            	resetValidationForm();
@@ -707,7 +739,7 @@
 });/* END READY DOCUMENT  */
  
       // Process with Label
-      $('#addLabel').click(function(event) {
+  /*     $('#addLabel').click(function(event) {
         // Get value from input and append to list
         var label = $("#addLabel").parent().parent().find('input').val();        
         if(label.trim() != ""){
@@ -721,7 +753,7 @@
         }
         // Clear
         $("#addLabel").parent().parent().find('input').val('');  
-      });
+      }); */
 
       $(".balloon").on('click', '.delTag', function() {
         $(this).parent().parent().remove();
@@ -852,9 +884,9 @@
 	   		
 	   		return checkValidation;
 	   	}
+		
 	   	function resetValidationForm() {
 	   		$(".error_common").text("");
-
 	   	}
 	   	
 	   	$(document).on('click', '.business_card_book .list-group-item', function() {
@@ -873,11 +905,6 @@
             $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
             $(".addTagCard").css("display","none");  
           }          
-        });
-
-        // Process add tag and delete
-        $("#deletePeople").click(function(e){
-          
         });
 
         $(document).on('click','#addTag',function(e){
@@ -984,6 +1011,98 @@
 	   		return modal;
 	   	}
 	   	
+
+	    // Add card tag
+	     $('#addLabel').click(function(event) {
+	    	var listCardId = [];
+	    	var cardId = 0 ;
+	    	$(".icheckbox_square-green").find('.checked').each(function(){
+   	            cardId = $(this).find('input[name=bla]').val();
+   	            listCardId.push({"cardId":cardId});    	         
+   			});
+	    	//var cardId = $("input[name=cardId]").val();
+	    	var tagName = $("#tagCardName").val();
+			if(tagName =="" ){
+				BootstrapDialog.show({
+					title: 'Warning',
+	             	message: 'Please enter tag name'
+		        });			
+			}else{
+				   var check = true;
+					$(".nametag").each(function(){
+			    		if($(this).text().trim() == tagName.trim()){
+			    			BootstrapDialog.show({
+								title: 'Error',
+				             	message: '既に作成されているラベルです'});
+			    			check = false;
+			    		}
+			    	});
+					if(check){
+							$.ajax({
+					        	url: "<c:url value='/user/addTagHome' />",
+					        	data: JSON.stringify({"tagName" : tagName, "listCardId" : listCardId}),
+					        	type: "POST",
+					        	beforeSend: function(xhr) {
+					        		xhr.setRequestHeader("Accept", "application/json");
+					        		xhr.setRequestHeader("Content-Type", "application/json");
+					        	},
+					        	success: function(response) {
+					        		var respHTML = "";
+					        		var isChecked = "";
+					        		console.log("hsfkshfksfhs : " +listCardId.cardId );
+					        		$.each(response, function(index, value){
+					        			isChecked = "";
+					        			$.each(value["listCardIds"], function(idx, v){
+					        				//console.log("v : "+ v);
+					        				if(v == $("input[name=cardId]").val()){
+					        					//console.log("v : "+ v + " tagId : "+tagId);
+					        					isChecked = "checked";
+					        					return false;
+					        				}
+					        				
+					        				if(v != $("input[name=cardId]").val()){
+					        					isChecked = "";
+					        				}
+					        			});
+					        			if(isChecked == "checked")
+					        				{respHTML += "<tr id='rowData'>"
+						    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+						        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+						        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
+				                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
+						        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+						    					+ "</td>"
+						    					+ "<td class='nametag'>"+value["tagName"]+"</td>"
+						    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+					        			else
+					        				{respHTML += "<tr id='rowData'>"
+						    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+						        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+						        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
+				                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
+						        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+						    					+ "</td>"
+						    					+ "<td class='nametag' >"+value["tagName"]+"</td>"
+						    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+					        		});
+					        		$("#tagCardName").val('');
+					        		$("#paging tbody").html("");  
+					        		$("#paging tbody").html(respHTML);    		
+					        	},
+					        	error: function(){
+								  BootstrapDialog.show({
+				       				title: 'Information',
+				      	             	message: 'Add tag failed'
+				       	      		});
+							  	}
+					        });
+						}
+						
+						isClick = true;
+						console.log("isClick : "+isClick);
+					}
+	     });
+	
 	   	function resetFreeText() {
 	   		$("#freeText").text("");
 	   		$("#freeText").val("");
@@ -1061,4 +1180,5 @@
 	   			+'</div>'
    			return data;
 	   	}
+
     </script>

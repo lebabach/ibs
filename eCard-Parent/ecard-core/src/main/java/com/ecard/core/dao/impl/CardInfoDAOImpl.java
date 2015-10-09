@@ -24,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ecard.core.dao.CardInfoDAO;
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.CardTagId;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.UserTag;
 import com.ecard.core.model.enums.PermissionType;
 import com.ecard.core.model.enums.SearchConditions;
 import com.ecard.core.vo.CardConnectModel;
@@ -929,12 +931,11 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
     
 	@Override
 	public List<CardInfoUserVo> getListPossesionCard(Integer userId,  int pageNumber) {
-		// TODO Auto-generated method stub
+
 		String sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c "
                       + "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 ORDER BY c.contactDate DESC ";
 		Query query = getEntityManager().createQuery(sqlStr);
-		query.setParameter("userId", userId);
-//		.setFirstResult(offet).setMaxResults(limit);
+		query.setParameter("userId", userId);		
 		query.setFirstResult(pageNumber * this.maxResult).setMaxResults(this.maxResult);
         List<Object[]> listObj = query.getResultList();
         List<CardInfoUserVo> lstcardInfoUserVo = new ArrayList<>();
@@ -1197,6 +1198,11 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
             query.setMaxResults(1);
             return (CardInfo)query.getSingleResult();    
     }
+
+	public List<CardInfo> getOldCardInfor(){
+		Query query = getEntityManager().createQuery("SELECT c FROM OldCard oc INNER JOIN oc.cardInfo c ORDER BY oc.seq DESC");
+		return (List<CardInfo>)query.getResultList();
+	}
 	
 	public int deleteListCard(List<Integer> listCard){
 		Query query = getEntityManager().createNativeQuery("UPDATE card_info ci "
@@ -1204,6 +1210,63 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				+ " WHERE ci.card_id in (:listCard)");
 		query.setParameter("listCard",listCard);
 		return  query.executeUpdate();
-		
+	}
+	
+	public List<CardInfo> getListPossessionCardByTag(Integer userId, Integer tagId, String sort, int pageNumber){		
+		String sqlStr="SELECT c FROM  CardTag ct "
+				+ " INNER JOIN ct.userTag ut"
+				+ " INNER JOIN  ct.cardInfo c"
+				+ " WHERE ct.id.tagId = :tagId AND ut.userInfo.userId = :userId AND c.cardOwnerId = :userId"
+				+ " AND c.deleteFlg = 0 AND c.approvalStatus = 1";
+		if(sort.equals(StringUtils.lowerCase(SearchConditions.NAME.name()))) {
+            sqlStr += " ORDER BY c.nameKana ASC ";
+        }
+        else if(sort.equals(StringUtils.lowerCase(SearchConditions.COMPANY.name()))) {
+            sqlStr += " ORDER BY c.companyNameKana ASC ";
+        }
+        else if(sort.equals(StringUtils.lowerCase(SearchConditions.CONTACT.name()))) {
+            sqlStr += " ORDER BY c.contactDate DESC ";
+        }
+		Query query = getEntityManager().createQuery(sqlStr);
+		query.setParameter("userId", userId);
+		query.setParameter("tagId", tagId);
+		query.setFirstResult(pageNumber * this.maxResult).setMaxResults(this.maxResult);		
+		return query.getResultList();		
+	}
+	
+	public List<CardInfoUserVo> getListPossessionCardByTag(Integer userId, Integer tagId, int pageNumber){
+		/*String sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c "
+                + "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 ORDER BY c.contactDate DESC ";
+*/		
+		String sqlStr="SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM  CardTag ct "
+				+ " INNER JOIN ct.userTag ut"
+				+ " INNER JOIN  ct.cardInfo c"
+				+ " WHERE ct.id.tagId = :tagId AND ut.userInfo.userId = :userId AND c.cardOwnerId = :userId"
+				+ " AND c.deleteFlg = 0 AND c.approvalStatus = 1 ORDER BY c.contactDate DESC";		
+		Query query = getEntityManager().createQuery(sqlStr);
+		query.setParameter("userId", userId);
+		query.setParameter("tagId", tagId);
+		query.setFirstResult(pageNumber * this.maxResult).setMaxResults(this.maxResult);
+	    List<Object[]> listObj = query.getResultList();
+	    List<CardInfoUserVo> lstcardInfoUserVo = new ArrayList<>();
+	    for(Object[] object : listObj){
+	    	CardInfoUserVo  cardInfoVo = new CardInfoUserVo((String)object[0], (CardInfo)object[1]);
+	    	lstcardInfoUserVo.add(cardInfoVo);
+	    }
+	    
+	    return lstcardInfoUserVo;
+	}
+	
+	public List<String> getListSortTypeByTag(Integer userId, Integer tagId){		
+		String sqlStr="SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate FROM  CardTag ct "
+				+ " INNER JOIN ct.userTag ut"
+				+ " INNER JOIN  ct.cardInfo c"
+				+ " WHERE ct.id.tagId = :tagId AND ut.userInfo.userId = :userId AND c.cardOwnerId = :userId"
+				+ " AND c.deleteFlg = 0 AND c.approvalStatus = 1 GROUP BY DATE_FORMAT(c.contactDate,'%m/%Y') ORDER BY c.contactDate DESC";	
+		Query query = getEntityManager().createQuery(sqlStr);		
+		query.setParameter("userId", userId);
+		query.setParameter("tagId", tagId);
+		query.setFirstResult(0 * this.maxResult).setMaxResults(this.maxResult);
+	    return  query.getResultList();
 	}
 }
