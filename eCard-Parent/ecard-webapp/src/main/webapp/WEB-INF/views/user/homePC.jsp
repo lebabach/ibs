@@ -497,7 +497,35 @@
 
        // Process add tag and delete
        $("#deletePeople").click(function(e){
-         
+    	   if (confirm('<fmt:message key="card.delete.confirm"/>')) {
+    		   var listCardId=[];
+    			$(".icheckbox_square-green").find('.checked').each(function(){
+    	         cardId = $(this).find('input[name=bla]').val();
+    	         listCardId.push({"cardId":cardId});    	         
+    			});
+    			$.ajax({
+ 					type: 'POST',
+ 					url: 'deleteListCard',
+ 					 dataType: 'json', 
+ 					 contentType: 'application/json',
+ 					 mimeType: 'application/json',
+ 					data:JSON.stringify({"listCardId":listCardId}) 
+ 				}).done(function(resp, status, xhr) { 					
+ 					if(resp != 0){
+ 						$(".list-group-item .checked").closest('.list-group-item').each(function(){
+ 						$(this).removeClass("checked")
+ 	 					  if($(this).parents('.list-group').find('.row-new').length==1){
+ 	 					    $(this).parents('.list-group').remove();
+ 	 					  } else {
+ 	 					    $(this).remove();
+ 	 					  }
+ 	 					});	
+ 					}
+ 					reloadICheck();
+ 				}).fail(function(xhr, status, err) {
+ 					console.log('BBB='+err);
+ 				});
+    	   }
        });
 
     /*    $(document).on('click','#addTag',function(e){
