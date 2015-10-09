@@ -111,7 +111,14 @@
                 <li class="dropdown" style="margin-top:-9px; text-align:right">
                     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" style=" position: relative;">
                         
-                        <span style=" position: absolute;right: 3px;top: 6px; width:121px;">お知らせ<img src="<c:url value='/assets/img/icon-notice.png'/>" width="44px;" ></span><span class="label label-warning">1</span>
+                        <span style=" position: absolute;right: 3px;top: 6px; width:121px;">お知らせ
+                        	<img src="<c:url value='/assets/img/icon-notice.png'/>" width="44px;" >
+                        </span>
+                        <span class="label label-warning"> 
+                        	<c:if test="${objectNotification.numberOfNotification>=1}">
+				      			${objectNotification.numberOfNotification}
+			      			</c:if>
+			      		</span>
                         
                     </a>
                     <ul class="dropdown-menu notification dropdown-messages " style="padding:0;">
