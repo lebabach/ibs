@@ -274,21 +274,16 @@
                       <col width="80%">
                       <col width="10%">
                       <tbody>
+                      <c:forEach var="cardTag" items="${listTagGroup}">
                           <tr id="rowData">
-                            <td><input type="checkbox" class="i-checks" id="1"></td>                  
-                            <td class="nametag">Mark111111111</td>
+                            <td>
+                                 <input type="checkbox"  class="i-checks" id="1" value="<c:out value='${cardTag.tagId}'/>">
+                                 <input type="hidden" name= "userId"  value="<c:out value='${cardTag.userId}'/>">
+                            </td>                  
+                            <td class="nametag"><c:out value="${cardTag.tagName}" /></td>
                             <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
                           </tr>
-                          <tr id="rowData">
-                            <td><input type="checkbox" class="i-checks" id="1"></td>                  
-                            <td class="nametag">22222222222222222244444444222244444</td>
-                            <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
-                          </tr>
-                          <tr id="rowData">
-                            <td><input type="checkbox" class="i-checks " id="1"></td>                  
-                            <td>33333</td>
-                            <td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>
-                          </tr>
+                       </c:forEach>
                       </tbody>
                     </table>
                 </div>
@@ -475,10 +470,10 @@
 
  $(document).ready(function(){
     	     	  
-   	$(".business_card_book .list-group").each(function() {
-   		var id  = $(this).attr("id").replace('/', '');
-   		$(this).attr("id",id);
-   	});
+	   	$(".business_card_book .list-group").each(function() {
+	   		var id  = $(this).attr("id").replace('/', '');
+	   		$(this).attr("id",id);
+	   	});
        $('.i-checks').iCheck({
          checkboxClass: 'icheckbox_square-green',
          radioClass: 'iradio_square-green',                

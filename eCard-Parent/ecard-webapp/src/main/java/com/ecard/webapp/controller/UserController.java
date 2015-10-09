@@ -134,12 +134,13 @@ public class UserController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		Long listTotalCardInfo = new Long(0);
+		List<TagGroup> listTagGroup  = null;
 		List<CardInfoPCVo> lstCardInfoPCVo = new ArrayList<>();
 		if (ecardUser != null) {
 			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
 			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), 0);
 			listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId());
-
+			listTagGroup = getCardTag();
 			for (String nameSort : lstNameSort) {
 				List<CardInfo> cardInfoDisp = new ArrayList<>();
 				for (CardInfoUserVo cardInfo : lstCardInfo) {
@@ -165,6 +166,7 @@ public class UserController {
 		modelAndView.setViewName("homePC");
 		modelAndView.addObject("lstCardInfoPCVo", lstCardInfoPCVo);
 		modelAndView.addObject("totalCardInfo", listTotalCardInfo);
+		modelAndView.addObject("listTagGroup",listTagGroup);
 		return modelAndView;
 
 	}
