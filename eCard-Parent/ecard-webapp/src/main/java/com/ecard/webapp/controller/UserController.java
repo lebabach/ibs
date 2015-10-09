@@ -726,7 +726,24 @@ public class UserController {
 		try{
 			userCardMemo.setCreateDate(new Date());
 			userCardMemo.setUserId(userId);
-			cardMemoService.createCardMemo(userCardMemo);
+			
+			int seq;
+            if(userCardMemo.getSeq() != 0){
+            	cardMemoService.registerCardMemo(userCardMemo);
+            }
+            else{
+            	try{
+            		seq = cardMemoService.getMaxSeqByUserId(userId);
+            	}
+            	catch(Exception e){
+            		seq = 1;
+            	}
+            	
+            	if(userCardMemo.getSeq() == 0){
+            		userCardMemo.setSeq(seq);
+                }
+                cardMemoService.createCardMemo(userCardMemo);
+            }
 		}
 		catch(Exception ex){
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);

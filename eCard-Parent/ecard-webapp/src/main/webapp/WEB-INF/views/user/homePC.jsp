@@ -307,61 +307,6 @@
      
       </div>
     </div>
-
-    <div class="searchTargetSwitcher">
-      <div class="clearfix">
-      <a href="javascript:void(0)" class="BusinessCardList active"> あなたの名刺 </a>
-      <div class="ManagerSearch_box" style="display: none;">
-        <div class="lbl_srh">
-          <dl class="srhbox_round">
-            <dt><a class="search_tag_index_btn" href="javascript: void(0);"></a><i class="fa fa-search"></i></dt>
-            <dd><span class="iptxt"><input type="text" class="search_tag_index" value="" style="color: rgb(171, 171, 171);"></span></dd>
-          </dl>
-        </div>
-        <div class="">
-          <div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;">
-            <table class="table" id="mSearch">
-              <col width="10%">
-              <col width="90%">              
-              <tbody>
-                  <tr id="rowData_1">
-                    <td><input type="checkbox" class="i-checks"></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-                  <tr id="rowData_2">
-                    <td><input type="checkbox" class="i-checks"></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-                  <tr id="rowData_3">
-                    <td><input type="checkbox" class="i-checks "></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-                  <tr id="rowData_4">
-                    <td><input type="checkbox" class="i-checks "></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-                  <tr id="rowData_5">
-                    <td><input type="checkbox" class="i-checks "></td>                  
-                    <td class="nametag"></td>
-                  </tr>
-              </tbody>
-            </table>
-        </div>
-        </div>
-        
-        <div class="" style="margin-top:5px">
-          <div class="ac">
-            <p><a href="#">選択した検索条件を使用する</a></p>
-            <p><a href="#">選択した検索条件を削除</a></p>
-          </div>
-        </div>
-      </div> 
-      <!-- <a class="export"> Export CSV</a> -->
-    </div>
-    </div>
-    
- 
-
   
   <!--  End Header -->
 
@@ -612,15 +557,6 @@
           });
 });/* END READY DOCUMENT  */
  
-      // Manager Search 
-      $(".ManagerSearch").click(function(event) {        
-        if($(".ManagerSearch").hasClass("active")) {
-          $(".ManagerSearch_box").css("display","none");
-        } else {
-          $(".ManagerSearch_box").css("display","block");
-        }        
-      });
-      
       // Process with Label
       $('#addLabel').click(function(event) {
         // Get value from input and append to list
