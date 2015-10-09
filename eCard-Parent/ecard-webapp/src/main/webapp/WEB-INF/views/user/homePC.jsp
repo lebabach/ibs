@@ -370,45 +370,82 @@
     			   return false;
     		   }  */
 	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
-	    	    	// Call ajax here	    	   		
-	        		request = $.ajax({
-						type: 'POST',
-						url: 'search',
-						data: 'page=' +id_manager + "&typeSort=" +typeSort
-					}).done(function(resp, status, xhr) {
-						var lastDate = $('.business_card_book .list-group').last().attr("id");
-						$.each( resp.data, function( key, value ) {
-							 if(value.nameSort.replace("/","").trim() == lastDate.trim()){
-								 $.each( value.lstCardInfo, function (k,v) {									 
-									 createTableHasGroup(lastDate, v);
-									 reloadICheck();
-									 isLoading=isLoading+1;
-									 getImageFromSCP(v.imageFile); 
-								 });
-							 } else {
-								 $.each( value.lstCardInfo, function (k,v) {
-									 var lastDate = $('.business_card_book .list-group').last().attr("id");
-									if(value.nameSort.replace("/","").trim() != lastDate.trim()){											
-										 createTableNoGroup(value.nameSort, v);	 
-										 reloadICheck();
-										 isLoading=isLoading+1;
-										 getImageFromSCP(v.imageFile);
-									 }else{										 
+	    	    	// Call ajax here	
+	    	    	debugger;
+	    	    	if(!$('#titleOfSearch').length){
+	    	    		request = $.ajax({
+							type: 'POST',
+							url: 'search',
+							data: 'page=' +id_manager + "&typeSort=" +typeSort
+						}).done(function(resp, status, xhr) {
+							var lastDate = $('.business_card_book .list-group').last().attr("id");
+							$.each( resp.data, function( key, value ) {
+								 if(value.nameSort.replace("/","").trim() == lastDate.trim()){
+									 $.each( value.lstCardInfo, function (k,v) {									 
 										 createTableHasGroup(lastDate, v);
 										 reloadICheck();
 										 isLoading=isLoading+1;
-										 getImageFromSCP(v.imageFile);
-									 }
-								 });
-							 }
-							 
+										 getImageFromSCP(v.imageFile); 
+									 });
+								 } else {
+									 $.each( value.lstCardInfo, function (k,v) {
+										 var lastDate = $('.business_card_book .list-group').last().attr("id");
+										if(value.nameSort.replace("/","").trim() != lastDate.trim()){											
+											 createTableNoGroup(value.nameSort, v);	 
+											 reloadICheck();
+											 isLoading=isLoading+1;
+											 getImageFromSCP(v.imageFile);
+										 }else{										 
+											 createTableHasGroup(lastDate, v);
+											 reloadICheck();
+											 isLoading=isLoading+1;
+											 getImageFromSCP(v.imageFile);
+										 }
+									 });
+								 }
+								 
+							});
+							
+							
+						}).fail(function(xhr, status, err) {
+							//alert('Error');
 						});
-						
-						
-					}).fail(function(xhr, status, err) {
-						//alert('Error');
-					});
-	        	    id_manager++;
+		        	    id_manager++;
+	    	    	}else{
+	    	    		//search
+	    	    		var freeText = $("#freeText").val();
+	           	   		var owner = $("#owner").val();
+	           	   		var company = $("#company").val();
+	           	   		var department = $("#department").val();
+	           	   		var position = $("#position").val();
+	           	   		var name = $("#name").val();
+	           	   		var parameterFlg = $("#parameterFlg").val()
+	           	   		
+	           			if($("#parameterFlg").val()==0){
+	           				owner="";	
+	           	        }
+		           	   	$.ajax({
+		       			    type: 'POST',
+		       			    url: 'searchCards',
+		       			    dataType: 'json', 
+		       				 contentType: 'application/json',
+		       				 mimeType: 'application/json',
+		       			     data: JSON.stringify({ 
+		       			        'freeText':freeText,
+		       			        'owner':owner,
+		       			        'company':company,
+		       			        'department':department,
+		       			        'position':position,
+		       			        'name':name,
+		       			        'parameterFlg':parameterFlg,
+		       			        'page':++id_manager
+		       			    }),
+		       			    success: function(data){
+		       			    	setDataSearchLoadMore(data);
+		       			    }
+		       			});
+	    	    	}
+	        		
 	    	    } 
     	  }
     	}); 
@@ -644,6 +681,7 @@
        				owner="";	
        	        }
        	   		$(".modal-header button").click();
+       	   		id_manager=0;
        			$.ajax({
        			    type: 'POST',
        			    url: 'searchCards',
@@ -658,11 +696,11 @@
        			        'position':position,
        			        'name':name,
        			        'parameterFlg':parameterFlg,
-       			        'page':1
+       			        'page':0
        			    }),
        			    success: function(data){
-       			    	debugger;
        			    	setDataSearch(data);
+       			    	$("#titleSearch").text($('#parameterFlg').find(":selected").text());
        			    }
        			});
               });
@@ -987,7 +1025,7 @@
 	   			+	 '<div class="col-xs-5" style=" display: table;">'
 	   			+		'</div>'
 	   			+           '<div class="col-xs-7">'
-	   			+			'<img src="" class="img-responsive img-thumb pull-right" alt="Responsive image">'
+	   			+			'<img src="<c:url value="/assets/img/loading.gif"/>" name="'+imageFile+'" class="img-responsive img-thumb pull-right" alt="Responsive image">'
 	   			+			'<input class="hidden" name="fileImageName" value="'+imageFile+'">'
 	   			+'</div> '
 	   			+	'</div>'
@@ -1001,12 +1039,25 @@
 	   		var listGroup=$(".business_card_book").append(SetListGroupSearch());
 	   		$.each( cards, function( key, data ) {
 	   			$(".business_card_book .list-group").append(setListSearch(data.cardId,data.firstName,data.lastName,data.companyName,data.departmentName,data.positionName,data.telNumberCompany,data.imageFile,data.email));
+	   			getImageFromSCP(data.imageFile); 
+	   		});
+	   	}
+	   	
+	   	function setDataSearchLoadMore(cards){
+	   		$.each( cards, function( key, data ) {
+	   			$(".business_card_book .list-group").append(setListSearch(data.cardId,data.firstName,data.lastName,data.companyName,data.departmentName,data.positionName,data.telNumberCompany,data.imageFile,data.email));
+	   			getImageFromSCP(data.imageFile); 
 	   		});
 	   	}
 	   	
 	   	function SetListGroupSearch(){
-	   		var data='<div class="list-group" style="margin-bottom: 10px !important;" id= "titleOfSearch">'
-	   			+'<div class="list-group-item-title">Title</div>'
+	   		var data='<div class="list-group" id= "titleOfSearch">'
+	   			+'<div class="list-group-item-title" style="height:46px">'
+	   			+'<button type="button" class="close" data-dismiss="modal" id="btnCloseUserSearch">'
+	   			+'<span aria-hidden="true">×</span>'
+	   			+'</button>'
+	   			+'<span id="titleSearch"></span>'
+	   			+'</div>'
 	   			+'</div>'
    			return data;
 	   	}

@@ -1017,10 +1017,20 @@ public class UserController {
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
 		List<com.ecard.core.vo.CardInfo> cardInfo=null;
+		if(!userSearchVO.getFreeText().equals("")){
+			userSearchVO.setCompany(null);
+			userSearchVO.setName(null);
+			userSearchVO.setPosition(null);
+			userSearchVO.setDepartment(null);
+			userSearchVO.setOwner(null);
+		}else{
+			userSearchVO.setFreeText(null);
+		}
+		
         if(userSearchVO.getParameterFlg()==0){
-        	cardInfo = cardInfoService.getListCardSearch(userInfo.getUserId(), null, userSearchVO.getName(), userSearchVO.getPosition(), userSearchVO.getDepartment(), userSearchVO.getCompany(),0, userInfo.getGroupCompanyId());
+        	cardInfo = cardInfoService.getListCardSearch(userInfo.getUserId(), userSearchVO.getFreeText(), userSearchVO.getName(), userSearchVO.getPosition(), userSearchVO.getDepartment(), userSearchVO.getCompany(),userSearchVO.getPage(), userInfo.getGroupCompanyId());
         }else{
-        	cardInfo = cardInfoService.getListCardSearchAll(null, userSearchVO.getFreeText(), null,null, null, null, 0, userInfo.getGroupCompanyId());
+        	cardInfo = cardInfoService.getListCardSearchAll(userSearchVO.getOwner(), userSearchVO.getFreeText(), userSearchVO.getName(),userSearchVO.getPosition(), userSearchVO.getDepartment(), userSearchVO.getCompany(), userSearchVO.getPage(), userInfo.getGroupCompanyId());
         }
 		return cardInfo;
 	}
