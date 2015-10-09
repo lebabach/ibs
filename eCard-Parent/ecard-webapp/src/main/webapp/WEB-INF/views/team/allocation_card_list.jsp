@@ -205,6 +205,7 @@ function listAllication(teamId) {
 			}
 			
 			$("#paging1 input.txt-table").each(function() {
+				var lastTotal = checkNumber($('.current_count').text());
 				$(this).blur(function(){
 					var total=0;
 					$("#paging1 input.txt-table").each(function() {
@@ -216,6 +217,7 @@ function listAllication(teamId) {
 							total+=number;
 						}
 					});
+					total+=parseInt(lastTotal);
 					$(".current_count").text(total);
 					return false;
 				});
@@ -236,9 +238,11 @@ $(function() {
 	if(parseInt($("#listTeam option:selected" ).val()) == 0){
 		$('.content-user').html("");
 	}
-	$("#paging1 input.txt-table").each(function() {
-		$(this).blur(function(){
-			var total=0;
+	
+
+	$("#paging1 input.txt-table").each(function() {		
+		$(this).blur(function(){			
+			var total = 0; 
 			$("#paging1 input.txt-table").each(function() {
 				var number=checkNumber($(this).val());
 				if(number==-1){
