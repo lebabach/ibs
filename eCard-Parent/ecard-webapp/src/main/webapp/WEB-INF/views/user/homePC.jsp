@@ -375,7 +375,7 @@
     <div class="business_card_book">
     <!-- for here  -->
     <c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">
-		      <div class="list-group" id= "<c:out value='${cardInfoPCVo.nameSort}' />">
+		      <div class="list-group" style="margin-bottom: 10px !important;" id= "<c:out value='${cardInfoPCVo.nameSort}' />">
 		        <div class="list-group-item-title"><c:out value="${cardInfoPCVo.nameSort}" /></div>
 		        <!-- for item here  -->
 		        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
