@@ -123,7 +123,7 @@ a {
 	<div class="row animated fadeInRight">
 		<div class="rel" style="margin-top:0">
 			<div class="bg">
-				<img src="<c:url value='/assets/img/bg-1.jpg'/>">
+				<%-- <img src="<c:url value='/assets/img/bg-1.jpg'/>"> --%>
 			</div>
 			<div>
 				<a href="<c:url value="/user/home"/>" class="btn_back"><span><img
@@ -145,9 +145,17 @@ a {
                    </ul> -->
 				<div class="card">
 					<div class="card_img">
-						<a href="#" title="Image from Unsplash" data-target="#myModal"
+						<c:if test="${cardInfo.imageFile ==''}">
+							<a href="#" title="Image from Unsplash" data-target="#myModal"
 							id="popup"> <img id="imageresource" width="318" height="190"
-							src="data:image/png;base64,${cardInfo.imageFile}"></a>
+							src='<c:url value="/assets/img/card_08.png"></c:url>'></a>	
+						</c:if>
+						<c:if test="${not cardInfo.imageFile ==''}">
+							<a href="#" title="Image from Unsplash" data-target="#myModal"
+							id="popup"> <img id="imageresource" width="318" height="190"
+							src="data:image/png;base64,${cardInfo.imageFile}"></a>	
+						</c:if>
+						
 					</div>
 				</div>
 			</div>
@@ -651,9 +659,9 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.companyName}" name="companyName"> <br/>
+										value="${cardInfo.companyName}" name="companyName" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.companyNameKana}" name="companyNameKana">
+										value="${cardInfo.companyNameKana}" name="companyNameKana" readonly="readonly">
 								</dd>
 							</dl>
 						</div>
@@ -665,9 +673,9 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.departmentName}" name="departmentName"> <br/>
+										value="${cardInfo.departmentName}" name="departmentName" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.positionName}" name="positionName">
+										value="${cardInfo.positionName}" name="positionName" readonly="readonly">
 								</dd>
 							</dl>
 						</div>
@@ -679,13 +687,13 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.lastName}" name="lastName"> <br/>
+										value="${cardInfo.lastName}" name="lastName" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.firstName}" name="firstName"> <br/>
+										value="${cardInfo.firstName}" name="firstName" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.lastNameKana}" name="lastNameKana"> <br/>
+										value="${cardInfo.lastNameKana}" name="lastNameKana" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.firstNameKana}" name="firstNameKana">
+										value="${cardInfo.firstNameKana}" name="firstNameKana" readonly="readonly">
 								</dd>
 							</dl>
 						</div>
@@ -701,7 +709,7 @@ label.error {
 										<a href="mailto:${cardInfo.email}" target="_blank">${cardInfo.email}</a>
 									</div>
 									<input type="email" class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.email}" name="email">
+										value="${cardInfo.email}" name="email" readonly="readonly">
 								</dd>
 							</dl>
 						</div>
@@ -713,13 +721,13 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberDirect}" name="telNumberDirect" id="telNumberDirect" /> <br/>
+										value="${cardInfo.telNumberDirect}" name="telNumberDirect" id="telNumberDirect"  readonly="readonly"/> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberDepartment}" name="telNumberDepartment" id="telNumberDepartment" /> <br/>
+										value="${cardInfo.telNumberDepartment}" name="telNumberDepartment" id="telNumberDepartment"  readonly="readonly"/> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberCompany}" name="telNumberCompany" id="telNumberDepartment"><br/>
+										value="${cardInfo.telNumberCompany}" name="telNumberCompany" id="telNumberDepartment" readonly="readonly"><br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.mobileNumber}" name="mobileNumber" id="mobileNumber" />
+										value="${cardInfo.mobileNumber}" name="mobileNumber" id="mobileNumber" readonly="readonly" />
 								</dd>
 							</dl>
 						</div>
@@ -730,7 +738,7 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.faxNumber}" name="faxNumber">
+										value="${cardInfo.faxNumber}" name="faxNumber" readonly="readonly">
 								</dd>
 							</dl>
 						</div>
@@ -741,7 +749,7 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.zipCode}" name="zipCode">
+										value="${cardInfo.zipCode}" name="zipCode" readonly="readonly">
 								</dd>
 							</dl>
 						</div>
@@ -753,13 +761,13 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address1}" name="address1"> <br/>
+										value="${cardInfo.address1}" name="address1" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address2}" name="address2"> <br/>
+										value="${cardInfo.address2}" name="address2" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address3}" name="address3"> <br/>
+										value="${cardInfo.address3}" name="address3" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address4}" name="address4"> <br/>
+										value="${cardInfo.address4}" name="address4" readonly="readonly"> <br/>
 								</dd>
 							</dl>
 						</div>
@@ -775,7 +783,7 @@ label.error {
 										<a href="${cardInfo.companyUrl}" target="_blank">${cardInfo.companyUrl}</a>
 									</div>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.companyUrl}" name="companyUrl" id="companyURL">
+										value="${cardInfo.companyUrl}" name="companyUrl" id="companyURL" readonly="readonly">
 								</dd>
 							</dl>
 						</div>

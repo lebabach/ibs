@@ -32,6 +32,18 @@
 	type="text/css" media="all" />
 <script src="<c:url value='/assets/js/jquery-2.1.1.js'/>"
 	type="text/javascript"></script>
+<style type="text/css">
+      .loginscreen.middle-box{
+        max-width: 425px !important;
+        width: 425px;
+      }
+      .m-t {
+       
+        width: 310px;
+        margin: 15px auto 0 auto;
+        }
+  </style>
+
 <script type="text/javascript">
 	    $(document).ready(function() {
 	    	 $('#btnLogin').on('click', function(){
@@ -51,11 +63,9 @@
 <body class="gray-bg">
 	<div class="middle-box text-center loginscreen animated fadeInDown">
 		<div>
-			<div style="margin-left: -65px;">
-				<h2 class="logo-name">
-					<%-- <fmt:message key="webapp.name"/> --%>
-				</h2>
-			</div>
+			<div>
+		        <h2 class="logo-name"><img src="<c:url value='/assets/img/login_logo.png'/>" style=""></h2>
+		    </div>
 			<%-- <h3><fmt:message key="webapp.welcome"/></h3> --%>
 			<!-- <p>Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.          
       </p> -->

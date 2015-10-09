@@ -20,9 +20,7 @@
   .clearfix{
     margin-bottom: 4px;
   }
-  .navbar-right{
-    margin-right: -40px;
-  }
+
   .clearfix a.active{
     font-weight: bold;
   }

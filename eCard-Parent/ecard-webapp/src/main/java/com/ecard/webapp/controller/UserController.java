@@ -172,7 +172,7 @@ public class UserController {
 			 for(Integer cardId : tagGroup.getListCardIds()){
 				  str = str + "," + cardId;
 			 }
-			 tagGroup.setCardId(str.substring(1,str.length()));
+			 //tagGroup.setCardId(str.substring(1,str.length()));
 		}
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("homePC");
@@ -472,10 +472,9 @@ public class UserController {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 			Integer userId = ecardUser.getUserId();
-			
 			cardInfo = cardInfoService.getCardInfoDetail(id);
 			String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
-			//cardInfo.setImageFile(fileNameFromSCP);
+			cardInfo.setImageFile(fileNameFromSCP);
 			
 			//List card connected
 			cardList = cardInfoService.listCardConnect(cardInfo.getCardOwnerId(), cardInfo.getGroupCompanyId(), cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
@@ -1105,7 +1104,7 @@ public class UserController {
 			 for(Integer cardId : tagGroup.getListCardIds()){
 				  str = str + "," + cardId;
 			 }
-			 tagGroup.setCardId(str.substring(1,str.length()));
+			 //tagGroup.setCardId(str.substring(1,str.length()));
 		}
 		return listTagGroup;
     }
