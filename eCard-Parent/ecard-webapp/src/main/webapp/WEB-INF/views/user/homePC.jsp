@@ -629,10 +629,30 @@
            
        });
        
-       $( "#btn-success2, #btn-success3, #close-x" ).click(function() {
-         $('.modal-content').show(); 
-         $('.modal-content-new').hide(); 
-       });
+       $( "#btn-success2" ).click(function() {
+ 	         $('.modal-content').show(); 
+ 	         $('.modal-content-new').hide(); 
+ 	     	var freeText="",owner="",company="",department="",position="",name="",parameterFlg="";
+	   		$(".modal-content-new .i-checks").each(function() {
+	   			if($(this).is(':checked')){
+	   				freeText=$(this).closest(".row.row-new").find(".hidden.freeText").val();
+	   				owner=$(this).closest(".row.row-new").find(".hidden.owner").val();
+	   				company=$(this).closest(".row.row-new").find(".hidden.company").val();
+	   				department=$(this).closest(".row.row-new").find(".hidden.department").val();
+	   				position=$(this).closest(".row.row-new").find(".hidden.position").val();
+	   				name=$(this).closest(".row.row-new").find(".hidden.name").val();
+	   				parameterFlg=$(this).closest(".row.row-new").find(".hidden.parameterFlg").val();
+	   				setDisplayResearch(freeText,owner,company,department,position,name,parameterFlg);
+	   				return false;
+	   			}
+	   		});
+	   		setDisplayResearch(freeText,owner,company,department,position,name,0);
+         });
+         
+         $( "#close-x" ).click(function() {
+   	         $('.modal-content').show(); 
+   	         $('.modal-content-new').hide(); 
+           });
        
        $( "#parameterFlg" ).click(function() {
            if($(this).val()==0){
@@ -713,6 +733,8 @@
        				owner="";	
        	        }
        	   		$(".modal-header button").click();
+       	   		disableBtnSort();
+       	   		
        	   		id_manager=0;
        			$.ajax({
        			    type: 'POST',
@@ -733,6 +755,9 @@
        			    success: function(data){
        			    	setDataSearch(data);
        			    	$("#titleSearch").text($('#parameterFlg').find(":selected").text());
+       			    	$("#btnCloseUserSearch").click(function(){
+       			    		location.reload();
+       			    	});
        			    }
        			});
               });
@@ -1179,6 +1204,12 @@
 	   			+'</div>'
 	   			+'</div>'
    			return data;
+	   	}
+	   	
+	   	function disableBtnSort(){
+	   		$("#selectSortBox").prop('disabled', true);
+	   		$(".btn-group").prop('disabled', true);
+	   		$("#sort-card-cnd").prop('disabled', true);
 	   	}
 
     </script>
