@@ -181,36 +181,79 @@ public class UserController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		int limit = parseIntParameter(request.getParameter("page"), 0);
+		int searchType = parseIntParameter(request.getParameter("typeSearch"),0);		
 		int typeSort = parseIntParameter(request.getParameter("typeSort"), 0);
 		DataPagingJsonVO<CardInfoPCVo> dataTableResponse = new DataPagingJsonVO<CardInfoPCVo>();
 		List<CardInfoPCVo> cardInfoSearchResponses = new ArrayList<CardInfoPCVo>();
 		List<String> lstNameSort = null;
 		List<CardInfo> listCardSortNameCompany = null;
 		List<CardInfoUserVo> lstCardInfo = null;
-		if(typeSort == SearchConditions.CONTACT.getValue()){
-		  lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
-		  lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), limit);
-		}else if (typeSort == SearchConditions.NAME.getValue()){
-			listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(),null, SearchConditions.NAME.name().toLowerCase(), limit);
+		// Search with possessionCard
+		if(searchType == 0){
+			if(typeSort == SearchConditions.CONTACT.getValue()){
+				  lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
+				  lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), limit);
+			}else if (typeSort == SearchConditions.NAME.getValue()){
+				listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(),null, SearchConditions.NAME.name().toLowerCase(), limit);
+				lstCardInfo = new ArrayList<>();
+				lstNameSort = new ArrayList<>();
+				 for(CardInfo cardInfoModel :listCardSortNameCompany ){
+					 String sortType = cardInfoModel.getNameKana().substring(0,  1);
+					 lstNameSort.add(sortType.toUpperCase());
+					 CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
+					 lstCardInfo.add(cardInfoUserVo);
+				 }
+			}else{
+				listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(),null, SearchConditions.COMPANY.name().toLowerCase(), limit);
+				lstCardInfo = new ArrayList<>();
+				lstNameSort = new ArrayList<>();
+				 for(CardInfo cardInfoModel :listCardSortNameCompany ){
+					 String sortType = cardInfoModel.getCompanyNameKana().substring(0,  1);
+					 lstNameSort.add(sortType.toUpperCase());
+					 CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
+					 lstCardInfo.add(cardInfoUserVo);
+				 }
+			}
+			
+		} else {
+			// get List Card follow by TagName : tagId, userId, sort condition, limit
+			/*listCardSortNameCompany = cardInfoService.getListPossessionCardByTag(ecardUser.getUserId(),searchType, SearchConditions.NAME.name().toLowerCase(),limit);
 			lstCardInfo = new ArrayList<>();
 			lstNameSort = new ArrayList<>();
-			 for(CardInfo cardInfoModel :listCardSortNameCompany ){
-				 String sortType = cardInfoModel.getNameKana().substring(0,  1);
+			for(CardInfo cardInfoModel : listCardSortNameCompany){
+				System.out.println("AA="+cardInfoModel.getCardId());
+				String sortType = cardInfoModel.getCompanyNameKana().substring(0,  1);
 				 lstNameSort.add(sortType.toUpperCase());
 				 CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
 				 lstCardInfo.add(cardInfoUserVo);
-			 }
-		}else{
-			listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(),null, SearchConditions.COMPANY.name().toLowerCase(), limit);
-			lstCardInfo = new ArrayList<>();
-			lstNameSort = new ArrayList<>();
-			 for(CardInfo cardInfoModel :listCardSortNameCompany ){
-				 String sortType = cardInfoModel.getCompanyNameKana().substring(0,  1);
-				 lstNameSort.add(sortType.toUpperCase());
-				 CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
-				 lstCardInfo.add(cardInfoUserVo);
-			 }
+			}*/
+			if(typeSort == SearchConditions.CONTACT.getValue()){
+				  lstCardInfo = cardInfoService.getListPossessionCardByTag(ecardUser.getUserId(),searchType, limit);
+				  lstNameSort = cardInfoService.getListSortTypeByTag(ecardUser.getUserId(),searchType);
+//				  lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), limit);
+			}else if (typeSort == SearchConditions.NAME.getValue()){
+				listCardSortNameCompany = cardInfoService.getListPossessionCardByTag(ecardUser.getUserId(),searchType, SearchConditions.NAME.name().toLowerCase(),limit);
+				lstCardInfo = new ArrayList<>();
+				lstNameSort = new ArrayList<>();
+				 for(CardInfo cardInfoModel :listCardSortNameCompany ){
+					 String sortType = cardInfoModel.getNameKana().substring(0,  1);
+					 lstNameSort.add(sortType.toUpperCase());
+					 CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
+					 lstCardInfo.add(cardInfoUserVo);
+				 }
+			}else{
+				listCardSortNameCompany = cardInfoService.getListPossessionCardByTag(ecardUser.getUserId(),searchType, SearchConditions.COMPANY.name().toLowerCase(),limit);
+				lstCardInfo = new ArrayList<>();
+				lstNameSort = new ArrayList<>();
+				 for(CardInfo cardInfoModel :listCardSortNameCompany ){
+					 String sortType = cardInfoModel.getCompanyNameKana().substring(0,  1);
+					 lstNameSort.add(sortType.toUpperCase());
+					 CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
+					 lstCardInfo.add(cardInfoUserVo);
+				 }
+			}			
 		}
+		
 		lstNameSort = lstNameSort.stream().distinct().sorted().collect(Collectors.toList());
 		for (String nameSort : lstNameSort) {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
@@ -1012,12 +1055,10 @@ public class UserController {
 	@RequestMapping(value = "deleteListCard", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public int deleteListCard(@RequestBody final  ListCardDelete listCardDelete){
-		System.out.println("I am here");	
 		List<Integer> listCard = new ArrayList<>();
 		int result = 0;
 		try{
-			for(ObjectCards cardId : listCardDelete.getListCardId()){
-				System.out.println("BBBB = "+cardId.getCardId());
+			for(ObjectCards cardId : listCardDelete.getListCardId()){				
 				listCard.add(Integer.parseInt(cardId.getCardId()));				
 			}
 			result = cardInfoService.deleteListCard(listCard);
@@ -1025,7 +1066,6 @@ public class UserController {
 			e.printStackTrace();
 			return 0;
 		}
-		
 		return result;
 	}
 }
