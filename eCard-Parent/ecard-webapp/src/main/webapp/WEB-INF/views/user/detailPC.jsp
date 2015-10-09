@@ -5,6 +5,9 @@
 	pageEncoding="utf-8"%>
 
 <style type="text/css">
+a {
+    color: #E3157A;
+}
 .btn-lg {
 	padding: 2px 16px;
 }
@@ -160,8 +163,9 @@
 		</button>
 		</c:if>
 
+		<c:if test="${ isMyCard == true and sfManualLinkFlg == true}">
 		<a href="#" class="a-new-pc">セールスフォース連携</a>
-
+		</c:if>
 
 		<div class="balloon lbl_balloon" style="display: none; margin-top: 10px">
 			<div class="">
@@ -246,58 +250,39 @@
 }
 
 .p-fomr2 {
-	display: inline-block;
-	width: 100%;
-	border-top: 1px solid #b1b1b1;
-	padding: 12px 17px 10px 17px;
-	margin: 10px 0 0 0;
-	text-align: center;
-	background: #e2f3ff;
+    display: inline-block;
+    width: 100%;
+    border-top: 1px solid #B1B1B1;
+    padding: 12px 17px 10px;
+    margin: 10px 0px 0px;
+    text-align: center;
+    background: #E2F3FF none repeat scroll 0% 0%;
 }
 
 .input-submit {
-	font-size: 1.2em;
-	display: inline-block;
-	padding: 5px 12px 2px 12px;
-	border: 1px solid #12476a;
-	border-radius: 3px;
-	background: linear-gradient(#307cae, #27648d);
-	background: -webkit-gradient(linear, left top, left bottom, from(#307cae),
-		to(#27648d));
-	background: -moz-linear-gradient(top, #307cae, #27648d);
-	background-color: #307caf;
-	color: #ffffff !important;
-	vertical-align: middle;
-	text-shadow: 0 -1px 2px #000;
-	box-shadow: 1px 1px 0 #649dc2 inset;
-	white-space: nowrap;
-	-ms-filter:
-		"progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#307cae, EndColorStr=#27648d)";
-	filter: progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#307cae,
-		EndColorStr=#27648d);
+    font-size: 1.2em;
+    display: inline-block;
+    padding: 5px 12px 2px;
+    border: 1px solid #E3157A;
+    border-radius: 3px;
+    background-color: #E3157A;
+    color: #FFF !important;
+    vertical-align: middle;
+    text-shadow: 0px -1px 2px #000;
+    white-space: nowrap;
 }
 
 .input-reset {
-	font-size: 1.2em;
-	display: inline-block;
-	padding: 5px 12px 2px 12px;
-	border: 1px solid #a5a5a5;
-	border-radius: 3px;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	background: linear-gradient(#e0e0e0, #c8c8c8);
-	background: -webkit-gradient(linear, left top, left bottom, from(#e0e0e0),
-		to(#c8c8c8));
-	background: -moz-linear-gradient(top, #e0e0e0, #c8c8c8);
-	background-color: #e0e0e0;
-	color: #666666 !important;
-	vertical-align: middle;
-	text-shadow: 0 1px 0px #fff;
-	white-space: nowrap;
-	-ms-filter:
-		"progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#e0e0e0, EndColorStr=#c8c8c8)";
-	filter: progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#e0e0e0,
-		EndColorStr=#c8c8c8);
+    font-size: 1.2em;
+    display: inline-block;
+    padding: 5px 12px 2px;
+    border: 1px solid #A5A5A5;
+    border-radius: 3px;
+    background: #E0E0E0 -moz-linear-gradient(center top , #E0E0E0, #C8C8C8) repeat scroll 0% 0%;
+    color: #666 !important;
+    vertical-align: middle;
+    text-shadow: 0px 1px 0px #FFF;
+    white-space: nowrap;
 }
 </style>
 					<script type="text/javascript">
@@ -463,57 +448,29 @@
 						<h5>刺交換日</h5>
 					</div>
 					<div class="panel-body">
-						<div class="career_section selected">
-							<div class="career_date " style="font-weight: bold !important;">
-								2014/10/26<span>(最新)</span>
+						<c:if test="${ not empty listOldCard }">
+							<c:forEach var="oldCardList" items="${listOldCard}" varStatus="loop">
+							<div class="career_section selected">
+								<div class="career_date " style="font-weight: bold !important;">
+									<fmt:formatDate value='${ oldCardList.contactDate }' pattern="yyyy/MM/dd"/>
+								</div>
+								<div>
+									<table class="table">
+										<tbody>
+											<tr id="rowData">
+												<td>
+													<p><c:out value="${ oldCardList.companyName }"></c:out> </p>
+													<p></p>
+													<p><c:out value="${ oldCardList.departmentName }"></c:out></p>
+												</td>
+	
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
-							<div>
-								<table class="table">
-									<tbody>
-										<tr id="rowData">
-											<td>
-												<p>株式会社コアネット</p>
-												<p></p>
-												<p>代表取締役</p>
-											</td>
-
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<div class="career_section">
-							<div class="career_date " style="font-weight: bold !important;">2014/10/25</div>
-							<div>
-								<table class="table">
-									<tbody>
-										<tr id="rowData">
-											<td>
-												<p>株式会社コアネット</p>
-												<p></p>
-												<p>代表取締役</p>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<div class="career_section">
-							<div class="career_date " style="font-weight: bold !important;">2014/10/24</div>
-							<div>
-								<table class="table">
-									<tbody>
-										<tr id="rowData">
-											<td>
-												<p>株式会社コアネット</p>
-												<p></p>
-												<p>代表取締役</p>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
+							</c:forEach>
+						</c:if>						
 					</div>
 				</div>
 			</div>
@@ -564,33 +521,128 @@
 	font-size: 14px;
 	margin: 0 15px;
 }
+
+label.error {
+    color: #CC5965;
+    display: inline-block;
+    margin-left: 15px;
+}
 </style>
 				<script type="text/javascript">
-                          $(document).ready(function(){
-                                  $('.edit2').on({
-                                   'click':function(){
-                                              $(".input-new-1").addClass("input-new-1-ac");
-                                              $('.p-fomr2').show();
-                                              $('.div-pen').addClass('div-pen-ac') 
-                                              $(".input-new-1").removeAttr('readonly');
-                                      }
-                                  });   
-                                  $('.input-reset,.input-submit').on({
-                                   'click':function(){
-                                              $(".input-new-1").removeClass("input-new-1-ac");
-                                              $('.p-fomr2').hide();
-                                              $('.div-pen').removeClass('div-pen-ac') 
-                                              $(".input-new-1").attr('readonly', 'readonly');
-                                      }
-                                  });     
-                              
-                          });        
-                      </script>
+                    $(document).ready(function(){
+                            $('.edit2').on({
+                             'click':function(){
+                                        $(".input-new-1").addClass("input-new-1-ac");
+                                        $('.p-fomr2').show();
+                                        $('.div-pen').addClass('div-pen-ac') 
+                                        $(".input-new-1").removeAttr('readonly');
+                                }
+                            });   
+                            $('.input-reset').on({
+                             'click':function(){
+                                        $(".input-new-1").removeClass("input-new-1-ac");
+                                        $('.p-fomr2').hide();
+                                        $('.div-pen').removeClass('div-pen-ac') 
+                                        $(".input-new-1").attr('readonly', 'readonly');
+                                        
+                                        validator.resetForm();
+                                }
+                            });     
+                                                    
+                            var validator = $("#editForm").validate({
+                            	rules: {
+                            		companyName: "required",
+                            		companyNameKana: "required",
+                            		fisrtName: "required",
+                            		lastName: "required",
+                            		fisrtNameKana: "required",
+                            		lastNameKana: "required",
+                    				email: {
+                    					required: true,
+                    					email: true
+                    				},
+                    				telNumberDirect : {
+                    			    	required: false,
+                    			    	digits: true
+                    			    },
+                    			    telNumberDepartment : {
+                    			    	required: false,
+                    			    	digits: true
+                    			    },
+                    			    telNumberCompany : {
+                    			    	required: false,
+                    			    	digits: true
+                    			    },
+                    			    mobileNumber : {
+                    			    	required: false,
+                    			    	digits: true
+                    			    },
+                    			    urlvalidation : { 
+                    			    	urlvalidation : true, 
+                    			    	required: false
+                    			    }
+                    			},
+                    			messages: {
+                    				companyName: '<fmt:message key="valid.companyName" />',
+                    				companyNameKana: "<fmt:message key="valid.companyNameKana" />",
+                    				fisrtName: "<fmt:message key="valid.name" />",
+                            		lastName: "<fmt:message key="valid.name" />",
+                            		fisrtNameKana: "<fmt:message key="valid.nameKana" />",
+                            		lastNameKana: "<fmt:message key="valid.nameKana" />",
+                    				email: "<fmt:message key="valid.email" />",
+                    				telNumberDirect: "<fmt:message key="valid.phoneNumber" />",
+                    				telNumberDepartment: "<fmt:message key="valid.phoneNumber" />",
+                    				telNumberCompany: "<fmt:message key="valid.phoneNumber" />",
+                    				mobileNumber: "<fmt:message key="valid.phoneNumber" />"
+                    			}
+                            });
+                            
+                            $(".input-submit").click(function(){
+                            	
+                           		/* if($("#editForm").valid() && validTelNumberDirect() 
+                           				&& validTelNumberDepartment() && validTelNumberCompany() && validMobileNumber()){ */
+                          		if($("#editForm").valid()){
+                           			$(".input-new-1").removeClass("input-new-1-ac");
+                                    $('.p-fomr2').hide();
+                                    $('.div-pen').removeClass('div-pen-ac') 
+                                    $(".input-new-1").attr('readonly', 'readonly');
+                                    
+                           			$("#editForm").submit();
+                           		}
+                           		else{
+                           			$(".input-new-1").addClass("input-new-1-ac");
+                                    $('.p-fomr2').show();
+                                    $('.div-pen').addClass('div-pen-ac') 
+                                    $(".input-new-1").removeAttr('readonly');
+                                    
+                           			return false;
+                           		}
+                            });
+                            
+                    });        
+                    
+                    function validateURL(value){
+                      // URL validation from http://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+                      var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+                      var regex = new RegExp(expression);
+                      return value.match(regex);
+                    }
+
+                    $.validator.addMethod("urlvalidation", function(value, element) {
+                      return this.optional(element) || validateURL(value);
+                    }, "<fmt:message key="valid.URL" />");
+                    
+                </script>
                 
 				<div class="panel-body" style="padding: 15px 15px 0 15px;">
-					<form action="<c:url value='/user/editCardInfo' />" method="post">
+					<form action="<c:url value='/user/editCardInfo' />" method="post" id="editForm">
 						<input type="hidden" name="cardId" value="${ cardInfo.cardId }" />
 						<input type="hidden" name="imageFile" value="${cardInfo.imageFile}" />
+						<input type="hidden" name="fileOutputFlg" value="${cardInfo.fileOutputFlg}" />
+						<input type="hidden" name="cardOwnerId" value="${cardInfo.cardOwnerId}" />
+						<input type="hidden" name="publishStatus" value="${cardInfo.publishStatus}" />
+						<input type="hidden" name="approvalStatus" value="${cardInfo.approvalStatus}" />
+
 						<div class="section">
 							<dl>
 								<dt>
@@ -648,7 +700,7 @@
 										style="display: none">
 										<a href="mailto:${cardInfo.email}" target="_blank">${cardInfo.email}</a>
 									</div>
-									<input class="ipt_txt front_full_name input-new-1"
+									<input type="email" class="ipt_txt front_full_name input-new-1"
 										value="${cardInfo.email}" name="email">
 								</dd>
 							</dl>
@@ -661,13 +713,13 @@
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberDirect}" name="telNumberDirect"> <br/>
+										value="${cardInfo.telNumberDirect}" name="telNumberDirect" id="telNumberDirect" /> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberDepartment}" name="telNumberDepartment"> <br/>
+										value="${cardInfo.telNumberDepartment}" name="telNumberDepartment" id="telNumberDepartment" /> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberCompany}" name="telNumberCompany"> <br/>
+										value="${cardInfo.telNumberCompany}" name="telNumberCompany" id="telNumberDepartment"><br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.mobileNumber}" name="mobileNumber">
+										value="${cardInfo.mobileNumber}" name="mobileNumber" id="mobileNumber" />
 								</dd>
 							</dl>
 						</div>
@@ -723,20 +775,21 @@
 										<a href="${cardInfo.companyUrl}" target="_blank">${cardInfo.companyUrl}</a>
 									</div>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.companyUrl}" name="companyUrl">
+										value="${cardInfo.companyUrl}" name="companyUrl" id="companyURL">
 								</dd>
 							</dl>
 						</div>
 						
 						<p class="p-fomr2"
 							style="border: none; margin: 0 0 0 -15px; width: 107.4%; display: none">
-							<input type="submit" class="input-submit" value="保存"> 
+							<input type="button" class="input-submit" value="保存"> 
 							<input type="reset" class="input-reset" value="キャンセル">
 						</p>
 					</form>
 				</div>
 
 			</div>
+			<c:if test="${ not empty listCardConnect }">
 			<!-- List card connected -->
 			<div class="panel panel-default">
 				<div class="panel-heading" style="height: 40px;">
@@ -778,6 +831,7 @@
                    .mg-top {
 					    margin-top: 5px;
 					}
+					
                 </style>
 					<c:forEach var="listCardConnected" items="${listCardConnect}" varStatus="loop">
 						<div class="list-group-item pointer div-new">
@@ -798,6 +852,7 @@
 				</div>
 			</div>
 			<!-- List card connected -->
+			</c:if>
 		</div>
 		<!-- End Right side -->
 	</div>

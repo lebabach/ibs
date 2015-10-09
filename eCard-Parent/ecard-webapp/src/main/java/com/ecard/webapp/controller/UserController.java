@@ -418,7 +418,7 @@ public class UserController {
 			
 			cardInfo = cardInfoService.getCardInfoDetail(id);
 			String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
-			cardInfo.setImageFile(fileNameFromSCP);
+			//cardInfo.setImageFile(fileNameFromSCP);
 			
 			//List card connected
 			cardList = cardInfoService.listCardConnect(cardInfo.getCardOwnerId(), cardInfo.getGroupCompanyId(), cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
@@ -432,6 +432,19 @@ public class UserController {
             else{
             	modelAndView.addObject("isMyCard", true);
             }
+            
+            //Get user information
+            UserInfo userInfo = userInfoService.getUserInfoByUserId(userId);
+            if(userInfo.getSfManualLinkFlg() != 0){
+            	modelAndView.addObject("sfManualLinkFlg", true);
+            }
+            else{
+            	modelAndView.addObject("sfManualLinkFlg", false);
+            }
+            
+            //Get old cards
+            List<CardInfo> listOldCard = cardInfoService.getOldCardInfor();
+            modelAndView.addObject("listOldCard", listOldCard);
 		}
 		catch(Exception ex){
 			logger.debug("Exception : ", ex.getMessage());
@@ -582,6 +595,7 @@ public class UserController {
                 cardInfo.setContactDate(new Date());
             }
             cardInfo.setDeletDate(null);
+            cardInfo.setDateEditting(new Date());
             
             cardInfo.setName(name);
             cardInfo.setNameKana(nameKana);

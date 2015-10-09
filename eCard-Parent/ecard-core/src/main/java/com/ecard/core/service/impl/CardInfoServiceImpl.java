@@ -293,4 +293,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public CardInfo getNewestCardInfo(CardInfo cardInfo){
     	return cardInfoDAO.getNewestCardInfo(cardInfo);
     }
+	
+	public List<CardInfo> getOldCardInfor(){
+		return cardInfoDAO.getOldCardInfor();
+	}
 }

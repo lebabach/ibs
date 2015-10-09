@@ -1197,4 +1197,9 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
             query.setMaxResults(1);
             return (CardInfo)query.getSingleResult();    
     }
+	
+	public List<CardInfo> getOldCardInfor(){
+		Query query = getEntityManager().createQuery("SELECT c FROM OldCard oc INNER JOIN oc.cardInfo c ORDER BY oc.seq DESC");
+		return (List<CardInfo>)query.getResultList();
+	}
 }
