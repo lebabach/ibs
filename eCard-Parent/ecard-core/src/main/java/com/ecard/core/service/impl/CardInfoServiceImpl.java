@@ -294,6 +294,10 @@ public class CardInfoServiceImpl implements CardInfoService {
     	return cardInfoDAO.getNewestCardInfo(cardInfo);
     }
 	
+	public List<CardInfo> getOldCardInfor(){
+		return cardInfoDAO.getOldCardInfor();
+	}
+
 	public int deleteListCard(List<Integer> listCard){
 		return cardInfoDAO.deleteListCard(listCard);
 	}

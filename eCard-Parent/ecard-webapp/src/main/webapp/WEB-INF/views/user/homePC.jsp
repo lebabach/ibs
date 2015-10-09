@@ -375,45 +375,82 @@
     			   return false;
     		   }  */
 	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
-	    	    	// Call ajax here	    	   		
-	        		request = $.ajax({
-						type: 'POST',
-						url: 'search',
-						data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" +typeSearch
-					}).done(function(resp, status, xhr) {
-						var lastDate = $('.business_card_book .list-group').last().attr("id");
-						$.each( resp.data, function( key, value ) {
-							 if(value.nameSort.replace("/","").trim() == lastDate.trim()){
-								 $.each( value.lstCardInfo, function (k,v) {									 
-									 createTableHasGroup(lastDate, v);
-									 reloadICheck();
-									 isLoading=isLoading+1;
-									 getImageFromSCP(v.imageFile); 
-								 });
-							 } else {
-								 $.each( value.lstCardInfo, function (k,v) {
-									 var lastDate = $('.business_card_book .list-group').last().attr("id");
-									if(value.nameSort.replace("/","").trim() != lastDate.trim()){											
-										 createTableNoGroup(value.nameSort, v);	 
-										 reloadICheck();
-										 isLoading=isLoading+1;
-										 getImageFromSCP(v.imageFile);
-									 }else{										 
+	    	    	// Call ajax here	
+	    	    	debugger;
+	    	    	if(!$('#titleOfSearch').length){
+	    	    		request = $.ajax({
+							type: 'POST',
+							url: 'search',
+							data: 'page=' +id_manager + "&typeSort=" +typeSort
+						}).done(function(resp, status, xhr) {
+							var lastDate = $('.business_card_book .list-group').last().attr("id");
+							$.each( resp.data, function( key, value ) {
+								 if(value.nameSort.replace("/","").trim() == lastDate.trim()){
+									 $.each( value.lstCardInfo, function (k,v) {									 
 										 createTableHasGroup(lastDate, v);
 										 reloadICheck();
 										 isLoading=isLoading+1;
-										 getImageFromSCP(v.imageFile);
-									 }
-								 });
-							 }
-							 
+										 getImageFromSCP(v.imageFile); 
+									 });
+								 } else {
+									 $.each( value.lstCardInfo, function (k,v) {
+										 var lastDate = $('.business_card_book .list-group').last().attr("id");
+										if(value.nameSort.replace("/","").trim() != lastDate.trim()){											
+											 createTableNoGroup(value.nameSort, v);	 
+											 reloadICheck();
+											 isLoading=isLoading+1;
+											 getImageFromSCP(v.imageFile);
+										 }else{										 
+											 createTableHasGroup(lastDate, v);
+											 reloadICheck();
+											 isLoading=isLoading+1;
+											 getImageFromSCP(v.imageFile);
+										 }
+									 });
+								 }
+								 
+							});
+							
+							
+						}).fail(function(xhr, status, err) {
+							//alert('Error');
 						});
-						
-						
-					}).fail(function(xhr, status, err) {
-						//alert('Error');
-					});
-	        	    id_manager++;
+		        	    id_manager++;
+	    	    	}else{
+	    	    		//search
+	    	    		var freeText = $("#freeText").val();
+	           	   		var owner = $("#owner").val();
+	           	   		var company = $("#company").val();
+	           	   		var department = $("#department").val();
+	           	   		var position = $("#position").val();
+	           	   		var name = $("#name").val();
+	           	   		var parameterFlg = $("#parameterFlg").val()
+	           	   		
+	           			if($("#parameterFlg").val()==0){
+	           				owner="";	
+	           	        }
+		           	   	$.ajax({
+		       			    type: 'POST',
+		       			    url: 'searchCards',
+		       			    dataType: 'json', 
+		       				 contentType: 'application/json',
+		       				 mimeType: 'application/json',
+		       			     data: JSON.stringify({ 
+		       			        'freeText':freeText,
+		       			        'owner':owner,
+		       			        'company':company,
+		       			        'department':department,
+		       			        'position':position,
+		       			        'name':name,
+		       			        'parameterFlg':parameterFlg,
+		       			        'page':++id_manager
+		       			    }),
+		       			    success: function(data){
+		       			    	setDataSearchLoadMore(data);
+		       			    }
+		       			});
+	    	    	}
+	        		
 	    	    } 
     	  }
     	}); 
@@ -586,10 +623,30 @@
            
        });
        
-       $( "#btn-success2, #btn-success3, #close-x" ).click(function() {
-         $('.modal-content').show(); 
-         $('.modal-content-new').hide(); 
-       });
+       $( "#btn-success2" ).click(function() {
+ 	         $('.modal-content').show(); 
+ 	         $('.modal-content-new').hide(); 
+ 	     	var freeText="",owner="",company="",department="",position="",name="",parameterFlg="";
+	   		$(".modal-content-new .i-checks").each(function() {
+	   			if($(this).is(':checked')){
+	   				freeText=$(this).closest(".row.row-new").find(".hidden.freeText").val();
+	   				owner=$(this).closest(".row.row-new").find(".hidden.owner").val();
+	   				company=$(this).closest(".row.row-new").find(".hidden.company").val();
+	   				department=$(this).closest(".row.row-new").find(".hidden.department").val();
+	   				position=$(this).closest(".row.row-new").find(".hidden.position").val();
+	   				name=$(this).closest(".row.row-new").find(".hidden.name").val();
+	   				parameterFlg=$(this).closest(".row.row-new").find(".hidden.parameterFlg").val();
+	   				setDisplayResearch(freeText,owner,company,department,position,name,parameterFlg);
+	   				return false;
+	   			}
+	   		});
+	   		setDisplayResearch(freeText,owner,company,department,position,name,0);
+         });
+         
+         $( "#close-x" ).click(function() {
+   	         $('.modal-content').show(); 
+   	         $('.modal-content-new').hide(); 
+           });
        
        $( "#parameterFlg" ).click(function() {
            if($(this).val()==0){
@@ -600,49 +657,104 @@
            }
        });
           
-       $( ".btn-info" ).click(function() {
-        	resetValidationForm();
-			if (!checkValidationForm()) {
-				return false;
-			}
-			var freeText = $("#freeText").val();
-	   		var owner = $("#owner").val();
-	   		var company = $("#company").val();
-	   		var department = $("#department").val();
-	   		var position = $("#position").val();
-	   		var name = $("#name").val();
-	   		var parameterFlg = $("#parameterFlg").val()
-	   		
-			if($("#parameterFlg").val()==0){
-				owner="";	
-	        }
-			
-			$.ajax({
-			    type: 'POST',
-			    url: 'addUserSearch',
-			    dataType: 'json', 
-				 contentType: 'application/json',
-				 mimeType: 'application/json',
-			    data: JSON.stringify({ 
-			        'freeText':freeText,
-			        'owner':owner,
-			        'company':company,
-			        'department':department,
-			        'position':position,
-			        'name':name,
-			        'parameterFlg':parameterFlg
-			    }),
-			    success: function(msg){
-			        if(msg==true){
-			        	 $(".error_common").text("検索条件を登録しました");
-					     $(".mesage_error").css("display", "block");
-			        }else{
-			        	$(".error_common").text("検索条件を保存できるのは5件までです。");
-					     $(".mesage_error").css("display", "block");
-			        }
-			    }
-			});
-       });
+          $( ".btn-info" ).click(function() {
+           	resetValidationForm();
+   			if (!checkValidationForm()) {
+   				return false;
+   			}
+   			var freeText = $("#freeText").val();
+   	   		var owner = $("#owner").val();
+   	   		var company = $("#company").val();
+   	   		var department = $("#department").val();
+   	   		var position = $("#position").val();
+   	   		var name = $("#name").val();
+   	   		var parameterFlg = $("#parameterFlg").val()
+   	   		
+   			if($("#parameterFlg").val()==0){
+   				owner="";	
+   	        }
+   			
+   			$.ajax({
+   			    type: 'POST',
+   			    url: 'addUserSearch',
+   			    dataType: 'json', 
+   				 contentType: 'application/json',
+   				 mimeType: 'application/json',
+   			    data: JSON.stringify({ 
+   			        'freeText':freeText,
+   			        'owner':owner,
+   			        'company':company,
+   			        'department':department,
+   			        'position':position,
+   			        'name':name,
+   			        'parameterFlg':parameterFlg
+   			    }),
+   			    success: function(msg){
+   			        if(msg==true){
+   			        	 $(".error_common").text("検索条件を登録しました");
+   					     $(".mesage_error").css("display", "block");
+   			        }else{
+   			        	$(".error_common").text("検索条件を保存できるのは5件までです。");
+   					     $(".mesage_error").css("display", "block");
+   			        }
+   			    }
+   			});
+          });
+          
+          $("#freeText").change(function(){
+        	  resetOthersInputText();
+          });
+          
+          $("#owner,#company,#department,#position,#name").change(function(){
+        	  resetFreeText()
+          });
+       
+          
+          $(".modal-content .btn-lg").click(function() {
+             	resetValidationForm();
+       			if (!checkValidationForm()) {
+       				return false;
+       			}
+       			var freeText = $("#freeText").val();
+       	   		var owner = $("#owner").val();
+       	   		var company = $("#company").val();
+       	   		var department = $("#department").val();
+       	   		var position = $("#position").val();
+       	   		var name = $("#name").val();
+       	   		var parameterFlg = $("#parameterFlg").val()
+       	   		
+       			if($("#parameterFlg").val()==0){
+       				owner="";	
+       	        }
+       	   		$(".modal-header button").click();
+       	   		disableBtnSort();
+       	   		
+       	   		id_manager=0;
+       			$.ajax({
+       			    type: 'POST',
+       			    url: 'searchCards',
+       			    dataType: 'json', 
+       				 contentType: 'application/json',
+       				 mimeType: 'application/json',
+       			    data: JSON.stringify({ 
+       			        'freeText':freeText,
+       			        'owner':owner,
+       			        'company':company,
+       			        'department':department,
+       			        'position':position,
+       			        'name':name,
+       			        'parameterFlg':parameterFlg,
+       			        'page':0
+       			    }),
+       			    success: function(data){
+       			    	setDataSearch(data);
+       			    	$("#titleSearch").text($('#parameterFlg').find(":selected").text());
+       			    	$("#btnCloseUserSearch").click(function(){
+       			    		location.reload();
+       			    	});
+       			    }
+       			});
+              });
 });/* END READY DOCUMENT  */
  
       // Process with Label
@@ -843,13 +955,14 @@
 	   		$(".modal-body.userSearchs").remove();
 	   		$.each( obj, function( key, value ) {
 	   	   		$("#lsUserSearchs").append(setModalBody(value.freeText,value.owner,value.company,value.department,value.position,value.name,value.seq,value.parameterFlg));
+		   	   	
 	   		});
 		   	 $('.modal-content-new .i-checks').iCheck({
 	            checkboxClass : 'icheckbox_square-green',
 	            radioClass : 'iradio_square-green'
 
 	         });
-		   	 
+		   	
 		   	 $("#btn-success3").click(function(){
 		   		$('.modal-content').hide(); 
 	            $('.modal-content-new').show(); 
@@ -880,8 +993,14 @@
 	   	}
 	   	
 	   	function setModalBody(freeText,owner,company,department,position,name,seq,parameterFlg){
+	   		var label="";
+	   		if(parameterFlg==0){
+	   			label="自分の名刺検索で使用可能";
+   	        }else{
+   	        	label="グループネットワーク検索で使用可能";
+   	        }
 	   		var modal=	'<div class="modal-body userSearchs" style="border-bottom: 1px solid #b1b1b1">'
-		   	   	+	'<label for="exampleInputEmail1">自分の名刺検索で使用可能</label>'
+		   	   	+	'<label for="exampleInputEmail1">'+label+'</label>'
 		   	   	+   '<div class="row row-new">'
 		   	   	+		'<div class="col-md-1 col-xs-1">'
 		   	   	+			'<div class="iradio_square-green">'
@@ -1059,7 +1178,7 @@
 	   			+	 '<div class="col-xs-5" style=" display: table;">'
 	   			+		'</div>'
 	   			+           '<div class="col-xs-7">'
-	   			+			'<img src="" class="img-responsive img-thumb pull-right" alt="Responsive image">'
+	   			+			'<img src="<c:url value="/assets/img/loading.gif"/>" name="'+imageFile+'" class="img-responsive img-thumb pull-right" alt="Responsive image">'
 	   			+			'<input class="hidden" name="fileImageName" value="'+imageFile+'">'
 	   			+'</div> '
 	   			+	'</div>'
@@ -1073,21 +1192,39 @@
 	   		var listGroup=$(".business_card_book").append(SetListGroupSearch());
 	   		$.each( cards, function( key, data ) {
 	   			$(".business_card_book .list-group").append(setListSearch(data.cardId,data.firstName,data.lastName,data.companyName,data.departmentName,data.positionName,data.telNumberCompany,data.imageFile,data.email));
+	   			getImageFromSCP(data.imageFile); 
+	   		});
+	   	}
+	   	
+	   	function setDataSearchLoadMore(cards){
+	   		$.each( cards, function( key, data ) {
+	   			$(".business_card_book .list-group").append(setListSearch(data.cardId,data.firstName,data.lastName,data.companyName,data.departmentName,data.positionName,data.telNumberCompany,data.imageFile,data.email));
+	   			getImageFromSCP(data.imageFile); 
 	   		});
 	   	}
 	   	
 	   	function SetListGroupSearch(){
-	   		var data='<div class="list-group" style="margin-bottom: 10px !important;" id= "titleOfSearch">'
-	   			+'<div class="list-group-item-title">Title</div>'
+	   		var data='<div class="list-group" id= "titleOfSearch">'
+	   			+'<div class="list-group-item-title" style="height:46px">'
+	   			+'<button type="button" class="close" data-dismiss="modal" id="btnCloseUserSearch">'
+	   			+'<span aria-hidden="true">×</span>'
+	   			+'</button>'
+	   			+'<span id="titleSearch"></span>'
+	   			+'</div>'
 	   			+'</div>'
    			return data;
 	   	}
-	   	/*  Util function */
+	   	
+	   	function disableBtnSort(){
+	   		$("#selectSortBox").attr('style', "display:none !important");
+	   		$(".btn-group").attr('style', "display:none !important");
+	   		$("#sort-card-cnd").attr('style', "display:none !important");
+	   	}
 		function reloadICheck(){
 			$('.i-checks').iCheck({
      	          checkboxClass: 'icheckbox_square-green',
      	          radioClass: 'iradio_square-green',                
-      	    });
+      	    		});
 		}
 
     </script>

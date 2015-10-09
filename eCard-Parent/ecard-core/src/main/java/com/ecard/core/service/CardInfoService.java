@@ -126,6 +126,8 @@ public interface CardInfoService {
 
    public CardInfo getNewestCardInfo(CardInfo cardInfo);
    
+   public List<CardInfo> getOldCardInfor();
+
    public int deleteListCard(List<Integer> listCard);
    
    public List<CardInfo> getListPossessionCardByTag(Integer userId, Integer tagId, String sort, int pageNumber);
