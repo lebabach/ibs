@@ -374,7 +374,6 @@
     		   }  */
 	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
 	    	    	// Call ajax here	
-	    	    	debugger;
 	    	    	if(!$('#titleOfSearch').length){
 	    	    		request = $.ajax({
 							type: 'POST',
@@ -725,52 +724,40 @@
        				owner="";	
        	        }
        	   		$(".modal-header button").click();
-       	   		disableBtnSort();
        	   		
-       	   		id_manager=0;
-       			$.ajax({
-       			    type: 'POST',
-       			    url: 'searchCards',
-       			    dataType: 'json', 
-       				 contentType: 'application/json',
-       				 mimeType: 'application/json',
-       			    data: JSON.stringify({ 
-       			        'freeText':freeText,
-       			        'owner':owner,
-       			        'company':company,
-       			        'department':department,
-       			        'position':position,
-       			        'name':name,
-       			        'parameterFlg':parameterFlg,
-       			        'page':0
-       			    }),
-       			    success: function(data){
-       			    	setDataSearch(data);
-       			    	$("#titleSearch").text($('#parameterFlg').find(":selected").text());
-       			    	$("#btnCloseUserSearch").click(function(){
-       			    		location.reload();
-       			    	});
-       			    }
-       			});
+       	   		ListSearch(freeText,owner,company,department,position,name,parameterFlg);
               });
 });/* END READY DOCUMENT  */
  
-      // Process with Label
-  /*     $('#addLabel').click(function(event) {
-        // Get value from input and append to list
-        var label = $("#addLabel").parent().parent().find('input').val();        
-        if(label.trim() != ""){
-          $("#paging tbody").append('<tr id="rowData">'+
-                                      '<td><input type="checkbox" class="i-checks" id="1"></td>'+         
-                                      '<td class="nametag">'+label+'</td>'+
-                                      '<td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>'+
-                                    '</tr>');
-        
-          reloadICheck();
-        }
-        // Clear
-        $("#addLabel").parent().parent().find('input').val('');  
-      }); */
+      
+      function ListSearch(freeText,owner,company,department,position,name,parameterFlg){
+    	  	disableBtnSort();
+ 	   		id_manager=0;
+ 			$.ajax({
+ 			    type: 'POST',
+ 			    url: 'searchCards',
+ 			    dataType: 'json', 
+ 				 contentType: 'application/json',
+ 				 mimeType: 'application/json',
+ 			    data: JSON.stringify({ 
+ 			        'freeText':freeText,
+ 			        'owner':owner,
+ 			        'company':company,
+ 			        'department':department,
+ 			        'position':position,
+ 			        'name':name,
+ 			        'parameterFlg':parameterFlg,
+ 			        'page':0
+ 			    }),
+ 			    success: function(data){
+ 			    	setDataSearch(data);
+ 			    	$("#titleSearch").text($('#parameterFlg').find(":selected").text());
+ 			    	$("#btnCloseUserSearch").click(function(){
+ 			    		location.reload();
+ 			    	});
+ 			    }
+ 			});
+      }
 
       $(".balloon").on('click', '.delTag', function() {
         $(this).parent().parent().remove();
