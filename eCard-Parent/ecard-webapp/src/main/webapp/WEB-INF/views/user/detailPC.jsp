@@ -157,7 +157,7 @@ a {
 							id="popup"> <img id="imageresource" width="318" height="190"
 							src='<c:url value="/assets/img/card_08.png"></c:url>'></a>	
 						</c:if>
-						<c:if test="${not cardInfo.imageFile ==''}">
+						<c:if test="${not empty cardInfo.imageFile}">
 							<a href="#" title="Image from Unsplash" data-target="#myModal"
 							id="popup"> <img id="imageresource" width="318" height="190"
 							src="data:image/png;base64,${cardInfo.imageFile}"></a>	
@@ -956,13 +956,13 @@ label.error {
        });
 
        $("input[name=checkTag]").on('ifChecked', function(event){
-         	//console.log("tagId "+ $(this).val());
+         	console.log("tagId "+ $(this).val());
          	var json = {"tagId" : $(this).val(), "cardId" : $("input[name=cardId]").val()};
     	    addCardTag(json);
        });
        
-       $("input").on('ifUnchecked', function(event){     
-	         //console.log("uncheck aaaa 111");
+       $("input[name=checkTag]").on('ifUnchecked', function(event){     
+	       console.log("uncheck aaaa 111");
            var json = {"tagId" : $(this).val(), "cardId" : $("input[name=cardId]").val()};
            deleteCardTag(json);
        });
@@ -1127,7 +1127,6 @@ label.error {
         	 
         	 //Add card tag
         	 var json = {"tagId" : this.id, "cardId" : $("input[name=cardId]").val()};
-        	 $("#tags tbody").html('');
      	     addCardTag(json);
     	 }
     	 else{
