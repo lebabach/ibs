@@ -507,7 +507,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         List<CardConnectModel> result = new ArrayList<>(rows.size());
         for (Object[] row : rows) {
             result.add(new CardConnectModel(0,(String)row[15], (String)row[16], (String)row[17],(String)row[18], (String)row[19], 
-            		(String)row[20], (String)row[22],(String)row[24], (String)row[25], (String)row[32], (String)row[4], (String)row[23]));
+            		(String)row[20], (String)row[22],(String)row[24], (String)row[25], (String)row[32], (String)row[4], (String)row[23], (Integer)row[0]));
         }
         
         return result;

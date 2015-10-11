@@ -21,6 +21,7 @@ public class CardConnectModel {
     private String telNumberCompany;
     private String email;
     private String companyNameKana;
+    private Integer userId;
 
     public CardConnectModel(){}
     
@@ -39,6 +40,24 @@ public class CardConnectModel {
         this.telNumberCompany = telNumberCompany;
         this.email = email;
         this.companyNameKana = companyNameKana;
+    }
+    
+    public CardConnectModel(Integer cardId, String name, String lastName, String firstName, String nameKana, String lastNameKana, String firstNameKana, 
+            String companyName, String departmentName, String positionName, String telNumberCompany, String email, String companyNameKana, Integer userId) {
+        this.cardId = cardId;
+        this.name = name;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.nameKana = nameKana;
+        this.lastNameKana = lastNameKana;
+        this.firstNameKana = firstNameKana;
+        this.companyName = companyName;
+        this.departmentName = departmentName;
+        this.positionName = positionName;
+        this.telNumberCompany = telNumberCompany;
+        this.email = email;
+        this.companyNameKana = companyNameKana;
+        this.userId = userId;
     }
     
     /**
@@ -222,4 +241,12 @@ public class CardConnectModel {
     public void setCardId(Integer cardId) {
         this.cardId = cardId;
     }
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 }
