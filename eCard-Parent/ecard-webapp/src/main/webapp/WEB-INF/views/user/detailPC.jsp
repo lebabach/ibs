@@ -542,15 +542,35 @@ label.error {
     display: inline-block;
     margin-left: 15px;
 }
+
+#editForm a{
+	color: #333 !important;
+}
 </style>
 				<script type="text/javascript">
                     $(document).ready(function(){
+                    	$(".email-hide").show();
+                        $("#email").hide();
+                        $(".companyUrl-hide").show();
+                        $("#companyURL").hide();
+                        
+                    	$(".address-hide").show();
+                    	$("#address").hide();	
+                    
                             $('.edit2').on({
                              'click':function(){
                                         $(".input-new-1").addClass("input-new-1-ac");
                                         $('.p-fomr2').show();
                                         $('.div-pen').addClass('div-pen-ac') 
                                         $(".input-new-1").removeAttr('readonly');
+                                        
+                                        $(".email-hide").hide();
+                                        $("#email").show();
+                                        $(".companyUrl-hide").hide();
+                                        $("#companyURL").show();
+                                        
+                                        $(".address-hide").hide();
+                                        $("#address").show();
                                 }
                             });   
                             $('.input-reset').on({
@@ -559,6 +579,14 @@ label.error {
                                         $('.p-fomr2').hide();
                                         $('.div-pen').removeClass('div-pen-ac') 
                                         $(".input-new-1").attr('readonly', 'readonly');
+                                        
+                                        $(".email-hide").show();
+                                        $("#email").hide();
+                                        $(".companyUrl-hide").show();
+                                        $("#companyURL").hide();
+                                        
+                                        $(".address-hide").show();
+                                        $("#address").hide();
                                         
                                         validator.resetForm();
                                 }
@@ -710,13 +738,12 @@ label.error {
 									<img src="<c:url value='/assets/img/ico_mail.png'/>" alt="氏名">
 								</dt>
 								<dd>
-
 									<div class="ipt_txt front_email email-hide"
 										style="display: none">
 										<a href="mailto:${cardInfo.email}" target="_blank">${cardInfo.email}</a>
 									</div>
 									<input type="email" class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.email}" name="email" readonly="readonly">
+										value="${cardInfo.email}" name="email" id="email">
 								</dd>
 							</dl>
 						</div>
@@ -766,15 +793,25 @@ label.error {
 									<img src="<c:url value='/assets/img/ico_address.png'/>"
 										alt="${cardInfo.address1}">
 								</dt>
-								<dd>
+								<dd class="address-hide" style="display: none">
+									<div class="ipt_txt front_email">
+										<a href="http://maps.google.com/maps?q=<c:out value="${ cardInfo.address1 }"></c:out> <c:out value="${ cardInfo.address2 }"></c:out> <c:out value="${ cardInfo.address3 }"></c:out> <c:out value="${ cardInfo.address4 }"></c:out>" target="_blank">
+											<c:out value="${ cardInfo.address1 }"></c:out> 
+											<c:out value="${ cardInfo.address2 }"></c:out> 
+											<c:out value="${ cardInfo.address3 }"></c:out> 
+											<c:out value="${ cardInfo.address4 }"></c:out> 
+										</a>
+									</div>
+								</dd>	
+								<dd id="address">
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address1}" name="address1" readonly="readonly"> <br/>
+										value="${cardInfo.address1}" name="address1" id="address1" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address2}" name="address2" readonly="readonly"> <br/>
+										value="${cardInfo.address2}" name="address2" id="address2" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address3}" name="address3" readonly="readonly"> <br/>
+										value="${cardInfo.address3}" name="address3" id="address3" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address4}" name="address4" readonly="readonly"> <br/>
+										value="${cardInfo.address4}" name="address4" id="address4" readonly="readonly"> <br/>
 								</dd>
 							</dl>
 						</div>
@@ -785,8 +822,7 @@ label.error {
 										alt="ホームページ">
 								</dt>
 								<dd>
-									<div class="ipt_txt front_url1 email-hide"
-										style="display: none">
+									<div class="ipt_txt front_url1 companyUrl-hide" style="display: none;">
 										<a href="${cardInfo.companyUrl}" target="_blank">${cardInfo.companyUrl}</a>
 									</div>
 									<input class="ipt_txt front_full_name input-new-1"
