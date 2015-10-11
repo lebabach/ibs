@@ -182,11 +182,11 @@
                           </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInLeft m-t-xs" style=" margin-top: 47px; margin-left: 11px;">
-                          <li><a href="profile">プロフィール</a></li>
-                          <li><a href="download">自分の名刺ダウンロード</a></li>
-                          <li><a href="changepass">パスワード設定</a></li>
-                          <li><a href="faq">FAQ</a></li>
-                          <li><a href="mailbox">ご意見・不具合の連絡</a></li>
+                          <li><a href="<c:url value='/user/profile' />">プロフィール</a></li>
+                          <li><a href="<c:url value='/user/download' />">自分の名刺ダウンロード</a></li>
+                          <li><a href="<c:url value='/user/changepass' />">パスワード設定</a></li>
+                          <li><a href="<c:url value='/user/faq' />">FAQ</a></li>
+                          <li><a href="<c:url value='/user/mailbox' />">ご意見・不具合の連絡</a></li>
                           <li><a href="collect_name.html">繋がった名刺検索</a></li>
                           <li><a href="companies_tree.html">顧客組織ツリー</a></li>
                           <li><a href="add_business_card.html">名刺データ作成</a></li>
