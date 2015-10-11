@@ -901,22 +901,20 @@ public class UserController {
 		return getCardTag();
 	}
 	
-	@RequestMapping (value = "deleteTag", method = RequestMethod.POST)
+	@RequestMapping (value = "deleteTag", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ModelAndView deleteTag(CardTagId cardTag, HttpServletRequest request, HttpServletResponse response) {
+	public List<TagGroup> deleteTag(@RequestParam Integer tagId, HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("deleteTag", UserController.class);
 		
-		ModelAndView modelAndView = new ModelAndView();
 		try{
-			cardTagService.deleteCardTagByTagId(cardTag.getTagId());
-			userTagService.deleteUserTag(cardTag.getTagId());
+			cardTagService.deleteCardTagByTagId(tagId);
+			userTagService.deleteUserTag(tagId);
 		}
 		catch(Exception ex){
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
-		response.setStatus(200, "Remove tag success");
-		modelAndView.setViewName("redirect:" + CommonConstants.REDIRECT_CARD_DETAIL + cardTag.getCardId());
-		return modelAndView;
+		
+		return getCardTag();
 	}
 	
 	@RequestMapping (value = "delBusinessCard", method = RequestMethod.POST)
