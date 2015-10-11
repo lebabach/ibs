@@ -710,7 +710,7 @@
           
           $(".modal-content .btn-lg").click(function() {
              	resetValidationForm();
-       			if (!checkValidationForm()) {
+       			if (!checkValidationFormSearch()) {
        				return false;
        			}
        			var freeText = $("#freeText").val();
@@ -888,6 +888,33 @@
 	        	if(freeText=="" &&company=="" &&department=="" &&position=="" &&name==""){
 		      		 $(".error_common").text(
 							"<fmt:message key='edit.card.validate'/>");
+					checkValidation = false;
+					$(".mesage_error").css("display", "block");
+		      	 }
+	        }
+	   		
+	   		return checkValidation;
+	   	}
+		
+		function checkValidationFormSearch() {
+	   		var checkValidation = true;
+	   		var freeText = $("#freeText").val();
+	   		var owner = $("#owner").val();
+	   		var company = $("#company").val();
+	   		var department = $("#department").val();
+	   		var position = $("#position").val();
+	   		var name = $("#name").val();
+	   		if($("#parameterFlg").val()==1){
+	        	 if(freeText=="" &&company=="" &&department=="" &&position=="" &&name=="" &&owner==""){
+	        		 $(".error_common").text(
+							"検索条件を指定してください");
+					checkValidation = false;
+					$(".mesage_error").css("display", "block");
+	        	 }
+	        }else{
+	        	if(freeText=="" &&company=="" &&department=="" &&position=="" &&name==""){
+		      		 $(".error_common").text(
+							"検索条件を指定してください");
 					checkValidation = false;
 					$(".mesage_error").css("display", "block");
 		      	 }
