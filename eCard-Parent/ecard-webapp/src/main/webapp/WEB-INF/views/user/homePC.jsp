@@ -374,7 +374,6 @@
     		   }  */
 	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
 	    	    	// Call ajax here	
-	    	    	debugger;
 	    	    	if(!$('#titleOfSearch').length){
 	    	    		request = $.ajax({
 							type: 'POST',
@@ -710,7 +709,7 @@
           
           $(".modal-content .btn-lg").click(function() {
              	resetValidationForm();
-       			if (!checkValidationForm()) {
+       			if (!checkValidationFormSearch()) {
        				return false;
        			}
        			var freeText = $("#freeText").val();
@@ -725,52 +724,40 @@
        				owner="";	
        	        }
        	   		$(".modal-header button").click();
-       	   		disableBtnSort();
        	   		
-       	   		id_manager=0;
-       			$.ajax({
-       			    type: 'POST',
-       			    url: 'searchCards',
-       			    dataType: 'json', 
-       				 contentType: 'application/json',
-       				 mimeType: 'application/json',
-       			    data: JSON.stringify({ 
-       			        'freeText':freeText,
-       			        'owner':owner,
-       			        'company':company,
-       			        'department':department,
-       			        'position':position,
-       			        'name':name,
-       			        'parameterFlg':parameterFlg,
-       			        'page':0
-       			    }),
-       			    success: function(data){
-       			    	setDataSearch(data);
-       			    	$("#titleSearch").text($('#parameterFlg').find(":selected").text());
-       			    	$("#btnCloseUserSearch").click(function(){
-       			    		location.reload();
-       			    	});
-       			    }
-       			});
+       	   		ListSearch(freeText,owner,company,department,position,name,parameterFlg);
               });
 });/* END READY DOCUMENT  */
  
-      // Process with Label
-  /*     $('#addLabel').click(function(event) {
-        // Get value from input and append to list
-        var label = $("#addLabel").parent().parent().find('input').val();        
-        if(label.trim() != ""){
-          $("#paging tbody").append('<tr id="rowData">'+
-                                      '<td><input type="checkbox" class="i-checks" id="1"></td>'+         
-                                      '<td class="nametag">'+label+'</td>'+
-                                      '<td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>'+
-                                    '</tr>');
-        
-          reloadICheck();
-        }
-        // Clear
-        $("#addLabel").parent().parent().find('input').val('');  
-      }); */
+      
+      function ListSearch(freeText,owner,company,department,position,name,parameterFlg){
+    	  	disableBtnSort();
+ 	   		id_manager=0;
+ 			$.ajax({
+ 			    type: 'POST',
+ 			    url: 'searchCards',
+ 			    dataType: 'json', 
+ 				 contentType: 'application/json',
+ 				 mimeType: 'application/json',
+ 			    data: JSON.stringify({ 
+ 			        'freeText':freeText,
+ 			        'owner':owner,
+ 			        'company':company,
+ 			        'department':department,
+ 			        'position':position,
+ 			        'name':name,
+ 			        'parameterFlg':parameterFlg,
+ 			        'page':0
+ 			    }),
+ 			    success: function(data){
+ 			    	setDataSearch(data);
+ 			    	$("#titleSearch").text($('#parameterFlg').find(":selected").text());
+ 			    	$("#btnCloseUserSearch").click(function(){
+ 			    		location.reload();
+ 			    	});
+ 			    }
+ 			});
+      }
 
       $(".balloon").on('click', '.delTag', function() {
         $(this).parent().parent().remove();
@@ -888,6 +875,33 @@
 	        	if(freeText=="" &&company=="" &&department=="" &&position=="" &&name==""){
 		      		 $(".error_common").text(
 							"<fmt:message key='edit.card.validate'/>");
+					checkValidation = false;
+					$(".mesage_error").css("display", "block");
+		      	 }
+	        }
+	   		
+	   		return checkValidation;
+	   	}
+		
+		function checkValidationFormSearch() {
+	   		var checkValidation = true;
+	   		var freeText = $("#freeText").val();
+	   		var owner = $("#owner").val();
+	   		var company = $("#company").val();
+	   		var department = $("#department").val();
+	   		var position = $("#position").val();
+	   		var name = $("#name").val();
+	   		if($("#parameterFlg").val()==1){
+	        	 if(freeText=="" &&company=="" &&department=="" &&position=="" &&name=="" &&owner==""){
+	        		 $(".error_common").text(
+							"検索条件を指定してください");
+					checkValidation = false;
+					$(".mesage_error").css("display", "block");
+	        	 }
+	        }else{
+	        	if(freeText=="" &&company=="" &&department=="" &&position=="" &&name==""){
+		      		 $(".error_common").text(
+							"検索条件を指定してください");
 					checkValidation = false;
 					$(".mesage_error").css("display", "block");
 		      	 }
