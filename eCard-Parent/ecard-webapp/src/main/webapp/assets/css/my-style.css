@@ -175,6 +175,7 @@ a, form, input, select, p{
   overflow: hidden;
   border-radius: 4px;
   -webkit-border-radius: 4px;
+  background-color: #CBC9B6;
 }
 .card {
     position: absolute;
