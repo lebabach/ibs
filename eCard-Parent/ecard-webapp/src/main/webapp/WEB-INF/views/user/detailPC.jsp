@@ -849,10 +849,10 @@ label.error {
 					</div>
 				</div>
 				
-				<div class="panel-body" style="padding: 15px 0; overflow: auto; height: 184px;">
+				<div class="panel-body" style="padding: 10px 0; overflow: auto; height: 500px;">
 				<style type="text/css">
                   .div-new{
-                           padding: 0 10px 10px 10px !important;
+                           padding: 0 10px 5px 10px !important;
                            margin-bottom: 10px !important;
                            border-left: none !important;
                             border-right: none !important;
