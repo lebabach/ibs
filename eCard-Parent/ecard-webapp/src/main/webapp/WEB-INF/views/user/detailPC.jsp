@@ -809,7 +809,7 @@ label.error {
 			<div class="panel panel-default">
 				<div class="panel-heading" style="height: 40px;">
 					<div style="float: left; font-weight: bold;">
-						<h5>この名刺で繋がっている人</h5>
+						<h5><fmt:message key="card.detail.connect" /></h5>
 					</div>
 				</div>
 				
@@ -846,18 +846,20 @@ label.error {
                    .mg-top {
 					    margin-top: 5px;
 					}
-					
+					.div-new a{
+						color: #333 !important;
+					}
                 </style>
 					<c:forEach var="listCardConnected" items="${listCardConnect}" varStatus="loop">
 						<div class="list-group-item pointer div-new">
 							<div class="row" style="margin-right: 0">
 								<div class="col-md-5 col-md-5-n">
 									<div class="col-xs-11 mg-top">
-										<p class="name"><c:out value="${listCardConnected.name}"></c:out> </p>
-										<p class="livepass"><c:out value="${listCardConnected.companyName}"></c:out></p>
+										<p class="name"><a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.name}"></c:out></a> </p>
+										<p class="livepass"><a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.companyName}"></c:out></a></p>
 										<p class="department_and_position">
-											<c:out value="${listCardConnected.departmentName}"></c:out> 
-											<c:out value="${listCardConnected.positionName}"></c:out>
+											<a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.departmentName}"></c:out> </a>
+											<a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.positionName}"></c:out></a>
 										</p>
 									</div>
 								</div>

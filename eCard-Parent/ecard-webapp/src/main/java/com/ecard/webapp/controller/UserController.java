@@ -513,6 +513,34 @@ public class UserController {
 		return modelAndView;
 	}
 
+	@RequestMapping(value = "profile/{id:[\\d]+}", method = RequestMethod.GET)
+	public ModelAndView profileCardConnect(@PathVariable("id") Integer userId) {
+		logger.debug("profileCardConnect", UserController.class);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		try{
+			if (userId != null) {
+				UserInfo user = userInfoService.getUserInfoByUserId(userId);
+				UserInfoVO userVO = new UserInfoVO();
+				userVO.setCompanyName(
+						groupCompanyInfoService.getCompanyById(user.getGroupCompanyId()).getGroupCompanyName());
+				userVO.setDepartmentName(user.getDepartmentName());
+				userVO.setName(user.getName());
+				userVO.setPositionName(user.getPositionName());
+				userVO.setEmail(user.getEmail());
+				
+				modelAndView.addObject("user", userVO);
+				modelAndView.setViewName("cardConnectDetail");
+				return modelAndView;
+			}
+			
+		}
+		catch(Exception ex){
+			logger.debug("Exception : "+ ex.getMessage(), UserController.class);
+		}
+		return new ModelAndView("redirect:home");
+	}
+	
 	@RequestMapping("profile")
 	public ModelAndView profile() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
