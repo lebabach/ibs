@@ -125,6 +125,14 @@ a {
 	float: none;
 }
 </style>
+
+<c:if test="${not empty isExpried and isExpried == true}">
+<style>
+.card{
+	background-color: red !important;
+}
+</style>
+</c:if>
 <div id="details" class="container">
 	<!-- Start banner -->
 	<div class="row animated fadeInRight">

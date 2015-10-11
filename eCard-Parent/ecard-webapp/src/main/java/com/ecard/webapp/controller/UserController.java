@@ -124,6 +124,9 @@ public class UserController {
 
 	@Value("${scp.port}")
 	private String scpPort;
+	
+	@Value("${compliace.date}")
+	private String compliaceDate;
 
 	@Autowired
 	SettingsInfoService settingsInfoService;
@@ -501,6 +504,16 @@ public class UserController {
             //Get old cards
             List<CardInfo> listOldCard = cardInfoService.getOldCardInfor();
             modelAndView.addObject("listOldCard", listOldCard);
+            
+            //Check compliance date
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String contactDate = sdf.format(cardInfo.getContactDate());
+            if(!contactDate.equals(compliaceDate)){
+            	modelAndView.addObject("isExpried", true);
+            }
+            else{
+            	modelAndView.addObject("isExpried", false);
+            }
 		}
 		catch(Exception ex){
 			logger.debug("Exception : ", ex.getMessage());
