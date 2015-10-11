@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-
+<%@ page import="com.ecard.webapp.vo.UserSearchVO"%>
 <style>
 .mesage_error {
 	color: red;
@@ -316,40 +316,61 @@
   <div id="container" class="container" style= "padding-top: 20px !important;" >
     <div class="business_card_book">
     <!-- for here  -->
-    <c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">
-		      <div class="list-group" style="margin-bottom: 10px !important;" id= "<c:out value='${cardInfoPCVo.nameSort}' />">
-		        <div class="list-group-item-title"><c:out value="${cardInfoPCVo.nameSort}" /></div>
-		        <!-- for item here  -->
-		        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
-			        <div class="list-group-item pointer">
-			          <div class="row row-new">
-			            <div class="col-md-1 col-xs-1">
-			              <div class="icheckbox_square-green">
-			                <input type="checkbox" class="i-checks" name="bla" value="<c:out value='${cardInfo.cardId}' />">
-			              </div>
-			            </div>
-			            <div class="col-md-5">
-			              <div class="col-xs-11 mg-top">
-			                <p class="name"><c:out value="${cardInfo.lastName}" />  <c:out value="${cardInfo.firstName}" /></p>
-			                <p class="livepass"><c:out value="${cardInfo.companyName}" /></p>
-			                <p class="department_and_position"><c:out value="${cardInfo.departmentName}" /> <c:out value="${cardInfo.positionName}" /></p>
-			                <p class="num"><c:out value="${cardInfo.telNumberCompany}" /></p>
-			                <p class="mail"><a href="#"><c:out value="${cardInfo.email}" /></a></p>
-			              </div>
-			            </div>
-			            <div class="col-md-6">
-			              <div class="col-xs-5" style=" display: table;">
-			                </div>
-			                  <div class="col-xs-7">
-			                    <img src="<c:url value='/assets/img/loading.gif'/>" class="img-responsive img-thumb pull-right" alt="Responsive image">
-			                    <input class="hidden" name="fileImageName" value="${cardInfo.imageFile}">
-			                  </div> 
-			            </div>
-			          </div>          
-			        </div>
-		        </c:forEach>
-		      </div>
-     </c:forEach>
+    <c:choose>
+	    <c:when test="${empty searchDetail}">
+		      <c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">
+			      <div class="list-group" style="margin-bottom: 10px !important;" id= "<c:out value='${cardInfoPCVo.nameSort}' />">
+			        <div class="list-group-item-title"><c:out value="${cardInfoPCVo.nameSort}" /></div>
+			        <!-- for item here  -->
+			        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
+				        <div class="list-group-item pointer">
+				          <div class="row row-new">
+				            <div class="col-md-1 col-xs-1">
+				              <div class="icheckbox_square-green">
+				                <input type="checkbox" class="i-checks" name="bla" value="<c:out value='${cardInfo.cardId}' />">
+				              </div>
+				            </div>
+				            <div class="col-md-5">
+				              <div class="col-xs-11 mg-top">
+				                <p class="name"><c:out value="${cardInfo.lastName}" />  <c:out value="${cardInfo.firstName}" /></p>
+				                <p class="livepass"><c:out value="${cardInfo.companyName}" /></p>
+				                <p class="department_and_position"><c:out value="${cardInfo.departmentName}" /> <c:out value="${cardInfo.positionName}" /></p>
+				                <p class="num"><c:out value="${cardInfo.telNumberCompany}" /></p>
+				                <p class="mail"><a href="#"><c:out value="${cardInfo.email}" /></a></p>
+				              </div>
+				            </div>
+				            <div class="col-md-6">
+				              <div class="col-xs-5" style=" display: table;">
+				                </div>
+				                  <div class="col-xs-7">
+				                    <img src="<c:url value='/assets/img/loading.gif'/>" class="img-responsive img-thumb pull-right" alt="Responsive image">
+				                    <input class="hidden" name="fileImageName" value="${cardInfo.imageFile}">
+				                  </div> 
+				            </div>
+				          </div>          
+				        </div>
+			        </c:forEach>
+			      </div>
+	     	</c:forEach>
+	    </c:when>
+	    <c:otherwise>
+				<input class="hidden" id="hid-freeText" name="hid-freeText"
+					value="${searchDetail.freeText}">
+				<input class="hidden" id="hid-owner" name="hid-owner"
+					value="${searchDetail.owner}">
+				<input class="hidden" id="hid-company" name="hid-company"
+					value="${searchDetail.company}">
+				<input class="hidden" id="hid-department" name="hid-department"
+					value="${searchDetail.department}">
+				<input class="hidden" id="hid-position" name="hid-position"
+					value="${searchDetail.position}">
+				<input class="hidden" id="hid-name" name="hid-name"
+					value="${searchDetail.name}">
+				<input class="hidden" id="hid-parameterFlg" name="hid-parameterFlg"
+					value="${searchDetail.parameterFlg}">
+			</c:otherwise>
+	</c:choose>
+    
       <!-- end eaxh  -->
     </div>
 </div>
@@ -362,6 +383,38 @@
      var request = null;
       var id_manager = 1;
       var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
+      
+      var searchDetail ='<c:out value="${searchDetail}" />';
+      if(searchDetail!=null&&searchDetail!=""){
+	   		var freeText = $("#hid-freeText").val();
+	   		var owner = $("#hid-owner").val();
+	   		var company = $("#hid-company").val();
+	   		var department = $("hid-#department").val();
+	   		var position = $("#hid-position").val();
+	   		var name = $("#hid-name").val();
+	   		var parameterFlg = $("#hid-parameterFlg").val();
+	   		var isDetail = $("#hid-isDetail").val();
+	   		assignToInput(freeText,owner,company,department,position,name,parameterFlg);
+	   		ListSearch(freeText,owner,company,department,position,name,parameterFlg);
+	   		
+      }
+      
+      function assignToInput(freeText,owner,company,department,position,name,parameterFlg) {
+    	  	$("#freeText").text(freeText);
+	   		$("#owner").text(owner);
+ 	   		$("#company").text(company);
+ 	   		$("#department").text(department);
+ 	   		$("#position").text(position);
+ 	   		$("#name").text(name);
+ 	   		
+	 	   	$("#freeText").val(freeText);
+	   		$("#owner").val(owner);
+	   		$("#company").val(company);
+	   		$("#department").val(department);
+	   		$("#position").val(position);
+	   		$("#name").val(name);
+	   		$("#parameterFlg").val(parameterFlg);
+	   	}
       var page = 1;
       var isLoading = 0;
       $(window).scroll(function() {     	  
@@ -374,7 +427,6 @@
     		   }  */
 	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
 	    	    	// Call ajax here	
-	    	    	debugger;
 	    	    	if(!$('#titleOfSearch').length){
 	    	    		request = $.ajax({
 							type: 'POST',
@@ -710,7 +762,7 @@
           
           $(".modal-content .btn-lg").click(function() {
              	resetValidationForm();
-       			if (!checkValidationForm()) {
+       			if (!checkValidationFormSearch()) {
        				return false;
        			}
        			var freeText = $("#freeText").val();
@@ -725,52 +777,44 @@
        				owner="";	
        	        }
        	   		$(".modal-header button").click();
-       	   		disableBtnSort();
        	   		
-       	   		id_manager=0;
-       			$.ajax({
-       			    type: 'POST',
-       			    url: 'searchCards',
-       			    dataType: 'json', 
-       				 contentType: 'application/json',
-       				 mimeType: 'application/json',
-       			    data: JSON.stringify({ 
-       			        'freeText':freeText,
-       			        'owner':owner,
-       			        'company':company,
-       			        'department':department,
-       			        'position':position,
-       			        'name':name,
-       			        'parameterFlg':parameterFlg,
-       			        'page':0
-       			    }),
-       			    success: function(data){
-       			    	setDataSearch(data);
-       			    	$("#titleSearch").text($('#parameterFlg').find(":selected").text());
-       			    	$("#btnCloseUserSearch").click(function(){
-       			    		location.reload();
-       			    	});
-       			    }
-       			});
+       	   		ListSearch(freeText,owner,company,department,position,name,parameterFlg);
               });
 });/* END READY DOCUMENT  */
  
-      // Process with Label
-  /*     $('#addLabel').click(function(event) {
-        // Get value from input and append to list
-        var label = $("#addLabel").parent().parent().find('input').val();        
-        if(label.trim() != ""){
-          $("#paging tbody").append('<tr id="rowData">'+
-                                      '<td><input type="checkbox" class="i-checks" id="1"></td>'+         
-                                      '<td class="nametag">'+label+'</td>'+
-                                      '<td><a href="#" class="delTag"><i class="fa fa-trash"></i></a></td>'+
-                                    '</tr>');
-        
-          reloadICheck();
-        }
-        // Clear
-        $("#addLabel").parent().parent().find('input').val('');  
-      }); */
+      
+      function ListSearch(freeText,owner,company,department,position,name,parameterFlg){
+    	  	disableBtnSort();
+ 	   		id_manager=0;
+ 			$.ajax({
+ 			    type: 'POST',
+ 			    url: 'searchCards',
+ 			    dataType: 'json', 
+ 				 contentType: 'application/json',
+ 				 mimeType: 'application/json',
+ 			    data: JSON.stringify({ 
+ 			        'freeText':freeText,
+ 			        'owner':owner,
+ 			        'company':company,
+ 			        'department':department,
+ 			        'position':position,
+ 			        'name':name,
+ 			        'parameterFlg':parameterFlg,
+ 			        'page':0
+ 			    }),
+ 			    success: function(data){
+ 			    	setDataSearch(data);
+ 			    	$("#titleSearch").text($('#parameterFlg').find(":selected").text());
+ 			    	$("#btnCloseUserSearch").click(function(){
+ 			    		 <%  
+ 			    		 session.setAttribute("searchDetail", null);
+ 			    		 %>
+ 			    		location.reload();
+ 			    		
+ 			    	});
+ 			    }
+ 			});
+      }
 
       $(".balloon").on('click', '.delTag', function() {
         $(this).parent().parent().remove();
@@ -888,6 +932,33 @@
 	        	if(freeText=="" &&company=="" &&department=="" &&position=="" &&name==""){
 		      		 $(".error_common").text(
 							"<fmt:message key='edit.card.validate'/>");
+					checkValidation = false;
+					$(".mesage_error").css("display", "block");
+		      	 }
+	        }
+	   		
+	   		return checkValidation;
+	   	}
+		
+		function checkValidationFormSearch() {
+	   		var checkValidation = true;
+	   		var freeText = $("#freeText").val();
+	   		var owner = $("#owner").val();
+	   		var company = $("#company").val();
+	   		var department = $("#department").val();
+	   		var position = $("#position").val();
+	   		var name = $("#name").val();
+	   		if($("#parameterFlg").val()==1){
+	        	 if(freeText=="" &&company=="" &&department=="" &&position=="" &&name=="" &&owner==""){
+	        		 $(".error_common").text(
+							"検索条件を指定してください");
+					checkValidation = false;
+					$(".mesage_error").css("display", "block");
+	        	 }
+	        }else{
+	        	if(freeText=="" &&company=="" &&department=="" &&position=="" &&name==""){
+		      		 $(".error_common").text(
+							"検索条件を指定してください");
 					checkValidation = false;
 					$(".mesage_error").css("display", "block");
 		      	 }
@@ -1160,24 +1231,24 @@
 	   			+  '<div class="row row-new">'
 	   			+	'<div class="col-md-1 col-xs-1">'
 	   			+	 '<div class="icheckbox_square-green" style="display:none">'
-	   			+		'<input type="checkbox" class="i-checks" name="bla" value="'+cardId+'">'
+	   			+		'<input type="checkbox" class="i-checks" name="bla" value='+cardId+'>'
 	   			+	 '</div>'
 	   			+	'</div>'
 	   			+	'<div class="col-md-5">'
 	   			+	 '<div class="col-xs-11 mg-top">'
 	   			+		'<p class="name">'+lastName +  firstName+'</p>'
-	   			+		'<p class="livepass">"'+companyName+'"</p>'
-	   			+		'<p class="department_and_position">"'+departmentName+'" "'+positionName+'"</p>'
-	   			+		'<p class="num">"'+telNumberCompany+'"</p>'
-	   			+		'<p class="mail"><a href="#">"'+email+'"</a></p>'
+	   			+		'<p class="livepass">'+companyName+'</p>'
+	   			+		'<p class="department_and_position">'+departmentName+' '+positionName+'</p>'
+	   			+		'<p class="num">'+telNumberCompany+'</p>'
+	   			+		'<p class="mail"><a href="#">'+email+'</a></p>'
 	   			+	 '</div>'
 	   			+	'</div>'
 	   			+	'<div class="col-md-6">'
 	   			+	 '<div class="col-xs-5" style=" display: table;">'
 	   			+		'</div>'
 	   			+           '<div class="col-xs-7">'
-	   			+			'<img src="<c:url value="/assets/img/loading.gif"/>" name="'+imageFile+'" class="img-responsive img-thumb pull-right" alt="Responsive image">'
-	   			+			'<input class="hidden" name="fileImageName" value="'+imageFile+'">'
+	   			+			'<img src="<c:url value="/assets/img/loading.gif"/>" name='+imageFile+' class="img-responsive img-thumb pull-right" alt="Responsive image">'
+	   			+			'<input class="hidden" name="fileImageName" value='+imageFile+'>'
 	   			+'</div> '
 	   			+	'</div>'
 	   			+ '</div>'

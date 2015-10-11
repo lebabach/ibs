@@ -125,6 +125,14 @@ a {
 	float: none;
 }
 </style>
+
+<c:if test="${not empty isExpried and isExpried == true}">
+<style>
+.card{
+	background-color: red !important;
+}
+</style>
+</c:if>
 <div id="details" class="container">
 	<!-- Start banner -->
 	<div class="row animated fadeInRight">
@@ -157,7 +165,7 @@ a {
 							id="popup"> <img id="imageresource" width="318" height="190"
 							src='<c:url value="/assets/img/card_08.png"></c:url>'></a>	
 						</c:if>
-						<c:if test="${not cardInfo.imageFile ==''}">
+						<c:if test="${not empty cardInfo.imageFile}">
 							<a href="#" title="Image from Unsplash" data-target="#myModal"
 							id="popup"> <img id="imageresource" width="318" height="190"
 							src="data:image/png;base64,${cardInfo.imageFile}"></a>	
@@ -219,7 +227,7 @@ a {
 						</div>
 
 						<c:if test="${ isMyCard == true }">
-						<div class="div-pen" style="float: right">
+						<div class="div-pen div-pen-contact" style="float: right">
 							<a> <i class="fa fa-pencil"></i>
 							</a>
 						</div>
@@ -287,7 +295,33 @@ a {
     white-space: nowrap;
 }
 
+.input-submit-date {
+    font-size: 1.2em;
+    display: inline-block;
+    padding: 5px 12px 2px;
+    border: 1px solid #E3157A;
+    border-radius: 3px;
+    background-color: #E3157A;
+    color: #FFF !important;
+    vertical-align: middle;
+    text-shadow: 0px -1px 2px #000;
+    white-space: nowrap;
+}
+
 .input-reset {
+    font-size: 1.2em;
+    display: inline-block;
+    padding: 5px 12px 2px;
+    border: 1px solid #A5A5A5;
+    border-radius: 3px;
+    background: #E0E0E0 -moz-linear-gradient(center top , #E0E0E0, #C8C8C8) repeat scroll 0% 0%;
+    color: #666 !important;
+    vertical-align: middle;
+    text-shadow: 0px 1px 0px #FFF;
+    white-space: nowrap;
+}
+
+.input-reset-date {
     font-size: 1.2em;
     display: inline-block;
     padding: 5px 12px 2px;
@@ -302,7 +336,43 @@ a {
 </style>
 					<script type="text/javascript">
                           $(document).ready(function(){
-                                  
+                    	  	
+                        	  $('.div-pen-contact').on({
+                               'click':function(){
+	                            	   $('.p-date').datepicker({
+		   	      							language : 'en',
+		   	      							todayHighlight : true,
+		   	      							keyboardNavigation : false,
+		   	      							format : 'yyyy-mm-dd',
+		   	      							forceParse : true,
+		   	      							autoclose : true,
+		   	      							calendarWeeks : true
+		     					     	});
+                                        $(".p-date").addClass("p-date-input");
+                                        $('.p-fomr').show();
+                                        $('.div-pen').addClass('div-pen-ac') 
+                                        $(".p-date").removeAttr('readonly');
+                                  }
+                              });
+                        	  
+                        	  $('.input-reset-date').on({
+	                               'click':function(){
+		                            	   $('.p-date').datepicker({
+			   	      							language : 'en',
+			   	      							todayHighlight : true,
+			   	      							keyboardNavigation : false,
+			   	      							format : 'yyyy-mm-dd',
+			   	      							forceParse : true,
+			   	      							autoclose : true,
+			   	      							calendarWeeks : true
+			     					     	});
+	                                          $(".p-date").removeClass("p-date-input");
+	                                          $('.p-fomr').hide();
+	                                          $('.div-pen').removeClass('div-pen-ac') 
+	                                          $(".p-date").attr('readonly', 'readonly');
+	                                  }
+                              }); 
+                        	  
 	                              $('.div-pen').on({
 	                               'click':function(){
 	                                          $(".p-date").addClass("p-date-input");
@@ -330,10 +400,11 @@ a {
 					                				title: 'Information',
 					               	             	message: 'Edit contact date success'
 					                	      });
+											  window.location.href = "<c:url value='/user/card/details/' />"+$("input[name=cardId]").val();
 										  },
 										  error: function(){
 											  BootstrapDialog.show({
-					                				title: 'Information',
+					                				title: 'Warning',
 					               	             	message: 'Edit contact date failed'
 					                	      });
 										  }
@@ -342,29 +413,14 @@ a {
                           });   
                           
                       </script>
-                      <c:if test="${ isMyCard == true }">
-	                      <script type="text/javascript">
-	                          $(document).ready(function(){
-	                        	  $('.p-date').datepicker({
-		      							language : 'en',
-		      							todayHighlight : true,
-		      							keyboardNavigation : false,
-		      							format : 'yyyy-mm-dd',
-		      							forceParse : true,
-		      							autoclose : true,
-		      							calendarWeeks : true
-	    					     	});
-	                          });
-	                      </script>
-                      </c:if>
                       
 					<div class="panel-body" style="padding: 12px 0 0 0;">
 						<form name="frmEditContactDate" id="frmEditContactDate">
 							<input type="hidden" value="${ cardInfo.cardId }" name="cardId" />
-							<input value="<fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy-MM-dd"/>" class="p-date" name="contactDate">
+							<input value="<fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy-MM-dd"/>" class="p-date" name="contactDate" readonly="readonly">
 							<p class="p-fomr" style="display: none">
-								<input type="button" class="input-submit" value="保存" id="editContactDate"> 
-								<input type="reset" class="input-reset" value="キャンセル">
+								<input type="button" class="input-submit-date" value="保存" id="editContactDate"> 
+								<input type="reset" class="input-reset-date" value="キャンセル">
 							</p>
 						</form>
 					</div>
@@ -542,15 +598,35 @@ label.error {
     display: inline-block;
     margin-left: 15px;
 }
+
+#editForm a{
+	color: #333 !important;
+}
 </style>
 				<script type="text/javascript">
                     $(document).ready(function(){
+                    	$(".email-hide").show();
+                        $("#email").hide();
+                        $(".companyUrl-hide").show();
+                        $("#companyURL").hide();
+                        
+                    	$(".address-hide").show();
+                    	$("#address").hide();	
+                    
                             $('.edit2').on({
                              'click':function(){
                                         $(".input-new-1").addClass("input-new-1-ac");
                                         $('.p-fomr2').show();
                                         $('.div-pen').addClass('div-pen-ac') 
                                         $(".input-new-1").removeAttr('readonly');
+                                        
+                                        $(".email-hide").hide();
+                                        $("#email").show();
+                                        $(".companyUrl-hide").hide();
+                                        $("#companyURL").show();
+                                        
+                                        $(".address-hide").hide();
+                                        $("#address").show();
                                 }
                             });   
                             $('.input-reset').on({
@@ -559,6 +635,14 @@ label.error {
                                         $('.p-fomr2').hide();
                                         $('.div-pen').removeClass('div-pen-ac') 
                                         $(".input-new-1").attr('readonly', 'readonly');
+                                        
+                                        $(".email-hide").show();
+                                        $("#email").hide();
+                                        $(".companyUrl-hide").show();
+                                        $("#companyURL").hide();
+                                        
+                                        $(".address-hide").show();
+                                        $("#address").hide();
                                         
                                         validator.resetForm();
                                 }
@@ -710,13 +794,12 @@ label.error {
 									<img src="<c:url value='/assets/img/ico_mail.png'/>" alt="氏名">
 								</dt>
 								<dd>
-
 									<div class="ipt_txt front_email email-hide"
 										style="display: none">
 										<a href="mailto:${cardInfo.email}" target="_blank">${cardInfo.email}</a>
 									</div>
 									<input type="email" class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.email}" name="email" readonly="readonly">
+										value="${cardInfo.email}" name="email" id="email">
 								</dd>
 							</dl>
 						</div>
@@ -732,7 +815,7 @@ label.error {
 									<input class="ipt_txt front_full_name input-new-1"
 										value="${cardInfo.telNumberDepartment}" name="telNumberDepartment" id="telNumberDepartment"  readonly="readonly"/> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberCompany}" name="telNumberCompany" id="telNumberDepartment" readonly="readonly"><br/>
+										value="${cardInfo.telNumberCompany}" name="telNumberCompany" id="telNumberCompany" readonly="readonly"><br/>
 									<input class="ipt_txt front_full_name input-new-1"
 										value="${cardInfo.mobileNumber}" name="mobileNumber" id="mobileNumber" readonly="readonly" />
 								</dd>
@@ -766,15 +849,25 @@ label.error {
 									<img src="<c:url value='/assets/img/ico_address.png'/>"
 										alt="${cardInfo.address1}">
 								</dt>
-								<dd>
+								<dd class="address-hide" style="display: none">
+									<div class="ipt_txt front_email">
+										<a href="http://maps.google.com/maps?q=<c:out value="${ cardInfo.address1 }"></c:out> <c:out value="${ cardInfo.address2 }"></c:out> <c:out value="${ cardInfo.address3 }"></c:out> <c:out value="${ cardInfo.address4 }"></c:out>" target="_blank">
+											<c:out value="${ cardInfo.address1 }"></c:out> 
+											<c:out value="${ cardInfo.address2 }"></c:out> 
+											<c:out value="${ cardInfo.address3 }"></c:out> 
+											<c:out value="${ cardInfo.address4 }"></c:out> 
+										</a>
+									</div>
+								</dd>	
+								<dd id="address">
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address1}" name="address1" readonly="readonly"> <br/>
+										value="${cardInfo.address1}" name="address1" id="address1" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address2}" name="address2" readonly="readonly"> <br/>
+										value="${cardInfo.address2}" name="address2" id="address2" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address3}" name="address3" readonly="readonly"> <br/>
+										value="${cardInfo.address3}" name="address3" id="address3" readonly="readonly"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address4}" name="address4" readonly="readonly"> <br/>
+										value="${cardInfo.address4}" name="address4" id="address4" readonly="readonly"> <br/>
 								</dd>
 							</dl>
 						</div>
@@ -785,8 +878,7 @@ label.error {
 										alt="ホームページ">
 								</dt>
 								<dd>
-									<div class="ipt_txt front_url1 email-hide"
-										style="display: none">
+									<div class="ipt_txt front_url1 companyUrl-hide" style="display: none;">
 										<a href="${cardInfo.companyUrl}" target="_blank">${cardInfo.companyUrl}</a>
 									</div>
 									<input class="ipt_txt front_full_name input-new-1"
@@ -809,14 +901,14 @@ label.error {
 			<div class="panel panel-default">
 				<div class="panel-heading" style="height: 40px;">
 					<div style="float: left; font-weight: bold;">
-						<h5>この名刺で繋がっている人</h5>
+						<h5><fmt:message key="card.detail.connect" /></h5>
 					</div>
 				</div>
 				
-				<div class="panel-body" style="padding: 15px 0; overflow: auto; height: 184px;">
+				<div class="panel-body" style="padding: 10px 0; overflow: auto; height: 500px;">
 				<style type="text/css">
                   .div-new{
-                           padding: 0 10px 10px 10px !important;
+                           padding: 0 10px 5px 10px !important;
                            margin-bottom: 10px !important;
                            border-left: none !important;
                             border-right: none !important;
@@ -846,18 +938,20 @@ label.error {
                    .mg-top {
 					    margin-top: 5px;
 					}
-					
+					.div-new a{
+						color: #333 !important;
+					}
                 </style>
 					<c:forEach var="listCardConnected" items="${listCardConnect}" varStatus="loop">
 						<div class="list-group-item pointer div-new">
 							<div class="row" style="margin-right: 0">
 								<div class="col-md-5 col-md-5-n">
 									<div class="col-xs-11 mg-top">
-										<p class="name"><c:out value="${listCardConnected.name}"></c:out> </p>
-										<p class="livepass"><c:out value="${listCardConnected.companyName}"></c:out></p>
+										<p class="name"><a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.name}"></c:out></a> </p>
+										<p class="livepass"><a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.companyName}"></c:out></a></p>
 										<p class="department_and_position">
-											<c:out value="${listCardConnected.departmentName}"></c:out> 
-											<c:out value="${listCardConnected.positionName}"></c:out>
+											<a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.departmentName}"></c:out> </a>
+											<a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.positionName}"></c:out></a>
 										</p>
 									</div>
 								</div>
@@ -916,24 +1010,8 @@ label.error {
     	//Delete card tag
          //$(".delTag").click(function(){
        	 $(document).on("click",".delTag",function(e){
-        	 $.ajax({
-    			  type: "POST",
-    			  url: "<c:url value='/user/deleteTag' />",
-    			  data: 'tagId='+ this.id,
-    			  success: function(){
-    				  BootstrapDialog.show({
-         				title: 'Information',
-        	             	message: 'Remove tag success'
-         	      		});
-    				  window.location.href = "<c:url value='/user/card/details' />/"+$("input[name=cardId]").val();
-    			  },
-    			  error: function(){
-    				  BootstrapDialog.show({
-         				title: 'Information',
-        	             	message: 'Remove tag failed'
-         	      		});
-    			  }
-    		});
+       		console.log("tagId : "+e.target.id + "==> a: "+this.id);
+       		deleteTag(this.id);
          });
     	
     	 var isEdit = (getUrlParameter('isEdit') != null) ? getUrlParameter('isEdit') : "";
@@ -956,20 +1034,15 @@ label.error {
        });
 
        $("input[name=checkTag]").on('ifChecked', function(event){
-         	//console.log("tagId "+ $(this).val());
+         	console.log("ifChecked 111");
          	var json = {"tagId" : $(this).val(), "cardId" : $("input[name=cardId]").val()};
     	    addCardTag(json);
        });
        
-       $("input").on('ifUnchecked', function(event){     
-	         //console.log("uncheck aaaa 111");
+       $("input[name=checkTag]").on('ifUnchecked', function(event){     
+    	   console.log("ifUnchecked 111");
            var json = {"tagId" : $(this).val(), "cardId" : $("input[name=cardId]").val()};
            deleteCardTag(json);
-       });
-
-       // Process add tag and delete
-       $("#deletePeople").click(function(e){
-         
        });
 
        $("#addTag").click(function(e){
@@ -1116,21 +1189,22 @@ label.error {
      	$(this).addClass("icheckbox_square-green");
      });
      
-     var isClick = true;
+     //var isClick = true;
      $(document).on('click', '#tags .icheckbox_square-green', function(e) {
-    	 isClick = !isClick;
-		 //console.log($(this).attr('id'));
-    	 if(isClick){
-			 $(this).removeClass("icheckbox_square-green hover");
+    	 //isClick = !isClick;
+		 console.log("Click 111 : "+$(this).attr("class"));
+		 		 
+    	 if(!$(this).attr("class").contains("checked")){
+    		 $(this).removeClass("icheckbox_square-green hover");
         	 $(this).removeClass("icheckbox_square-green");
         	 $(this).addClass("icheckbox_square-green checked");
         	 
         	 //Add card tag
         	 var json = {"tagId" : this.id, "cardId" : $("input[name=cardId]").val()};
-        	 $("#tags tbody").html('');
      	     addCardTag(json);
     	 }
     	 else{
+    		 //console.log("else "+isClick);
     		 $(this).removeClass("icheckbox_square-green checked");
     		 $(this).addClass("icheckbox_square-green");
     		 
@@ -1209,8 +1283,8 @@ label.error {
 			  	}
 	        });
 			
-			isClick = true;
-			console.log("isClick : "+isClick);
+			//isClick = true;
+			//console.log("isClick : "+isClick);
 		}
 		
      });
@@ -1289,7 +1363,7 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Information',
+   				title: 'Warning',
   	             	message: 'Add card tag failed'
    	      		});
 		  	}
@@ -1349,8 +1423,68 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Information',
+   				title: 'Warning',
   	             	message: 'Delete card tag failed'
+   	      		});
+		  	}
+        });	
+	}
+	
+	function deleteTag(id){
+     	$.ajax({
+        	url: "<c:url value='/user/deleteTag' />",
+        	data: 'tagId='+ id,
+        	type: "GET",
+        	
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(response) {
+        		//console.log(JSON.stringify(response));
+        		var respHTML = "";
+        		var isChecked = "";
+        		$.each(response, function(index, value){
+        			//console.log(JSON.stringify(value));
+        			//console.log(JSON.stringify(value["listCardIds"]));
+        			isChecked = "";
+        			$.each(value["listCardIds"], function(idx, v){
+        				//console.log("v : "+ v);
+        				if(v == $("input[name=cardId]").val()){
+        					//console.log("v : "+ v + " tagId : "+tagId);
+        					isChecked = "checked";
+        					return false;
+        				}
+        				
+        				if(v != $("input[name=cardId]").val()){
+        					isChecked = "";
+        				}
+        			});
+        			if(isChecked == "checked")
+        				{respHTML += "<tr id='rowData'>"
+	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+	    					+ "</td>"
+	    					+ "<td>"+value["tagName"]+"</td>"
+	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+        			else
+        				{respHTML += "<tr id='rowData'>"
+	    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+	        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+	        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+	    					+ "</td>"
+	    					+ "<td>"+value["tagName"]+"</td>"
+	    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+        		});
+        		
+        		$("#tagName").val('');
+        		$("#tags tbody").html(respHTML);    		
+        	},
+        	error: function(){
+			  BootstrapDialog.show({
+   				title: 'Warning',
+  	             	message: 'Delete tag failed'
    	      		});
 		  	}
         });	
@@ -1379,7 +1513,7 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Information',
+   				title: 'Warning',
   	             	message: 'Add card memo failed'
    	      		});
 		  	}
@@ -1467,7 +1601,7 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Information',
+   				title: 'Warning',
   	             	message: 'List card tag failed'
    	      		});
 		  	}
@@ -1485,4 +1619,6 @@ label.error {
 
 	    return [year, month, day].join('-');
 	}
+	
+	
    </script>

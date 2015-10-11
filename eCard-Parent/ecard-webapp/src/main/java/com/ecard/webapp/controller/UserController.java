@@ -9,7 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
@@ -124,6 +126,9 @@ public class UserController {
 
 	@Value("${scp.port}")
 	private String scpPort;
+	
+	@Value("${compliace.date}")
+	private String compliaceDate;
 
 	@Autowired
 	SettingsInfoService settingsInfoService;
@@ -174,6 +179,8 @@ public class UserController {
 			 }
 			 //tagGroup.setCardId(str.substring(1,str.length()));
 		}
+		
+		//UserSearchVO u=(UserSearchVO)request.getSession().getAttribute("searchDetail");
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("homePC");
 		modelAndView.addObject("lstCardInfoPCVo", lstCardInfoPCVo);
@@ -462,7 +469,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/card/details/{id:[\\d]+}",  method = RequestMethod.GET)
-	public ModelAndView detailPC(@PathVariable("id") int id) {
+	public ModelAndView detailPC(@PathVariable("id") int id,HttpSession session) {
 		logger.debug("detailPC", UserController.class);
 		
 		ModelAndView modelAndView = new ModelAndView();
@@ -501,6 +508,24 @@ public class UserController {
             //Get old cards
             List<CardInfo> listOldCard = cardInfoService.getOldCardInfor();
             modelAndView.addObject("listOldCard", listOldCard);
+            
+            //set search detail session
+            if (session.getAttribute("searchDetail") != null) {
+            	UserSearchVO userSearch=(UserSearchVO)session.getAttribute("searchDetail");
+            	userSearch.setDetail(true);
+            	session.setAttribute("searchDetail", userSearch);
+            } 
+            
+            //Check compliance date
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dateCompliance = sdf.parse(compliaceDate);
+
+            if(cardInfo.getContactDate().before(dateCompliance)){
+            	modelAndView.addObject("isExpried", true);
+            }
+            else{
+            	modelAndView.addObject("isExpried", false);
+            }
 		}
 		catch(Exception ex){
 			logger.debug("Exception : ", ex.getMessage());
@@ -513,6 +538,34 @@ public class UserController {
 		return modelAndView;
 	}
 
+	@RequestMapping(value = "profile/{id:[\\d]+}", method = RequestMethod.GET)
+	public ModelAndView profileCardConnect(@PathVariable("id") Integer userId) {
+		logger.debug("profileCardConnect", UserController.class);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		try{
+			if (userId != null) {
+				UserInfo user = userInfoService.getUserInfoByUserId(userId);
+				UserInfoVO userVO = new UserInfoVO();
+				userVO.setCompanyName(
+						groupCompanyInfoService.getCompanyById(user.getGroupCompanyId()).getGroupCompanyName());
+				userVO.setDepartmentName(user.getDepartmentName());
+				userVO.setName(user.getName());
+				userVO.setPositionName(user.getPositionName());
+				userVO.setEmail(user.getEmail());
+				
+				modelAndView.addObject("user", userVO);
+				modelAndView.setViewName("cardConnectDetail");
+				return modelAndView;
+			}
+			
+		}
+		catch(Exception ex){
+			logger.debug("Exception : "+ ex.getMessage(), UserController.class);
+		}
+		return new ModelAndView("redirect:home");
+	}
+	
 	@RequestMapping("profile")
 	public ModelAndView profile() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -860,22 +913,20 @@ public class UserController {
 		return getCardTag();
 	}
 	
-	@RequestMapping (value = "deleteTag", method = RequestMethod.POST)
+	@RequestMapping (value = "deleteTag", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ModelAndView deleteTag(CardTagId cardTag, HttpServletRequest request, HttpServletResponse response) {
+	public List<TagGroup> deleteTag(@RequestParam Integer tagId, HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("deleteTag", UserController.class);
 		
-		ModelAndView modelAndView = new ModelAndView();
 		try{
-			cardTagService.deleteCardTagByTagId(cardTag.getTagId());
-			userTagService.deleteUserTag(cardTag.getTagId());
+			cardTagService.deleteCardTagByTagId(tagId);
+			userTagService.deleteUserTag(tagId);
 		}
 		catch(Exception ex){
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
-		response.setStatus(200, "Remove tag success");
-		modelAndView.setViewName("redirect:" + CommonConstants.REDIRECT_CARD_DETAIL + cardTag.getCardId());
-		return modelAndView;
+		
+		return getCardTag();
 	}
 	
 	@RequestMapping (value = "delBusinessCard", method = RequestMethod.POST)
@@ -1110,7 +1161,7 @@ public class UserController {
     }
 	@RequestMapping(value = "searchCards", method = RequestMethod.POST)
 	@ResponseBody
-	public List<com.ecard.core.vo.CardInfo>  searchCards(@RequestBody final  UserSearchVO userSearchVO) {
+	public List<com.ecard.core.vo.CardInfo>  searchCards(@RequestBody final  UserSearchVO userSearchVO,HttpSession session) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
@@ -1129,6 +1180,11 @@ public class UserController {
         	cardInfo = cardInfoService.getListCardSearch(userInfo.getUserId(), userSearchVO.getFreeText(), userSearchVO.getName(), userSearchVO.getPosition(), userSearchVO.getDepartment(), userSearchVO.getCompany(),userSearchVO.getPage(), userInfo.getGroupCompanyId());
         }else{
         	cardInfo = cardInfoService.getListCardSearchAll(userSearchVO.getOwner(), userSearchVO.getFreeText(), userSearchVO.getName(),userSearchVO.getPosition(), userSearchVO.getDepartment(), userSearchVO.getCompany(), userSearchVO.getPage(), userInfo.getGroupCompanyId());
+        }
+        
+        if (session.getAttribute("searchDetail") == null) {
+        	userSearchVO.setDetail(false);
+        	session.setAttribute("searchDetail", userSearchVO);
         }
 		return cardInfo;
 	}
@@ -1149,6 +1205,7 @@ public class UserController {
 		}
 		return result;
 	}
+	
 }
 
 
