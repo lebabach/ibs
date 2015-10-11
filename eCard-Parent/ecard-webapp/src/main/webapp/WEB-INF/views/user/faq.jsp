@@ -221,13 +221,119 @@
     overflow: visible !important;
     overflow-x: hidden !important;
 }
+
+.label-c{
+        color: #666;
+        width: 150px;
+      }
+      .input-c{
+        width: 524px;
+        padding: 10px;
+        color: #666;
+      }
+      /*edit 9/10*/
+      .category_title {
+       
+      text-align: left;
+      font-weight: bold;
+      font-size: 15px;
+      line-height: 40px;
+      padding: 0 10px 0 20px;
+      margin-bottom: 15px;
+      background: url(/ecard-webapp/assets/img/faq2.png) no-repeat 10px center #f0eee4;
+     }
+    .category_title.active{
+       background: url(/ecard-webapp/assets/img/faq1.png) no-repeat 10px center #f0eee4;
+      } 
+      /*end edit 9/10*/
+   .dl{
+      display: block;
+      width: auto;
+      text-align: left;
+      margin: 0 10px;
+      font-family: "メイリオ",Meiryo,"ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","ＭＳ Ｐゴシック","MS PGothic",sans-serif !important;
+   }
+   .dl dt{
+      float: left;
+      width: 25px
+   }
+   .dl dt img{
+     width: 25px;
+   }
+   .dl dd{
+    margin-left: 35px;
+    font-weight: bold;
+    color: #555;
+    font-size: 1em;
+    display: block;
+    width: auto;
+    margin-bottom: 10px;
+   }    
+   .dl dd.dd-maB{
+    margin-bottom: 20px;
+    font-weight: normal;
+   }
 </style>
 
 <div class="div-list">
 	<div class="box-1">
-		<div class="title-box-1">FAQ</div>
-		<div class="content-box-1" style="padding: 0; height: 1000px; width:100%; overflow: hidden;">
-			<iframe src="https://bc-ribbon.temp-holdings.co.jp/qa.html" style="width: 104.2%; height: 100%"></iframe>
-		</div>
-	</div>
+	    	<div class="title-box-1">FAQ</div>
+	    	<div class="content-box-1" style="padding:0">  
+             <!-- /*edit 9/10*/ -->
+            <div class="category_title active">用語</div>
+            <dl class="dl">
+              <dt><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
+              <dd>「BC-RIBBON」とはどんな意味ですか？</dd>
+              <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
+              <dd class="dd-maB">BCとはBUSINESS CARD(名刺)の略です。RIBBONは、テンプグループの法人データベースの名前からとっています。法人データベースの「RIBBON」と同じく、名刺(お客様)とテンプグループを”結ぶ”、グループ各社同士を”結ぶ”という意味を込めています。</dd>
+
+              <dt><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
+              <dd>「データ登録センター」とは何ですか？</dd>
+              <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
+              <dd  class="dd-maB">スキャンした名刺情報の修正・確認を行うセンターです。フロンティアチャレンジにて運用を行っています。</dd>
+
+              <dt><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
+              <dd>「最近取り込んだ名刺」「最近見た名刺」「最近繋がった名刺」の「最近」とはいつまでですか？</dd>
+              <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
+              <dd  class="dd-maB">直近7日間です</dd>
+            </dl>
+
+            <div class="category_title">名刺撮影</div>
+            <dl class="dl" style="display:none">
+              <dt><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
+              <dd>撮影した名刺が枠が少しずれてしまいましたが、データ化されますか？</dd>
+              <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
+              <dd class="dd-maB">撮影した画像が枠からずれていたり、ぼやけていると正確にデータ化されません。できる限り正確に撮影をお願いします。</dd>
+            </dl>  
+
+            <div class="category_title">名刺撮影</div>
+            <dl class="dl" style="display:none">
+              <dt><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
+              <dd>撮影した名刺が枠が少しずれてしまいましたが、データ化されますか？</dd>
+              <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
+              <dd class="dd-maB">撮影した画像が枠からずれていたり、ぼやけていると正確にデータ化されません。できる限り正確に撮影をお願いします。</dd>
+            </dl> 
+             <!-- end edit 9/10*/ --> 
+	    	</div>
+	    </div>
 </div>
+<script src="js/jquery-2.1.1.js"></script>
+    <!-- /*edit 9/10*/ -->
+    <script type="text/javascript">
+        $( "#btn-success" ).click(function() {
+           $('.modal-content').hide(); 
+           $('.modal-content-new').show(); 
+        });
+         $( ".category_title" ).click(function() {
+
+           if($(this).hasClass('active')) {
+              $(this).next('.dl').hide();
+              $(this).removeClass('active');
+            }else{
+              $(this).next('.dl').show();
+              $(this).addClass("active");
+            }
+           
+           
+        });       
+     </script>
