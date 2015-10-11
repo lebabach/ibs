@@ -1192,9 +1192,9 @@ label.error {
      //var isClick = true;
      $(document).on('click', '#tags .icheckbox_square-green', function(e) {
     	 //isClick = !isClick;
-		 console.log("Click 111 : "+$(this).attr("class"));
+		 //console.log("Click 111 : "+$(this).attr("class"));
 		 		 
-    	 if(!$(this).attr("class").contains("checked")){
+    	 if($(this).attr("class").indexOf("checked") == -1){
     		 $(this).removeClass("icheckbox_square-green hover");
         	 $(this).removeClass("icheckbox_square-green");
         	 $(this).addClass("icheckbox_square-green checked");
@@ -1204,7 +1204,6 @@ label.error {
      	     addCardTag(json);
     	 }
     	 else{
-    		 //console.log("else "+isClick);
     		 $(this).removeClass("icheckbox_square-green checked");
     		 $(this).addClass("icheckbox_square-green");
     		 
