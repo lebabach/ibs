@@ -9,7 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
@@ -177,6 +179,8 @@ public class UserController {
 			 }
 			 //tagGroup.setCardId(str.substring(1,str.length()));
 		}
+		
+		//UserSearchVO u=(UserSearchVO)request.getSession().getAttribute("searchDetail");
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("homePC");
 		modelAndView.addObject("lstCardInfoPCVo", lstCardInfoPCVo);
@@ -465,7 +469,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/card/details/{id:[\\d]+}",  method = RequestMethod.GET)
-	public ModelAndView detailPC(@PathVariable("id") int id) {
+	public ModelAndView detailPC(@PathVariable("id") int id,HttpSession session) {
 		logger.debug("detailPC", UserController.class);
 		
 		ModelAndView modelAndView = new ModelAndView();
@@ -504,6 +508,13 @@ public class UserController {
             //Get old cards
             List<CardInfo> listOldCard = cardInfoService.getOldCardInfor();
             modelAndView.addObject("listOldCard", listOldCard);
+            
+            //set search detail session
+            if (session.getAttribute("searchDetail") != null) {
+            	UserSearchVO userSearch=(UserSearchVO)session.getAttribute("searchDetail");
+            	userSearch.setDetail(true);
+            	session.setAttribute("searchDetail", userSearch);
+            } 
             
             //Check compliance date
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -1150,7 +1161,7 @@ public class UserController {
     }
 	@RequestMapping(value = "searchCards", method = RequestMethod.POST)
 	@ResponseBody
-	public List<com.ecard.core.vo.CardInfo>  searchCards(@RequestBody final  UserSearchVO userSearchVO) {
+	public List<com.ecard.core.vo.CardInfo>  searchCards(@RequestBody final  UserSearchVO userSearchVO,HttpSession session) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
@@ -1169,6 +1180,11 @@ public class UserController {
         	cardInfo = cardInfoService.getListCardSearch(userInfo.getUserId(), userSearchVO.getFreeText(), userSearchVO.getName(), userSearchVO.getPosition(), userSearchVO.getDepartment(), userSearchVO.getCompany(),userSearchVO.getPage(), userInfo.getGroupCompanyId());
         }else{
         	cardInfo = cardInfoService.getListCardSearchAll(userSearchVO.getOwner(), userSearchVO.getFreeText(), userSearchVO.getName(),userSearchVO.getPosition(), userSearchVO.getDepartment(), userSearchVO.getCompany(), userSearchVO.getPage(), userInfo.getGroupCompanyId());
+        }
+        
+        if (session.getAttribute("searchDetail") == null) {
+        	userSearchVO.setDetail(false);
+        	session.setAttribute("searchDetail", userSearchVO);
         }
 		return cardInfo;
 	}
@@ -1189,6 +1205,7 @@ public class UserController {
 		}
 		return result;
 	}
+	
 }
 
 

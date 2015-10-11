@@ -45,7 +45,7 @@ public class UserSearchVO {
     private String position;
     private String name;
     private int parameterFlg;
-    
+    private boolean isDetail;
     private int page;
 	public int getPage() {
 		return page;
@@ -58,6 +58,12 @@ public class UserSearchVO {
 	}
 	public void setParameterFlg(int parameterFlg) {
 		this.parameterFlg = parameterFlg;
+	}
+	public boolean isDetail() {
+		return isDetail;
+	}
+	public void setDetail(boolean isDetail) {
+		this.isDetail = isDetail;
 	}
 	
 }
