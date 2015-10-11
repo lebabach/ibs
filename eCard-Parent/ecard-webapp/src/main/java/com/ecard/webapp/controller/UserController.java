@@ -514,7 +514,9 @@ public class UserController {
             	UserSearchVO userSearch=(UserSearchVO)session.getAttribute("searchDetail");
             	userSearch.setDetail(true);
             	session.setAttribute("searchDetail", userSearch);
-            } //Check compliance date
+            } 
+            
+            //Check compliance date
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String contactDate = sdf.format(cardInfo.getContactDate());
             if(!contactDate.equals(compliaceDate)){
