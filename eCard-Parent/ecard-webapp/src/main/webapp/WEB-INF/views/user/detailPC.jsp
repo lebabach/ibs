@@ -732,7 +732,7 @@ label.error {
 									<input class="ipt_txt front_full_name input-new-1"
 										value="${cardInfo.telNumberDepartment}" name="telNumberDepartment" id="telNumberDepartment"  readonly="readonly"/> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberCompany}" name="telNumberCompany" id="telNumberDepartment" readonly="readonly"><br/>
+										value="${cardInfo.telNumberCompany}" name="telNumberCompany" id="telNumberCompany" readonly="readonly"><br/>
 									<input class="ipt_txt front_full_name input-new-1"
 										value="${cardInfo.mobileNumber}" name="mobileNumber" id="mobileNumber" readonly="readonly" />
 								</dd>
@@ -1483,5 +1483,27 @@ label.error {
 	    if (day.length < 2) day = '0' + day;
 
 	    return [year, month, day].join('-');
+	}
+	
+	function editCardInfo(){
+		$.ajax({
+        	url: "<c:url value='/user/editCardInfo' />",
+        	data: JSON.stringify(json),
+        	type: "POST",
+        	
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(response) {
+	       		console.log(response);
+        	},
+        	error: function(){
+			  BootstrapDialog.show({
+   				title: 'Warning',
+  	             	message: 'Edit card failed'
+   	      		});
+		  	}
+        });	
 	}
    </script>
