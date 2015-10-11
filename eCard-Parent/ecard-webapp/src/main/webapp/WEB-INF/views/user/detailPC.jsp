@@ -295,7 +295,33 @@ a {
     white-space: nowrap;
 }
 
+.input-submit-date {
+    font-size: 1.2em;
+    display: inline-block;
+    padding: 5px 12px 2px;
+    border: 1px solid #E3157A;
+    border-radius: 3px;
+    background-color: #E3157A;
+    color: #FFF !important;
+    vertical-align: middle;
+    text-shadow: 0px -1px 2px #000;
+    white-space: nowrap;
+}
+
 .input-reset {
+    font-size: 1.2em;
+    display: inline-block;
+    padding: 5px 12px 2px;
+    border: 1px solid #A5A5A5;
+    border-radius: 3px;
+    background: #E0E0E0 -moz-linear-gradient(center top , #E0E0E0, #C8C8C8) repeat scroll 0% 0%;
+    color: #666 !important;
+    vertical-align: middle;
+    text-shadow: 0px 1px 0px #FFF;
+    white-space: nowrap;
+}
+
+.input-reset-date {
     font-size: 1.2em;
     display: inline-block;
     padding: 5px 12px 2px;
@@ -329,6 +355,24 @@ a {
                                   }
                               });
                         	  
+                        	  $('.input-reset-date').on({
+	                               'click':function(){
+		                            	   $('.p-date').datepicker({
+			   	      							language : 'en',
+			   	      							todayHighlight : true,
+			   	      							keyboardNavigation : false,
+			   	      							format : 'yyyy-mm-dd',
+			   	      							forceParse : true,
+			   	      							autoclose : true,
+			   	      							calendarWeeks : true
+			     					     	});
+	                                          $(".p-date").removeClass("p-date-input");
+	                                          $('.p-fomr').hide();
+	                                          $('.div-pen').removeClass('div-pen-ac') 
+	                                          $(".p-date").attr('readonly', 'readonly');
+	                                  }
+                              }); 
+                        	  
 	                              $('.div-pen').on({
 	                               'click':function(){
 	                                          $(".p-date").addClass("p-date-input");
@@ -356,10 +400,11 @@ a {
 					                				title: 'Information',
 					               	             	message: 'Edit contact date success'
 					                	      });
+											  window.location.href = "<c:url value='/user/card/details/' />"+$("input[name=cardId]").val();
 										  },
 										  error: function(){
 											  BootstrapDialog.show({
-					                				title: 'Information',
+					                				title: 'Warning',
 					               	             	message: 'Edit contact date failed'
 					                	      });
 										  }
@@ -372,10 +417,10 @@ a {
 					<div class="panel-body" style="padding: 12px 0 0 0;">
 						<form name="frmEditContactDate" id="frmEditContactDate">
 							<input type="hidden" value="${ cardInfo.cardId }" name="cardId" />
-							<input value="<fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy-MM-dd"/>" class="p-date" name="contactDate">
+							<input value="<fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy-MM-dd"/>" class="p-date" name="contactDate" readonly="readonly">
 							<p class="p-fomr" style="display: none">
-								<input type="button" class="input-submit" value="保存" id="editContactDate"> 
-								<input type="reset" class="input-reset" value="キャンセル">
+								<input type="button" class="input-submit-date" value="保存" id="editContactDate"> 
+								<input type="reset" class="input-reset-date" value="キャンセル">
 							</p>
 						</form>
 					</div>
@@ -989,20 +1034,15 @@ label.error {
        });
 
        $("input[name=checkTag]").on('ifChecked', function(event){
-         	console.log("tagId "+ $(this).val());
+         	console.log("ifChecked 111");
          	var json = {"tagId" : $(this).val(), "cardId" : $("input[name=cardId]").val()};
     	    addCardTag(json);
        });
        
        $("input[name=checkTag]").on('ifUnchecked', function(event){     
-	       console.log("uncheck aaaa 111");
+    	   console.log("ifUnchecked 111");
            var json = {"tagId" : $(this).val(), "cardId" : $("input[name=cardId]").val()};
            deleteCardTag(json);
-       });
-
-       // Process add tag and delete
-       $("#deletePeople").click(function(e){
-         
        });
 
        $("#addTag").click(function(e){
@@ -1149,12 +1189,13 @@ label.error {
      	$(this).addClass("icheckbox_square-green");
      });
      
-     var isClick = true;
+     //var isClick = true;
      $(document).on('click', '#tags .icheckbox_square-green', function(e) {
-    	 isClick = !isClick;
-		 //console.log($(this).attr('id'));
-    	 if(isClick){
-			 $(this).removeClass("icheckbox_square-green hover");
+    	 //isClick = !isClick;
+		 console.log("Click 111 : "+$(this).attr("class"));
+		 		 
+    	 if(!$(this).attr("class").contains("checked")){
+    		 $(this).removeClass("icheckbox_square-green hover");
         	 $(this).removeClass("icheckbox_square-green");
         	 $(this).addClass("icheckbox_square-green checked");
         	 
@@ -1163,6 +1204,7 @@ label.error {
      	     addCardTag(json);
     	 }
     	 else{
+    		 //console.log("else "+isClick);
     		 $(this).removeClass("icheckbox_square-green checked");
     		 $(this).addClass("icheckbox_square-green");
     		 
@@ -1241,8 +1283,8 @@ label.error {
 			  	}
 	        });
 			
-			isClick = true;
-			console.log("isClick : "+isClick);
+			//isClick = true;
+			//console.log("isClick : "+isClick);
 		}
 		
      });

@@ -507,8 +507,9 @@ public class UserController {
             
             //Check compliance date
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String contactDate = sdf.format(cardInfo.getContactDate());
-            if(!contactDate.equals(compliaceDate)){
+            Date dateCompliance = sdf.parse(compliaceDate);
+
+            if(cardInfo.getContactDate().before(dateCompliance)){
             	modelAndView.addObject("isExpried", true);
             }
             else{
