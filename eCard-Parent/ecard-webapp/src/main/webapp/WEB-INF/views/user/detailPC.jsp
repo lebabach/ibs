@@ -227,7 +227,7 @@ a {
 						</div>
 
 						<c:if test="${ isMyCard == true }">
-						<div class="div-pen" style="float: right">
+						<div class="div-pen div-pen-contact" style="float: right">
 							<a> <i class="fa fa-pencil"></i>
 							</a>
 						</div>
@@ -310,7 +310,25 @@ a {
 </style>
 					<script type="text/javascript">
                           $(document).ready(function(){
-                                  
+                    	  	
+                        	  $('.div-pen-contact').on({
+                               'click':function(){
+	                            	   $('.p-date').datepicker({
+		   	      							language : 'en',
+		   	      							todayHighlight : true,
+		   	      							keyboardNavigation : false,
+		   	      							format : 'yyyy-mm-dd',
+		   	      							forceParse : true,
+		   	      							autoclose : true,
+		   	      							calendarWeeks : true
+		     					     	});
+                                        $(".p-date").addClass("p-date-input");
+                                        $('.p-fomr').show();
+                                        $('.div-pen').addClass('div-pen-ac') 
+                                        $(".p-date").removeAttr('readonly');
+                                  }
+                              });
+                        	  
 	                              $('.div-pen').on({
 	                               'click':function(){
 	                                          $(".p-date").addClass("p-date-input");
@@ -350,21 +368,6 @@ a {
                           });   
                           
                       </script>
-                      <c:if test="${ isMyCard == true }">
-	                      <script type="text/javascript">
-	                          $(document).ready(function(){
-	                        	  $('.p-date').datepicker({
-		      							language : 'en',
-		      							todayHighlight : true,
-		      							keyboardNavigation : false,
-		      							format : 'yyyy-mm-dd',
-		      							forceParse : true,
-		      							autoclose : true,
-		      							calendarWeeks : true
-	    					     	});
-	                          });
-	                      </script>
-                      </c:if>
                       
 					<div class="panel-body" style="padding: 12px 0 0 0;">
 						<form name="frmEditContactDate" id="frmEditContactDate">
