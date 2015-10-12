@@ -392,9 +392,12 @@ public class UserController {
 	@ResponseBody
 	public void downloadFileCSV(HttpServletResponse response, HttpServletRequest request, @PathVariable("id") int id)
 			throws IOException {
-		try {
+		try {			
 			DownloadCsv downloadCsv = cardInfoService.getDownloadCSV(id);
-			String fileName = downloadCsv.getCsvUrl();			
+			String fileName = downloadCsv.getCsvUrl();
+			
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			UserInfo userInfo = userInfoService.findUserByEmail(authentication.getName());
 			// Connect to SCP and download File
 			byte[] myBytes = UploadFileUtil.getFileCSVFromSCP(fileName, scpHostName, scpUser, scpPassword,
 					Integer.parseInt(scpPort));
@@ -427,8 +430,17 @@ public class UserController {
 				if(userAdmin.getRoleAdminId() == 7){
 					listUserId.add(userAdmin.getUserId().toString());
 				}
+			}			
+			if(!Arrays.asList(listUserId).contains(userInfo.getUserId().toString())){
+				listUserId.add(userInfo.getUserId().toString());
 			}
-			sendMailDownload(listUserId);
+			
+			Context ctx = new Context();	    	
+			ctx.setVariable("company",userInfo.getCompanyNameKana());
+			ctx.setVariable("userDownload",userInfo.getNameKana());
+			ctx.setVariable("dateDownload",downloadCsv.getApprovalDate());
+//			ctx.setVariable("recordNumber",answerText);
+			sendMailDownload(listUserId,ctx);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -445,13 +457,8 @@ public class UserController {
 	}
 	
 	
-	public void sendMailDownload(List<String> listUserId) throws IOException{
-		Context ctx = new Context();
-    	String answerText = "asdfasdf\r\n asdfasdfadfa".replaceAll("(\r\n|\n)", " <br />");
-		ctx.setVariable("company",answerText);
-		ctx.setVariable("userDownload",answerText);
-		ctx.setVariable("dateDownload",answerText);
-		ctx.setVariable("recordNumber",answerText);
+	public void sendMailDownload(List<String> listUserId,Context ctx) throws IOException{
+		
 		try {
 			emailService.sendMailContact(CommonConstants.USER_FROM_MAIL, listUserId, CommonConstants.TITLE_DOWNLOAD_MAIL, ctx, "mailtodownloadCSV");			
 		} catch (MessagingException e) {
