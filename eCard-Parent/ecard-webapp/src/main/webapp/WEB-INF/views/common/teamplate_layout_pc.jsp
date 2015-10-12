@@ -37,8 +37,8 @@
 <link rel="stylesheet"
 	href="<c:url value='/assets/css/clockpicker.css'/>" type="text/css"
 	media="all" />
-<link rel="stylesheet" href="<c:url value='/assets/css/style_ibs.css'/>"
-	type="text/css" media="all" />
+<%-- <link rel="stylesheet" href="<c:url value='/assets/css/style_ibs.css'/>"
+	type="text/css" media="all" /> --%>
 
 <script src="<c:url value='/assets/js/jquery-2.1.1.js'/>"
 	type="text/javascript"></script>

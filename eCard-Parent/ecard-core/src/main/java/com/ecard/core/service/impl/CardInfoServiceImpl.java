@@ -323,4 +323,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public List<String> getListSortTypeByTag(Integer userId, Integer tagId){
 		return cardInfoDAO.getListSortTypeByTag(userId, tagId);
 	}
+	
+	public void updateDownloadHistory(Integer downloadCsvId) {
+		cardInfoDAO.updateDownloadHistory(downloadCsvId);
+	}
 }
