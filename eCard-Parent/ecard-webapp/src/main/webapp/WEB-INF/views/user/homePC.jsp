@@ -102,6 +102,9 @@
     width: 290px;
     float: none;
 }
+.some_chk{
+ background:url(../assets/img/checkbox.png) no-repeat !important ;
+}
 /* #paging .icheckbox_square-green {
     display: inline-block !important;
     *display: inline !important;
@@ -1338,13 +1341,12 @@
 	   			});
 		    	var tagId = $(this).find("input[type=checkbox]").val();
 		    	
-		    	if($(this).attr("class").indexOf("checked") == -1 || $(this).attr("class").indexOf("some_chk") == -1){
+		    	if($(this).attr("class").indexOf("not_chk") > 0){
 		    		 console.log("tagId add : " + tagId);
 				     console.log("listCardId add: " + listCardId[0].cardId);
 				     $(this).removeClass('icheckbox_square-green not_chk');
 			    	 $(this).removeClass('icheckbox_square-green some_chk');
 		    		 $(this).removeClass("icheckbox_square-green hover");
-		        	 $(this).removeClass("icheckbox_square-green");
 		        	 $(this).addClass("icheckbox_square-green checked");
 		        	 //Add card tag
 		        	 var json = {"tagId" : tagId, "listCardId" : listCardId};
