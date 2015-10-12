@@ -142,6 +142,16 @@ public class CardInfoServiceImpl implements CardInfoService {
         return cardInfoDAO.registerCardImage(cardInfo);
     }
     
+    public CardInfo registerCardImageManualPCOfAdmin(CardInfo cardInfo) {
+    	//String indexId=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Scanner);
+    	String indexId=dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.ManualPC,cardInfo.getCardIndexNo());
+    	cardInfo.setCardIndexNo(indexId);
+    	if(!StringUtils.isEmpty(indexId)){
+			cardInfo.setImageFile(DataIndexUtil.getIndexNoOfImageBy(TableTypeEnum.ImageInfor, indexId)+".jpg");
+		}
+        return cardInfoDAO.registerCardImage(cardInfo);
+    }
+    
     public int deleteCardInfo(Integer cardId){
         return cardInfoDAO.deleteCardInfo(cardId);
     }

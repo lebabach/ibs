@@ -57,6 +57,7 @@ public interface CardInfoService {
    
    public CardInfo registerCardImage(CardInfo cardInfo);
    public CardInfo registerCardImageOfAdmin(CardInfo cardInfo);
+   public CardInfo registerCardImageManualPCOfAdmin(CardInfo cardInfo);
    
    public int deleteCardInfo(Integer cardId);
    

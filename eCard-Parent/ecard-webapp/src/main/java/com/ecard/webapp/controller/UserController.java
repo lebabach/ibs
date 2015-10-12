@@ -1,5 +1,11 @@
 package com.ecard.webapp.controller;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
@@ -8,6 +14,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -47,6 +55,7 @@ import com.ecard.core.model.CardTagId;
 import com.ecard.core.model.CompanyInfo;
 import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.InquiryInfo;
+import com.ecard.core.model.PossessionCard;
 import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.UserCardMemoId;
 import com.ecard.core.model.UserInfo;
@@ -77,7 +86,10 @@ import com.ecard.core.vo.TagGroup;
 import com.ecard.core.vo.UserDownloadPermission;
 import com.ecard.core.vo.UserTagAndCardTag;
 import com.ecard.webapp.constant.CommonConstants;
+import com.ecard.webapp.controller.DataProcessController.UploadDefaultCardThread;
 import com.ecard.webapp.security.EcardUser;
+import com.ecard.webapp.util.FileUploadModel;
+import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardAndUserTagHome;
 import com.ecard.webapp.vo.CardInfoPCVo;
@@ -138,6 +150,9 @@ public class UserController {
 	
 	@Autowired
     SearchInfoService searchInfoService;
+	
+	@Value("${card.default.base64}")
+    private String defaultImage64;
 	
 	@RequestMapping("home")
 	public ModelAndView home(HttpServletRequest request) {
@@ -1205,6 +1220,98 @@ public class UserController {
 			return 0;
 		}
 		return result;
+	}
+	
+	@RequestMapping("addBusinessCard")
+	public ModelAndView addBusinessCard() {
+		return new ModelAndView("add-business-card");
+	}
+
+	@RequestMapping(value = "saveBusinessCard", method = RequestMethod.POST)
+	public ModelAndView saveBusinessCard(CardInfo cardInfo) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		int userId=ecardUser.getUserId();
+		UserInfo userInfo = userInfoService.getUserInfoByUserId(userId);
+        //Set id for user login
+        cardInfo.setCardOwnerId(userId);
+        cardInfo.setOperaterId(userId);
+        CompanyInfo companyInfo = new CompanyInfo();
+        companyInfo.setCompanyId(0);
+       
+        cardInfo.setGroupCompanyId(userInfo.getGroupCompanyId());
+        cardInfo.setCompanyInfo(companyInfo);
+        cardInfo.setCreateDate(new Date());
+        cardInfo.setUpdateDate(new Date());
+        cardInfo.setApprovalStatus(1);
+        if(cardInfo.getContactDate()==null || cardInfo.getContactDate().toString().equals("")){
+        	cardInfo.setContactDate(new Date());
+        }
+		cardInfo.setNewestCardFlg(0);
+		
+		//handle address full
+		List<String> listAddress = new ArrayList<String>(Arrays.asList(cardInfo.getAddressFull().trim().split(" ")));
+		cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
+		cardInfo.setAddress2(listAddress.get(1) != null ? listAddress.get(1) : "");
+		cardInfo.setAddress3(listAddress.get(2) != null ? listAddress.get(2) : "");
+		for(int i=0;i<=2;i++){
+			if (listAddress.get(0) != null) {
+				listAddress.remove(0);
+			}
+		}
+		cardInfo.setAddress4(listAddress.stream().collect(Collectors.joining(" ")));
+		cardInfo.setIsEditting(0);
+		cardInfo.setDateEditting(new Date());
+		
+        CardInfo cardInfoObject = cardInfoService.registerCardImageManualPCOfAdmin(cardInfo);
+      
+        PossessionCardId possessionCardId = new PossessionCardId();
+        possessionCardId.setCardId(cardInfoObject.getCardId());
+        possessionCardId.setUserId(userId);
+        possessionCardId.setContactDate(new Date());
+        possessionCardId.setCreateDate(new Date());
+        
+        PossessionCard posCard = new PossessionCard();
+        posCard.setId(possessionCardId);
+        posCard.setCardInfo(cardInfoObject);
+        possessionCardService.registerPosCard(posCard);  
+        UploadCardThread uploadThread =new UploadCardThread(cardInfoObject);
+        uploadThread.start();
+		return new ModelAndView("redirect:../home");
+	}
+	
+	class UploadCardThread extends Thread {
+		CardInfo cardInfo;
+		UploadCardThread(CardInfo cardInfo){
+			this.cardInfo=cardInfo;
+		}
+		public void run() {
+			try {
+			    ClassLoader classLoader = DataProcessController.class.getClassLoader();
+				File file = new File(classLoader.getResource("MSMINCHO.TTF").getFile());
+				Font font = Font.createFont(Font.TRUETYPE_FONT, file);
+			
+				Thread.sleep(1000);
+				BufferedImage image = UploadFileUtil.decodeToImage(defaultImage64);
+				Graphics g = image.getGraphics();
+				Graphics2D g2 = (Graphics2D)g;
+				 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					        RenderingHints.VALUE_ANTIALIAS_ON);
+				font = font.deriveFont(Font.BOLD, 20f);
+				//Font font = new Font(Font.SANS_SERIF, Font.BOLD, 20);
+				g2.setFont(font);
+				g2.setColor(Color.BLACK);
+				g2.drawString(cardInfo.getCompanyName()!= null ? StringUtilsHelper.convertToUTF8(cardInfo.getCompanyName()) : StringUtils.EMPTY, CommonConstants.xCooder, CommonConstants.yCooder);
+				g2.drawString(cardInfo.getDepartmentName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getDepartmentName()): StringUtils.EMPTY, CommonConstants.xCooder, CommonConstants.yCooder+ 30);
+				g2.drawString(cardInfo.getPositionName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getPositionName()) : StringUtils.EMPTY, CommonConstants.xCooder, CommonConstants.yCooder+ 60);
+				
+				g2.drawString(cardInfo.getName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getName()) : StringUtils.EMPTY,CommonConstants.xCooder + 30, CommonConstants.yCooder + 150);
+				g2.dispose();
+				UploadFileUtil.overrideImage(UploadFileUtil.encodeToString(image, "jpg"), scpHostName, scpUser, scpPassword, cardInfo.getImageFile());
+			} catch (Exception ex) {
+				logger.error("Error upload default card image: " + ex.getMessage());
+			}
+		}
 	}
 	
 }
