@@ -1207,6 +1207,31 @@ public class UserController {
 		return result;
 	}
 	
+	@RequestMapping (value = "addCardTagHome", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TagGroup> addCardTagHome(@RequestBody CardAndUserTagHome cardAndUserTagHome, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("addCardTag", UserController.class);
+	    for(TagUserHome tagUserHome : cardAndUserTagHome.getListCardId()){
+	    	CardTagId cardTag = new CardTagId();
+            cardTag.setCardId(tagUserHome.getCardId());
+            cardTag.setTagId(cardAndUserTagHome.getTagId());
+            cardTagService.addCardTag(cardTag);
+	    }
+		
+		return getCardTag();
+	}
+	
+	@RequestMapping (value = "deleteCardTagHome", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TagGroup> deleteCardTagHome(@RequestBody CardAndUserTagHome cardAndUserTagHome, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("deleteCardTag", UserController.class);
+		for(TagUserHome tagUserHome : cardAndUserTagHome.getListCardId()){
+			cardTagService.deleteCardTag(tagUserHome.getCardId(), cardAndUserTagHome.getTagId());
+		}
+		
+		return getCardTag();
+	}
+	
 }
 
 
