@@ -363,8 +363,7 @@ public class UserController {
 				listUserInfoCSV = null;
 				if (userInfo.getGroupCompanyId()!= null) {					
 					List<CardInfo> listCardInfo = cardInfoService.getCompanyCard(userInfo.getGroupCompanyId());
-					listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
-					System.out.println("NUMBER OF CARD INFO = "+listCardInfo.size());
+					listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);					
 				} else {
 					List<CardInfo> listCardInfo = cardInfoService.getListMyCard(userInfo.getUserId());
 					listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
@@ -425,21 +424,21 @@ public class UserController {
 			cardInfoService.updateDownloadHistory(downloadCsv.getCsvId());
 			// send mail to roleAdminID
 			List<UserInfo> listUser = userInfoService.getAllUserInfo();			
-			List<String> listUserId = null;
+			List<String> listUserId = new ArrayList<>();
 			for(UserInfo userAdmin : listUser){
 				if(userAdmin.getRoleAdminId() == 7){
-					listUserId.add(userAdmin.getUserId().toString());
+					listUserId.add(userAdmin.getEmail());
 				}
 			}			
-			if(!Arrays.asList(listUserId).contains(userInfo.getUserId().toString())){
-				listUserId.add(userInfo.getUserId().toString());
+			if(!Arrays.asList(listUserId).contains(userInfo.getEmail())){
+				listUserId.add(userInfo.getEmail());
 			}
 			
 			Context ctx = new Context();	    	
 			ctx.setVariable("company",userInfo.getCompanyNameKana());
 			ctx.setVariable("userDownload",userInfo.getNameKana());
 			ctx.setVariable("dateDownload",downloadCsv.getApprovalDate());
-//			ctx.setVariable("recordNumber",answerText);
+//			ctx.setVariable("recordNumber",answerText);			
 			sendMailDownload(listUserId,ctx);
 		} catch (Exception ex) {
 			ex.printStackTrace();
