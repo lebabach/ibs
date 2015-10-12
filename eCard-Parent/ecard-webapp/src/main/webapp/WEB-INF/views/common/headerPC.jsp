@@ -114,11 +114,13 @@
                         <span style=" position: absolute;right: 3px;top: 6px; width:121px;">お知らせ
                         	<img src="<c:url value='/assets/img/icon-notice.png'/>" width="44px;" >
                         </span>
-                        <span class="label label-warning"> 
-                        	<c:if test="${objectNotification.numberOfNotification>=1}">
-				      			${objectNotification.numberOfNotification}
-			      			</c:if>
-			      		</span>
+                        
+                       	<c:if test="${objectNotification.numberOfNotification>=1}">
+                       		<span class="label label-warning"> 
+			      			${objectNotification.numberOfNotification}
+			      			</span>
+		      			</c:if>
+			      		
                         
                     </a>
                     <ul class="dropdown-menu notification dropdown-messages " style="padding:0;">
@@ -134,7 +136,43 @@
 								
 								<c:forEach var="notification" items="${objectNotification.notifications}" varStatus="loop">
 									<tr class="pointer">
-									 <c:if test="${notification.image!=''}">
+									 <c:choose>
+									  <c:when test="${notification.image!=''}">
+									   	<td style="vertical-align: middle" width="30%"><img alt="image"
+											style="width: 100%" src="data:image/png;base64,${notification.image}"></td>
+										<td style="vertical-align: middle"  width="60%" >
+										     <c:choose>
+											  <c:when test="${notification.read_flg==0}">
+											   	<div class="content_notice" style="font-weight: bold">${notification.contents}</div>
+											  </c:when>
+											  <c:otherwise>
+											   	<div class="content_notice">${notification.contents}</div>
+											  </c:otherwise>
+											</c:choose>
+											
+											
+											<div class="date">${notification.date}</div>
+										</td>
+									  </c:when>
+									  <c:otherwise>
+									   
+										<td style="vertical-align: middle"  width="60%" colspan="2" >
+										     <c:choose>
+											  <c:when test="${notification.read_flg==0}">
+											   	<div class="content_notice" style="font-weight: bold">${notification.contents}</div>
+											  </c:when>
+											  <c:otherwise>
+											   	<div class="content_notice">${notification.contents}</div>
+											  </c:otherwise>
+											</c:choose>
+											
+											
+											<div class="date">${notification.date}</div>
+										</td>
+									  </c:otherwise>
+									</c:choose>
+									
+									 <%-- <c:if test="${notification.image!=''}">
 									      <td style="vertical-align: middle" width="30%"><img alt="image"
 											style="width: 100%" src="data:image/png;base64,${notification.image}"></td>
 								      </c:if>
@@ -152,14 +190,14 @@
 										
 										
 										<div class="date">${notification.date}</div>
-									</td>
+									</td> --%>
 									<c:choose>
 									  <c:when test="${notification.image!=''}">
 									   <td style="vertical-align: middle"  width="10%"><a href="notificationDetail/${notification.id}" class=""><i
 											class="fa fa-angle-right"></i></a></td>
 									  </c:when>
 									  <c:otherwise>
-									   <td style="vertical-align: middle"  width="10%"><a href="https://bc-ribbon.temp-holdings.co.jp/" class=""><i
+									   <td style="vertical-align: middle"  width="10%"><a class="" onclick="${notification.id}"><i
 											class="fa fa-angle-right"></i></a></td>
 									  </c:otherwise>
 									</c:choose>
@@ -209,8 +247,23 @@ $(document).ready(function() {
         var href = $(this).find("a").attr("href");
         if(href) {
             window.location = href;
+        }else{
+        	$.ajax({
+        	    type: 'POST',
+        	    url: 'notificationDetailRibbon',
+        	    data: { 
+        	        'id':$(this).find("a").attr("onclick")
+        	    },
+        	    success: function(msg){
+        	        if(msg==true){
+        	        	window.location = "https://bc-ribbon.temp-holdings.co.jp/";
+        	        }
+        	    }
+        	});
         }
     });
+    
+    
 
 });
 </script>

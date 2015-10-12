@@ -80,13 +80,10 @@
 	margin-right: 6px;
 }
 
-.content_notice {
-	max-width: 171px;
-}
 /**/
 .div-list {
 	display: inline-block;
-	margin: 105px auto 0 auto;
+	margin: 30px auto 0 auto;
 	text-align: center;
 	width: 100%;
 }
@@ -379,6 +376,13 @@ function getContactDate(){
 
 
 $(document).ready(function() {
+	//get address code 
+	$("#zipcode").change(function(){
+	  	  //does some stuff;
+	  	  $("#addressFull").text($("#p-region").val()+" "+$("#p-locality").val() +" "+$("#extended-address").val());
+	  	$("#addressFull").val($("#p-region").val()+" "+$("#p-locality").val() +" "+$("#extended-address").val());
+	})
+	
 	$("#btnSave").click(function(){
 		 resetValidationForm();
 		if (!checkValidationForm()) {
@@ -408,6 +412,8 @@ $(document).ready(function() {
 	$.fn.autoKana("#companyname", "#companyNameKanaId", {
 		katakana : true
 	});
+	
+	
 });
 
 </script>
@@ -415,7 +421,7 @@ $(document).ready(function() {
 	<div class="box-1">
 			<div class="title-box-1">名刺データ作成<button class="btn btn-sm btn-primary pull-right click-memo ch-regist" id="btnSave">登録</button></div>
 		<div class="content-box-1">
-			<form id="submitForm"class="for-add-bu" method="POST"
+			<form id="submitForm"class="for-add-bu h-adr" method="POST"
 				action="/ecard-webapp/user/saveBusinessCard/"
 				accept-charset="UFT-8">
 				<fieldset>
@@ -488,9 +494,19 @@ $(document).ready(function() {
 						class="input-a-b" name="companyUrl" id="exampleInputName2">
 				</fieldset>
 				<fieldset>
-					<label class="l-a-b"><fmt:message key='edit.card.zipcode' /><span>*</span></label> <input
-						value="" class="input-a-b" name="zipCode" id="zipcode">
+					<label class="l-a-b"><fmt:message key='edit.card.zipcode' /><span>*</span></label> 
+					<input class="input-a-b p-postal-code" name="zipCode" id="zipcode">
 						<p class="mesage_error error_zipcode"></p>
+						<span class="p-country-name" style="display: none;">Japan</span>
+
+										<input type="text" class="p-region" readonly="" id="p-region"
+											style="display: none;"> 
+										<input type="text"
+											class="p-locality" readonly="" id="p-locality"
+											style="display: none;"> 
+										<input type="text"
+											class="p-street-address p-extended-address"
+											id="extended-address" style="display: none;">
 				</fieldset>
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='card.detail.addressFull' /></label>
@@ -504,7 +520,7 @@ $(document).ready(function() {
 					<div class="text-a-b-d">
 						<div class="input-group date">
 							<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-							<input name="contactDate1" class="form-control create-date" />
+							<input name="contactDate1" class="form-control create-date" disabled/>
 							<input type="hidden" name="contactDate" class="form-control create-date"> 
 						</div>
 					</div>
@@ -512,7 +528,6 @@ $(document).ready(function() {
 				</fieldset> 
 
 			</form>
-
 		</div>
 	</div>
 </div>

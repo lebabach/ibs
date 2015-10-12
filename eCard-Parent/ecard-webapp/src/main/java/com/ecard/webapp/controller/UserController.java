@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +25,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.HttpMethod;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -32,16 +34,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
@@ -80,7 +86,6 @@ import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoCSV;
 import com.ecard.core.vo.CardInfoMemo;
 import com.ecard.core.vo.CardInfoUserVo;
-import com.ecard.core.vo.ContactHistory;
 import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.SearchInfo;
 import com.ecard.core.vo.TagForCard;
@@ -96,6 +101,7 @@ import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardAndUserTagHome;
 import com.ecard.webapp.vo.CardInfoPCVo;
+import com.ecard.webapp.vo.CardInfoSaleforce;
 import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.ListCardDelete;
 import com.ecard.webapp.vo.ObjectCards;
@@ -621,6 +627,91 @@ public class UserController {
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
 		return contactHistoryList;
+	}
+	
+	@RequestMapping (value = "loginSaleForce", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String loginSaleForce(@RequestBody CardInfoSaleforce cardInfo) {
+		logger.debug("loginSaleForce", UserController.class);
+		
+		final String URI = "https://bc-ribbon.temp-holdings.co.jp/api/";
+
+		RestTemplate restTemplate = new RestTemplate();
+		String result = "";
+		try{
+			String addressFull = cardInfo.getAddress1() + " " + cardInfo.getAddress2() + " " + cardInfo.getAddress3() + " " + cardInfo.getAddress4();
+			String lastName = cardInfo.getLastname();
+			String firstName = cardInfo.getFirstname();
+			String positionName = cardInfo.getPositionName();
+			String companyName = cardInfo.getCompanyName();
+			String address2 = cardInfo.getAddress2();
+			String address1 = cardInfo.getAddress1();
+			String companyUrl = cardInfo.getCompanyUrl();
+			String departmentName = cardInfo.getDepartmentName();
+			
+			if(addressFull.length() > 255){
+				addressFull = addressFull.substring(0, 255);
+			}
+			
+			if(lastName.length() > 80){
+				lastName = lastName.substring(0, 80);
+			}
+			
+			if(firstName.length() > 40){
+				firstName = firstName.substring(0, 40);
+			}
+			
+			if(positionName.length() > 128){
+				positionName = positionName.substring(0, 128);
+			}
+			
+			if(companyName.length() > 255){
+				companyName = companyName.substring(0, 255);
+			}
+			
+			if(address2.length() > 40){
+				address2 = address2.substring(0, 40);
+			}
+			
+			if(address1.length() > 80){
+				address1 = address1.substring(0, 80);
+			}
+			
+			if(companyUrl.length() > 255){
+				companyUrl = companyUrl.substring(0, 255);
+			}
+			
+			if(departmentName.length() > 255){
+				departmentName = departmentName.substring(0, 255);
+			}
+			
+			
+			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+			map.add("lastname", lastName);
+			map.add("firstname", firstName);
+			map.add("positionName", positionName);
+			map.add("companyName", companyName);
+			map.add("address1", address1);
+			map.add("address2", address2);
+			map.add("address3", cardInfo.getAddress3());
+			map.add("address4", cardInfo.getAddress4());
+			map.add("telNumberCompany", cardInfo.getTelNumberCompany());
+			map.add("mobileNumber", cardInfo.getMobileNumber());
+			map.add("faxNumber", cardInfo.getFaxNumber());
+			map.add("email", cardInfo.getEmail());
+			map.add("companyUrl", companyUrl);
+			map.add("departmentName", departmentName);
+			map.add("zipCode", cardInfo.getZipCode());
+			map.add("login_id", cardInfo.getLogin_id());
+			map.add("login_pass", cardInfo.getLogin_pass());
+			
+			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+			result = restTemplate.postForObject(URI, map, String.class);
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		return result;
 	}
 
 	@RequestMapping(value = "profile/{id:[\\d]+}", method = RequestMethod.GET)
@@ -1379,6 +1470,16 @@ public class UserController {
 				 tagGroup.setCardId(str.substring(1,str.length()));
 			}
 		}
+	}
+	
+	@RequestMapping(value = "notificationDetailRibbon", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean notificationDetailRibbon(@RequestParam(value = "id") int id) {
+		UserNotification notify=new UserNotification();
+		notify.setNoticeId(id);
+		notify.setReadFlg(1);
+		notificationInfoService.updateReadFlgById(notify);
+		return true;
 	}
 	
 	class UploadCardThread extends Thread {
