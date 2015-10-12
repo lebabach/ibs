@@ -364,18 +364,23 @@ a {
 </style>
 					<script type="text/javascript">
                           $(document).ready(function(){
-                    	  	
+                        	$("#lblContactDate").show();
+                   	   	    $("input[name=contactDate]").hide();
+                        	$('.p-date').datepicker({
+ 	      							language : 'en',
+ 	      							todayHighlight : true,
+ 	      							keyboardNavigation : false,
+ 	      							format : 'yyyy-mm-dd',
+ 	      							forceParse : true,
+ 	      							autoclose : true,
+ 	      							calendarWeeks : true
+   					     	});
+                        	  
                         	  $('.div-pen-contact').on({
                                'click':function(){
-	                            	   $('.p-date').datepicker({
-		   	      							language : 'en',
-		   	      							todayHighlight : true,
-		   	      							keyboardNavigation : false,
-		   	      							format : 'yyyy-mm-dd',
-		   	      							forceParse : true,
-		   	      							autoclose : true,
-		   	      							calendarWeeks : true
-		     					     	});
+                            	   	   $("#lblContactDate").hide();
+                            	   	   $("input[name=contactDate]").show();
+	                            	   
                                         $(".p-date").addClass("p-date-input");
                                         $('.p-fomr').show();
                                         $('.div-pen').addClass('div-pen-ac') 
@@ -385,15 +390,9 @@ a {
                         	  
                         	  $('.input-reset-date').on({
 	                               'click':function(){
-		                            	   $('.p-date').datepicker({
-			   	      							language : 'en',
-			   	      							todayHighlight : true,
-			   	      							keyboardNavigation : false,
-			   	      							format : 'yyyy-mm-dd',
-			   	      							forceParse : true,
-			   	      							autoclose : true,
-			   	      							calendarWeeks : true
-			     					     	});
+	                            	   $("#lblContactDate").show();
+                            	   	   $("input[name=contactDate]").hide();
+                            	   	   
 	                                          $(".p-date").removeClass("p-date-input");
 	                                          $('.p-fomr').hide();
 	                                          $('.div-pen').removeClass('div-pen-ac') 
@@ -445,6 +444,7 @@ a {
 					<div class="panel-body" style="padding: 12px 0 0 0;">
 						<form name="frmEditContactDate" id="frmEditContactDate">
 							<input type="hidden" value="${ cardInfo.cardId }" name="cardId" />
+							<label id="lblContactDate" style="display:none;margin-left:15px;font-weight:normal;"><fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy-MM-dd"/></label>
 							<input value="<fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy-MM-dd"/>" class="p-date" name="contactDate" readonly="readonly">
 							<p class="p-fomr" style="display: none">
 								<input type="button" class="input-submit-date" value="保存" id="editContactDate"> 
