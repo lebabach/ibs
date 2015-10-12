@@ -136,7 +136,43 @@
 								
 								<c:forEach var="notification" items="${objectNotification.notifications}" varStatus="loop">
 									<tr class="pointer">
-									 <c:if test="${notification.image!=''}">
+									 <c:choose>
+									  <c:when test="${notification.image!=''}">
+									   	<td style="vertical-align: middle" width="30%"><img alt="image"
+											style="width: 100%" src="data:image/png;base64,${notification.image}"></td>
+										<td style="vertical-align: middle"  width="60%" >
+										     <c:choose>
+											  <c:when test="${notification.read_flg==0}">
+											   	<div class="content_notice" style="font-weight: bold">${notification.contents}</div>
+											  </c:when>
+											  <c:otherwise>
+											   	<div class="content_notice">${notification.contents}</div>
+											  </c:otherwise>
+											</c:choose>
+											
+											
+											<div class="date">${notification.date}</div>
+										</td>
+									  </c:when>
+									  <c:otherwise>
+									   
+										<td style="vertical-align: middle"  width="60%" colspan="2" >
+										     <c:choose>
+											  <c:when test="${notification.read_flg==0}">
+											   	<div class="content_notice" style="font-weight: bold">${notification.contents}</div>
+											  </c:when>
+											  <c:otherwise>
+											   	<div class="content_notice">${notification.contents}</div>
+											  </c:otherwise>
+											</c:choose>
+											
+											
+											<div class="date">${notification.date}</div>
+										</td>
+									  </c:otherwise>
+									</c:choose>
+									
+									 <%-- <c:if test="${notification.image!=''}">
 									      <td style="vertical-align: middle" width="30%"><img alt="image"
 											style="width: 100%" src="data:image/png;base64,${notification.image}"></td>
 								      </c:if>
@@ -154,7 +190,7 @@
 										
 										
 										<div class="date">${notification.date}</div>
-									</td>
+									</td> --%>
 									<c:choose>
 									  <c:when test="${notification.image!=''}">
 									   <td style="vertical-align: middle"  width="10%"><a href="notificationDetail/${notification.id}" class=""><i

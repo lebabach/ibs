@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +25,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.HttpMethod;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -32,16 +34,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
@@ -80,7 +86,6 @@ import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoCSV;
 import com.ecard.core.vo.CardInfoMemo;
 import com.ecard.core.vo.CardInfoUserVo;
-import com.ecard.core.vo.ContactHistory;
 import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.SearchInfo;
 import com.ecard.core.vo.TagForCard;
@@ -96,6 +101,7 @@ import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardAndUserTagHome;
 import com.ecard.webapp.vo.CardInfoPCVo;
+import com.ecard.webapp.vo.CardInfoSaleforce;
 import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.ListCardDelete;
 import com.ecard.webapp.vo.ObjectCards;
@@ -328,11 +334,12 @@ public class UserController {
 	public ModelAndView DownloadCSV(HttpServletRequest request) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		UserDownloadPermission permissionType = userInfoService.getPermisionDownloadByUserId(ecardUser.getUserId());
+		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+		
 		List<DownloadCsv> downloadCSVHistory = userInfoService.getHistoryCSVDownload(ecardUser.getUserId());
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("download");
-		modelAndView.addObject("permissionType", permissionType);
+		modelAndView.addObject("roleAdminId", userInfo.getRoleAdminId());
 		modelAndView.addObject("downloadCSVHistory", downloadCSVHistory);
 		return modelAndView;
 	}
@@ -343,10 +350,9 @@ public class UserController {
 		try {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			UserInfo userInfo = userInfoService.findUserByEmail(authentication.getName());
-			UserDownloadPermission permissionType = userInfoService.getPermisionDownloadByUserId(userInfo.getUserId());
+			
 			DownloadCsv downloadCsvId = new DownloadCsv();
 			downloadCsvId.setUserInfo(userInfo);
-			downloadCsvId.setCsvApprovalStatus(0);
 			downloadCsvId.setApprovalDate(new Date());
 			downloadCsvId.setRequestDate(new Date());
 
@@ -355,8 +361,7 @@ public class UserController {
 			List<CardInfoCSV> listUserInfoCSV;
 			if (id == 2 ) {
 				listUserInfoCSV = null;
-				if (userInfo.getGroupCompanyId()!= null) {
-					
+				if (userInfo.getGroupCompanyId()!= null) {					
 					List<CardInfo> listCardInfo = cardInfoService.getCompanyCard(userInfo.getGroupCompanyId());
 					listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
 					System.out.println("NUMBER OF CARD INFO = "+listCardInfo.size());
@@ -365,13 +370,11 @@ public class UserController {
 					listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
 				}
 				fileName = "CompanyCard_" + current + userInfo.getUserId() + ".csv";
-				downloadCsvId.setCsvType(CsvConstant.COMPANY_CARDS);
-				createCSVFile(response, fileName, listUserInfoCSV, CsvConstant.DOWNLOAD_NOT_DIRECT);
+				downloadCsvId.setCsvType(CsvConstant.COMPANY_CARDS);				
 				downloadCsvId.setCsvUrl(fileName);
+				createCSVFile(response, fileName, listUserInfoCSV, CsvConstant.DOWNLOAD_NOT_DIRECT);
 				cardInfoService.saveDownloadHistory(downloadCsvId);
-			}
-
-			if (id == 1) {
+			} else {
 				List<CardInfo> listCardInfo = cardInfoService.getListMyCard(userInfo.getUserId());
 				listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
 				fileName = "MyCard_" + current + userInfo.getUserId() + ".csv";
@@ -384,24 +387,17 @@ public class UserController {
 			ex.printStackTrace();
 		}
 	}
-
-	@RequestMapping(value = "downloadCSV", method = RequestMethod.POST)
-	@ResponseBody
-	public void downloadCSV(HttpServletRequest request,HttpSession session){		
-		try {
-			int csvID = parseIntParameter(request.getParameter("csvID"),0);				
-			cardInfoService.updateDownloadHistory(csvID);			
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
 	
-	@RequestMapping(value = "/downloadFileCSV/{fileName}", method = RequestMethod.GET)
+	@RequestMapping(value = "/downloadFileCSV/{id:[\\d]+}", method = RequestMethod.GET)
 	@ResponseBody
-	public void downloadFileCSV(HttpServletResponse response, HttpServletRequest request, @PathVariable("fileName") String fileName)
+	public void downloadFileCSV(HttpServletResponse response, HttpServletRequest request, @PathVariable("id") int id)
 			throws IOException {
-		try {
-			fileName = fileName + ".csv";
+		try {			
+			DownloadCsv downloadCsv = cardInfoService.getDownloadCSV(id);
+			String fileName = downloadCsv.getCsvUrl();
+			
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			UserInfo userInfo = userInfoService.findUserByEmail(authentication.getName());
 			// Connect to SCP and download File
 			byte[] myBytes = UploadFileUtil.getFileCSVFromSCP(fileName, scpHostName, scpUser, scpPassword,
 					Integer.parseInt(scpPort));
@@ -426,28 +422,45 @@ public class UserController {
 				os.close();
 			}
 			//update History
+			cardInfoService.updateDownloadHistory(downloadCsv.getCsvId());
+			// send mail to roleAdminID
+			List<UserInfo> listUser = userInfoService.getAllUserInfo();			
+			List<String> listUserId = null;
+			for(UserInfo userAdmin : listUser){
+				if(userAdmin.getRoleAdminId() == 7){
+					listUserId.add(userAdmin.getUserId().toString());
+				}
+			}			
+			if(!Arrays.asList(listUserId).contains(userInfo.getUserId().toString())){
+				listUserId.add(userInfo.getUserId().toString());
+			}
+			
+			Context ctx = new Context();	    	
+			ctx.setVariable("company",userInfo.getCompanyNameKana());
+			ctx.setVariable("userDownload",userInfo.getNameKana());
+			ctx.setVariable("dateDownload",downloadCsv.getApprovalDate());
+//			ctx.setVariable("recordNumber",answerText);
+			sendMailDownload(listUserId,ctx);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 	
-	@RequestMapping(value = "/deleteFileCSV/{fileName}", method = RequestMethod.GET)
-	@ResponseBody
-	public void deleteFileCSV(HttpServletResponse response, HttpServletRequest request, @PathVariable("fileName") String fileName)
-			throws IOException{
+	public void deleteFileCSV(String fileName) throws IOException{
 		
+		String saveFileCSV = System.getProperty("user.dir") + "/csv";
+		String fileExist = saveFileCSV + "/" + fileName;
+
+		File myFile = new File(fileExist);
+		if(myFile.exists())
+		    myFile.delete();
 	}
 	
-	@RequestMapping(value = "/sendMailDownload")
-	public void sendMailDownload(HttpServletResponse response, HttpServletRequest request) throws IOException{
-		Context ctx = new Context();
-    	String answerText = "asdfasdf\r\n asdfasdfadfa".replaceAll("(\r\n|\n)", " <br />");
-		ctx.setVariable("company",answerText);
-		ctx.setVariable("userDownload",answerText);
-		ctx.setVariable("dateDownload",answerText);
-		ctx.setVariable("recordNumber",answerText);
+	
+	public void sendMailDownload(List<String> listUserId,Context ctx) throws IOException{
+		
 		try {
-			emailService.sendMail(CommonConstants.USER_FROM_MAIL, "" ,CommonConstants.TITLE_DOWNLOAD_MAIL, ctx, "mailtodownloadCSV");
+			emailService.sendMailContact(CommonConstants.USER_FROM_MAIL, listUserId, CommonConstants.TITLE_DOWNLOAD_MAIL, ctx, "mailtodownloadCSV");			
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
@@ -461,7 +474,7 @@ public class UserController {
 
 		String absoluteFilePath = "";
 		absoluteFilePath = workingDirectory + File.separator + csvFileName;
-		System.out.println("BBBBBBBB"+absoluteFilePath);
+		
 		String[] header = { "cardId", "companyName", "companyNameKana", "departmentName", "positionName", "lastName",
 				"firstName", "lastNameKana", "firstNameKana", "email", "zipCode", "addressFull", "address1", "address2",
 				"address3", "telNumberCompany", "telNumberDepartment", "telNumberDirect", "faxNumber", "mobileNumber",
@@ -481,12 +494,9 @@ public class UserController {
 				csvWriter.write(aCard, header);
 			}
 			csvWriter.close();
-			
-    		
 		} else {
 			response.setContentType("text/html");
-			ICsvBeanWriter csvWriter = new CsvBeanWriter(new FileWriter(absoluteFilePath),
-					CsvPreference.STANDARD_PREFERENCE);
+			ICsvBeanWriter csvWriter = new CsvBeanWriter(new FileWriter(absoluteFilePath), CsvPreference.STANDARD_PREFERENCE);
 			csvWriter.writeHeader(header);
 
 			for (CardInfoCSV aCard : listUserInfoCSV) {
@@ -624,6 +634,91 @@ public class UserController {
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
 		return contactHistoryList;
+	}
+	
+	@RequestMapping (value = "loginSaleForce", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String loginSaleForce(@RequestBody CardInfoSaleforce cardInfo) {
+		logger.debug("loginSaleForce", UserController.class);
+		
+		final String URI = "https://bc-ribbon.temp-holdings.co.jp/api/";
+
+		RestTemplate restTemplate = new RestTemplate();
+		String result = "";
+		try{
+			String addressFull = cardInfo.getAddress1() + " " + cardInfo.getAddress2() + " " + cardInfo.getAddress3() + " " + cardInfo.getAddress4();
+			String lastName = cardInfo.getLastname();
+			String firstName = cardInfo.getFirstname();
+			String positionName = cardInfo.getPositionName();
+			String companyName = cardInfo.getCompanyName();
+			String address2 = cardInfo.getAddress2();
+			String address1 = cardInfo.getAddress1();
+			String companyUrl = cardInfo.getCompanyUrl();
+			String departmentName = cardInfo.getDepartmentName();
+			
+			if(addressFull.length() > 255){
+				addressFull = addressFull.substring(0, 255);
+			}
+			
+			if(lastName.length() > 80){
+				lastName = lastName.substring(0, 80);
+			}
+			
+			if(firstName.length() > 40){
+				firstName = firstName.substring(0, 40);
+			}
+			
+			if(positionName.length() > 128){
+				positionName = positionName.substring(0, 128);
+			}
+			
+			if(companyName.length() > 255){
+				companyName = companyName.substring(0, 255);
+			}
+			
+			if(address2.length() > 40){
+				address2 = address2.substring(0, 40);
+			}
+			
+			if(address1.length() > 80){
+				address1 = address1.substring(0, 80);
+			}
+			
+			if(companyUrl.length() > 255){
+				companyUrl = companyUrl.substring(0, 255);
+			}
+			
+			if(departmentName.length() > 255){
+				departmentName = departmentName.substring(0, 255);
+			}
+			
+			
+			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+			map.add("lastname", lastName);
+			map.add("firstname", firstName);
+			map.add("positionName", positionName);
+			map.add("companyName", companyName);
+			map.add("address1", address1);
+			map.add("address2", address2);
+			map.add("address3", cardInfo.getAddress3());
+			map.add("address4", cardInfo.getAddress4());
+			map.add("telNumberCompany", cardInfo.getTelNumberCompany());
+			map.add("mobileNumber", cardInfo.getMobileNumber());
+			map.add("faxNumber", cardInfo.getFaxNumber());
+			map.add("email", cardInfo.getEmail());
+			map.add("companyUrl", companyUrl);
+			map.add("departmentName", departmentName);
+			map.add("zipCode", cardInfo.getZipCode());
+			map.add("login_id", cardInfo.getLogin_id());
+			map.add("login_pass", cardInfo.getLogin_pass());
+			
+			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+			result = restTemplate.postForObject(URI, map, String.class);
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		return result;
 	}
 
 	@RequestMapping(value = "profile/{id:[\\d]+}", method = RequestMethod.GET)
