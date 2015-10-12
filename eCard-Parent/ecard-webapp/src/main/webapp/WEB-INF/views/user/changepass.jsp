@@ -80,9 +80,6 @@
 	margin-right: 6px;
 }
 
-.content_notice {
-	max-width: 171px;
-}
 /**/
 .div-list {
 	display: inline-block;
@@ -171,31 +168,22 @@
 	color: #666;
 }
 
-.input-submit {
-	cursor: pointer;
-	font-size: 1.4em;
-	margin: 20px auto 20px 153px;
-	padding: 10px 12px 8px 12px;
-	border: 1px solid #12476a;
-	border-radius: 3px;
-	background: linear-gradient(#307cae, #27648d);
-	background: -webkit-gradient(linear, left top, left bottom, from(#307cae),
-		to(#27648d));
-	background: -moz-linear-gradient(top, #307cae, #27648d);
-	background-color: #307caf;
-	color: #ffffff !important;
-	vertical-align: middle;
-	text-shadow: 0 -1px 2px #000;
-	box-shadow: 1px 1px 0 #649dc2 inset;
-	white-space: nowrap;
-	-ms-filter:
-		"progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#307cae, EndColorStr=#27648d)";
-	filter: progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#307cae,
-		EndColorStr=#27648d);
-	font-size: 14px;
-	width: 524px;
-	display: block;
-}
+.input-submit{
+        cursor: pointer;
+    font-size: 1.4em;
+    margin: 20px auto 20px 153px;
+    padding: 10px 12px 8px 12px;
+    border: 1px solid #e3157a;
+    border-radius: 3px;
+    background-color: #e3157a;
+    color: #ffffff !important;
+    vertical-align: middle;
+    text-shadow: 0 -1px 2px #000;
+    white-space: nowrap;
+    font-size: 14px;
+    width: 524px;
+    display: block;
+      }
 </style>
 <div class="div-list">
 	<div class="box-1">

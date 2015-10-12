@@ -114,11 +114,13 @@
                         <span style=" position: absolute;right: 3px;top: 6px; width:121px;">お知らせ
                         	<img src="<c:url value='/assets/img/icon-notice.png'/>" width="44px;" >
                         </span>
-                        <span class="label label-warning"> 
-                        	<c:if test="${objectNotification.numberOfNotification>=1}">
-				      			${objectNotification.numberOfNotification}
-			      			</c:if>
-			      		</span>
+                        
+                       	<c:if test="${objectNotification.numberOfNotification>=1}">
+                       		<span class="label label-warning"> 
+			      			${objectNotification.numberOfNotification}
+			      			</span>
+		      			</c:if>
+			      		
                         
                     </a>
                     <ul class="dropdown-menu notification dropdown-messages " style="padding:0;">
@@ -159,7 +161,7 @@
 											class="fa fa-angle-right"></i></a></td>
 									  </c:when>
 									  <c:otherwise>
-									   <td style="vertical-align: middle"  width="10%"><a href="https://bc-ribbon.temp-holdings.co.jp/" class=""><i
+									   <td style="vertical-align: middle"  width="10%"><a class="" onclick="${notification.id}"><i
 											class="fa fa-angle-right"></i></a></td>
 									  </c:otherwise>
 									</c:choose>
@@ -189,7 +191,7 @@
                           <li><a href="<c:url value='/user/mailbox' />">ご意見・不具合の連絡</a></li>
                           <li><a href="collect_name.html">繋がった名刺検索</a></li>
                           <li><a href="companies_tree.html">顧客組織ツリー</a></li>
-                          <li><a href="add_business_card.html">名刺データ作成</a></li>
+                          <li><a href="<c:url value='/user/addBusinessCard' />">名刺データ作成</a></li>
                           <c:if test="${pageContext.request.isUserInRole('ROLE_LEADER') or pageContext.request.isUserInRole('ROLE_OPERATOR') or pageContext.request.isUserInRole('ROLE_SUPERVISOR') or pageContext.request.isUserInRole('ROLE_ADMIN') or pageContext.request.isUserInRole('ROLE_AUTHORITY_USER') or pageContext.request.isUserInRole('ROLE_OPERATOR_MANAGER') }">
 						    <li><a href="<c:url value='/manager/home'/>">管理ページ</a></li>
 					      </c:if>
@@ -209,8 +211,23 @@ $(document).ready(function() {
         var href = $(this).find("a").attr("href");
         if(href) {
             window.location = href;
+        }else{
+        	$.ajax({
+        	    type: 'POST',
+        	    url: 'notificationDetailRibbon',
+        	    data: { 
+        	        'id':$(this).find("a").attr("onclick")
+        	    },
+        	    success: function(msg){
+        	        if(msg==true){
+        	        	window.location = "https://bc-ribbon.temp-holdings.co.jp/";
+        	        }
+        	    }
+        	});
         }
     });
+    
+    
 
 });
 </script>

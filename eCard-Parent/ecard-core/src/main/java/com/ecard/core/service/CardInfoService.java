@@ -57,6 +57,7 @@ public interface CardInfoService {
    
    public CardInfo registerCardImage(CardInfo cardInfo);
    public CardInfo registerCardImageOfAdmin(CardInfo cardInfo);
+   public CardInfo registerCardImageManualPCOfAdmin(CardInfo cardInfo);
    
    public int deleteCardInfo(Integer cardId);
    
@@ -135,5 +136,7 @@ public interface CardInfoService {
    public List<CardInfoUserVo> getListPossessionCardByTag(Integer userId, Integer tagId, int pageNumber);
    
    public List<String> getListSortTypeByTag(Integer userId, Integer tagId);
+   
+   public void updateDownloadHistory(Integer downloadCsvId);
    
 }
