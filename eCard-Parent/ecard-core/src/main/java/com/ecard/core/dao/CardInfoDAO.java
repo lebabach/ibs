@@ -133,5 +133,7 @@ public interface CardInfoDAO {
     public List<CardInfoUserVo> getListPossessionCardByTag(Integer userId, Integer tagId, int pageNumber);
     
     public List<String> getListSortTypeByTag(Integer userId, Integer tagId);
+    
+    public void updateDownloadHistory(Integer downloadCsvId);
 
 }

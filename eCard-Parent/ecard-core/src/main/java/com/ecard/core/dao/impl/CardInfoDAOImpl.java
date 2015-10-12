@@ -726,12 +726,11 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 //    ON ui.company_name = ci.company_name
 //    WHERE ui.user_id = 2 AND ci.delete_flg = 0 AND ci.approval_status = 1
     
-    public List<CardInfo> getCompanyCard(Integer groupCompanyName){
-    	/*Query query = getEntityManager().createQuery("SELECT c FROM CardInfo c"
-    			+ "WHERE c.companyName = :companyName "
-    			+ "AND c.approvalStatus = 1 AND c.deleteFlg = 0");*/
-    	Query query = getEntityManager().createQuery("SELECT p.cardInfo FROM PossessionCard p LEFT JOIN p.cardInfo c WHERE p.id.userId IN "
+    public List<CardInfo> getCompanyCard(Integer groupCompanyName){    	
+    	/*Query query = getEntityManager().createQuery("SELECT p.cardInfo FROM PossessionCard p LEFT JOIN p.cardInfo c WHERE p.id.userId IN "
     			+ " (SELECT ui.userId FROM UserInfo ui WHERE ui.groupCompanyId = :groupCompanyName)"
+    			+ " AND c.approvalStatus = 1 AND c.deleteFlg = 0");*/
+    	Query query = getEntityManager().createQuery("SELECT c FROM CardInfo c WHERE c.groupCompanyId = :groupCompanyName"
     			+ " AND c.approvalStatus = 1 AND c.deleteFlg = 0");
     	
     	query.setParameter("groupCompanyName", groupCompanyName);
@@ -1269,4 +1268,11 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		query.setFirstResult(0 * this.maxResult).setMaxResults(this.maxResult);
 	    return  query.getResultList();
 	}
+	
+	public void updateDownloadHistory(Integer downloadCsvId){
+		Query query = getEntityManager().createQuery("UPDATE DownloadCsv c SET c.csvApprovalStatus = 1 , c.approvalDate = NOW() WHERE c.csvId = :csvId");
+		query.setParameter("csvId", downloadCsvId);
+        query.executeUpdate();
+	}
+	
 }
