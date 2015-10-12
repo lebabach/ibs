@@ -268,8 +268,9 @@ public class UserController {
 				 }
 			}			
 		}
-		
-		lstNameSort = lstNameSort.stream().distinct().sorted().collect(Collectors.toList());
+		if(typeSort == SearchConditions.NAME.getValue() || typeSort == SearchConditions.COMPANY.getValue() ){
+		    lstNameSort = lstNameSort.stream().distinct().sorted().collect(Collectors.toList());
+		}
 		for (String nameSort : lstNameSort) {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
 			for (CardInfoUserVo cardInfo : lstCardInfo) {
