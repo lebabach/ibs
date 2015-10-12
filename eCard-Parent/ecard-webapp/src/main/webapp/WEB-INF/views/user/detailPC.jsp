@@ -1,6 +1,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 
@@ -477,6 +478,10 @@ a {
 .panel-body-memo {
 	border-bottom: 1px solid #ddd;
 }
+
+.career_section{
+	border-bottom : 0px !important;
+}
 </style>
 					<script type="text/javascript">
                           $(document).ready(function(){
@@ -514,6 +519,97 @@ a {
 					</ul>
 				</div>
 				</c:if>
+				
+				<!-- Contact history -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5 style="position: relative;">コンタクト履歴
+                        <c:if test="${ isMyCard == true }">
+                        <button data-toggle="modal" data-target="#modal-example2" class="btn btn-primary btn-lg" 
+                        	style=" position: absolute;right: 0;top: -4px; padding:6px 9px; font-size:13px;">の追加</button>
+                        </c:if>	
+                        </h5>
+                    </div>
+
+                     <div class="modal" id="modal-example2" tabindex="-1">
+                          <div class="modal-dialog">
+                             <form action="<c:url value='/user/addContactHistory' />" method="post" name="saveContactFrm" id="saveContactFrm">
+	                             <div class="modal-content">
+	                              <!-- modal header -->
+	                                <div class="modal-header">
+	                                  <button type="button" class="close" data-dismiss="modal">
+	                                    <span aria-hidden="true">×</span>
+	                                  </button>
+	                                  <h4 class="modal-title" id="modal-label">コンタクト履歴の追加</h4>
+	                                </div>
+	                                <!-- modal body -->
+	                                  <div class="modal-body">
+	                                    <div class="form-group">
+	                                        <label for="contactDate">コンタクト日付</label>
+	                                        <input class="form-control" id="contactDate" name="contactDate" placeholder="" value="">
+	                                    </div>
+	                                    <div class="form-group">
+	                                      <label for="contactMemo">内容</label>
+	                                        <textarea style="width:100%; height:200px; border:1px solid #e5e6e7" name="contactMemo" id="contactMemo"></textarea>
+	                                    </div>
+	                                </div>
+	                                  <div style="text-align: center;">コンタクト履歴は公開されるため、機密情報を入力しないこと</div>
+	                                  <div class="modal-footer" style="text-align:center;">
+	
+	                                  <button style="width:200px;" type="button" class="btn btn-info" id="saveContactHistory">登録</button>
+	                                </div>
+	                            </div>
+                            </form>
+                         </div>
+                    </div>                
+					
+					<c:if test="${fn:length(contactHistoryList) gt 5}">
+						<style type="text/css">
+							#contact-hist-body {
+								height: 500px;
+								overflow-y: auto;
+								overflow-x: hidden;
+							}
+						</style>
+					</c:if>
+					<style type="text/css">
+                      .delContactHist{
+                    		float: right;
+							width: 17px;
+							height: 22px;
+							font-size: 14px;
+							text-align: center;
+							cursor: pointer;
+                      }
+					  #modal-example2 .datepicker.dropdown-menu{z-index:100000 !important;}
+                    </style>
+                    <div class="panel-body" id="contact-hist-body">
+                        <c:if test="${ not empty contactHistoryList }">
+                        	<c:forEach var="contactHistory" items="${contactHistoryList}" varStatus="loop">
+	                        <div class="career_section selected">
+	                            <div class="career_date" style="font-weight: bold !important;">
+	                            	<fmt:formatDate value='${ contactHistory.contactDate }' pattern="yyyy/MM/dd"/>
+	                            	<div class="delContactHist" id="${ contactHistory.userId }">x</div>
+	                            </div>
+	                            <div>
+	                                <table class="table">
+	                                    <tbody>
+	                                        <tr id="rowData">
+	                                            <td>
+	                                                <p><c:out value="${ contactHistory.contactMemo }"></c:out></p>
+	                                            </td>
+	                                        </tr>
+	                                    </tbody>
+	                                </table>
+	                            </div>
+	                        </div>
+	                        </c:forEach>
+                        </c:if>
+                    </div>
+                </div>
+				<!-- End contact history -->
+				
+				<!-- User connected -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h5>刺交換日</h5>
@@ -544,6 +640,7 @@ a {
 						</c:if>						
 					</div>
 				</div>
+				<!-- End User connected -->
 			</div>
 			<c:if test="${ isMyCard == true }">
 			<button id="delBusinessCard" type="button"
@@ -975,7 +1072,34 @@ label.error {
          var cardIdParam = arrParam[7];
          //Find get cardId
          var hCardId = $("#rowData").find('.card-Id').val();
-             	 
+         
+         //Add contact history
+         $('#contactDate').click(function(){
+        	 $(".datepicker").css("zIndex", 100000000000);
+         });
+         
+         $('#contactDate').datepicker({
+   			language : 'en',
+   			todayHighlight : true,
+   			keyboardNavigation : false,
+   			format : 'yyyy-mm-dd',
+   			forceParse : true,
+   			autoclose : true,
+   			calendarWeeks : true
+       	 });
+         
+         $("#saveContactHistory").click(function(){
+       		saveContactHistory(); 
+         });
+         
+         $('.delContactHist').on({
+           'click':function(){
+        	   console.log(this.id);
+        	     var json = {"cardId" : $("input[name=cardId]").val(), "userId" : this.id};  
+        	   	 delContactHistory(json);
+              }
+          });
+                      	 
          //Get tag for card
          getTagForCard();
          
@@ -1616,8 +1740,73 @@ label.error {
 	    if (month.length < 2) month = '0' + month;
 	    if (day.length < 2) day = '0' + day;
 
-	    return [year, month, day].join('-');
+	    return [year, month, day].join('/');
 	}
 	
+	function saveContactHistory(){
+		var json = {"cardId" : $("input[name=cardId]").val(), "contactDate" : $("#contactDate").val(), "contactMemo" : $("#contactMemo").val()};
+		$.ajax({
+        	url: "<c:url value='/user/addContactHistory' />",
+        	data: JSON.stringify(json),
+        	type: "POST",
+        	
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(response) {
+        		var respHTML = "";
+        		$.each(response, function(index, value){
+        			if(value != null){
+        				window.location.reload(true);
+        			}
+        		});
+        		
+        		$(".ul-memo").html(resp);
+        		$('.ul-memo').show();
+                $('.panel-body').addClass('panel-body-memo');
+        	},
+        	error: function(){
+			  BootstrapDialog.show({
+   				title: 'Warning',
+  	             	message: 'Add card memo failed'
+   	      		});
+		  	}
+        });	
+	}
 	
+	function delContactHistory(json){
+		//console.log(this.id);
+		//var json = {"cardId" : $("input[name=cardId]").val(), "userId" : this.id};
+		$.ajax({
+        	url: "<c:url value='/user/deleteContactHistory' />",
+        	data: JSON.stringify(json),
+        	type: "POST",
+        	
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(response) {
+	       		//console.log(response);
+	       		var responseHTML = "";
+	       		$.each(response, function(index, value){
+		       		var contactDate = formatDate(value["contactDate"]);
+	       			responseHTML = "<div class='career_section selected'><div class='career_date ' style='font-weight: bold !important;'>"
+	            				+ contactDate
+	            				+ "<span class='delContactHist' id='"+ value["userId"] +"'>x</span></div>"
+	            				+ "<div><table class='table'><tbody>"
+	                        	+ "<tr id='rowData'><td>"
+	                            + "    <p>"+ value["contactMemo"] +"</p></td></tr></tbody></table></div></div>";
+	       		});
+	       		$("#contact-hist-body").html(responseHTML);
+        	},
+        	error: function(){
+			  BootstrapDialog.show({
+   				title: 'Warning',
+  	             	message: 'Delete contact history failed'
+   	      		});
+		  	}
+        });	 
+	}
    </script>
