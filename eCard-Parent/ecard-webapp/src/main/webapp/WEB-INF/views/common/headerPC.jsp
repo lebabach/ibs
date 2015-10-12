@@ -114,11 +114,13 @@
                         <span style=" position: absolute;right: 3px;top: 6px; width:121px;">お知らせ
                         	<img src="<c:url value='/assets/img/icon-notice.png'/>" width="44px;" >
                         </span>
-                        <span class="label label-warning"> 
-                        	<c:if test="${objectNotification.numberOfNotification>=1}">
-				      			${objectNotification.numberOfNotification}
-			      			</c:if>
-			      		</span>
+                        
+                       	<c:if test="${objectNotification.numberOfNotification>=1}">
+                       		<span class="label label-warning"> 
+			      			${objectNotification.numberOfNotification}
+			      			</span>
+		      			</c:if>
+			      		
                         
                     </a>
                     <ul class="dropdown-menu notification dropdown-messages " style="padding:0;">
