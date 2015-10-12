@@ -429,12 +429,12 @@ $(document).ready(function() {
 				</fieldset>
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.lastname' /><span>*</span></label> <input
-						value="" class="input-a-b" name="lastName" id="lastname">
+						class="input-a-b" name="lastName" id="lastname">
 						<p class="mesage_error error_lastname"></p>
 				</fieldset>
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.firstname' /> <span>*</span></label> <input
-						value="" class="input-a-b" name="firstName" id="fistname">
+						class="input-a-b" name="firstName" id="fistname">
 						<p class="mesage_error error_fistname"></p>
 				</fieldset>
 				<fieldset>
@@ -451,7 +451,7 @@ $(document).ready(function() {
 				</fieldset>
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.teletephonenumber1' /> <span>*</span></label> <input
-						value="" class="input-a-b" name="telNumberCompany" id="telcompany">
+						class="input-a-b" name="telNumberCompany" id="telcompany">
 						<p class="mesage_error error_telcompany"></p>
 				</fieldset>
 				<fieldset>
@@ -468,17 +468,17 @@ $(document).ready(function() {
 				</fieldset>
 				 <fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.email' /><span>*</span></label> <input
-						value="" class="input-a-b" name="email" id="email">
+						class="input-a-b" name="email" id="email">
 						<p class="mesage_error error_email"></p>
 				</fieldset>
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.companyname' /><span>*</span></label> <input
-						value="" class="input-a-b" name="companyName" id="companyname">
+						class="input-a-b" name="companyName" id="companyname">
 						<p class="mesage_error error_companyname"></p>
 				</fieldset>
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.companynamekana' /><span>*</span></label> <input
-						value="" class="input-a-b" name="companyNameKana" id="companyNameKanaId">
+						class="input-a-b" name="companyNameKana" id="companyNameKanaId">
 						<p class="mesage_error error_companyNameKana"></p>
 				</fieldset>
 				<fieldset>
@@ -487,7 +487,7 @@ $(document).ready(function() {
 				</fieldset>
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.positisionname' /></label> <input
-						value="" class="input-a-b" name="positionName" id="exampleInputName2">
+						class="input-a-b" name="positionName" id="exampleInputName2">
 				</fieldset>
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.computerUrl' /></label> <input value=""
@@ -520,7 +520,7 @@ $(document).ready(function() {
 					<div class="text-a-b-d">
 						<div class="input-group date">
 							<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-							<input name="contactDate1" class="form-control create-date" disabled/>
+							<input name="contactDate1" class="form-control create-date" readonly/>
 							<input type="hidden" name="contactDate" class="form-control create-date"> 
 						</div>
 					</div>
