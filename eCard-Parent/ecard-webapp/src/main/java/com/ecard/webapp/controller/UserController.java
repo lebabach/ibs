@@ -426,13 +426,11 @@ public class UserController {
 			List<UserInfo> listUser = userInfoService.getAllUserInfo();			
 			List<String> listUserId = new ArrayList<>();
 			for(UserInfo userAdmin : listUser){
-				if(userAdmin.getRoleAdminId() == 7){
+				if(userAdmin.getRoleAdminId() == 7 && userAdmin.getUserId() != userInfo.getUserId()){
 					listUserId.add(userAdmin.getEmail());
 				}
-			}			
-			if(!Arrays.asList(listUserId).contains(userInfo.getEmail())){
-				listUserId.add(userInfo.getEmail());
 			}
+			listUserId.add(userInfo.getEmail());
 			
 			Context ctx = new Context();	    	
 			ctx.setVariable("company",userInfo.getCompanyNameKana());

@@ -463,10 +463,7 @@ body{
 									<input type="hidden" name="csvURL" value="${downloadCSVHistory.csvUrl}" />
 									<span class="span-td">ダウンロード</span>
 								</c:if>
-								<c:if test="${downloadCSVHistory.csvApprovalStatus == 1}">
-									<%-- <c:out value="${downloadCSVHistory.csvUrl}" /> --%>
-									Your cards is downloaded
-								</c:if>
+
 							</td>
 						</tr>
 					</c:forEach>
