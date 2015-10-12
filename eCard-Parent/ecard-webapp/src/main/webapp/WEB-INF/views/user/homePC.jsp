@@ -1043,17 +1043,17 @@
  	              }
  	  	    	});
  	  	       if (check && intSame ==countCard) {
- 	  	    	  $(this).find("td .icheckbox_square-green").removeClass("some_checked");
-	  	          $(this).find("td .icheckbox_square-green").removeClass("not_checked");
+ 	  	    	  $(this).find("td .icheckbox_square-green").removeClass("some_chk");
+	  	          $(this).find("td .icheckbox_square-green").removeClass("not_chk");
  	  	    	   $(this).find("td .icheckbox_square-green").addClass("checked");
  	  	        }else if (same) {
  	  	          $(this).find("td .icheckbox_square-green").removeClass("checked");
- 	  	          $(this).find("td .icheckbox_square-green").removeClass("not_checked");
- 	  	          $(this).find("td .icheckbox_square-green").addClass("some_checked");
+ 	  	          $(this).find("td .icheckbox_square-green").removeClass("not_chk");
+ 	  	          $(this).find("td .icheckbox_square-green").addClass("some_chk");
  	  	        }else {
  	  	        	$(this).find("td .icheckbox_square-green").removeClass("checked");
- 	 	  	        $(this).find("td .icheckbox_square-green").removeClass("some_checked");
- 	  	        	$(this).find("td .icheckbox_square-green").addClass("not_checked");
+ 	 	  	        $(this).find("td .icheckbox_square-green").removeClass("some_chk");
+ 	  	        	$(this).find("td .icheckbox_square-green").addClass("not_chk");
  	  	        }
    	       });
    	        $(".balloon").css("display","block");
@@ -1251,7 +1251,7 @@
 					        		        }else if (same) {
 					        		        	console.log("Same");
 					        		        	respHTML += "<tr id='rowData'>"
-							    					+ "<td><div style='position: relative;' class='icheckbox_square-green some_checked' id='"+value["tagId"]+"'>"
+							    					+ "<td><div style='position: relative;' class='icheckbox_square-green some_chk' id='"+value["tagId"]+"'>"
 							        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
 							        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
 							        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
@@ -1263,7 +1263,7 @@
 					        		        {
 					        		        	console.log("Not");
 					        		        	respHTML += "<tr id='rowData'>"
-							    					+ "<td><div style='position: relative;' class='icheckbox_square-green not_checked' id='"+value["tagId"]+"'>"
+							    					+ "<td><div style='position: relative;' class='icheckbox_square-green not_chk' id='"+value["tagId"]+"'>"
 							        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
 							        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
 							        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
@@ -1293,8 +1293,8 @@
 	    
 	     //check add tag card
 	     $("#paging input[type='checkbox']").on('ifChecked', function(event){
-	    	 $(this).parent().removeClass('not_checked');
-	    	 $(this).parent().removeClass('some_checked')
+	    	 $(this).parent().removeClass('not_chk');
+	    	 $(this).parent().removeClass('some_chk');
 	    	 var listCardId = [];
 		    	var cardId = 0 ;
 		    	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
@@ -1306,12 +1306,13 @@
 		    	console.log("listCardId add : " + listCardId[0].cardId);
 		    	 var json = {"tagId" :tagId, "listCardId" : listCardId};
 		    	 addCardTag(json);
+		    	// reloadICheck();
 	       });
 	       
 	     //uncheck remove tag card
 	       $("#paging input[type='checkbox']").on('ifUnchecked', function(event){ 
-	    	   $(this).parent().removeClass('not_checked');
-		    	 $(this).parent().removeClass('checked')
+	    	   $(this).parent().removeClass('not_chk');
+		    	 $(this).parent().removeClass('checked');
 	    	   var listCardId = [];
 		    	var cardId = 0 ;
 		    	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
@@ -1323,6 +1324,7 @@
 		    	console.log("listCardId remove : " + listCardId[0].cardId);
 		    	 var json = {"tagId" : tagId, "listCardId" : listCardId};
 		    	deleteCardTag(json);
+		    	//reloadICheck();
 	      });
 
 	    
@@ -1336,9 +1338,11 @@
 	   			});
 		    	var tagId = $(this).find("input[type=checkbox]").val();
 		    	
-		    	 if($(this).attr("class").indexOf("checked") == -1){
+		    	if($(this).attr("class").indexOf("checked") == -1){
 		    		 console.log("tagId add : " + tagId);
 				     console.log("listCardId add: " + listCardId[0].cardId);
+				     $(this).removeClass('icheckbox_square-green not_chk');
+			    	 $(this).removeClass('icheckbox_square-green some_chk');
 		    		 $(this).removeClass("icheckbox_square-green hover");
 		        	 $(this).removeClass("icheckbox_square-green");
 		        	 $(this).addClass("icheckbox_square-green checked");
@@ -1349,7 +1353,8 @@
 		    		 console.log("tagId remove : " + tagId);
 				    console.log("listCardId remove: " + listCardId[0].cardId);
 		    		 $(this).removeClass("icheckbox_square-green checked");
-		    		 $(this).addClass("icheckbox_square-green"); 
+		    		 $(this).removeClass('icheckbox_square-green some_chk');
+		    		 $(this).addClass("icheckbox_square-green not_chk"); 
 		    		//Delete card tag
 		        	 var json = {"tagId" :tagId, "listCardId" : listCardId};
 		     	     deleteCardTag(json);
@@ -1504,7 +1509,7 @@
 	        		        }else if (same) {
 	        		        	console.log("Same");
 	        		        	respHTML += "<tr id='rowData'>"
-			    					+ "<td><div style='position: relative;' class='icheckbox_square-green some_checked' id='"+value["tagId"]+"'>"
+			    					+ "<td><div style='position: relative;' class='icheckbox_square-green some_chk' id='"+value["tagId"]+"'>"
 			        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
 			        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
 			        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
@@ -1516,7 +1521,7 @@
 	        		        {
 	        		        	console.log("Not");
 	        		        	respHTML += "<tr id='rowData'>"
-			    					+ "<td><div style='position: relative;' class='icheckbox_square-green not_checked' id='"+value["tagId"]+"'>"
+			    					+ "<td><div style='position: relative;' class='icheckbox_square-green not_chk' id='"+value["tagId"]+"'>"
 			        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
 			        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
 			        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
@@ -1592,7 +1597,7 @@
 	        		        }else if (same) {
 	        		        	console.log("Same");
 	        		        	respHTML += "<tr id='rowData'>"
-			    					+ "<td><div style='position: relative;' class='icheckbox_square-green some_checked' id='"+value["tagId"]+"'>"
+			    					+ "<td><div style='position: relative;' class='icheckbox_square-green some_chk' id='"+value["tagId"]+"'>"
 			        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
 			        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
 			        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
@@ -1604,7 +1609,7 @@
 	        		        {
 	        		        	console.log("Not");
 	        		        	respHTML += "<tr id='rowData'>"
-			    					+ "<td><div style='position: relative;' class='icheckbox_square-green not_checked' id='"+value["tagId"]+"'>"
+			    					+ "<td><div style='position: relative;' class='icheckbox_square-green not_chk' id='"+value["tagId"]+"'>"
 			        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
 			        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
 			        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
@@ -1680,7 +1685,7 @@
 	        		        }else if (same) {
 	        		        	console.log("Same");
 	        		        	respHTML += "<tr id='rowData'>"
-			    					+ "<td><div style='position: relative;' class='icheckbox_square-green some_checked' id='"+value["tagId"]+"'>"
+			    					+ "<td><div style='position: relative;' class='icheckbox_square-green some_chk' id='"+value["tagId"]+"'>"
 			        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
 			        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
 			        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
@@ -1691,7 +1696,7 @@
 	        		        }else{
 	        		        	console.log("Not");
 	        		        	respHTML += "<tr id='rowData'>"
-			    					+ "<td><div style='position: relative;' class='icheckbox_square-green not_checked' id='"+value["tagId"]+"'>"
+			    					+ "<td><div style='position: relative;' class='icheckbox_square-green not_chk' id='"+value["tagId"]+"'>"
 			        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
 			        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
 			        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
