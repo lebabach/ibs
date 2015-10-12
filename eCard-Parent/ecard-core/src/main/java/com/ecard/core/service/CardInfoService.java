@@ -139,4 +139,6 @@ public interface CardInfoService {
    
    public void updateDownloadHistory(Integer downloadCsvId);
    
+   public DownloadCsv getDownloadCSV(Integer csvId);
+   
 }

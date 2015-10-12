@@ -327,4 +327,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public void updateDownloadHistory(Integer downloadCsvId) {
 		cardInfoDAO.updateDownloadHistory(downloadCsvId);
 	}
+	
+	public DownloadCsv getDownloadCSV(Integer csvId) {
+		return cardInfoDAO.getDownloadCSV(csvId);
+	}
 }

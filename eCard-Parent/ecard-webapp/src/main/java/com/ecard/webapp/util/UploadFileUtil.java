@@ -40,8 +40,8 @@ public class UploadFileUtil {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(UploadFileUtil.class);
     public static String localFileUploaded = System.getProperty("user.dir") + "/upload";
     private static String saveFileUploaded = "/data/photo/card";
-//	private static String saveFileCSV = System.getProperty("user.dir") + "/csv";
-    private static String saveFileCSV = "/usr/share/tomcat8/csv";
+	private static String saveFileCSV = System.getProperty("user.dir") + "/csv";
+//    private static String saveFileCSV = "/usr/share/tomcat8/csv";
     private static Connection conn = null;
     private static String lostImageFileUploaded = "/data/backup/lost_image";
     

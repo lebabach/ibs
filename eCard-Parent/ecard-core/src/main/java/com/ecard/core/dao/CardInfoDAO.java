@@ -135,5 +135,7 @@ public interface CardInfoDAO {
     public List<String> getListSortTypeByTag(Integer userId, Integer tagId);
     
     public void updateDownloadHistory(Integer downloadCsvId);
+    
+    public DownloadCsv getDownloadCSV(Integer csvId);
 
 }
