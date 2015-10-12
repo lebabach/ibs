@@ -136,4 +136,6 @@ public interface CardInfoService {
    
    public List<String> getListSortTypeByTag(Integer userId, Integer tagId);
    
+   public void updateDownloadHistory(Integer downloadCsvId);
+   
 }
