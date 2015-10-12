@@ -102,7 +102,21 @@
     width: 290px;
     float: none;
 }
-
+/* #paging .icheckbox_square-green {
+    display: inline-block !important;
+    *display: inline !important;
+    vertical-align: middle !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 22px !important;
+    height: 22px !important;
+    background: url(../assets/css/plugins/iCheck/checkbox.png) no-repeat !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+#paging .icheckbox_square-green.hover {
+    background-position: 0 -22px;
+} */
 </style>
 <!-- START HEADER -->
 <div class="" style="border: solid 1px #f3f3f4;background: #e3e3e3;">
@@ -550,6 +564,7 @@
 
        $('#sort-card-cnd').on('change', function() {
        	$.xhrPool.abortAll();
+        $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
        	var typeSort = $(this).val();
        	var typeSearch = $("#selectSortBox option:selected").val();
        	id_manager = 0;
@@ -597,6 +612,7 @@
        
        $('#selectSortBox').on('change', function(event) {
     	   $.xhrPool.abortAll();
+    	   $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
     	   var tagName = $("#selectSortBox option:selected").text(); 
     	   var typeSort = $("#sort-card-cnd option:selected").val();
           	var typeSearch = $("#selectSortBox option:selected").val();    	   
@@ -816,9 +832,9 @@
  			});
       }
 
-      $(".balloon").on('click', '.delTag', function() {
+      /* $(".balloon").on('click', '.delTag', function() {
         $(this).parent().parent().remove();
-      });
+      }); */
 
       // Process with Notification List
       $("#notification").click(function(event) {
@@ -978,12 +994,14 @@
 	         $(this).toggleClass('hover');
         });
 
-       $(document).on('ifChecked','input[name=bla]',function(event) {
+       $(document).on('ifChecked','.business_card_book input[name=bla]',function(event) {
+    	   $(".balloon").css("display","none");
           $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
         });
         
-        $(document).on('ifUnchecked','input',function(event){     
-          if($(".icheckbox_square-green").find('.checked').size() == 1){
+        $(document).on('ifUnchecked','.business_card_book input',function(event){  
+        	$(".balloon").css("display","none");
+          if($(".icheckbox_square-green").find('.checked').size() == 1){ 
             $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
             $(".addTagCard").css("display","none");  
           }          
@@ -1111,9 +1129,10 @@
 
 	    // Add card tag
 	     $('#addLabel').click(function(event) {
+	       $.xhrPool.abortAll();
 	    	var listCardId = [];
 	    	var cardId = 0 ;
-	    	$(".icheckbox_square-green").find('.checked').each(function(){
+	    	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
    	            cardId = $(this).find('input[name=bla]').val();
    	            listCardId.push({"cardId":cardId});    	         
    			});
@@ -1155,29 +1174,31 @@
 					        		$.each(response, function(index, value){
 					        			isChecked = "";
 					        			$.each(value["listCardIds"], function(idx, v){
-					        				if(v == 2242){
+					        				if(v == 1761){
 					        					isChecked = "checked";
 					        					return false;
 					        				}
-					        				if(v != 2242){
+					        				if(v != 1761){
 					        					isChecked = "";
 					        				}
 					        			});
 					        			if(isChecked == "checked"){
 					        				respHTML += "<tr id='rowData'>"
-						    					+ "<td><input type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag1' style='position: absolute; opacity: 0;'>"
+					        					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+						        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+						        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
 						        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
 				                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
-						        				+ "</div>"
 						    					+ "</td>"
 						    					+ "<td class='nametag'>"+value["tagName"]+"</td>"
 						    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
 						    			}else{
 						    				respHTML += "<tr id='rowData'>"
-						    					+ "<td><input type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag2' style='position: absolute; opacity: 0;'>"
+						    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+						        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+						        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
 						        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
 				                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
-						        				+ "</div>"
 						    					+ "</td>"
 						    					+ "<td class='nametag' >"+value["tagName"]+"</td>"
 						    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
@@ -1186,10 +1207,6 @@
 					        		$("#tagCardName").val('');
 					        		$("#paging tbody").html("");  
 					        		$("#paging tbody").html(respHTML);
-					        		$('.i-checks').iCheck({
-				    			         checkboxClass: 'icheckbox_square-green',
-				    			         radioClass: 'iradio_square-green',                
-				    			       });
 					        	},
 					        	error: function(){
 								  BootstrapDialog.show({
@@ -1204,7 +1221,70 @@
 					}
 	     });
 	    
+	     $("#paging input[type='checkbox']").on('ifChecked', function(event){
+	    	 var listCardId = [];
+		    	var cardId = 0 ;
+		    	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+	   	            cardId = $(this).find('input[name=bla]').val();
+	   	            listCardId.push({"cardId":cardId});    	         
+	   			});
+		    	var tagId = $(this).val();
+		    	console.log("tagId add : " + tagId);
+		    	console.log("listCardId add : " + listCardId[0].cardId);
+		    	 var json = {"tagId" :tagId, "listCardId" : listCardId};
+		    	 addCardTag(json);
+	       });
+	       
+	       $("#paging input[type='checkbox']").on('ifUnchecked', function(event){     
+	    	   var listCardId = [];
+		    	var cardId = 0 ;
+		    	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+	   	            cardId = $(this).find('input[name=bla]').val();
+	   	            listCardId.push({"cardId":cardId});    	         
+	   			});
+		    	var tagId = $(this).val();
+		    	console.log("tagId remove: " + tagId);
+		    	console.log("listCardId remove : " + listCardId[0].cardId);
+		    	 var json = {"tagId" : tagId, "listCardId" : listCardId};
+		    	deleteCardTag(json);
+	      });
+
 	    
+	 	// Card tag
+		    $(document).on('click', '#paging .icheckbox_square-green', function(e) {
+		    	var listCardId = [];
+		    	var cardId = 0 ;
+		    	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+	   	            cardId = $(this).find('input[name=bla]').val();
+	   	            listCardId.push({"cardId":cardId});    	         
+	   			});
+		    	var tagId = $(this).find("input[type=checkbox]").val();
+		    	
+		    	 if($(this).attr("class").indexOf("checked") == -1){
+		    		 console.log("tagId add : " + tagId);
+				     console.log("listCardId add: " + listCardId[0].cardId);
+		    		 $(this).removeClass("icheckbox_square-green hover");
+		        	 $(this).removeClass("icheckbox_square-green");
+		        	 $(this).addClass("icheckbox_square-green checked");
+		        	 //Add card tag
+		        	 var json = {"tagId" : tagId, "listCardId" : listCardId};
+		     	     addCardTag(json);
+		    	 }else{
+		    		 console.log("tagId remove : " + tagId);
+				    console.log("listCardId remove: " + listCardId[0].cardId);
+		    		 $(this).removeClass("icheckbox_square-green checked");
+		    		 $(this).addClass("icheckbox_square-green"); 
+		    		//Delete card tag
+		        	 var json = {"tagId" :tagId, "listCardId" : listCardId};
+		     	     deleteCardTag(json);
+		    	 }
+		     });
+	 	
+	 	// Delete tag   
+	    $(document).on("click",".delTag",function(e){
+	    	var tagId = $(this).parent().parent().find('input[type=checkbox]').val();
+       		deleteTag(tagId);
+         });
 	
 	   	function resetFreeText() {
 	   		$("#freeText").text("");
@@ -1294,6 +1374,185 @@
      	          checkboxClass: 'icheckbox_square-green',
      	          radioClass: 'iradio_square-green',                
       	    		});
+		}
+		
+		function addCardTag(json){
+	     	$.ajax({
+	        	url: "<c:url value='/user/addCardTagHome' />",
+	        	data: JSON.stringify(json),
+	        	type: "POST",
+	        	
+	        	beforeSend: function(xhr) {
+	        		xhr.setRequestHeader("Accept", "application/json");
+	        		xhr.setRequestHeader("Content-Type", "application/json");
+	        	},
+	        	success: function(response) {
+	        		var respHTML = "";
+	        		var isChecked = "";
+	        		$.each(response, function(index, value){
+	        			isChecked = "";
+	        			$.each(value["listCardIds"], function(idx, v){
+	        				if(v == 1761){
+	        					isChecked = "checked";
+	        					return false;
+	        				}
+	        				if(v != 1761){
+	        					isChecked = "";
+	        				}
+	        			});
+	        			if(isChecked == "checked")
+	        				{respHTML += "<tr id='rowData'>"
+		    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+		        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+		        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+		        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
+                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
+		        				+ "</td>"
+		    					+ "<td class='nametag'>"+value["tagName"]+"</td>"
+		    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+	        			else
+	        				{respHTML += "<tr id='rowData'>"
+		    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+		        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+		        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+		        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
+                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
+		        				+ "</td>"
+		    					+ "<td class='nametag'>"+value["tagName"]+"</td>"
+		    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+	        		});
+	        		
+	        		$("#tagCardName").val('');
+	        		$("#paging tbody").html("");
+	        		$("#paging tbody").html(respHTML);    		
+	        	},
+	        	error: function(){
+				  BootstrapDialog.show({
+	   				title: 'Warning',
+	  	             	message: 'Add card tag failed'
+	   	      		});
+			  	}
+	        });	
+		}
+		
+		function deleteCardTag(json){
+	     	$.ajax({
+	        	url: "<c:url value='/user/deleteCardTagHome' />",
+	        	data: JSON.stringify(json),
+	        	type: "POST",
+	        	
+	        	beforeSend: function(xhr) {
+	        		xhr.setRequestHeader("Accept", "application/json");
+	        		xhr.setRequestHeader("Content-Type", "application/json");
+	        	},
+	        	success: function(response) {
+	        		var respHTML = "";
+	        		var isChecked = "";
+	        		$.each(response, function(index, value){
+	        			isChecked = "";
+	        			$.each(value["listCardIds"], function(idx, v){
+	        				if(v == 1761){
+	        					isChecked = "checked";
+	        					return false;
+	        				}
+	        				
+	        				if(v != 1761){
+	        					isChecked = "";
+	        				}
+	        			});
+	        			if(isChecked == "checked")
+	        				{respHTML += "<tr id='rowData'>"
+		    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+		        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+		        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+		        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
+                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
+		        				+ "</td>"
+		    					+ "<td class='nametag'>"+value["tagName"]+"</td>"
+		    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+	        			else
+	        				{respHTML += "<tr id='rowData'>"
+		    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+		        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+		        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+		        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
+                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
+		        				+ "</td>"
+		    					+ "<td class='nametag'>"+value["tagName"]+"</td>"
+		    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+	        		});
+	        		
+	        		$("#tagCardName").val('');
+	        		$("#paging tbody").html("");
+	        		$("#paging tbody").html(respHTML);    		
+	        	},
+	        	error: function(){
+				  BootstrapDialog.show({
+	   				title: 'Warning',
+	  	             	message: 'Delete card tag failed'
+	   	      		});
+			  	}
+	        });	
+		}
+		
+		function deleteTag(id){
+	     	$.ajax({
+	        	url: "<c:url value='/user/deleteTag' />",
+	        	data: 'tagId='+ id,
+	        	type: "GET",
+	        	
+	        	beforeSend: function(xhr) {
+	        		xhr.setRequestHeader("Accept", "application/json");
+	        		xhr.setRequestHeader("Content-Type", "application/json");
+	        	},
+	        	success: function(response) {
+	        		var respHTML = "";
+	        		var isChecked = "";
+	        		$.each(response, function(index, value){
+	        			isChecked = "";
+	        			$.each(value["listCardIds"], function(idx, v){
+	        				if(v == $("input[name=cardId]").val()){
+	        					isChecked = "checked";
+	        					return false;
+	        				}
+	        				
+	        				if(v != $("input[name=cardId]").val()){
+	        					isChecked = "";
+	        				}
+	        			});
+	        			if(isChecked == "checked")
+	        				{respHTML += "<tr id='rowData'>"
+		    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+		        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+		        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+		        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
+                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
+		        				+ "</td>"
+		    					+ "<td class='nametag'>"+value["tagName"]+"</td>"
+		    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+	        			else
+	        				{respHTML += "<tr id='rowData'>"
+		    					+ "<td><div style='position: relative;' class='icheckbox_square-green "+isChecked+"' id='"+value["tagId"]+"'>"
+		        				+ "<input style='position: absolute; opacity: 0;' type='checkbox' class='i-checks' value='"+value["tagId"]+"' name='checkTag'>"
+		        				+ "<ins style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;' class='iCheck-helper'></ins></div>"
+		        				+ "<input type='hidden' name= 'userId'  value='"+value["userId"]+"'>"
+                                + " <input type='hidden' name= 'cardId'  value='"+value["cardId"]+"'>"
+		        				+ "</td>"
+		    					+ "<td class='nametag'>"+value["tagName"]+"</td>"
+		    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";}
+	        		});
+	        		
+	        		$("#tagCardName").val('');
+	        		$("#paging tbody").html("");
+	        		$("#paging tbody").html(respHTML);		
+	        	},
+	        	error: function(){
+				  BootstrapDialog.show({
+	   				title: 'Warning',
+	  	             	message: 'Delete tag failed'
+	   	      		});
+			  	}
+	        });	
 		}
 
     </script>

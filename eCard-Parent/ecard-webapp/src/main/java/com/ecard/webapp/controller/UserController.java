@@ -16,9 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
@@ -28,7 +26,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +42,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -53,6 +49,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.CardTagId;
 import com.ecard.core.model.CompanyInfo;
+import com.ecard.core.model.ContactHistoryId;
 import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.InquiryInfo;
 import com.ecard.core.model.PossessionCard;
@@ -66,6 +63,7 @@ import com.ecard.core.model.enums.SearchConditions;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.CardMemoService;
 import com.ecard.core.service.CardTagService;
+import com.ecard.core.service.ContactHistoryService;
 import com.ecard.core.service.GroupCompanyInfoService;
 import com.ecard.core.service.NotificationInfoService;
 import com.ecard.core.service.PossessionCardService;
@@ -79,6 +77,7 @@ import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoCSV;
 import com.ecard.core.vo.CardInfoMemo;
 import com.ecard.core.vo.CardInfoUserVo;
+import com.ecard.core.vo.ContactHistory;
 import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.SearchInfo;
 import com.ecard.core.vo.TagForCard;
@@ -126,6 +125,9 @@ public class UserController {
 
 	@Autowired
 	GroupCompanyInfoService groupCompanyInfoService;
+	
+	@Autowired
+	ContactHistoryService contactHistoryService;
 
 	@Value("${scp.hostname}")
 	private String scpHostName;
@@ -187,13 +189,7 @@ public class UserController {
 			}
 
 		}
-		for(TagGroup tagGroup : listTagGroup){
-			 String str = "";
-			 for(Integer cardId : tagGroup.getListCardIds()){
-				  str = str + "," + cardId;
-			 }
-			 //tagGroup.setCardId(str.substring(1,str.length()));
-		}
+		appendCardId(listTagGroup);
 		
 		//UserSearchVO u=(UserSearchVO)request.getSession().getAttribute("searchDetail");
 		ModelAndView modelAndView = new ModelAndView();
@@ -542,6 +538,12 @@ public class UserController {
             else{
             	modelAndView.addObject("isExpried", false);
             }
+            
+            //Get contact history
+            List<com.ecard.core.vo.ContactHistory> contactHistoryList = contactHistoryService.getListContactHistoryById(id);
+            if(contactHistoryList.size() > 0){
+            	modelAndView.addObject("contactHistoryList", contactHistoryList);
+            }
 		}
 		catch(Exception ex){
 			logger.debug("Exception : ", ex.getMessage());
@@ -552,6 +554,50 @@ public class UserController {
 		modelAndView.addObject("listCardConnect", cardList);
 		
 		return modelAndView;
+	}
+	
+	@RequestMapping (value = "addContactHistory", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<com.ecard.core.vo.ContactHistory> addContactHistory(@RequestBody ContactHistoryId contactHistoryId, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("addContactHistory", UserController.class);
+		
+		com.ecard.core.model.ContactHistory contactHistModel = new com.ecard.core.model.ContactHistory();
+		List<com.ecard.core.vo.ContactHistory> contactHistoryList = null;
+		try{
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+			Integer userId = ecardUser.getUserId();
+			
+			contactHistoryId.setUserId(userId);
+			contactHistModel.setId(contactHistoryId);
+			
+			com.ecard.core.model.ContactHistory contactHistory = contactHistoryService.saveContactHistory(contactHistModel);
+			
+			contactHistoryList = contactHistoryService.getListContactHistoryById(contactHistoryId.getCardId());
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		return contactHistoryList;
+	}
+	
+	@RequestMapping (value = "deleteContactHistory", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<com.ecard.core.vo.ContactHistory> deleteContactHistory(@RequestBody ContactHistoryId contactHistoryId, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("deleteContactHistory", UserController.class);
+		
+		com.ecard.core.model.ContactHistory contactHistModel = new com.ecard.core.model.ContactHistory();
+		List<com.ecard.core.vo.ContactHistory> contactHistoryList = null;
+		try{
+			int rs = contactHistoryService.deleteContactHistory(contactHistoryId);
+			if(rs > 0){
+				contactHistoryList = contactHistoryService.getListContactHistoryById(contactHistoryId.getCardId());
+			}
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		return contactHistoryList;
 	}
 
 	@RequestMapping(value = "profile/{id:[\\d]+}", method = RequestMethod.GET)
@@ -1166,13 +1212,7 @@ public class UserController {
         }
 		
 		List<TagGroup> listTagGroup = getCardTag();
-		for(TagGroup tagGroup : listTagGroup){
-			 String str = "";
-			 for(Integer cardId : tagGroup.getListCardIds()){
-				  str = str + "," + cardId;
-			 }
-			 //tagGroup.setCardId(str.substring(1,str.length()));
-		}
+		appendCardId(listTagGroup);
 		return listTagGroup;
     }
 	@RequestMapping(value = "searchCards", method = RequestMethod.POST)
@@ -1278,6 +1318,44 @@ public class UserController {
         UploadCardThread uploadThread =new UploadCardThread(cardInfoObject);
         uploadThread.start();
 		return new ModelAndView("redirect:../home");
+	}
+
+	@RequestMapping (value = "addCardTagHome", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TagGroup> addCardTagHome(@RequestBody CardAndUserTagHome cardAndUserTagHome, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("addCardTag", UserController.class);
+	    for(TagUserHome tagUserHome : cardAndUserTagHome.getListCardId()){
+	    	CardTagId cardTag = new CardTagId();
+            cardTag.setCardId(tagUserHome.getCardId());
+            cardTag.setTagId(cardAndUserTagHome.getTagId());
+            cardTagService.addCardTag(cardTag);
+	    }
+	    List<TagGroup> listTagGroup = getCardTag();
+	    appendCardId(listTagGroup);
+		return listTagGroup;
+	}
+	
+	@RequestMapping (value = "deleteCardTagHome", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TagGroup> deleteCardTagHome(@RequestBody CardAndUserTagHome cardAndUserTagHome, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("deleteCardTag", UserController.class);
+		for(TagUserHome tagUserHome : cardAndUserTagHome.getListCardId()){
+			cardTagService.deleteCardTag(tagUserHome.getCardId(), cardAndUserTagHome.getTagId());
+		}
+		 List<TagGroup> listTagGroup = getCardTag();
+		 appendCardId(listTagGroup);
+		return listTagGroup;
+	}
+	private void appendCardId(List<TagGroup> listTagGroup ){
+		for(TagGroup tagGroup : listTagGroup){
+			if(tagGroup.getListCardIds().size() > 0){
+				 String str = "";
+				 for(Integer cardId : tagGroup.getListCardIds()){
+					  str = str + "," + cardId;
+				 }
+				 tagGroup.setCardId(str.substring(1,str.length()));
+			}
+		}
 	}
 	
 	class UploadCardThread extends Thread {
