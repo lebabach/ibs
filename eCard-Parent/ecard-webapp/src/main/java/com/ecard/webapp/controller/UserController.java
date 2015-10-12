@@ -174,13 +174,7 @@ public class UserController {
 			}
 
 		}
-		for(TagGroup tagGroup : listTagGroup){
-			 String str = "";
-			 for(Integer cardId : tagGroup.getListCardIds()){
-				  str = str + "," + cardId;
-			 }
-			 //tagGroup.setCardId(str.substring(1,str.length()));
-		}
+		appendCardId(listTagGroup);
 		
 		//UserSearchVO u=(UserSearchVO)request.getSession().getAttribute("searchDetail");
 		ModelAndView modelAndView = new ModelAndView();
@@ -270,8 +264,9 @@ public class UserController {
 				 }
 			}			
 		}
-		
-		lstNameSort = lstNameSort.stream().distinct().sorted().collect(Collectors.toList());
+		if(typeSort == SearchConditions.NAME.getValue() || typeSort == SearchConditions.COMPANY.getValue() ){
+		    lstNameSort = lstNameSort.stream().distinct().sorted().collect(Collectors.toList());
+		}
 		for (String nameSort : lstNameSort) {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
 			for (CardInfoUserVo cardInfo : lstCardInfo) {
@@ -1202,13 +1197,7 @@ public class UserController {
         }
 		
 		List<TagGroup> listTagGroup = getCardTag();
-		for(TagGroup tagGroup : listTagGroup){
-			 String str = "";
-			 for(Integer cardId : tagGroup.getListCardIds()){
-				  str = str + "," + cardId;
-			 }
-			 //tagGroup.setCardId(str.substring(1,str.length()));
-		}
+		appendCardId(listTagGroup);
 		return listTagGroup;
     }
 	@RequestMapping(value = "searchCards", method = RequestMethod.POST)
@@ -1256,6 +1245,44 @@ public class UserController {
 			return 0;
 		}
 		return result;
+	}
+	
+	@RequestMapping (value = "addCardTagHome", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TagGroup> addCardTagHome(@RequestBody CardAndUserTagHome cardAndUserTagHome, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("addCardTag", UserController.class);
+	    for(TagUserHome tagUserHome : cardAndUserTagHome.getListCardId()){
+	    	CardTagId cardTag = new CardTagId();
+            cardTag.setCardId(tagUserHome.getCardId());
+            cardTag.setTagId(cardAndUserTagHome.getTagId());
+            cardTagService.addCardTag(cardTag);
+	    }
+	    List<TagGroup> listTagGroup = getCardTag();
+	    appendCardId(listTagGroup);
+		return listTagGroup;
+	}
+	
+	@RequestMapping (value = "deleteCardTagHome", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TagGroup> deleteCardTagHome(@RequestBody CardAndUserTagHome cardAndUserTagHome, HttpServletRequest request, HttpServletResponse response) {
+		logger.debug("deleteCardTag", UserController.class);
+		for(TagUserHome tagUserHome : cardAndUserTagHome.getListCardId()){
+			cardTagService.deleteCardTag(tagUserHome.getCardId(), cardAndUserTagHome.getTagId());
+		}
+		 List<TagGroup> listTagGroup = getCardTag();
+		 appendCardId(listTagGroup);
+		return listTagGroup;
+	}
+	private void appendCardId(List<TagGroup> listTagGroup ){
+		for(TagGroup tagGroup : listTagGroup){
+			if(tagGroup.getListCardIds().size() > 0){
+				 String str = "";
+				 for(Integer cardId : tagGroup.getListCardIds()){
+					  str = str + "," + cardId;
+				 }
+				 tagGroup.setCardId(str.substring(1,str.length()));
+			}
+		}
 	}
 	
 }
