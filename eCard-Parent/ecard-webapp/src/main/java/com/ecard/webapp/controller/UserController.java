@@ -172,13 +172,7 @@ public class UserController {
 			}
 
 		}
-		for(TagGroup tagGroup : listTagGroup){
-			 String str = "";
-			 for(Integer cardId : tagGroup.getListCardIds()){
-				  str = str + "," + cardId;
-			 }
-			 //tagGroup.setCardId(str.substring(1,str.length()));
-		}
+		appendCardId(listTagGroup);
 		
 		//UserSearchVO u=(UserSearchVO)request.getSession().getAttribute("searchDetail");
 		ModelAndView modelAndView = new ModelAndView();
@@ -1151,13 +1145,7 @@ public class UserController {
         }
 		
 		List<TagGroup> listTagGroup = getCardTag();
-		for(TagGroup tagGroup : listTagGroup){
-			 String str = "";
-			 for(Integer cardId : tagGroup.getListCardIds()){
-				  str = str + "," + cardId;
-			 }
-			 //tagGroup.setCardId(str.substring(1,str.length()));
-		}
+		appendCardId(listTagGroup);
 		return listTagGroup;
     }
 	@RequestMapping(value = "searchCards", method = RequestMethod.POST)
@@ -1217,8 +1205,9 @@ public class UserController {
             cardTag.setTagId(cardAndUserTagHome.getTagId());
             cardTagService.addCardTag(cardTag);
 	    }
-		
-		return getCardTag();
+	    List<TagGroup> listTagGroup = getCardTag();
+	    appendCardId(listTagGroup);
+		return listTagGroup;
 	}
 	
 	@RequestMapping (value = "deleteCardTagHome", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -1228,8 +1217,20 @@ public class UserController {
 		for(TagUserHome tagUserHome : cardAndUserTagHome.getListCardId()){
 			cardTagService.deleteCardTag(tagUserHome.getCardId(), cardAndUserTagHome.getTagId());
 		}
-		
-		return getCardTag();
+		 List<TagGroup> listTagGroup = getCardTag();
+		 appendCardId(listTagGroup);
+		return listTagGroup;
+	}
+	private void appendCardId(List<TagGroup> listTagGroup ){
+		for(TagGroup tagGroup : listTagGroup){
+			if(tagGroup.getListCardIds().size() > 0){
+				 String str = "";
+				 for(Integer cardId : tagGroup.getListCardIds()){
+					  str = str + "," + cardId;
+				 }
+				 tagGroup.setCardId(str.substring(1,str.length()));
+			}
+		}
 	}
 	
 }
