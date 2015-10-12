@@ -188,7 +188,34 @@ a {
 		</c:if>
 
 		<c:if test="${ isMyCard == true and sfManualLinkFlg == true}">
-		<a href="#" class="a-new-pc">セールスフォース連携</a>
+		<a href="#" class="a-new-pc" data-toggle="modal" id="sfLoginLink">セールスフォース連携</a>
+		<div class="modal" id="modal-login-saleforce" tabindex="-1">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                <!-- modal header -->
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="modal-label" style="font-size: 13pt;font-weight: 600;">Salesforce</h4>
+                  </div>
+                  <!-- modal body -->
+                    <div class="modal-body">
+                      <div class="form-group" id="errors" style="padding:10px 0 10px 0; text-align: center;"></div>
+                      <div class="form-group">
+                          <input type="email" class="form-control" id="sfEmail" placeholder="ID" value="" name="login_id">
+                      </div>
+                      <div class="form-group">
+                          <label></label>
+                          <input type="password" class="form-control" id="sfPassword" placeholder="パスワード" value="" name="login_pass">
+                      </div>
+                  </div>
+                    <div class="modal-footer" style="text-align:center;">
+                    <button style="width:200px;" type="button" class="btn btn-info" id="loginSaleForce">ログイン</button>
+                  </div>
+              </div>
+           </div>
+      </div>
 		</c:if>
 
 		<div class="balloon lbl_balloon" style="display: none; margin-top: 10px">
@@ -795,8 +822,6 @@ label.error {
                             
                             $(".input-submit").click(function(){
                             	
-                           		/* if($("#editForm").valid() && validTelNumberDirect() 
-                           				&& validTelNumberDepartment() && validTelNumberCompany() && validMobileNumber()){ */
                           		if($("#editForm").valid()){
                            			$(".input-new-1").removeClass("input-new-1-ac");
                                     $('.p-fomr2').hide();
@@ -1099,6 +1124,28 @@ label.error {
         	   	 delContactHistory(json);
               }
           });
+         
+         $("#loginSaleForce").click(function(){
+       		if(validLoginSaleForce()){
+        	 	loginSaleForce(); 
+       		}
+         });
+         
+         $("#sfLoginLink").click(function(){
+        	 var lastName = $("input[name=lastName]").val();
+        	 var firstName = $("input[name=firstName]").val();
+        	 var companyName = $("input[name=companyName]").val();
+        	 if(lastName == "" || firstName == "" || companyName == ""){
+        		 BootstrapDialog.show({
+     				title: 'Warning',
+    	             	message: '<fmt:message key="valid.login.saleforce" />'
+     	      		});
+        	 }
+        	 else{
+        		 console.log("aaaaaa");
+        		 $(this).attr("data-target", "#modal-login-saleforce");
+        	 }
+         });
                       	 
          //Get tag for card
          getTagForCard();
@@ -1808,5 +1855,66 @@ label.error {
    	      		});
 		  	}
         });	 
+	}
+	
+	function loginSaleForce(){
+		var lastname = "vinh";
+		var firstname = "le";
+		var positionName = "DEV";
+		var companyName = "Livepass";
+		var address1 = "15 Nguyen Quyen";
+		var address2 = "Cam Le";
+		var address3 = "Da Nang";
+		var address4 = "Viet Nam";
+		var telNumberCompany = "88957";
+		var mobileNumber = "84956990-898";
+		var faxNumber = "895790345";
+		var email = "vinh@gmail.com";
+		var companyUrl = "http://abc.com";
+		var departmentName = "LivePass VN";
+		var zipCode = "84";
+		var login_id = "sadad@asd.com";
+		var login_pass = "skjfhksfhak";
+		
+		var json = {"lastname": lastname, "firstname" : firstname, "positionName" : positionName, "companyName" : companyName, 
+					"address1" : address1, "address2" : address2, "address3" : address3, "address4" : address4, 
+					"telNumberCompany" : telNumberCompany, "mobileNumber" : mobileNumber, "faxNumber" : faxNumber, "email" : email, 
+					"companyUrl" : companyUrl, "departmentName" : departmentName, "zipCode" : zipCode, "login_id" : login_id, "login_pass" : login_pass };
+		$.ajax({
+        	url: "<c:url value='/user/loginSaleForce' />",
+        	data: JSON.stringify(json),
+        	type: "POST",
+        	
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(response) {
+	       		if(response.faultcode == "INVALID_LOGIN"){
+	       			$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'>Invalid username or password.</label>")
+	       		}
+        	},
+        	error: function(xhr, status, error){
+        		console.log("Error :"+ xhr.responseText);
+		  	}
+        });	
+	}
+	
+	function validLoginSaleForce(){
+		var sfEmail = $("#sfEmail").val();
+		var sfPassword = $("#sfPassword").val();
+		
+		if(sfEmail == ""){
+			$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'>Login Id is not blank</label>")
+			return false;
+		}
+		else if(sfPassword == ""){
+			$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'>Password is not blank</label>")
+			return false;
+		}
+		else{
+			$("#errors").html('');
+			return true;
+		}
 	}
    </script>
