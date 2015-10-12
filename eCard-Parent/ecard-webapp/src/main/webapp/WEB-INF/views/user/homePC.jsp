@@ -1294,7 +1294,7 @@
 	     //check add tag card
 	     $("#paging input[type='checkbox']").on('ifChecked', function(event){
 	    	 $(this).parent().removeClass('not_checked');
-	    	 $(this).parent().removeClass('some_checked')
+	    	 $(this).parent().removeClass('some_checked');
 	    	 var listCardId = [];
 		    	var cardId = 0 ;
 		    	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
@@ -1306,12 +1306,13 @@
 		    	console.log("listCardId add : " + listCardId[0].cardId);
 		    	 var json = {"tagId" :tagId, "listCardId" : listCardId};
 		    	 addCardTag(json);
+		    	// reloadICheck();
 	       });
 	       
 	     //uncheck remove tag card
 	       $("#paging input[type='checkbox']").on('ifUnchecked', function(event){ 
 	    	   $(this).parent().removeClass('not_checked');
-		    	 $(this).parent().removeClass('checked')
+		    	 $(this).parent().removeClass('checked');
 	    	   var listCardId = [];
 		    	var cardId = 0 ;
 		    	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
@@ -1323,6 +1324,7 @@
 		    	console.log("listCardId remove : " + listCardId[0].cardId);
 		    	 var json = {"tagId" : tagId, "listCardId" : listCardId};
 		    	deleteCardTag(json);
+		    	//reloadICheck();
 	      });
 
 	    
@@ -1336,9 +1338,11 @@
 	   			});
 		    	var tagId = $(this).find("input[type=checkbox]").val();
 		    	
-		    	 if($(this).attr("class").indexOf("checked") == -1){
+		    	 if($(this).find(".checked").length == 0){
 		    		 console.log("tagId add : " + tagId);
 				     console.log("listCardId add: " + listCardId[0].cardId);
+				     $(this).removeClass('icheckbox_square-green not_checked');
+			    	 $(this).removeClass('icheckbox_square-green some_checked');
 		    		 $(this).removeClass("icheckbox_square-green hover");
 		        	 $(this).removeClass("icheckbox_square-green");
 		        	 $(this).addClass("icheckbox_square-green checked");
@@ -1349,7 +1353,8 @@
 		    		 console.log("tagId remove : " + tagId);
 				    console.log("listCardId remove: " + listCardId[0].cardId);
 		    		 $(this).removeClass("icheckbox_square-green checked");
-		    		 $(this).addClass("icheckbox_square-green"); 
+		    		 $(this).removeClass('icheckbox_square-green some_checked');
+		    		 $(this).addClass("icheckbox_square-green not_checked"); 
 		    		//Delete card tag
 		        	 var json = {"tagId" :tagId, "listCardId" : listCardId};
 		     	     deleteCardTag(json);
