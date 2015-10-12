@@ -1338,7 +1338,7 @@
 	   			});
 		    	var tagId = $(this).find("input[type=checkbox]").val();
 		    	
-		    	if($(this).attr("class").indexOf("checked") == -1){
+		    	if($(this).attr("class").indexOf("checked") == -1 || $(this).attr("class").indexOf("some_chk") == -1){
 		    		 console.log("tagId add : " + tagId);
 				     console.log("listCardId add: " + listCardId[0].cardId);
 				     $(this).removeClass('icheckbox_square-green not_chk');
@@ -1348,17 +1348,18 @@
 		        	 $(this).addClass("icheckbox_square-green checked");
 		        	 //Add card tag
 		        	 var json = {"tagId" : tagId, "listCardId" : listCardId};
+		        	 deleteCardTag(json);
 		     	     addCardTag(json);
-		    	 }else{
-		    		 console.log("tagId remove : " + tagId);
-				    console.log("listCardId remove: " + listCardId[0].cardId);
-		    		 $(this).removeClass("icheckbox_square-green checked");
-		    		 $(this).removeClass('icheckbox_square-green some_chk');
-		    		 $(this).addClass("icheckbox_square-green not_chk"); 
-		    		//Delete card tag
-		        	 var json = {"tagId" :tagId, "listCardId" : listCardId};
-		     	     deleteCardTag(json);
-		    	 }
+		    	 }else {
+			    		console.log("tagId remove : " + tagId);
+					    console.log("listCardId remove: " + listCardId[0].cardId);
+			    		 $(this).removeClass("icheckbox_square-green checked");
+			    		 $(this).removeClass('icheckbox_square-green some_chk');
+			    		 $(this).addClass("icheckbox_square-green not_chk"); 
+			    		//Delete card tag
+			        	 var json = {"tagId" :tagId, "listCardId" : listCardId};
+			     	     deleteCardTag(json);
+			    }
 		     });
 	 	
 	 	// Delete tag   
