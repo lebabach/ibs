@@ -1275,4 +1275,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         query.executeUpdate();
 	}
 	
+	public DownloadCsv getDownloadCSV(Integer csvId) {
+		Query query = getEntityManager().createQuery("SELECT c FROM DownloadCsv c WHERE c.csvId = :csvId");
+		query.setParameter("csvId", csvId);
+		return (DownloadCsv)getOrNull(query);
+	}
+	
 }

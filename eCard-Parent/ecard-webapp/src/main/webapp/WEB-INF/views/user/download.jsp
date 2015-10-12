@@ -436,9 +436,9 @@ body{
                   
                 <div class="box-3">
                     <a href="downloadCSV/1" class="export">自分の名刺をダウンロード</a>
-					<a href="downloadCSV/2" class="export">自社の名刺をダウンロード</a>
-                    
-                    
+                    <c:if test="${roleAdminId == 7}">
+                    	<a href="downloadCSV/2" class="export">自社の名刺をダウンロード</a>
+                    </c:if>
                 </div>
                 <p class="p-line"></p>
                 <p class="p-box-3">ダウンロード可能期間は1週間です。</p>
@@ -464,7 +464,7 @@ body{
 									<span class="span-td">ダウンロード</span>
 								</c:if>
 								<c:if test="${downloadCSVHistory.csvApprovalStatus == 1}">
-									<c:out value="${downloadCSVHistory.csvUrl}" />
+									<%-- <c:out value="${downloadCSVHistory.csvUrl}" /> --%>
 									Your cards is downloaded
 								</c:if>
 							</td>
@@ -479,50 +479,17 @@ body{
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('a.export').click(function(e){
-			
+		$('a.export').click(function(e){			
 		    $('a.export').removeClass('active');
 		    $('button.export').removeClass('active');
 		    $(this).addClass('active');
 		    var  id = $(this).attr('href');
 		    
-		    var groupDownload = $('input[name=groupDownload]') .val();
-		    var allDownload = $('input[name=allDownload]') .val();
 		    $.ajax({
 				type: 'GET',
 				url: '/ecard-webapp/user/'+id
 			}).done(function(resp, status, xhr) {
-				/* alert('111' + resp);
-				if(id == '2' && groupDownload==0){
-					showMsg();
-				}
-				
-				if(id == '3' && allDownload==0){
-					showMsg();
-				}
-				setTimeout(function(){ 				
-					document.location.href='/ecard-webapp/user/download';
-				}, 3000); */
-			}).fail(function(xhr, status, err) {
-				document.location.href='/ecard-webapp/user/download';
-			});
-		});
-		
-		$('button.export').click(function(e){
-		    $('a.export').removeClass('active');
-		    $('button.export').removeClass('active');
-		    $(this).addClass('active');
-		    var  id = $(this).attr('id');		    
-		    $.ajax({
-				type: 'GET',
-				url: '/ecard-webapp/user/downloadCSV/'+id
-			}).done(function(resp, status, xhr) {
-				$("#titleMsg").css('display','block');
-				setTimeout(function(){ 				
-					document.location.href='/ecard-webapp/user/download';
-				}, 3000);
-					
-				
+				document.location.href='/ecard-webapp/user/download';				
 			}).fail(function(xhr, status, err) {
 				document.location.href='/ecard-webapp/user/download';
 			});
@@ -530,19 +497,26 @@ body{
 		
 		$('.span-td').click(function(e){
 			var csvID = parseInt($(this).parents('tr').attr("id"));
-			var csvName = $(this).parents('tr').find('input[name=csvURL]').val();			
-			$.ajax({
+			var csvName = $(this).parents('tr').find('input[name=csvURL]').val();
+			document.location.href="downloadFileCSV/"+csvID;
+			setTimeout(function(){ 				
+				document.location.href='/ecard-webapp/user/download';
+			}, 3000);
+			/* $.ajax({
 				type: 'POST',
-				url: 'downloadCSV',
-				data: 'csvID=' + csvID
+				url: 'requestDownloadCSV',
+				data: 'csvID=' + csvID + '&csvName='+csvName,
+				beforeSend: function(xhr) {
+	        		xhr.setRequestHeader("Accept", "application/json");
+	        		xhr.setRequestHeader("Content-Type", "application/json");
+	        	}
 			}).done(function(resp, status, xhr) {				
-				document.location.href="downloadFileCSV/"+csvName;
-				/* setTimeout(function(){ 				
+				setTimeout(function(){ 				
 					document.location.href='/ecard-webapp/user/download';
-				}, 3000); */
+				}, 3000);
 			}).fail(function(xhr, status, err) {
 				document.location.href='/ecard-webapp/user/download';				
-			}); 
+			});  */
 			
 		});
 		
