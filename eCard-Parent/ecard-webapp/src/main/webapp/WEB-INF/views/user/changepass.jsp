@@ -80,9 +80,6 @@
 	margin-right: 6px;
 }
 
-.content_notice {
-	max-width: 171px;
-}
 /**/
 .div-list {
 	display: inline-block;

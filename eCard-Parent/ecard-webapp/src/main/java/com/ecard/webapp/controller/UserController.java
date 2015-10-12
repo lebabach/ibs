@@ -1384,6 +1384,16 @@ public class UserController {
 		}
 	}
 	
+	@RequestMapping(value = "notificationDetailRibbon", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean notificationDetailRibbon(@RequestParam(value = "id") int id) {
+		UserNotification notify=new UserNotification();
+		notify.setNoticeId(id);
+		notify.setReadFlg(1);
+		notificationInfoService.updateReadFlgById(notify);
+		return true;
+	}
+	
 	class UploadCardThread extends Thread {
 		CardInfo cardInfo;
 		UploadCardThread(CardInfo cardInfo){

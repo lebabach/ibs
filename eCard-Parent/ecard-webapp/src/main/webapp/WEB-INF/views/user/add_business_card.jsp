@@ -80,13 +80,10 @@
 	margin-right: 6px;
 }
 
-.content_notice {
-	max-width: 171px;
-}
 /**/
 .div-list {
 	display: inline-block;
-	margin: 105px auto 0 auto;
+	margin: 30px auto 0 auto;
 	text-align: center;
 	width: 100%;
 }

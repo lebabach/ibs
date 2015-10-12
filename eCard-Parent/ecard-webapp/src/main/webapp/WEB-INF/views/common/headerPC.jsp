@@ -159,7 +159,7 @@
 											class="fa fa-angle-right"></i></a></td>
 									  </c:when>
 									  <c:otherwise>
-									   <td style="vertical-align: middle"  width="10%"><a href="https://bc-ribbon.temp-holdings.co.jp/" class=""><i
+									   <td style="vertical-align: middle"  width="10%"><a class="" onclick="${notification.id}"><i
 											class="fa fa-angle-right"></i></a></td>
 									  </c:otherwise>
 									</c:choose>
@@ -209,8 +209,23 @@ $(document).ready(function() {
         var href = $(this).find("a").attr("href");
         if(href) {
             window.location = href;
+        }else{
+        	$.ajax({
+        	    type: 'POST',
+        	    url: 'notificationDetailRibbon',
+        	    data: { 
+        	        'id':$(this).find("a").attr("onclick")
+        	    },
+        	    success: function(msg){
+        	        if(msg==true){
+        	        	window.location = "https://bc-ribbon.temp-holdings.co.jp/";
+        	        }
+        	    }
+        	});
         }
     });
+    
+    
 
 });
 </script>
