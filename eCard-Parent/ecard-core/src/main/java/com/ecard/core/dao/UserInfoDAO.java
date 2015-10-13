@@ -115,4 +115,8 @@ public interface UserInfoDAO extends IGenericDao{
     public void saveActionLog(ActionLog actionLog);
     
     public boolean checkUseDateEndDate(String email);
+    public List<UserInfoVo> searchUserForList(String criteriaSearch, int limit, int offet);
+    public BigInteger countUserForList(String criteriaSearch);
+    public List<UserInfoVo> searchUserOfMyCompanyForList(String criteriaSearch, int limit, int offet, int groupCompanyInfoId);
+    public BigInteger countUserForList(String criteriaSearch, int groupCompanyInfoId);
  }

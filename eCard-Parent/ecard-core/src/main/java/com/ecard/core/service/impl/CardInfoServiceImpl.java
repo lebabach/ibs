@@ -343,4 +343,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName){
 		return cardInfoDAO.searchCardInfo(companyName, departmentName);
 	}
+
+	@Override
+	public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.getListCardAllocationUser(userId);
+	}
 }

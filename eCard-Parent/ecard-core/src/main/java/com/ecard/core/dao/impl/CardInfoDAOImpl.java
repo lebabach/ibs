@@ -1280,6 +1280,28 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		query.setParameter("csvId", csvId);
 		return (DownloadCsv)getOrNull(query);
 	}
+
+	@Override
+	public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId) {
+		// TODO Auto-generated method stub
+		String sqlStr=" SELECT c.card_id,name,first_name,last_name,name_kana,first_name_kana,last_name_kana, "
+					  + " company_name,company_name_kana,department_name,image_file,position_name, "
+				      + "  c.create_date,approval_status,tel_number_company,email "
+					  + " FROM card_info c JOIN admin_possession_card ac ON c.card_id = ac.card_id "    
+					  + " WHERE ac.user_id =:userId  and  c.approval_status <> 1 ";
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		query.setParameter("userId", userId);
+		List<Object[]> lstObj = query.getResultList();
+		List<com.ecard.core.vo.CardInfo> lstCardInfoVo = new ArrayList<>();
+		for(Object[] obj : lstObj){
+			com.ecard.core.vo.CardInfo  cardInfoVo = new com.ecard.core.vo.CardInfo((Integer)obj[0],(String) obj[1],(String) obj[2], (String)obj[3],(String) obj[4],(String)obj[5],(String) obj[6],
+					                                             (String) obj[7],(String) obj[8],(String)obj[9],(String)obj[10],(String)obj[11],(Date) obj[12],(Integer) obj[13],(String) obj[14], (String)obj[15]);
+			lstCardInfoVo.add(cardInfoVo);
+		}
+		
+		
+		return lstCardInfoVo;
+	}
 	
 	public List<com.ecard.core.vo.CardInfo> searchCompanyTree(String companyName){
 		String sqlStr = "SELECT c.company_name AS companyName, count(*) AS cnt, c.card_id AS cardId FROM card_info AS c "

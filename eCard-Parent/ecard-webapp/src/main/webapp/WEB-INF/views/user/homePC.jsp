@@ -255,7 +255,7 @@
             
           </div>
           <div class="col-md-2 m-b-xs setDisplayTerm" style="width:188px; display:inline-block">
-            <select id="selectSortBox" class="input-sm form-control input-s-sm inline" id="sort-card-connect">
+            <select id="selectSortBox" class="input-sm form-control input-s-sm inline">
               <option value="0" selected>すべて</option>
               <c:forEach var="cardTag" items="${listTagGroup}">
               	<option value="${cardTag.tagId}"><c:out value="${cardTag.tagName}"/></option>
@@ -563,8 +563,10 @@
  				}).fail(function(xhr, status, err) {
  					console.log('BBB='+err);
  				});
-    	   }
-    	   $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
+    			$(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
+    	   } 
+    	   
+    	   
        });
 
        $('#sort-card-cnd').on('change', function() {
@@ -579,14 +581,14 @@
 			data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch
 		  }).done(function(resp, status, xhr) {
 			 $('.business_card_book').html("");
-			   var str = "";
-				$.each( resp.data, function( key, value ) {	
-					str = $('.business_card_book').append(
-						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id= "'+value.nameSort.replace("/","").trim()+'">'
-				        +'<div class="list-group-item-title">'+value.nameSort+'</div>');
+			   var listGroup = "";
+			   var listGroupItem = "";
+				$.each( resp.data, function( key, value ) {						
+					listGroup = $('.business_card_book').append(
+						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
+				        +'<div class="list-group-item-title">'+value.nameSort+'</div></div>');
 					 $.each( value.lstCardInfo, function (k,v) {
-							isLoading = isLoading + 1;							 		
-								str.append(	'<div class="list-group-item pointer">'
+						 listGroupItem += '<div class="list-group-item pointer">'
 				    					+'<div class="row row-new">'
 				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
 				    					+	'<div class="col-md-5">'
@@ -602,13 +604,15 @@
 				    					+	'<div class="col-xs-7">'								
 				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-				    					+	'</div> </div> </div> </div></div>'
-				        	    );
+				    					+	'</div> </div> </div> </div>';				    		 
+	    					 $('.business_card_book').find("#"+value.nameSort.replace("/","").trim()).append(listGroupItem);    
 							 isLoading++;
 							 reloadICheck();
 							 getImageFromSCP(v.imageFile);
 					 });
+					 
 				});
+				
 				id_manager++;
 			}).fail(function(xhr, status, err) {
 				//alert('Error');
@@ -1014,7 +1018,8 @@
         });
 
         $(document).on('click','#addTag',function(e){
-          if($(".balloon").css('display') == 'block'){
+       	  
+          if($(".balloon").css("display") == "block"){
             $(".balloon").css("display","none");
           }else{
             var listCardIdCheck = [];
@@ -1060,17 +1065,17 @@
  	 	  	        $(this).find("td .icheckbox_square-green").removeClass("some_chk");
  	  	        	$(this).find("td .icheckbox_square-green").addClass("not_chk");
  	  	        }
-   	       });
+   	        });
    	        $(".balloon").css("display","block");
           }
         });
         
         $(document).mouseup(function (e){
-     		    var container = $(".balloon");
+     		    var container = $(".balloon").parent();
      		    if (!container.is(e.target) && container.has(e.target).length === 0) {
      		    	$(".balloon").css("display","none");
      		     }
-        });
+        }); 
         
         $(function() {
             $.xhrPool = [];
@@ -1204,6 +1209,8 @@
 			    		}
 			    	});
 					if(check){
+							$('#selectSortBox').find('option[value!=0]').remove();
+							
 							$.ajax({
 					        	url: "<c:url value='/user/addTagHome' />",
 					        	data: JSON.stringify({"tagName" : tagName, "listCardId" : listCardId}),
@@ -1253,7 +1260,7 @@
 							    					+ "</td>"
 							    					+ "<td class='nametag'>"+value["tagName"]+"</td>"
 							    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
-					        		        }else if (same) {
+					        		        } else if (same) {
 					        		        	console.log("Same");
 					        		        	respHTML += "<tr id='rowData'>"
 							    					+ "<td><div style='position: relative;' class='icheckbox_square-green some_chk' id='"+value["tagId"]+"'>"
@@ -1264,8 +1271,7 @@
 							    					+ "</td>"
 							    					+ "<td class='nametag' >"+value["tagName"]+"</td>"
 							    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
-					        		        }else
-					        		        {
+					        		        } else {
 					        		        	console.log("Not");
 					        		        	respHTML += "<tr id='rowData'>"
 							    					+ "<td><div style='position: relative;' class='icheckbox_square-green not_chk' id='"+value["tagId"]+"'>"
@@ -1277,6 +1283,10 @@
 							    					+ "<td class='nametag' >"+value["tagName"]+"</td>"
 							    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
 					        		        }
+					        			 
+					        			 $('#selectSortBox').append('<option value="'+value["tagId"]+'">'+value["tagName"]+'</option>');					        			    
+					        			
+
 
 					        		});
 					        		$("#tagCardName").val('');
@@ -1291,9 +1301,8 @@
 							  	}
 					        });
 						}
-						
-
 					}
+			
 	     });
 	    
 	     //check add tag card
@@ -1639,6 +1648,7 @@
 		}
 		
 		function deleteTag(id){
+			$('#selectSortBox').find('option[value!=0]').remove();
 	     	$.ajax({
 	        	url: "<c:url value='/user/deleteTag' />",
 	        	data: 'tagId='+ id,
@@ -1710,7 +1720,7 @@
 			    					+ "<td class='nametag' >"+value["tagName"]+"</td>"
 			    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
 	        		        }
-
+	        			 	$('#selectSortBox').append('<option value="'+value["tagId"]+'">'+value["tagName"]+'</option>');
 	        		});
 	        		$("#tagCardName").val('');
 	        		$("#paging tbody").html("");

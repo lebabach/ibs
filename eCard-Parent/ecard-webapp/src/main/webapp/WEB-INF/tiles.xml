@@ -38,9 +38,13 @@
     <definition name="operatorregister" extends="base.definition">  
         <put-attribute name="body" value="/WEB-INF/views/operator/register_operator.jsp" />  
     </definition>
-        <definition name="operatorconfirm" extends="base.definition">  
+     <definition name="operatorconfirm" extends="base.definition">  
         <put-attribute name="body" value="/WEB-INF/views/operator/confirm_operator.jsp" />  
     </definition>
+    <definition name="changeowner" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/operator/change_owners.jsp" />  
+    </definition>
+    
     <!-- team administration -->
     <definition name="teamlist" extends="base.definition">  
         <put-attribute name="body" value="/WEB-INF/views/team/teamlist.jsp" />  
@@ -184,6 +188,11 @@
     <definition name="add-business-card" extends="base.pc.definition">   	
         <put-attribute name="title" value="名刺データ作成" />  
         <put-attribute name="body" value="/WEB-INF/views/user/add_business_card.jsp" />  
+    </definition>
+    
+    <definition name="overlapcards" extends="base.pc.definition">   	
+        <put-attribute name="title" value="名刺データ作成" />  
+        <put-attribute name="body" value="/WEB-INF/views/user/overlap_cards.jsp" />  
     </definition>
     
     <!-- backup --> 
