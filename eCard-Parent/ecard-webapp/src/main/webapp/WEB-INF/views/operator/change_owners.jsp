@@ -38,12 +38,21 @@ $(document).ready(function() {
 	    	 document.location.href="<c:url value='/operators/confirm/"+${userLeave.userId}+" '/>";
 		});
 	     
+	     $(".criteriaSearch").keyup(function (e) {
+			  if (e.which == 13) {
+				  $('#criteriaSearch').trigger('click');
+			  }
+		 });
+	     
 });
 
   $(document).on('click', '#criteriaSearch', function() {
 	   $('.content_user').html("");
 	   var criteriaSearch = $('.criteriaSearch').val();
 	   console.log(criteriaSearch);
+	   if (criteriaSearch == ""){
+		   document.location.href="<c:url value='/operators/changeowner/"+${userLeave.userId}+" '/>";
+	   }
 		$.ajax({
 			type: 'POST',
 			url: '<c:url value="/operators/searchList"/>',
@@ -153,10 +162,10 @@ $(document).ready(function() {
                                     <tr>
                                         <td colspan="2"  style="background-color: #fff; padding-left: 0;">所有者（変更先）の検索</td>
                                         <td colspan="4" style="background-color: #fff; padding-left: 0; text-align:right;">
-                                            <form>
+
                                                 <input class="criteriaSearch"  name="criteriaSearch" value="" style="width:300px; height:30px;">
                                                 <input value="検索" style="padding-left:10px; padding-right:10px; height:30px;" id ="criteriaSearch"  type="button">
-                                            </form>
+                                         
                                         </td>
                                     </tr>
                                     <tr>
