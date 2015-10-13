@@ -255,7 +255,7 @@
             
           </div>
           <div class="col-md-2 m-b-xs setDisplayTerm" style="width:188px; display:inline-block">
-            <select id="selectSortBox" class="input-sm form-control input-s-sm inline" id="sort-card-connect">
+            <select id="selectSortBox" class="input-sm form-control input-s-sm inline">
               <option value="0" selected>すべて</option>
               <c:forEach var="cardTag" items="${listTagGroup}">
               	<option value="${cardTag.tagId}"><c:out value="${cardTag.tagName}"/></option>
@@ -1204,6 +1204,8 @@
 			    		}
 			    	});
 					if(check){
+							$('#selectSortBox').find('option[value!=0]').remove();
+							
 							$.ajax({
 					        	url: "<c:url value='/user/addTagHome' />",
 					        	data: JSON.stringify({"tagName" : tagName, "listCardId" : listCardId}),
@@ -1253,7 +1255,7 @@
 							    					+ "</td>"
 							    					+ "<td class='nametag'>"+value["tagName"]+"</td>"
 							    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
-					        		        }else if (same) {
+					        		        } else if (same) {
 					        		        	console.log("Same");
 					        		        	respHTML += "<tr id='rowData'>"
 							    					+ "<td><div style='position: relative;' class='icheckbox_square-green some_chk' id='"+value["tagId"]+"'>"
@@ -1264,8 +1266,7 @@
 							    					+ "</td>"
 							    					+ "<td class='nametag' >"+value["tagName"]+"</td>"
 							    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
-					        		        }else
-					        		        {
+					        		        } else {
 					        		        	console.log("Not");
 					        		        	respHTML += "<tr id='rowData'>"
 							    					+ "<td><div style='position: relative;' class='icheckbox_square-green not_chk' id='"+value["tagId"]+"'>"
@@ -1277,6 +1278,10 @@
 							    					+ "<td class='nametag' >"+value["tagName"]+"</td>"
 							    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
 					        		        }
+					        			 
+					        			 $('#selectSortBox').append('<option value="'+value["tagId"]+'">'+value["tagName"]+'</option>');					        			    
+					        			
+
 
 					        		});
 					        		$("#tagCardName").val('');
@@ -1291,9 +1296,8 @@
 							  	}
 					        });
 						}
-						
-
 					}
+			
 	     });
 	    
 	     //check add tag card
@@ -1639,6 +1643,7 @@
 		}
 		
 		function deleteTag(id){
+			$('#selectSortBox').find('option[value!=0]').remove();
 	     	$.ajax({
 	        	url: "<c:url value='/user/deleteTag' />",
 	        	data: 'tagId='+ id,
@@ -1710,7 +1715,7 @@
 			    					+ "<td class='nametag' >"+value["tagName"]+"</td>"
 			    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
 	        		        }
-
+	        			 	$('#selectSortBox').append('<option value="'+value["tagId"]+'">'+value["tagName"]+'</option>');
 	        		});
 	        		$("#tagCardName").val('');
 	        		$("#paging tbody").html("");
