@@ -1307,10 +1307,11 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		String sqlStr = "SELECT c.company_name AS companyName, count(*) AS cnt, c.card_id AS cardId FROM card_info AS c "
 				+ "WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 AND c.newest_card_flg = 1 ";
 		
-		String params[] = { "'*W1:1,2:1,3:1,4:1,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 +", companyName.toLowerCase(), "'"};
+		String params[] = { "'*W1:1,2:1,3:0,4:0,5:0,6:0,7:1,8:0,9:0,10:0,11:0,12:0,13:0,14:0 +", "\""+companyName.toLowerCase()+"\"", "'"};
 		
 		sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
-				+ "AGAINST(%s %s %s IN BOOLEAN MODE)";
+				+ "AGAINST(%s %s %s IN BOOLEAN MODE) "
+				+ "GROUP BY c.company_name";
 		sqlStr = String.format(sqlStr, params);
 
 		Query query = getEntityManager().createNativeQuery(sqlStr);

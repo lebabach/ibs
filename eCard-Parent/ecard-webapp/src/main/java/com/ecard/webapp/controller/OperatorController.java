@@ -338,10 +338,38 @@ public class OperatorController {
     	ModelAndView modelAndView = new ModelAndView();
     	UserInfo userLeave = userInfoService.getUserInfoByUserId(id);
     	List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(id);
+    	List<UserInfoVo> lstUserInfo = userInfoService.getAllUserSearchInfo();
 		modelAndView.setViewName("changeowner");
 		modelAndView.addObject("userLeave", userLeave);
 		modelAndView.addObject("listCardInfo", listCardInfo);
+		modelAndView.addObject("lstUserInfo", lstUserInfo);
 		return modelAndView;
 		
 	}
+    
+    @RequestMapping(value = "searchList", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public DataPagingJsonVO<UserInfoResultVO> searchList(HttpServletRequest request) {
+		DataPagingJsonVO<UserInfoResultVO> dataTableResponse = new DataPagingJsonVO<UserInfoResultVO>();
+		List<UserInfoResultVO> userInfoResultVOs = new ArrayList<UserInfoResultVO>();
+		int limit = parseIntParameter(request.getParameter("length"), 0);
+		int offset = parseIntParameter(request.getParameter("start"), 0);
+		String criteriaSearch = request.getParameter("criteriaSearch");
+		String textSearch = criteriaSearch.trim().replaceAll(" +", "|");
+		
+		List<UserInfoVo> userInfos =userInfoService.searchUser(textSearch,-1,-1); 
+		BigInteger count = userInfoService.countUser(textSearch);
+		long totalRecord = count.longValue();
+		for (UserInfoVo info : userInfos) {
+			UserInfoResultVO userInfoResultVO = new UserInfoResultVO(info.getUserId(), info.getName(), info.getCompanyName(), info.getPositionName(), info.getEmail(), info.getMobileNumber(), info.getCreateDate().toString() ,info.getFirstName(),info.getLastName(),info.getFirstNameKana(),info.getLastNameKana(),info.getDepartmentName(),info.getUserIndexNo());
+			userInfoResultVOs.add(userInfoResultVO);
+		}
+		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));
+		dataTableResponse.setRecordsTotal(totalRecord);
+		dataTableResponse.setRecordsFiltered(totalRecord);
+		dataTableResponse.setData(userInfoResultVOs);
+	
+		return dataTableResponse;
+	}
+	
 }
