@@ -563,8 +563,10 @@
  				}).fail(function(xhr, status, err) {
  					console.log('BBB='+err);
  				});
-    	   }
-    	   $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
+    			$(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
+    	   } 
+    	   
+    	   
        });
 
        $('#sort-card-cnd').on('change', function() {
@@ -1016,7 +1018,8 @@
         });
 
         $(document).on('click','#addTag',function(e){
-          if($(".balloon").css('display') == 'block'){
+       	  
+          if($(".balloon").css("display") == "block"){
             $(".balloon").css("display","none");
           }else{
             var listCardIdCheck = [];
@@ -1062,17 +1065,17 @@
  	 	  	        $(this).find("td .icheckbox_square-green").removeClass("some_chk");
  	  	        	$(this).find("td .icheckbox_square-green").addClass("not_chk");
  	  	        }
-   	       });
+   	        });
    	        $(".balloon").css("display","block");
           }
         });
         
         $(document).mouseup(function (e){
-     		    var container = $(".balloon");
+     		    var container = $(".balloon").parent();
      		    if (!container.is(e.target) && container.has(e.target).length === 0) {
      		    	$(".balloon").css("display","none");
      		     }
-        });
+        }); 
         
         $(function() {
             $.xhrPool = [];
