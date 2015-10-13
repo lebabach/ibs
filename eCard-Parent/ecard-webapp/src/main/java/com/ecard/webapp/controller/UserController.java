@@ -117,6 +117,8 @@ import com.ecard.webapp.vo.TagUserHome;
 import com.ecard.webapp.vo.UserInfoResultVO;
 import com.ecard.webapp.vo.UserInfoVO;
 import com.ecard.webapp.vo.UserSearchVO;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/user/*")
@@ -442,7 +444,7 @@ public class UserController {
 			//update History
 			cardInfoService.updateDownloadHistory(downloadCsv.getCsvId());
 			// send mail to roleAdminID
-			/*List<UserInfo> listUser = userInfoService.getAllUserInfo();			
+			List<UserInfo> listUser = userInfoService.getAllUserInfo();			
 			List<String> listUserId = new ArrayList<>();
 			for(UserInfo userAdmin : listUser){
 				if(userAdmin.getRoleAdminId() == 7 && userAdmin.getUserId() != userInfo.getUserId()){
@@ -456,7 +458,7 @@ public class UserController {
 			ctx.setVariable("userDownload",userInfo.getNameKana());
 			ctx.setVariable("dateDownload",downloadCsv.getApprovalDate());
 //			ctx.setVariable("recordNumber",answerText);			
-			sendMailDownload(listUserId,ctx);*/
+			sendMailDownload(listUserId,ctx);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -1583,6 +1585,71 @@ public class UserController {
 				logger.error("Error upload default card image: " + ex.getMessage());
 			}
 		}
+	}
+	
+	@RequestMapping(value = "companyTree")
+	public ModelAndView companyTree(HttpServletRequest request){
+		logger.debug("companyTree", UserController.class);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("companyTree");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "searchCompany", method = RequestMethod.POST)
+	@ResponseBody
+	public String searchCompany(@RequestBody com.ecard.core.vo.CardInfo cardInfo, HttpServletRequest request){
+		logger.debug("searchCompany", UserController.class);
+		
+		List<com.ecard.core.vo.CardInfo> cardList = null;
+		String jsonObj = "";
+		try{
+			cardList = cardInfoService.searchCompanyTree(cardInfo.getCompanyName());
+			if(cardList.size() > 0){
+				jsonObj = new Gson().toJson(cardList);
+			}
+		}
+		catch(Exception ex){
+			logger.debug("Exception : "+ex.getMessage(), UserController.class);
+		}
+		
+		return jsonObj;
+	}
+	
+	@RequestMapping (value = "searchDepartment", method = RequestMethod.POST, produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String searchDepartment(@RequestBody com.ecard.core.vo.CardInfo cardInfo, HttpServletRequest request, HttpServletResponse response){
+		List<com.ecard.core.vo.CardInfo> cardList = null;
+		String jsonObj = "";
+		try{
+			cardList = cardInfoService.searchDepartment(cardInfo.getCompanyName());
+			if(cardList.size() > 0){
+				jsonObj = new Gson().toJson(cardList);
+			}
+		}
+		catch(Exception ex){
+			logger.debug("Exception : "+ex.getMessage(), UserController.class);
+		}
+		
+		return jsonObj;
+	}
+	
+	@RequestMapping (value = "searchCardInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String searchCardInfo(@RequestBody com.ecard.core.vo.CardInfo cardInfo, HttpServletRequest request, HttpServletResponse response){
+		List<com.ecard.core.vo.CardInfo> cardList = null;
+		String jsonObj = "";
+		try{
+			cardList = cardInfoService.searchCardInfo(cardInfo.getCompanyName(), cardInfo.getDepartmentName());
+			if(cardList.size() > 0){
+				jsonObj = new Gson().toJson(cardList);
+			}
+		}
+		catch(Exception ex){
+			logger.debug("Exception : "+ex.getMessage(), UserController.class);
+		}
+		
+		return jsonObj;
 	}
 	
 }

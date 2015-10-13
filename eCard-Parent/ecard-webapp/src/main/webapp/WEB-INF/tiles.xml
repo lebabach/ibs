@@ -38,9 +38,13 @@
     <definition name="operatorregister" extends="base.definition">  
         <put-attribute name="body" value="/WEB-INF/views/operator/register_operator.jsp" />  
     </definition>
-        <definition name="operatorconfirm" extends="base.definition">  
+     <definition name="operatorconfirm" extends="base.definition">  
         <put-attribute name="body" value="/WEB-INF/views/operator/confirm_operator.jsp" />  
     </definition>
+    <definition name="changeowner" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/operator/change_owners.jsp" />  
+    </definition>
+    
     <!-- team administration -->
     <definition name="teamlist" extends="base.definition">  
         <put-attribute name="body" value="/WEB-INF/views/team/teamlist.jsp" />  
@@ -136,6 +140,12 @@
         <put-attribute name="title" value="TOP | トップ" />
         <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
         <put-attribute name="body" value="/WEB-INF/views/user/homePC.jsp" />  
+    </definition>
+    
+    <definition name="companyTree" extends="base.pc.definition">   	
+        <put-attribute name="title" value="顧客組織ツリー" />
+        <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/user/companyTree.jsp" />  
     </definition>
     
     <definition name="detailPC" extends="base.pc.definition">   	
