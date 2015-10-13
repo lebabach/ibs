@@ -3,9 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script>
 $(document).ready(function() {
-	 $(document).on('click', '.btn_back_reply', function() {
-		 document.location.href="<c:url value='/manager/home'/>";
-	 });
 	 $('#table-1').dataTable( {
 	        "dom": '<<t>ip>',
 	        "ordering": false,
@@ -21,8 +18,73 @@ $(document).ready(function() {
 				}
 			}
 	    } );
-	
+	 
+	     $(document).on('click', '#checkAll', function() { 
+			
+			$("#table-1 tbody").find(".i-checks-chk_all").each(function( index ) {
+				 $(this).prop('checked', true);
+				 $(this).parent().attr("class","icheckbox_square-green checked");
+				
+			});
+		});
+	     $(document).on('click', '#removeAll', function() {
+			$("#table-1 tbody").find(".i-checks-chk_all").each(function( index ) {
+				  $(this).prop('checked', false);
+				  $(this).parent().attr("class","icheckbox_square-green");  
+			});
+		});
+	     
+	     $(document).on('click', '.btn_back_reply', function() { 
+	    	 document.location.href="<c:url value='/operators/confirm/"+${userLeave.userId}+" '/>";
+		});
+	     
 });
+
+  $(document).on('click', '#criteriaSearch', function() {
+	   $('.content_user').html("");
+	   var criteriaSearch = $('.criteriaSearch').val();
+	   console.log(criteriaSearch);
+		$.ajax({
+			type: 'POST',
+			url: '<c:url value="/operators/searchList"/>',
+			cache: false,
+			data: 'criteriaSearch='+criteriaSearch,
+			success: function(response) {
+				 $(function() {
+					 var str = "";
+					 $('.content_user').html(" ");
+			            $.each(response.data, function(i, item) {
+			            	$('.content_user').append($('<tr id="rowData" class="tr1">').append(
+			            			    $('<td>').append(
+			            			    		$('<div class="i-checks">').append(
+			            			    				'<label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="'+item.userId+'"  style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label>'
+			            			    				)
+			            			    ),
+			                            $('<td>').text(item.firstName + " " + item.lastName),
+			                            $('<td>').text(item.companyName),
+			                            $('<td>').text(item.departmentName),
+			                            $('<td>').text(item.positionName),
+			                            $('<td>').text(item.email)
+				                        	
+				                          )
+	                
+					                    );
+			            	$('.i-checks').iCheck({
+			                    checkboxClass: 'icheckbox_square-green',
+			                    radioClass: 'iradio_square-green'
+			                     
+			                  });
+
+			            });
+			        });
+				 $('#modelAddTag').modal('show');
+				 
+	        },
+           error: function (response) {
+           	alert("Error");
+           }
+		});
+	}); 
 </script>
 
  <!-- BODY -->
@@ -65,7 +127,7 @@ $(document).ready(function() {
                                 <tbody>
                                    <c:forEach var="cardInfo" items="${listCardInfo}">
 	                                <tr id="rowData">
-	                                    <td><div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="<c:out value="${cardInfo.cardId}" />" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+	                                    <td><div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" class = "i-checks-chk_all" value="<c:out value="${cardInfo.cardId}" />" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
 	                                    <td><c:out value="${cardInfo.lastName}" />　<c:out value="${cardInfo.firstName}" /></td>
 	                                    <td><c:out value="${cardInfo.companyName}" /></td>
 	                                    <td><c:out value="${cardInfo.departmentName}" /></td>
@@ -92,8 +154,8 @@ $(document).ready(function() {
                                         <td colspan="2"  style="background-color: #fff; padding-left: 0;">所有者（変更先）の検索</td>
                                         <td colspan="4" style="background-color: #fff; padding-left: 0; text-align:right;">
                                             <form>
-                                                <input value="" style="width:300px; height:30px;">
-                                                <input value="検索" style="padding-left:10px; padding-right:10px; height:30px;" type="submit">
+                                                <input class="criteriaSearch"  name="criteriaSearch" value="" style="width:300px; height:30px;">
+                                                <input value="検索" style="padding-left:10px; padding-right:10px; height:30px;" id ="criteriaSearch"  type="button">
                                             </form>
                                         </td>
                                     </tr>
@@ -106,31 +168,17 @@ $(document).ready(function() {
                                         <th>メールアドレス</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                <tr id="rowData">
-                                    <td><div class="i-checks"><label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
-                                    <td>名刺　A夫</td>
-                                    <td>(株)インテリジェンス</td>
-                                    <td>営業部営業一課　課長</td>
-                                    <td>課長</td>
-                                    <td>kazuo.yamada@inte.co.jp</td>
-                                </tr>
-                                <tr id="rowData">
-                                    <td><div class="i-checks"><label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
-                                    <td>名刺　B夫</td>
-                                    <td>(株)テンプスタッフ</td>
-                                    <td>営業部営業一課</td>
-                                    <td></td>
-                                    <td>kazuo.yamada@inte.co.jp</td>
-                                </tr>
-                                <tr id="rowData">
-                                    <td><div class="i-checks"><label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
-                                    <td>名刺　E夫</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>kazuo.yamada@inte.co.jp</td>
-                                </tr>
+                                <tbody class="content_user">
+		                                <c:forEach var="userInfo" items="${lstUserInfo}">
+			                                <tr id="rowData">
+			                                    <td><div class="i-checks"><label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="<c:out value="${userInfo.userId}" />" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+			                                    <td><c:out value="${userInfo.lastName}" />　<c:out value="${userInfo.firstName}" /></td>
+			                                    <td><c:out value="${userInfo.companyName}" /></td>
+			                                    <td><c:out value="${userInfo.departmentName}" /></td>
+			                                    <td><c:out value="${userInfo.positionName}" /></td>
+			                                    <td><c:out value="${userInfo.email}" /></td>
+			                                </tr>
+		                               </c:forEach>
                                 </tbody>
                             </table>
                             <div style=" margin-left: 0;">

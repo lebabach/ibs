@@ -62,6 +62,7 @@ import com.ecard.core.model.CardTagId;
 import com.ecard.core.model.CompanyInfo;
 import com.ecard.core.model.ContactHistoryId;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.GroupCompanyInfo;
 import com.ecard.core.model.InquiryInfo;
 import com.ecard.core.model.PossessionCard;
 import com.ecard.core.model.PossessionCardId;
@@ -90,6 +91,7 @@ import com.ecard.core.vo.CardInfoCSV;
 import com.ecard.core.vo.CardInfoMemo;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.NotificationList;
+import com.ecard.core.vo.OwnerCards;
 import com.ecard.core.vo.SearchInfo;
 import com.ecard.core.vo.TagForCard;
 import com.ecard.core.vo.TagGroup;
@@ -1374,7 +1376,6 @@ public class UserController {
         }else{
         	cardInfo = cardInfoService.getListCardSearchAll(userSearchVO.getOwner(), userSearchVO.getFreeText(), userSearchVO.getName(),userSearchVO.getPosition(), userSearchVO.getDepartment(), userSearchVO.getCompany(), userSearchVO.getPage(), userInfo.getGroupCompanyId());
         }
-        
         if (session.getAttribute("searchDetail") == null) {
         	userSearchVO.setDetail(false);
         	session.setAttribute("searchDetail", userSearchVO);
@@ -1513,35 +1514,41 @@ public class UserController {
 	
 	@RequestMapping(value = "searchOverLapCards", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public DataPagingJsonVO<UserInfoResultVO> searchOverLapCards(HttpServletRequest request) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();	
-		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-		DataPagingJsonVO<UserInfoResultVO> dataTableResponse = new DataPagingJsonVO<UserInfoResultVO>();
-		List<UserInfoResultVO> userInfoResultVOs = new ArrayList<UserInfoResultVO>();
-		String criteriaSearch = request.getParameter("criteriaSearch");
-		String textSearch = criteriaSearch.trim().replaceAll(" +", "|");
+	public DataPagingJsonVO<OwnerCards> searchOverLapCards(HttpServletRequest request) {
 		int limit = parseIntParameter(request.getParameter("length"), 0);
 		int offset = parseIntParameter(request.getParameter("start"), 0);
-		List<UserInfoVo> userInfos = null ;
-		BigInteger count = null ;
-		if(roles.contains(RoleType.ROLE_ADMIN.name())){
-			 userInfos = userInfoService.searchUser(textSearch, limit, offset);
-			 count = userInfoService.countUser(textSearch);
-		}else{
-			 userInfos = userInfoService.searchUserOfMyCompany(criteriaSearch, limit, offset, ecardUser.getGroupCompanyId());
-			 count = userInfoService.countUser(criteriaSearch, ecardUser.getGroupCompanyId());
-		}
+		String criteriaSearch = request.getParameter("criteriaSearch");
+		DataPagingJsonVO<OwnerCards> dataTableResponse = new DataPagingJsonVO<OwnerCards>();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+		List<OwnerCards> ownerCards=new ArrayList<OwnerCards>();
+		OwnerCards ownerCard=null;
+		List<GroupCompanyInfo> companies= groupCompanyInfoService.getListCompany();
+		List<com.ecard.core.vo.CardInfo> cards= cardInfoService.getListCardSearch(userInfo.getUserId(), "内閣府認証特定非営利活動法人日本経営士協会1",null, null, null, null,0, userInfo.getGroupCompanyId());
+		List<GroupCompanyInfo> companyTemp=null;
 		
-		long totalRecord = count.longValue();
-		for (UserInfoVo info : userInfos) {
-			UserInfoResultVO userInfoResultVO = new UserInfoResultVO(info.getUserId(), info.getName(), info.getCompanyName(), info.getPositionName(), info.getEmail(), info.getMobileNumber(), info.getCreateDate().toString() ,info.getFirstName(),info.getLastName(),info.getFirstNameKana(),info.getLastNameKana(),info.getDepartmentName(),info.getUserIndexNo());
-			userInfoResultVOs.add(userInfoResultVO);
+		for(com.ecard.core.vo.CardInfo item : cards){
+			ownerCard=new OwnerCards();
+			ownerCard.setCardId(item.getCardId());
+			ownerCard.setAddressFull(item.getAddressFull());
+			companyTemp=companies.stream().filter(x->x.getGroupCompanyId()==item.getGroupCompanyId()).collect(Collectors.toList());
+			ownerCard.setCompanyName(CollectionUtils.isNotEmpty(companyTemp)?companyTemp.stream().findFirst().get().getGroupCompanyName():item.getCompanyName());
+			ownerCard.setContactDate(item.getContactDate());
+			ownerCard.setDepartmentName(item.getDepartmentName());
+			ownerCard.setEmail(item.getEmail());
+			ownerCard.setName(item.getName());;
+			ownerCard.setPositionName(item.getPositionName());
+			ownerCard.setTelNumberCompany(item.getTelNumberCompany());
+			ownerCards.add(ownerCard);
 		}
+		ownerCards=ownerCards.stream().distinct().collect(Collectors.toList());
+		
+		long totalRecord = 100;
 		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));
 		dataTableResponse.setRecordsTotal(totalRecord);
 		dataTableResponse.setRecordsFiltered(totalRecord);
-		dataTableResponse.setData(userInfoResultVOs);
+		dataTableResponse.setData(ownerCards);
 	
 		return dataTableResponse;
 	}

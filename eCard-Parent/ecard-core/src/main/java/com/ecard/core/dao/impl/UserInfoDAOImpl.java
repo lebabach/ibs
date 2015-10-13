@@ -515,7 +515,7 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
         List<UserInfoVo> result = new ArrayList<>(rows.size());
 
         for (Object[] row : rows) {
-            result.add(new UserInfoVo((Integer)row[0],(String) row[16],(String) row[17], (String)row[22],(String) row[24],(String) row[25]));
+            result.add(new UserInfoVo((Integer)row[0],(String) row[15],(String) row[16],(String) row[17], (String)row[22],(String) row[24],(String) row[25],(String) row[4]));
         }
         return result;		
 	}
