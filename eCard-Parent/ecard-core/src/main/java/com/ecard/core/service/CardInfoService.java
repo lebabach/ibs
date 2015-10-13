@@ -124,5 +124,7 @@ public interface CardInfoService {
 
    public Long countPossessionCard(Integer userId);
 
-public CardInfo getNewestCardInfo(CardInfo cardInfo);
+   public CardInfo getNewestCardInfo(CardInfo cardInfo);
+	
+   public Long countSameCardInfoByOwner(CardInfo cardInfo);
 }
