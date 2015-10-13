@@ -3,6 +3,7 @@
  */
 package com.ecard.core.vo;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 /**
@@ -64,8 +65,7 @@ public class CardInfo {
     private Integer groupCompanyId;
     private int is_editting;
     private Date contactDate;
-    
-    
+    private BigInteger count;   
     
     public int getIs_editting() {
 		return is_editting;
@@ -84,6 +84,17 @@ public class CardInfo {
 	}
 
 	public CardInfo(){}
+	
+	public CardInfo(String companyName, BigInteger count, Integer cardId){
+		this.companyName = companyName;
+		this.count = count;
+		this.cardId = cardId;
+	}
+	
+	public CardInfo(Integer cardId, String name){
+		this.cardId = cardId;
+		this.name = name;
+	}
     
     public CardInfo(Integer cardId, String name, String lastName, String firstName, String nameKana, String lastNameKana, String firstNameKana,
             String companyName, String departmentName, String positionName, String imageFile, Integer approvalStatus ,Date createDate){
@@ -777,6 +788,14 @@ public class CardInfo {
     public void setContactDate(Date contactDate) {
         this.contactDate = contactDate;
     }
+
+	public BigInteger getCount() {
+		return count;
+	}
+
+	public void setCount(BigInteger count) {
+		this.count = count;
+	}
 	
     
     

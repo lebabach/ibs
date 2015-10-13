@@ -957,7 +957,7 @@ label.error {
 						<div class="section">
 							<dl>
 								<dt>
-									<img src="<c:url value='/assets/img/ico_address.png'/>" alt="会社FAX">
+									<img src="<c:url value='/assets/img/zip_code_ic.png'/>" alt="会社FAX">
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
@@ -1152,7 +1152,7 @@ label.error {
          
     	 //Delete card bussiness
     	 $("#delBusinessCard").click(function(){
-    		 var confirm = window.confirm("Are you sure ?");
+    		 var confirm = window.confirm('<fmt:message key="card.list.confirmDelete"/>');
     	     if(confirm){
 	    		 $.ajax({
 		   			  type: "POST",

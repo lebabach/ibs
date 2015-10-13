@@ -142,4 +142,9 @@ public interface CardInfoService {
    public DownloadCsv getDownloadCSV(Integer csvId);
    public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId);
    
+   public List<com.ecard.core.vo.CardInfo> searchCompanyTree(String companyName);
+
+   public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName);
+   
+   public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName);
 }
