@@ -434,7 +434,7 @@ public class UserController {
 			//update History
 			cardInfoService.updateDownloadHistory(downloadCsv.getCsvId());
 			// send mail to roleAdminID
-			List<UserInfo> listUser = userInfoService.getAllUserInfo();			
+			/*List<UserInfo> listUser = userInfoService.getAllUserInfo();			
 			List<String> listUserId = new ArrayList<>();
 			for(UserInfo userAdmin : listUser){
 				if(userAdmin.getRoleAdminId() == 7 && userAdmin.getUserId() != userInfo.getUserId()){
@@ -448,7 +448,7 @@ public class UserController {
 			ctx.setVariable("userDownload",userInfo.getNameKana());
 			ctx.setVariable("dateDownload",downloadCsv.getApprovalDate());
 //			ctx.setVariable("recordNumber",answerText);			
-			sendMailDownload(listUserId,ctx);
+			sendMailDownload(listUserId,ctx);*/
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
