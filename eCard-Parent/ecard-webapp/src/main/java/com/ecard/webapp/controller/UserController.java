@@ -12,12 +12,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
@@ -36,6 +38,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -91,11 +94,13 @@ import com.ecard.core.vo.SearchInfo;
 import com.ecard.core.vo.TagForCard;
 import com.ecard.core.vo.TagGroup;
 import com.ecard.core.vo.UserDownloadPermission;
+import com.ecard.core.vo.UserInfoVo;
 import com.ecard.core.vo.UserTagAndCardTag;
 import com.ecard.webapp.constant.CommonConstants;
 import com.ecard.webapp.controller.DataProcessController.UploadDefaultCardThread;
 import com.ecard.webapp.constant.CsvConstant;
 import com.ecard.webapp.security.EcardUser;
+import com.ecard.webapp.security.RoleType;
 import com.ecard.webapp.util.FileUploadModel;
 import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.util.UploadFileUtil;
@@ -107,6 +112,7 @@ import com.ecard.webapp.vo.ListCardDelete;
 import com.ecard.webapp.vo.ObjectCards;
 import com.ecard.webapp.vo.ObjectListSearchUsers;
 import com.ecard.webapp.vo.TagUserHome;
+import com.ecard.webapp.vo.UserInfoResultVO;
 import com.ecard.webapp.vo.UserInfoVO;
 import com.ecard.webapp.vo.UserSearchVO;
 
@@ -1496,6 +1502,46 @@ public class UserController {
 		notify.setReadFlg(1);
 		notificationInfoService.updateReadFlgById(notify);
 		return true;
+	}
+	
+	@RequestMapping("overlapcards")
+	public ModelAndView list() {
+		return new ModelAndView("overlapcards");
+	} 
+	
+	@RequestMapping(value = "searchOverLapCards", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public DataPagingJsonVO<UserInfoResultVO> searchOverLapCards(HttpServletRequest request) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();	
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+		DataPagingJsonVO<UserInfoResultVO> dataTableResponse = new DataPagingJsonVO<UserInfoResultVO>();
+		List<UserInfoResultVO> userInfoResultVOs = new ArrayList<UserInfoResultVO>();
+		String criteriaSearch = request.getParameter("criteriaSearch");
+		String textSearch = criteriaSearch.trim().replaceAll(" +", "|");
+		int limit = parseIntParameter(request.getParameter("length"), 0);
+		int offset = parseIntParameter(request.getParameter("start"), 0);
+		List<UserInfoVo> userInfos = null ;
+		BigInteger count = null ;
+		if(roles.contains(RoleType.ROLE_ADMIN.name())){
+			 userInfos = userInfoService.searchUser(textSearch, limit, offset);
+			 count = userInfoService.countUser(textSearch);
+		}else{
+			 userInfos = userInfoService.searchUserOfMyCompany(criteriaSearch, limit, offset, ecardUser.getGroupCompanyId());
+			 count = userInfoService.countUser(criteriaSearch, ecardUser.getGroupCompanyId());
+		}
+		
+		long totalRecord = count.longValue();
+		for (UserInfoVo info : userInfos) {
+			UserInfoResultVO userInfoResultVO = new UserInfoResultVO(info.getUserId(), info.getName(), info.getCompanyName(), info.getPositionName(), info.getEmail(), info.getMobileNumber(), info.getCreateDate().toString() ,info.getFirstName(),info.getLastName(),info.getFirstNameKana(),info.getLastNameKana(),info.getDepartmentName(),info.getUserIndexNo());
+			userInfoResultVOs.add(userInfoResultVO);
+		}
+		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));
+		dataTableResponse.setRecordsTotal(totalRecord);
+		dataTableResponse.setRecordsFiltered(totalRecord);
+		dataTableResponse.setData(userInfoResultVOs);
+	
+		return dataTableResponse;
 	}
 	
 	class UploadCardThread extends Thread {
