@@ -563,6 +563,7 @@
  					console.log('BBB='+err);
  				});
     	   }
+    	   $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
        });
 
        $('#sort-card-cnd').on('change', function() {
