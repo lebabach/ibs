@@ -4,6 +4,15 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <style type="text/css">
+ .ibox-content-company .dataTables_wrapper {
+ 	width: 100% !important;
+    margin-left: 0% !important;
+ }
+ .ibox-content-question .dataTables_wrapper {
+ 	width: 100% !important;
+    margin-left: 0% !important;
+ }
+ 
 .btn-lg {
 	padding: 2px 16px;
 }
@@ -325,6 +334,83 @@ td {
 	text-align: left;
 }
 </style>
+<script type="text/javascript">
+var dataTables;
+function loadDataComplete() {
+	$('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',                
+   		});
+	$(".iradio_square-green_combo").on("click",function(){
+		console.log("12121");
+	})
+}
+
+$(document).ready(function() {
+	
+	dataTables = $('#tbl-cards').dataTable( {
+		"fnDrawCallback" : function() {
+			loadDataComplete();
+		},
+		"dom" : '<<t>ip>',
+		"iDisplayLength" : 5,
+		"processing": true,
+		"serverSide": true,
+		"searching": false,
+		"ordering": false,
+		"language": {
+			"zeroRecords": '<fmt:message key="operator.list.table.emptyTable"/>',
+			"emptyTable": '<fmt:message key="operator.list.table.emptyTable"/>',
+			"info": '<fmt:message key="operator.list.table.info"/>',
+			"infoEmpty": '<fmt:message key="operator.list.table.info"/>',
+			"paginate": {
+				"previous": '<fmt:message key="operator.list.table.paginate.previous"/>',
+				"next": '<fmt:message key="operator.list.table.paginate.next"/>'
+			}
+		},
+		"ajax": {
+			"url": "searchOverLapCards",
+			"type": "POST",
+			"data": function (dataTableRequest) {
+				dataTableRequest.criteriaSearch = $('#criteriaSearch').val();
+				dataTableRequest.status = $('#status').val();
+				return dataTableRequest;
+			},
+			"dataSrc": "data",
+			"error": function(xhr) {
+				alert('error datatable')
+			}
+		},
+		"columns": [
+			{ "data": "cardId",
+				"createdCell": function (td, cellData, rowData, row, col) {
+			       $(td).html("<input type='hidden' id='userId' value='"+rowData.cardId+"'/>"+ rowData.cardId );
+			}}, 
+			{"data": "email"},
+
+			 { "data": "cardId",
+				"className": "ch-color-link",
+				"createdCell": function (td, cellData, rowData, row, col) {
+					
+					$(td).html("<div class='iradio_square-green_combo'><input type='radio' class='i-checks' name='bla'></div>");
+				}
+			},
+			{ "data": "name"},
+			{ "data": "companyName"},
+			{ "data": "addressFull"},
+			{ "data": "departmentName"},
+			{ "data": "positionName"},
+			{ "data": "telNumberCompany"},
+			{ "data": "contactDate"},
+		],
+	});
+	
+	
+	
+});
+
+</script>
+
 <div class="div-list">
 	<div class="box-1" style="width: 1200px;">
 		<div class="title-box-1">繋がった名刺検索</div>
@@ -334,25 +420,26 @@ td {
 				style="margin-left: 0; margin-right: 0">
 
 				<div class="col-sm-12 table-list-operator">
-					<div class="row " id="data-table">
+					<div class="row ">
 						<div class="ibox-content  ibox-content-question ibox-custom01"
 							style="padding: 0;">
-							<table class="table paging" style="padding: 0;">
+							<table class="table paging" style="padding: 0;"  id="tbl-cards">
 								<thead>
 									<tr>
 										<td colspan="2"
 											style="background-color: #fff; padding-left: 0;">履歴となる名刺検索</td>
 										<td colspan="9"
 											style="background-color: #fff; padding-left: 0; text-align: right;">
-											<form>
-												<input value="" style="width: 300px; height: 30px;">
+											<%-- <form>
+												<input value="" id="criteriaSearch" style="width: 300px; height: 30px;">
 												<input value="検索"
 													style="padding-left: 10px; padding-right: 10px; height: 30px;"
-													type="submit">
-											</form>
+													type="button">
+											</form> --%>
 										</td>
-									</tr>
+									</tr> 
 									<tr>
+									    <th>Id</th>
 										<th><fmt:message key='overlap.cards.table1.email' /></th>
 										<th></th>
 										<th><fmt:message key='overlap.cards.table1.name' /></th>
@@ -371,10 +458,10 @@ td {
 				</div>
 				<!-- DATA TABLE -->
 				<div class="col-sm-12 table-list-operator">
-					<div class="row" id="data-table">
+					<div class="row" id="tbl-connect-cards">
 						<div class="ibox-content  ibox-content-question ibox-custom01"
 							style="padding: 0;">
-							<table id="table-1" class="table paging"
+							<table id="tbl-connect-cards" class="table paging"
 								style="padding: 0; position: relative; z-index: 9">
 								<thead>
 
@@ -392,8 +479,6 @@ td {
 									</tr>
 								</thead>
 							</table>
-
-
 						</div>
 					</div>
 				</div>
@@ -401,10 +486,7 @@ td {
 					<button type="submit" class="btn btn-primary"
 						style="width: 150px !important">履歴として統合する</button>
 				</div>
-
-
-
-
 			</div>
 		</div>
 	</div>
+</div>

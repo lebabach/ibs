@@ -1514,41 +1514,22 @@ public class UserController {
 	
 	@RequestMapping(value = "searchOverLapCards", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public DataPagingJsonVO<OwnerCards> searchOverLapCards(HttpServletRequest request) {
-		int limit = parseIntParameter(request.getParameter("length"), 0);
+	public DataPagingJsonVO<com.ecard.core.vo.CardInfo> searchOverLapCards(HttpServletRequest request) {
+		/*int limit = parseIntParameter(request.getParameter("length"), 0);
 		int offset = parseIntParameter(request.getParameter("start"), 0);
-		String criteriaSearch = request.getParameter("criteriaSearch");
-		DataPagingJsonVO<OwnerCards> dataTableResponse = new DataPagingJsonVO<OwnerCards>();
+		String criteriaSearch = request.getParameter("criteriaSearch");*/
+		DataPagingJsonVO<com.ecard.core.vo.CardInfo> dataTableResponse = new DataPagingJsonVO<com.ecard.core.vo.CardInfo>();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
-		List<OwnerCards> ownerCards=new ArrayList<OwnerCards>();
-		OwnerCards ownerCard=null;
-		List<GroupCompanyInfo> companies= groupCompanyInfoService.getListCompany();
 		List<com.ecard.core.vo.CardInfo> cards= cardInfoService.getListCardSearch(userInfo.getUserId(), "内閣府認証特定非営利活動法人日本経営士協会1",null, null, null, null,0, userInfo.getGroupCompanyId());
-		List<GroupCompanyInfo> companyTemp=null;
 		
-		for(com.ecard.core.vo.CardInfo item : cards){
-			ownerCard=new OwnerCards();
-			ownerCard.setCardId(item.getCardId());
-			ownerCard.setAddressFull(item.getAddressFull());
-			companyTemp=companies.stream().filter(x->x.getGroupCompanyId()==item.getGroupCompanyId()).collect(Collectors.toList());
-			ownerCard.setCompanyName(CollectionUtils.isNotEmpty(companyTemp)?companyTemp.stream().findFirst().get().getGroupCompanyName():item.getCompanyName());
-			ownerCard.setContactDate(item.getContactDate());
-			ownerCard.setDepartmentName(item.getDepartmentName());
-			ownerCard.setEmail(item.getEmail());
-			ownerCard.setName(item.getName());;
-			ownerCard.setPositionName(item.getPositionName());
-			ownerCard.setTelNumberCompany(item.getTelNumberCompany());
-			ownerCards.add(ownerCard);
-		}
-		ownerCards=ownerCards.stream().distinct().collect(Collectors.toList());
 		
-		long totalRecord = 100;
+		BigInteger totalRecord =cardInfoService.getTotalCardSearch(userInfo.getUserId(), "内閣府認証特定非営利活動法人日本経営士協会1",null, null, null, null,userInfo.getGroupCompanyId());
 		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));
-		dataTableResponse.setRecordsTotal(totalRecord);
-		dataTableResponse.setRecordsFiltered(totalRecord);
-		dataTableResponse.setData(ownerCards);
+		dataTableResponse.setRecordsTotal(totalRecord.longValue());
+		dataTableResponse.setRecordsFiltered(totalRecord.longValue());
+		dataTableResponse.setData(cards);
 	
 		return dataTableResponse;
 	}
