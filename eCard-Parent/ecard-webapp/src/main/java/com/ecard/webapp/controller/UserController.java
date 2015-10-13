@@ -229,6 +229,7 @@ public class UserController {
 		List<String> lstNameSort = null;
 		List<CardInfo> listCardSortNameCompany = null;
 		List<CardInfoUserVo> lstCardInfo = null;
+		 String sortType = "";
 		// Search with possessionCard
 		if(searchType == 0){
 			if(typeSort == SearchConditions.CONTACT.getValue()){
@@ -239,20 +240,26 @@ public class UserController {
 				lstCardInfo = new ArrayList<>();
 				lstNameSort = new ArrayList<>();
 				 for(CardInfo cardInfoModel :listCardSortNameCompany ){
-					 String sortType = cardInfoModel.getNameKana().substring(0,  1);
-					 lstNameSort.add(sortType.toUpperCase());
-					 CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
-					 lstCardInfo.add(cardInfoUserVo);
+					 if(!cardInfoModel.getNameKana().equals("")){
+						  sortType = cardInfoModel.getNameKana().substring(0,  1);
+					 }
+						 lstNameSort.add(sortType.toUpperCase());
+						 CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
+						 lstCardInfo.add(cardInfoUserVo);
+					
 				 }
 			}else{
 				listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(),null, SearchConditions.COMPANY.name().toLowerCase(), limit);
 				lstCardInfo = new ArrayList<>();
 				lstNameSort = new ArrayList<>();
 				 for(CardInfo cardInfoModel :listCardSortNameCompany ){
-					 String sortType = cardInfoModel.getCompanyNameKana().substring(0,  1);
-					 lstNameSort.add(sortType.toUpperCase());
-					 CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
-					 lstCardInfo.add(cardInfoUserVo);
+					 if(!cardInfoModel.getCompanyNameKana().equals("")){
+						 sortType = cardInfoModel.getCompanyNameKana().substring(0,  1);
+					 }
+						 lstNameSort.add(sortType.toUpperCase());
+						 CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
+						 lstCardInfo.add(cardInfoUserVo);
+					 
 				 }
 			}
 			
@@ -277,7 +284,9 @@ public class UserController {
 				lstCardInfo = new ArrayList<>();
 				lstNameSort = new ArrayList<>();
 				 for(CardInfo cardInfoModel :listCardSortNameCompany ){
-					 String sortType = cardInfoModel.getNameKana().substring(0,  1);
+					 if(!cardInfoModel.getNameKana().equals("")){
+					   sortType = cardInfoModel.getNameKana().substring(0,  1);
+					 }
 					 lstNameSort.add(sortType.toUpperCase());
 					 CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
 					 lstCardInfo.add(cardInfoUserVo);
@@ -287,7 +296,9 @@ public class UserController {
 				lstCardInfo = new ArrayList<>();
 				lstNameSort = new ArrayList<>();
 				 for(CardInfo cardInfoModel :listCardSortNameCompany ){
-					 String sortType = cardInfoModel.getCompanyNameKana().substring(0,  1);
+					 if(!cardInfoModel.getCompanyNameKana().equals("")){
+					   sortType = cardInfoModel.getCompanyNameKana().substring(0,  1);
+					 }
 					 lstNameSort.add(sortType.toUpperCase());
 					 CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
 					 lstCardInfo.add(cardInfoUserVo);
