@@ -579,14 +579,14 @@
 			data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch
 		  }).done(function(resp, status, xhr) {
 			 $('.business_card_book').html("");
-			   var str = "";
-				$.each( resp.data, function( key, value ) {	
-					str = $('.business_card_book').append(
-						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id= "'+value.nameSort.replace("/","").trim()+'">'
-				        +'<div class="list-group-item-title">'+value.nameSort+'</div>');
+			   var listGroup = "";
+			   var listGroupItem = "";
+				$.each( resp.data, function( key, value ) {						
+					listGroup = $('.business_card_book').append(
+						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
+				        +'<div class="list-group-item-title">'+value.nameSort+'</div></div>');
 					 $.each( value.lstCardInfo, function (k,v) {
-							isLoading = isLoading + 1;							 		
-								str.append(	'<div class="list-group-item pointer">'
+						 listGroupItem += '<div class="list-group-item pointer">'
 				    					+'<div class="row row-new">'
 				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
 				    					+	'<div class="col-md-5">'
@@ -602,13 +602,15 @@
 				    					+	'<div class="col-xs-7">'								
 				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-				    					+	'</div> </div> </div> </div></div>'
-				        	    );
+				    					+	'</div> </div> </div> </div>';				    		 
+	    					 $('.business_card_book').find("#"+value.nameSort.replace("/","").trim()).append(listGroupItem);    
 							 isLoading++;
 							 reloadICheck();
 							 getImageFromSCP(v.imageFile);
 					 });
+					 
 				});
+				
 				id_manager++;
 			}).fail(function(xhr, status, err) {
 				//alert('Error');
