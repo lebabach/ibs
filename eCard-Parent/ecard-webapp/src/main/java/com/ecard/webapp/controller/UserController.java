@@ -810,7 +810,7 @@ public class UserController {
 		return new ModelAndView("faq");
 	}
 
-	@RequestMapping("mailbox")
+	@RequestMapping("contact")
 	public ModelAndView mailbox() {
 		return new ModelAndView("mailbox");
 	}
