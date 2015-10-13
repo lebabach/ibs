@@ -331,6 +331,18 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public DownloadCsv getDownloadCSV(Integer csvId) {
 		return cardInfoDAO.getDownloadCSV(csvId);
 	}
+	
+	public List<com.ecard.core.vo.CardInfo> searchCompanyTree(String companyName){
+		return cardInfoDAO.searchCompanyTree(companyName);
+	}
+	
+	public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName){
+		return cardInfoDAO.searchDepartment(companyName);
+	}
+	
+	public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName){
+		return cardInfoDAO.searchCardInfo(companyName, departmentName);
+	}
 
 	@Override
 	public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId) {

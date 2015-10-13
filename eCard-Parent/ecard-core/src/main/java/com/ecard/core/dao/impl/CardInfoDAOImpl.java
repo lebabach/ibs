@@ -1303,4 +1303,58 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		return lstCardInfoVo;
 	}
 	
+	public List<com.ecard.core.vo.CardInfo> searchCompanyTree(String companyName){
+		String sqlStr = "SELECT c.company_name AS companyName, count(*) AS cnt, c.card_id AS cardId FROM card_info AS c "
+				+ "WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 AND c.newest_card_flg = 1 ";
+		
+		String params[] = { "'*W1:1,2:1,3:1,4:1,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 +", companyName.toLowerCase(), "'"};
+		
+		sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
+				+ "AGAINST(%s %s %s IN BOOLEAN MODE)";
+		sqlStr = String.format(sqlStr, params);
+
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		
+		List<Object[]> listObj = query.getResultList();
+	    List<com.ecard.core.vo.CardInfo> cardInfoList = new ArrayList<>();
+	    for(Object[] object : listObj){
+	    	com.ecard.core.vo.CardInfo  cardInfoVo = new com.ecard.core.vo.CardInfo((String)object[0], (BigInteger)object[1], (Integer)object[2]);
+	    	cardInfoList.add(cardInfoVo);
+	    }
+	    
+	    return cardInfoList;
+	}
+	
+	public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName){
+		String sqlStr = "SELECT c.department_name AS departmentName, count(*) AS cnt, c.card_id AS cardId FROM card_info AS c "
+				+ "WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 AND c.newest_card_flg = 1 AND c.company_name = :companyName GROUP BY department_name";
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		query.setParameter("companyName", companyName);
+		
+		List<Object[]> listObj = query.getResultList();
+	    List<com.ecard.core.vo.CardInfo> cardInfoList = new ArrayList<>();
+	    for(Object[] object : listObj){
+	    	com.ecard.core.vo.CardInfo  cardInfoVo = new com.ecard.core.vo.CardInfo((String)object[0], (BigInteger)object[1], (Integer)object[2]);
+	    	cardInfoList.add(cardInfoVo);
+	    }
+	    
+	    return cardInfoList;
+	}
+	
+	public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName){
+		String sqlStr = "SELECT c.card_id AS cardId, c.name AS name FROM card_info AS c WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 AND c.newest_card_flg = 1 "
+				+ "AND c.company_name = :companyName AND c.department_name = :departmentName";
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		query.setParameter("companyName", companyName);
+		query.setParameter("departmentName", departmentName);
+		
+		List<Object[]> listObj = query.getResultList();
+	    List<com.ecard.core.vo.CardInfo> cardInfoList = new ArrayList<>();
+	    for(Object[] object : listObj){
+	    	com.ecard.core.vo.CardInfo  cardInfoVo = new com.ecard.core.vo.CardInfo((Integer)object[0], (String)object[1]);
+	    	cardInfoList.add(cardInfoVo);
+	    }
+	    
+	    return cardInfoList;
+	}
 }
