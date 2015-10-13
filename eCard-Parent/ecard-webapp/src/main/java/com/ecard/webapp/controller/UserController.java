@@ -551,8 +551,8 @@ public class UserController {
             }
             
             //Get old cards
-            List<CardInfo> listOldCard = cardInfoService.getOldCardInfor();
-            modelAndView.addObject("listOldCard", listOldCard);
+            //List<CardInfo> listOldCard = cardInfoService.getOldCardInfor();
+            //modelAndView.addObject("listOldCard", listOldCard);
             
             //set search detail session
             if (session.getAttribute("searchDetail") != null) {
