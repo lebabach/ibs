@@ -341,9 +341,28 @@ function loadDataComplete() {
         checkboxClass: 'icheckbox_square-green',
         radioClass: 'iradio_square-green',                
    		});
-	$(".iradio_square-green_combo").on("click",function(){
-		console.log("12121");
-	})
+	
+	$(document).on('ifClicked', '.iradio_square-green_combo', function(event){
+		var cardId=$(this).attr("id");
+		console.log(cardId);
+		$.ajax({
+		    type: 'POST',
+		    url: 'searchCards',
+		    dataType: 'json', 
+			 contentType: 'application/json',
+			 mimeType: 'application/json',
+		     data: JSON.stringify({ 
+		        'cardId':cardId,
+		    }),
+		    success: function(data){
+		    	setDataSearchLoadMore(data);
+		    }
+		});
+	});
+}
+
+function clickBox() {
+	alert("ok");
 }
 
 $(document).ready(function() {
@@ -392,7 +411,7 @@ $(document).ready(function() {
 				"className": "ch-color-link",
 				"createdCell": function (td, cellData, rowData, row, col) {
 					
-					$(td).html("<div class='iradio_square-green_combo'><input type='radio' class='i-checks' name='bla'></div>");
+					$(td).html("<div class='iradio_square-green_combo' id='"+rowData.cardId+"'><input type='radio' class='i-checks' name='bla'></div>");
 				}
 			},
 			{ "data": "name"},
