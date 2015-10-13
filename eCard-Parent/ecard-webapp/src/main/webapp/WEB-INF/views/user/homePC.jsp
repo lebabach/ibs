@@ -559,6 +559,7 @@
  	 					});	
  					}
  					reloadICheck();
+ 					
  				}).fail(function(xhr, status, err) {
  					console.log('BBB='+err);
  				});
