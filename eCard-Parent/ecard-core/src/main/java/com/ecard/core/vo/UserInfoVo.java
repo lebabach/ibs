@@ -76,6 +76,16 @@ public class UserInfoVo {
 		this.departmentName = departmentName;
 		this.positionName = positionName;
 	}
+    public UserInfoVo(Integer userId,String name,String lastName, String firstName, String companyName, String departmentName, String positionName,String email) {		
+		this.userId=userId;
+		this.name = name;
+		this.lastName = lastName;
+		this.firstName = firstName;
+		this.companyName = companyName;
+		this.departmentName = departmentName;
+		this.positionName = positionName;
+		this.email = email;
+	}
 	
 	public UserInfoVo(Integer userId, Integer teamDivideCnt, String name,String lastName, String firstName, String companyName, String departmentName, String positionName) {		
 		this.userId=userId;
