@@ -36,11 +36,13 @@ import com.ecard.core.model.GroupCompanyInfo;
 import com.ecard.core.model.Roles;
 import com.ecard.core.model.TeamInfo;
 import com.ecard.core.model.UserInfo;
+import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.EmailService;
 import com.ecard.core.service.GroupCompanyInfoService;
 import com.ecard.core.service.MasterService;
 import com.ecard.core.service.TeamInfoService;
 import com.ecard.core.service.UserInfoService;
+import com.ecard.core.vo.CardInfo;
 import com.ecard.core.vo.GroupDepartmentVO;
 import com.ecard.core.vo.UserInfoVo;
 import com.ecard.webapp.constant.CommonConstants;
@@ -69,6 +71,10 @@ public class OperatorController {
 	@Autowired
     EmailService emailService;
 	
+	@Autowired
+	CardInfoService cardInfoService;
+	
+	
 	@Value("${mail.server.from}")
 	private String fromUser;
 	
@@ -92,11 +98,11 @@ public class OperatorController {
 		List<UserInfoVo> userInfos = null ;
 		BigInteger count = null ;
 		if(roles.contains(RoleType.ROLE_ADMIN.name())){
-			 userInfos = userInfoService.searchUser(textSearch, limit, offset);
-			 count = userInfoService.countUser(textSearch);
+			 userInfos = userInfoService.searchUserForList(textSearch, limit, offset);
+			 count = userInfoService.countUserForList(textSearch);
 		}else{
-			 userInfos = userInfoService.searchUserOfMyCompany(criteriaSearch, limit, offset, ecardUser.getGroupCompanyId());
-			 count = userInfoService.countUser(criteriaSearch, ecardUser.getGroupCompanyId());
+			 userInfos = userInfoService.searchUserOfMyCompanyForList(criteriaSearch, limit, offset, ecardUser.getGroupCompanyId());
+			 count = userInfoService.countUserForList(criteriaSearch, ecardUser.getGroupCompanyId());
 		}
 		
 		long totalRecord = count.longValue();
@@ -327,4 +333,15 @@ public class OperatorController {
 		}
 	  return 0;
     }
+    @RequestMapping(value = "changeowner/{id:[\\d]+}", method = RequestMethod.GET)
+	public ModelAndView changeowner(@PathVariable("id") int id) {
+    	ModelAndView modelAndView = new ModelAndView();
+    	UserInfo userLeave = userInfoService.getUserInfoByUserId(id);
+    	List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(id);
+		modelAndView.setViewName("changeowner");
+		modelAndView.addObject("userLeave", userLeave);
+		modelAndView.addObject("listCardInfo", listCardInfo);
+		return modelAndView;
+		
+	}
 }

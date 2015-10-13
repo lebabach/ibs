@@ -140,5 +140,6 @@ public interface CardInfoService {
    public void updateDownloadHistory(Integer downloadCsvId);
    
    public DownloadCsv getDownloadCSV(Integer csvId);
+   public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId);
    
 }

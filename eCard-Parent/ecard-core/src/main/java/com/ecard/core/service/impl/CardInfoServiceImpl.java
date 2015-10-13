@@ -331,4 +331,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public DownloadCsv getDownloadCSV(Integer csvId) {
 		return cardInfoDAO.getDownloadCSV(csvId);
 	}
+
+	@Override
+	public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.getListCardAllocationUser(userId);
+	}
 }

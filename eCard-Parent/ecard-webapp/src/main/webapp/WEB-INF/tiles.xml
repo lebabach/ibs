@@ -38,9 +38,13 @@
     <definition name="operatorregister" extends="base.definition">  
         <put-attribute name="body" value="/WEB-INF/views/operator/register_operator.jsp" />  
     </definition>
-        <definition name="operatorconfirm" extends="base.definition">  
+     <definition name="operatorconfirm" extends="base.definition">  
         <put-attribute name="body" value="/WEB-INF/views/operator/confirm_operator.jsp" />  
     </definition>
+    <definition name="changeowner" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/operator/change_owners.jsp" />  
+    </definition>
+    
     <!-- team administration -->
     <definition name="teamlist" extends="base.definition">  
         <put-attribute name="body" value="/WEB-INF/views/team/teamlist.jsp" />  
