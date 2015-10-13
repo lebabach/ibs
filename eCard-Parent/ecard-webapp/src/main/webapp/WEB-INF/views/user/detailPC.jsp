@@ -637,7 +637,7 @@ a {
 				<!-- End contact history -->
 				
 				<!-- User connected -->
-				<div class="panel panel-default">
+				<%-- <div class="panel panel-default">
 					<div class="panel-heading">
 						<h5>刺交換日</h5>
 					</div>
@@ -666,7 +666,7 @@ a {
 							</c:forEach>
 						</c:if>						
 					</div>
-				</div>
+				</div> --%>
 				<!-- End User connected -->
 			</div>
 			<c:if test="${ isMyCard == true }">
@@ -1858,23 +1858,23 @@ label.error {
 	}
 	
 	function loginSaleForce(){
-		var lastname = "vinh";
-		var firstname = "le";
-		var positionName = "DEV";
-		var companyName = "Livepass";
-		var address1 = "15 Nguyen Quyen";
-		var address2 = "Cam Le";
-		var address3 = "Da Nang";
-		var address4 = "Viet Nam";
-		var telNumberCompany = "88957";
-		var mobileNumber = "84956990-898";
-		var faxNumber = "895790345";
-		var email = "vinh@gmail.com";
-		var companyUrl = "http://abc.com";
-		var departmentName = "LivePass VN";
-		var zipCode = "84";
-		var login_id = "sadad@asd.com";
-		var login_pass = "skjfhksfhak";
+		var lastname = $("input[name=lastName]").val();
+		var firstname = $("input[name=firstName]").val();
+		var positionName = $("input[name=positionName]").val();
+		var companyName = $("input[name=companyName]").val();
+		var address1 = $("input[name=address1]").val();
+		var address2 = $("input[name=address2]").val();
+		var address3 = $("input[name=address3]").val();
+		var address4 = $("input[name=address4]").val();
+		var telNumberCompany = $("input[name=telNumberCompany]").val();
+		var mobileNumber = $("input[name=mobileNumber]").val();
+		var faxNumber = $("input[name=faxNumber]").val();
+		var email = $("input[name=email]").val();
+		var companyUrl = $("input[name=companyUrl]").val();
+		var departmentName = $("input[name=departmentName]").val();
+		var zipCode = $("input[name=zipCode]").val();
+		var login_id = $("input[name=login_id]").val();
+		var login_pass = $("input[name=login_pass]").val();
 		
 		var json = {"lastname": lastname, "firstname" : firstname, "positionName" : positionName, "companyName" : companyName, 
 					"address1" : address1, "address2" : address2, "address3" : address3, "address4" : address4, 
