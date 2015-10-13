@@ -226,7 +226,7 @@
                           <li><a href="<c:url value='/user/faq' />">FAQ</a></li>
                           <li><a href="<c:url value='/user/mailbox' />">ご意見・不具合の連絡</a></li>
                           <li><a href="collect_name.html">繋がった名刺検索</a></li>
-                          <li><a href="companies_tree.html">顧客組織ツリー</a></li>
+                          <li><a href="<c:url value='/user/companyTree' />">顧客組織ツリー</a></li>
                           <li><a href="<c:url value='/user/addBusinessCard' />">名刺データ作成</a></li>
                           <c:if test="${pageContext.request.isUserInRole('ROLE_LEADER') or pageContext.request.isUserInRole('ROLE_OPERATOR') or pageContext.request.isUserInRole('ROLE_SUPERVISOR') or pageContext.request.isUserInRole('ROLE_ADMIN') or pageContext.request.isUserInRole('ROLE_AUTHORITY_USER') or pageContext.request.isUserInRole('ROLE_OPERATOR_MANAGER') }">
 						    <li><a href="<c:url value='/manager/home'/>">管理ページ</a></li>

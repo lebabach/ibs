@@ -138,6 +138,12 @@
         <put-attribute name="body" value="/WEB-INF/views/user/homePC.jsp" />  
     </definition>
     
+    <definition name="companyTree" extends="base.pc.definition">   	
+        <put-attribute name="title" value="顧客組織ツリー" />
+        <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/user/companyTree.jsp" />  
+    </definition>
+    
     <definition name="detailPC" extends="base.pc.definition">   	
         <put-attribute name="title" value="ログイン" />
         <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />

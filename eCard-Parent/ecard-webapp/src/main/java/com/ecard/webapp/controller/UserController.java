@@ -109,6 +109,8 @@ import com.ecard.webapp.vo.ObjectListSearchUsers;
 import com.ecard.webapp.vo.TagUserHome;
 import com.ecard.webapp.vo.UserInfoVO;
 import com.ecard.webapp.vo.UserSearchVO;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/user/*")
@@ -1530,6 +1532,71 @@ public class UserController {
 				logger.error("Error upload default card image: " + ex.getMessage());
 			}
 		}
+	}
+	
+	@RequestMapping(value = "companyTree")
+	public ModelAndView companyTree(HttpServletRequest request){
+		logger.debug("companyTree", UserController.class);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("companyTree");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "searchCompany", method = RequestMethod.POST)
+	@ResponseBody
+	public String searchCompany(@RequestBody com.ecard.core.vo.CardInfo cardInfo, HttpServletRequest request){
+		logger.debug("searchCompany", UserController.class);
+		
+		List<com.ecard.core.vo.CardInfo> cardList = null;
+		String jsonObj = "";
+		try{
+			cardList = cardInfoService.searchCompanyTree(cardInfo.getCompanyName());
+			if(cardList.size() > 0){
+				jsonObj = new Gson().toJson(cardList);
+			}
+		}
+		catch(Exception ex){
+			logger.debug("Exception : "+ex.getMessage(), UserController.class);
+		}
+		
+		return jsonObj;
+	}
+	
+	@RequestMapping (value = "searchDepartment", method = RequestMethod.POST, produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String searchDepartment(@RequestBody com.ecard.core.vo.CardInfo cardInfo, HttpServletRequest request, HttpServletResponse response){
+		List<com.ecard.core.vo.CardInfo> cardList = null;
+		String jsonObj = "";
+		try{
+			cardList = cardInfoService.searchDepartment(cardInfo.getCompanyName());
+			if(cardList.size() > 0){
+				jsonObj = new Gson().toJson(cardList);
+			}
+		}
+		catch(Exception ex){
+			logger.debug("Exception : "+ex.getMessage(), UserController.class);
+		}
+		
+		return jsonObj;
+	}
+	
+	@RequestMapping (value = "searchCardInfo", method = RequestMethod.POST, produces = "application/json;charset=utf-8", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public String searchCardInfo(@RequestBody com.ecard.core.vo.CardInfo cardInfo, HttpServletRequest request, HttpServletResponse response){
+		List<com.ecard.core.vo.CardInfo> cardList = null;
+		String jsonObj = "";
+		try{
+			cardList = cardInfoService.searchCardInfo(cardInfo.getCompanyName(), cardInfo.getDepartmentName());
+			if(cardList.size() > 0){
+				jsonObj = new Gson().toJson(cardList);
+			}
+		}
+		catch(Exception ex){
+			logger.debug("Exception : "+ex.getMessage(), UserController.class);
+		}
+		
+		return jsonObj;
 	}
 	
 }
