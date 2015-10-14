@@ -11,6 +11,7 @@ import com.ecard.core.vo.CardInfoConnectUser;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
+import com.ecard.core.vo.TagUser;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -137,11 +138,13 @@ public interface CardInfoDAO {
     public void updateDownloadHistory(Integer downloadCsvId);
     
     public DownloadCsv getDownloadCSV(Integer csvId);
-    public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId);
+    public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId,int tagId,int limit,int offset);
 
     public List<com.ecard.core.vo.CardInfo> searchCompanyTree(String companyName);
     
     public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName);
     
     public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName);
+    public BigInteger countListCardAllocationUser(int userId, int tagId);
+    public List<TagUser> getAllTagUser(int userId);
 }

@@ -4,8 +4,114 @@
 <script>
 var listCardId = [];
 var checkAll = false;
+var dataTables;
 $(document).ready(function() {
-	 $('#table-1').dataTable( {
+	dataTables = $('#table-1').dataTable( {
+		"dom" : '<<t>ip>',
+		"iDisplayLength" : 5,
+		"processing": true,
+		"serverSide": true,
+		"searching": false,
+		"ordering": false,
+		"language": {
+			"zeroRecords": '<fmt:message key="operator.list.table.emptyTable"/>',
+			"emptyTable": '<fmt:message key="operator.list.table.emptyTable"/>',
+			"info": '<fmt:message key="operator.list.table.info"/>',
+			"infoEmpty": '<fmt:message key="operator.list.table.info"/>',
+			"paginate": {
+				"previous": '<fmt:message key="operator.list.table.paginate.previous"/>',
+				"next": '<fmt:message key="operator.list.table.paginate.next"/>'
+			}
+		},
+		"ajax": {
+			"url": '<c:url value="/operators/searchCardTag"/>',
+			"type": "POST",
+			"data": function (dataTableRequest) {
+				dataTableRequest.tagId = $('#tagId').val();
+				dataTableRequest.id ='<c:out value="${userLeave.userId}"/>';
+				return dataTableRequest;
+			},
+			"dataSrc": "data",
+			"error": function(xhr) {
+				alert('error datatable')
+			}
+			
+		},
+		"columns": [
+			{ "data": "cardId",
+				"createdCell": function (td, cellData, rowData, row, col) {
+					 $(td).html('<div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" class = "i-checks-chk_all" value="'+rowData.cardId+'" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div>');
+					 
+				}
+					
+			},
+				
+			{ "data": "lastName",
+				"createdCell": function (td, cellData, rowData, row, col) {
+					 $(td).html(rowData.lastName + ' ' + rowData.firstName );
+					
+			}},
+			{ "data": "companyName"},
+			{ "data": "departmentName"},
+			{ "data": "positionName"},
+			{ "data": "tagName"},
+		],
+		
+	}); 
+	
+	$('#tagId').on('change', function() {
+		var tagId = $(this).val();
+		dataTables.api().destroy();
+		dataTables = $('#table-1').dataTable( {
+			"dom" : '<<t>ip>',
+			"iDisplayLength" : 5,
+			"processing": true,
+			"serverSide": true,
+			"searching": false,
+			"ordering": false,
+			"language": {
+				"zeroRecords": '<fmt:message key="operator.list.table.emptyTable"/>',
+				"emptyTable": '<fmt:message key="operator.list.table.emptyTable"/>',
+				"info": '<fmt:message key="operator.list.table.info"/>',
+				"infoEmpty": '<fmt:message key="operator.list.table.info"/>',
+				"paginate": {
+					"previous": '<fmt:message key="operator.list.table.paginate.previous"/>',
+					"next": '<fmt:message key="operator.list.table.paginate.next"/>'
+				}
+			},
+			"ajax": {
+				"url": '<c:url value="/operators/searchCardTag"/>',
+				"type": "POST",
+				"data": function (dataTableRequest) {
+					dataTableRequest.tagId =tagId;
+					dataTableRequest.id ='<c:out value="${userLeave.userId}"/>';
+					return dataTableRequest;
+				},
+				"dataSrc": "data",
+				"error": function(xhr) {
+					alert('error datatable')
+				}
+			},
+			"columns": [
+				{ "data": "cardId",
+					"createdCell": function (td, cellData, rowData, row, col) {
+						 $(td).html('<div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" class = "i-checks-chk_all" value="'+rowData.cardId+'" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div>');
+						
+					}},
+				{ "data": "lastName",
+					"createdCell": function (td, cellData, rowData, row, col) {
+						 $(td).html(rowData.lastName + ' ' + rowData.firstName );
+						
+				}},
+				{ "data": "companyName"},
+				{ "data": "departmentName"},
+				{ "data": "positionName"},
+				{ "data": "tagName"},
+			],
+	   });
+	});
+	
+ /*   $('#table-1').dataTable( {
 	        "dom": '<<t>ip>',
 	        "ordering": false,
 	        "iDisplayLength": 5,
@@ -19,8 +125,8 @@ $(document).ready(function() {
 					"next": '次へ'
 				}
 			}
-	    } );
-	 
+	    } ); */
+	   
 	     $(document).on('click', '#checkAll', function() { 
 	    	 checkAll = true;
 			$("#table-1 tbody").find(".i-checks-chk_all").each(function( index ) {
@@ -35,27 +141,7 @@ $(document).ready(function() {
 				  $(this).parent().attr("class","icheckbox_square-green");  
 			});
 		});
-	     
-	     $(document).on('click', '.paginate_button', function() { 
-	    	 if(checkAll){
-	    	 	 $("#table-1 tbody").find(".i-checks-chk_all").each(function( index ) {
-	    				 $(this).prop('checked', true);
-	    				 $(this).parent().attr("class","icheckbox_square-green checked");
-	    			});
-	    	  }else{
-	    	 	 $("#table-1 tbody").find(".i-checks-chk_all").each(function( index ) {
-	    				  $(this).prop('checked', false);
-	    				  $(this).parent().attr("class","icheckbox_square-green");  
-	    		 });
-	    	 	 if(listCardId.length > 0){
-	    	 		$.each(listCardId, function(idcard, vcard){
-	    	 			$("#table-1 tbody").find("input[value="+vcard+"]").prop('checked', true);
-	    	 			$("#table-1 tbody").find("input[value="+vcard+"]").parent().attr("class","icheckbox_square-green checked");
-	    	 		});
-	    	 	 }
-	    	  }
-		});
-	     
+	       
 	     $(document).on('ifChecked', "#table-1 input[type='checkbox']", function() {
 	    	 listCardId.push($(this).val());
 	     });
@@ -78,6 +164,26 @@ $(document).ready(function() {
 			  }
 		 });
 	     
+	     $(document).on('click', '#table-1 .icheckbox_square-green', function(e) {
+	    	  	if($(this).attr("class").indexOf("checked") == -1){
+	    	  		$(this).removeClass('icheckbox_square-green');
+	    	  		 $(this).removeClass("icheckbox_square-green hover");
+	    	      	 $(this).addClass("icheckbox_square-green checked");
+	    	      	 var cardId = $(this).find("input[type=checkbox]").val();
+	    	      	  listCardId.push(parseInt(cardId));
+	    	      	 return false;
+	    	  	}else{
+	    	  		$(this).removeClass("icheckbox_square-green checked");
+	    	  		 $(this).addClass("icheckbox_square-green"); 
+	    	  		var cardId =$(this).find("input[type=checkbox]").val();
+	    	  		 var i = listCardId.indexOf(parseInt(cardId));
+	    	    	 if(i != -1) {
+	    	    		 listCardId.splice(i, 1);
+	    	    	 }
+	    	  		 return false;
+	    	  	}
+	    	  	
+	    });
 });
 
   $(document).on('click', '#criteriaSearch', function() {
@@ -87,6 +193,7 @@ $(document).ready(function() {
 	   if (criteriaSearch == ""){
 		   document.location.href="<c:url value='/operators/changeowner/"+${userLeave.userId}+" '/>";
 	   }
+	   
 		$.ajax({
 			type: 'POST',
 			url: '<c:url value="/operators/searchList"/>',
@@ -101,7 +208,7 @@ $(document).ready(function() {
 			            	$('.content_user').append($('<tr id="rowData" class="tr1">').append(
 			            			    $('<td>').append(
 			            			    		$('<div class="i-checks">').append(
-			            			    				'<label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="'+item.userId+'"  style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label>'
+			            			    				' <input type="radio" name = "bla" value="'+item.userId+'"  style="position: absolute; opacity: 0;">'
 			            			    		)
 			            			    ),
 			                            $('<td>').text(item.firstName + " " + item.lastName),
@@ -110,15 +217,16 @@ $(document).ready(function() {
 			                            $('<td>').text(item.positionName),
 			                            $('<td>').text(item.email)
 				                        	
-				                          )
-	                
-					                    );
-			            	$('.i-checks').iCheck({
-			                    checkboxClass: 'icheckbox_square-green',
-			                    radioClass: 'iradio_square-green'
-			                     
-			                  });
+	                          )
+              
+		                    );
+
 			            });
+		            	$('.i-checks').iCheck({
+		                    checkboxClass: 'icheckbox_square-green',
+		                    radioClass: 'iradio_square-green'
+		                     
+		                  });
 			        });
 				 
 	        },
@@ -127,13 +235,17 @@ $(document).ready(function() {
            }
 		});
 	});
-  $(document).on('ifClicked', '.iradio_square-green', function(event){
-	  var userAssign = parseInt(event.target.value);
+  
+  $(document).on('ifChecked', "#paging input[type='radio']", function() {
+	  var userAssign = $(this).val();
+	  var nameAssign = $(this).parent().parent().parent().parent().find("td:nth-child(2)").text();
 	  $("input[name=userAssign]").val(userAssign);
+	  $("input[name=nameAssign]").val(nameAssign);
   });
   $(document).on('click', '.btn-assign', function() {
 	  var userLeave = parseInt($("input[name=userLeave]").val());
 	  var userAssign = $("input[name=userAssign]").val();
+	  var nameAssign = $("input[name=nameAssign]").val();
 	  if(!checkAll && listCardId.length == 0){
 		  BootstrapDialog.show({
 	             title: 'Waring',
@@ -148,25 +260,47 @@ $(document).ready(function() {
 	        });
 		  return false;
 	  }
-	  $.ajax({
-			type: 'POST',
-			url: '<c:url value="/operators/updateCardUser"/>',
-			 dataType: 'json', 
-			 contentType: 'application/json',
-			 mimeType: 'application/json',
-			data:JSON.stringify({"userLeave":userLeave,"userAssign":userAssign,"checkAll":checkAll,"listCardId":listCardId}) 
-		}).done(function(resp, status, xhr) {
-			document.location.href="<c:url value='/operators/changeowner/"+resp+" '/>";
-		}).fail(function(xhr, status, err) {
-			BootstrapDialog.show({
-	             title: 'Error',
-	             message: 'Assign error'
-	        });
-		  return false;
-		});
+	  if (confirm('<c:out value="${userLeave.firstName}"/> <c:out value="${userLeave.lastName}"/> 学 さんの名刺○件を、'+nameAssign +' さんの所有とします。よろしいですか？')) {
+		  $.ajax({
+				type: 'POST',
+				url: '<c:url value="/operators/updateCardUser"/>',
+				 dataType: 'json', 
+				 contentType: 'application/json',
+				 mimeType: 'application/json',
+				data:JSON.stringify({"userLeave":userLeave,"userAssign":userAssign,"checkAll":checkAll,"listCardId":listCardId}) 
+			}).done(function(resp, status, xhr) {
+				document.location.href="<c:url value='/operators/changeowner/"+resp+" '/>";
+			}).fail(function(xhr, status, err) {
+				BootstrapDialog.show({
+		             title: 'Error',
+		             message: 'Assign error'
+		        });
+			  return false;
+			});
+	  }
 	  
   });
+  $(document).on('click', '.paginate_button', function() { 
+ 	 if(checkAll){
+ 	 	 $("#table-1 tbody").find(".i-checks-chk_all").each(function( index ) {
+ 				 $(this).prop('checked', true);
+ 				 $(this).parent().attr("class","icheckbox_square-green checked");
+ 			});
+ 	  }else{
+ 	 	 $("#table-1 tbody").find(".i-checks-chk_all").each(function( index ) {
+ 				  $(this).prop('checked', false);
+ 				  $(this).parent().attr("class","icheckbox_square-green");  
+ 		 });
+ 	 	 if(listCardId.length > 0){
+ 	 		$.each(listCardId, function(idcard, vcard){
+ 	 			$("#table-1 tbody").find("input[value="+vcard+"]").prop('checked', true);
+ 	 			$("#table-1 tbody").find("input[value="+vcard+"]").parent().attr("class","icheckbox_square-green checked");
+ 	 		});
+ 	 	 }
+ 	  }
+	});
   
+
   
 </script>
 
@@ -192,31 +326,48 @@ $(document).ready(function() {
             <div class="row bg-white box-shadow box-marginTop5 padding-top-bottom">
                 <input  name="userLeave" value="<c:out value="${userLeave.userId}"/>" type = "hidden">
                 <input  name="userAssign" value="" type = "hidden">
+                 <input  name="nameAssign" value="" type = "hidden">
                 <!-- DATA TABLE -->
                 <div class="col-sm-12 container table-list-operator">
                     <div class="row" id="data-table" >
                         <div class="ibox-content  ibox-custom01">
                             <table id="table-1" class="table container paging" style="margin-top: -54px; padding: 0; position: relative; z-index:9">
                                 <thead>
-                                    <tr role="row"><td colspan="6" style="background-color: #fff; padding-left: 0;" rowspan="1">所有者（変更元） <c:out value="${userLeave.lastName}" /> <c:out value="${userLeave.firstName}" /></td></tr>
+                                    <tr role="row">
+                                        <td colspan="5" style="background-color: #fff; padding-left: 0;" rowspan="1">所有者（変更元） <c:out value="${userLeave.lastName}" /> <c:out value="${userLeave.firstName}" /></td>
+                                        <td colspan="1" style="background-color: #fff; padding-left: 0;" rowspan="1">
+                                          <div class="form-group">
+													 <form>
+											               <select id = "tagId" class="form-control role-service" >
+											                  <option value = "">すべて </option>
+											                  <c:forEach var="tagGroup" items="${listTagGroup}">
+											                       <option value ='<c:out value="${tagGroup.tagId}" />'><c:out value="${tagGroup.tagName}" /></option>
+											                  </c:forEach>
+											               </select>
+											         </form>
+											 </div>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <th></th>
                                         <th>名前</th>
                                         <th>会社名</th>
                                         <th>部署</th>
                                         <th>役職</th>
+                                        <th>タグ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   <c:forEach var="cardInfo" items="${listCardInfo}">
+                                    <%-- <c:forEach var="cardInfo" items="${listCardInfo}">
 	                                <tr id="rowData">
 	                                    <td><div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" class = "i-checks-chk_all" value="<c:out value="${cardInfo.cardId}" />" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
 	                                    <td><c:out value="${cardInfo.lastName}" />　<c:out value="${cardInfo.firstName}" /></td>
 	                                    <td><c:out value="${cardInfo.companyName}" /></td>
 	                                    <td><c:out value="${cardInfo.departmentName}" /></td>
 	                                    <td><c:out value="${cardInfo.positionName}" /></td>
+	                                    <td>ルート営業,頻繁に訪問,次郎さんへ移動</td>
 	                                </tr>
-	                                </c:forEach>
+	                                </c:forEach> --%> 
                                 </tbody>
                             </table>
                             
@@ -252,7 +403,7 @@ $(document).ready(function() {
                                 <tbody class="content_user">
 		                                <c:forEach var="userInfo" items="${lstUserInfo}">
 			                                <tr id="rowData">
-			                                    <td><div class="i-checks"><label class=""> <div class="iradio_square-green" style="position: relative;"><input type="radio" value="<c:out value="${userInfo.userId}" />" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div></td>
+			                                    <td><div class="i-checks"><input type="radio" name = "bla" value="<c:out value="${userInfo.userId}" />" style="position: absolute; opacity: 0;"></div></td>
 			                                    <td><c:out value="${userInfo.lastName}" />　<c:out value="${userInfo.firstName}" /></td>
 			                                    <td><c:out value="${userInfo.companyName}" /></td>
 			                                    <td><c:out value="${userInfo.departmentName}" /></td>
