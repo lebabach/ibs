@@ -1515,17 +1515,17 @@ public class UserController {
 	@RequestMapping(value = "searchOverLapCards", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public DataPagingJsonVO<com.ecard.core.vo.CardInfo> searchOverLapCards(HttpServletRequest request) {
-		/*int limit = parseIntParameter(request.getParameter("length"), 0);
+		int limit = parseIntParameter(request.getParameter("length"), 0);
 		int offset = parseIntParameter(request.getParameter("start"), 0);
-		String criteriaSearch = request.getParameter("criteriaSearch");*/
+		String criteriaSearch = request.getParameter("criteriaSearch");
 		DataPagingJsonVO<com.ecard.core.vo.CardInfo> dataTableResponse = new DataPagingJsonVO<com.ecard.core.vo.CardInfo>();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
-		List<com.ecard.core.vo.CardInfo> cards= cardInfoService.getListCardSearch(userInfo.getUserId(), "内閣府認証特定非営利活動法人日本経営士協会1",null, null, null, null,0, userInfo.getGroupCompanyId());
+		List<com.ecard.core.vo.CardInfo> cards= cardInfoService.getListCardSearch(userInfo.getUserId(), criteriaSearch,null, null, null, null,offset/limit, userInfo.getGroupCompanyId());
 		
 		
-		BigInteger totalRecord =cardInfoService.getTotalCardSearch(userInfo.getUserId(), "内閣府認証特定非営利活動法人日本経営士協会1",null, null, null, null,userInfo.getGroupCompanyId());
+		BigInteger totalRecord =cardInfoService.getTotalCardSearch(userInfo.getUserId(), criteriaSearch,null, null, null, null,userInfo.getGroupCompanyId());
 		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));
 		dataTableResponse.setRecordsTotal(totalRecord.longValue());
 		dataTableResponse.setRecordsFiltered(totalRecord.longValue());
