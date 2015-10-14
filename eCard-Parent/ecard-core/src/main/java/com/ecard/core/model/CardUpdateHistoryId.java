@@ -1,5 +1,5 @@
 package com.ecard.core.model;
-// Generated Aug 4, 2015 10:15:08 AM by Hibernate Tools 3.2.4.GA
+// Generated Oct 14, 2015 9:55:15 AM by Hibernate Tools 3.2.4.GA
 
 
 import java.util.Date;
@@ -14,7 +14,9 @@ public class CardUpdateHistoryId  implements java.io.Serializable {
 
 
      private int cardId;
-     private String positionName;
+     private int paramType;
+     private String oldData;
+     private String newData;
      private Date createDate;
      private Date updateDate;
      private int operaterId;
@@ -23,15 +25,18 @@ public class CardUpdateHistoryId  implements java.io.Serializable {
     }
 
 	
-    public CardUpdateHistoryId(int cardId, Date createDate, Date updateDate, int operaterId) {
+    public CardUpdateHistoryId(int cardId, int paramType, Date createDate, Date updateDate, int operaterId) {
         this.cardId = cardId;
+        this.paramType = paramType;
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.operaterId = operaterId;
     }
-    public CardUpdateHistoryId(int cardId, String positionName, Date createDate, Date updateDate, int operaterId) {
+    public CardUpdateHistoryId(int cardId, int paramType, String oldData, String newData, Date createDate, Date updateDate, int operaterId) {
        this.cardId = cardId;
-       this.positionName = positionName;
+       this.paramType = paramType;
+       this.oldData = oldData;
+       this.newData = newData;
        this.createDate = createDate;
        this.updateDate = updateDate;
        this.operaterId = operaterId;
@@ -49,13 +54,33 @@ public class CardUpdateHistoryId  implements java.io.Serializable {
     }
 
 
-    @Column(name="position_name", length=65535)
-    public String getPositionName() {
-        return this.positionName;
+    @Column(name="param_type", nullable=false)
+    public int getParamType() {
+        return this.paramType;
     }
     
-    public void setPositionName(String positionName) {
-        this.positionName = positionName;
+    public void setParamType(int paramType) {
+        this.paramType = paramType;
+    }
+
+
+    @Column(name="old_data", length=65535)
+    public String getOldData() {
+        return this.oldData;
+    }
+    
+    public void setOldData(String oldData) {
+        this.oldData = oldData;
+    }
+
+
+    @Column(name="new_data", length=65535)
+    public String getNewData() {
+        return this.newData;
+    }
+    
+    public void setNewData(String newData) {
+        this.newData = newData;
     }
 
 
@@ -96,7 +121,9 @@ public class CardUpdateHistoryId  implements java.io.Serializable {
 		 CardUpdateHistoryId castOther = ( CardUpdateHistoryId ) other; 
          
 		 return (this.getCardId()==castOther.getCardId())
- && ( (this.getPositionName()==castOther.getPositionName()) || ( this.getPositionName()!=null && castOther.getPositionName()!=null && this.getPositionName().equals(castOther.getPositionName()) ) )
+ && (this.getParamType()==castOther.getParamType())
+ && ( (this.getOldData()==castOther.getOldData()) || ( this.getOldData()!=null && castOther.getOldData()!=null && this.getOldData().equals(castOther.getOldData()) ) )
+ && ( (this.getNewData()==castOther.getNewData()) || ( this.getNewData()!=null && castOther.getNewData()!=null && this.getNewData().equals(castOther.getNewData()) ) )
  && ( (this.getCreateDate()==castOther.getCreateDate()) || ( this.getCreateDate()!=null && castOther.getCreateDate()!=null && this.getCreateDate().equals(castOther.getCreateDate()) ) )
  && ( (this.getUpdateDate()==castOther.getUpdateDate()) || ( this.getUpdateDate()!=null && castOther.getUpdateDate()!=null && this.getUpdateDate().equals(castOther.getUpdateDate()) ) )
  && (this.getOperaterId()==castOther.getOperaterId());
@@ -106,7 +133,9 @@ public class CardUpdateHistoryId  implements java.io.Serializable {
          int result = 17;
          
          result = 37 * result + this.getCardId();
-         result = 37 * result + ( getPositionName() == null ? 0 : this.getPositionName().hashCode() );
+         result = 37 * result + this.getParamType();
+         result = 37 * result + ( getOldData() == null ? 0 : this.getOldData().hashCode() );
+         result = 37 * result + ( getNewData() == null ? 0 : this.getNewData().hashCode() );
          result = 37 * result + ( getCreateDate() == null ? 0 : this.getCreateDate().hashCode() );
          result = 37 * result + ( getUpdateDate() == null ? 0 : this.getUpdateDate().hashCode() );
          result = 37 * result + this.getOperaterId();
