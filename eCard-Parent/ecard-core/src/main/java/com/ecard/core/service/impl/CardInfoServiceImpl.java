@@ -34,6 +34,7 @@ import com.ecard.core.model.enums.PropertyCodeEnum;
 import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.util.DataIndexUtil;
+import com.ecard.core.util.StringUtilsHelper;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
@@ -252,6 +253,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public void updateOldCardInfo (CardInfo cardInfo){
 		cardInfoDAO.updateOldCardInfo(cardInfo);
 	}
+	
+	public void updateCardInfoNotCreateIndex (CardInfo cardInfo){
+		cardInfoDAO.saveOrUpdate(cardInfo);
+	}
     
     public CardInfo importCardInfoFromCsv(CardInfo cardInfo){
     	/*String cardIndexNo=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Migration);
@@ -386,6 +391,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 			card2.setUserCardMemos(null);*/
 			
 			int ownerUserId=card2.getCardOwnerId();
+			String ownerName=StringUtilsHelper.mergerStringEitherAWord(card2.getLastName(), card2.getFirstName(), " ");
 			card1.setOldCardFlg(1);
 			this.updateCardInfoAdmin(card1);
 			if(ownerUserId!=currentUserId){
@@ -403,6 +409,9 @@ public class CardInfoServiceImpl implements CardInfoService {
 				oldcard.setId(oldCardId);
 			
 				oldCardDAO.saveOrUpdate(oldcard);
+				card2.setCardOwnerId(ownerUserId);
+				card2.setCardOwnerName(ownerName);
+				this.updateCardInfoNotCreateIndex(card2);
 				
 			}else{
 				OldCard oldcard=new OldCard();
