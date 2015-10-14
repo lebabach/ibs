@@ -361,11 +361,15 @@ a {
     text-shadow: 0px 1px 0px #FFF;
     white-space: nowrap;
 }
+
+.career_date{
+	border-bottom: 0px !important;
+}
 </style>
 					<script type="text/javascript">
                           $(document).ready(function(){
                         	$("#lblContactDate").show();
-                   	   	    $("input[name=contactDate]").hide();
+                   	   	    $("#frmEditContactDate input[name=contactDate]").hide();
                         	$('.p-date').datepicker({
  	      							language : 'en',
  	      							todayHighlight : true,
