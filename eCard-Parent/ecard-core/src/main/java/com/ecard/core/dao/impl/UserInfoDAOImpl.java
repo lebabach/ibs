@@ -946,4 +946,10 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
 		query.setParameter("group_company_id", groupCompanyInfoId);
 		return (BigInteger) query.getSingleResult();
 	}
+	
+	public List<UserInfo> getAllListUser(){
+		Query query = getEntityManager().createQuery("SELECT u FROM UserInfo u");
+		
+		return (List<UserInfo>)query.getResultList();
+	}
 }
