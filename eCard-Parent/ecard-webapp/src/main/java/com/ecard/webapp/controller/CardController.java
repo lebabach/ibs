@@ -44,16 +44,20 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ecard.core.contants.AppIdContants;
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.CardUpdateHistory;
+import com.ecard.core.model.CardUpdateHistoryId;
 import com.ecard.core.model.CompanyInfo;
 import com.ecard.core.model.PossessionCard;
 import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.PushInfoId;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.UserNotification;
+import com.ecard.core.model.enums.CardUpdateHistoryType;
 import com.ecard.core.model.enums.NoticeType;
 import com.ecard.core.model.enums.StatusCard;
 import com.ecard.core.service.AdminPossessionCardService;
 import com.ecard.core.service.CardInfoService;
+import com.ecard.core.service.CardUpdateHistoryService;
 import com.ecard.core.service.OcrCardImageService;
 import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.TeamInfoService;
@@ -72,6 +76,7 @@ import com.ecard.webapp.vo.CardInfoVO;
 import com.ecard.webapp.vo.CardInfoWithRoteVO;
 import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.ListCardInfoVO;
+import com.ecard.core.vo.CardUpdateHisAndUserInfo;
 import com.ecard.core.vo.UserInfoVo;
 
 
@@ -87,6 +92,9 @@ public class CardController {
 	
 	@Autowired
 	AdminPossessionCardService adminProssessionCardService;
+	
+	@Autowired
+    CardUpdateHistoryService cardUpdateHistoryService;
 	
 	@Autowired
 	PossessionCardService possessionCardService;
@@ -243,7 +251,7 @@ public class CardController {
 		try {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-
+			UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
 			if ((CardInfo) session.getAttribute("cardInfo" + id) != null) {
 				cardInfo = (CardInfo) session.getAttribute("cardInfo" + id);
 				String imageFile = cardInfo.getImageFile().substring(cardInfo.getImageFile().indexOf(',') + 1);
@@ -261,13 +269,27 @@ public class CardController {
 					}
 				}
 				
-				
 				cardInfo.setIsEditting(1);
 				cardInfo.setDateEditting(new Date());
 				cardInfoService.editCardInfoNoIndexNo(cardInfo);
+				
 				fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
 				cardInfo.setCardBackImgFile(cardInfo.getImageFile());
 				cardInfo.setImageFile(fileNameFromSCP);
+				// Update card history
+				CardUpdateHistory cardUpdateHistory = new CardUpdateHistory();
+				CardUpdateHistoryId cardUpdateHistoryId = new CardUpdateHistoryId();
+						
+				cardUpdateHistoryId.setParamType(CardUpdateHistoryType.APPROVAL.getValue());
+				cardUpdateHistoryId.setOldData(null);
+				cardUpdateHistoryId.setNewData(null);
+				cardUpdateHistoryId.setCreateDate(new Date());
+				cardUpdateHistoryId.setOperaterId(userInfo.getUserId());
+				
+				cardUpdateHistory.setId(cardUpdateHistoryId);
+				cardUpdateHistory.setCardInfo(cardInfo);
+				
+				cardUpdateHistoryService.registerCardUpdateHistory(cardUpdateHistory);
 			}
 			boolean permissionEdit = adminProssessionCardService.checkPermissionEdit(ecardUser.getUserId(), id);
 			modelAndView.addObject("cardInfo", cardInfo);

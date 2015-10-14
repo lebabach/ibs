@@ -1,19 +1,16 @@
-/*
- * ActionLogType
- */
 package com.ecard.core.model.enums;
 
-/**
- *
- * @author vinhla
- */
-public enum ActionLogType {
-    LOGIN(1),
-    DOWNLOAD(2);
+public enum CardUpdateHistoryType {
+	APPROVAL(1),
+    INPUT_WAITING(2),
+    FIX_WAITING(3),
+    APPROVAL_WAITING(4),
+    DELETE(99)
+    ;
     
     private int value;
 
-    private ActionLogType(int value) {
+    private CardUpdateHistoryType(int value) {
         this.value = value;
     }
 

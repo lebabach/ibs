@@ -341,19 +341,39 @@ function loadDataComplete() {
         checkboxClass: 'icheckbox_square-green',
         radioClass: 'iradio_square-green',                
    		});
-	$(".iradio_square-green_combo").on("click",function(){
-		console.log("12121");
-	})
+	
+	$(document).on('ifClicked', '.iradio_square-green_combo', function(event){
+		var cardId=$(this).attr("id");
+		console.log(cardId);
+		$.ajax({
+		    type: 'POST',
+		    url: 'searchCards',
+		    dataType: 'json', 
+			 contentType: 'application/json',
+			 mimeType: 'application/json',
+		     data: JSON.stringify({ 
+		        'cardId':cardId,
+		    }),
+		    success: function(data){
+		    	setDataSearchLoadMore(data);
+		    }
+		});
+	});
+}
+
+function clickBox() {
+	alert("ok");
 }
 
 $(document).ready(function() {
+	
 	
 	dataTables = $('#tbl-cards').dataTable( {
 		"fnDrawCallback" : function() {
 			loadDataComplete();
 		},
 		"dom" : '<<t>ip>',
-		"iDisplayLength" : 5,
+		"iDisplayLength" : 10,
 		"processing": true,
 		"serverSide": true,
 		"searching": false,
@@ -392,7 +412,7 @@ $(document).ready(function() {
 				"className": "ch-color-link",
 				"createdCell": function (td, cellData, rowData, row, col) {
 					
-					$(td).html("<div class='iradio_square-green_combo'><input type='radio' class='i-checks' name='bla'></div>");
+					$(td).html("<div class='iradio_square-green_combo' id='"+rowData.cardId+"'><input type='radio' class='i-checks' name='bla'></div>");
 				}
 			},
 			{ "data": "name"},
@@ -405,7 +425,10 @@ $(document).ready(function() {
 		],
 	});
 	
-	
+	$("#btnSearch").click(function(){
+		var dataTableSearch = $('#tbl-cards').dataTable();
+		dataTableSearch.fnFilter();
+	})
 	
 });
 
@@ -430,12 +453,11 @@ $(document).ready(function() {
 											style="background-color: #fff; padding-left: 0;">履歴となる名刺検索</td>
 										<td colspan="9"
 											style="background-color: #fff; padding-left: 0; text-align: right;">
-											<%-- <form>
-												<input value="" id="criteriaSearch" style="width: 300px; height: 30px;">
-												<input value="検索"
-													style="padding-left: 10px; padding-right: 10px; height: 30px;"
-													type="button">
-											</form> --%>
+										
+											<input value="" id="criteriaSearch" style="width: 300px; height: 30px;">
+											<input value="検索" id="btnSearch"
+												style="padding-left: 10px; padding-right: 10px; height: 30px;"
+												type="button">
 										</td>
 									</tr> 
 									<tr>
