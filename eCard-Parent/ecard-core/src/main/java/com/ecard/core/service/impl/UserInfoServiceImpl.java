@@ -327,4 +327,10 @@ public class UserInfoServiceImpl implements UserInfoService {
     public List<UserInfo> getAllListUser(){
     	return userInfoDAO.getAllListUser();
     }
+
+	@Override
+	public List<UserInfoVo> getAllUserOfCompany(int groupCompanyInfoId) {
+		// TODO Auto-generated method stub
+		return userInfoDAO.getAllUserOfCompany(groupCompanyInfoId);
+	}
 }

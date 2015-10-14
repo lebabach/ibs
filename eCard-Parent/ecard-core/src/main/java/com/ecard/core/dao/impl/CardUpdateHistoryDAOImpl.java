@@ -5,6 +5,7 @@ package com.ecard.core.dao.impl;
 
 import com.ecard.core.dao.CardUpdateHistoryDAO;
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.CardUpdateHistory;
 import com.ecard.core.model.enums.CardParamType;
 import com.ecard.core.model.enums.SearchConditions;
 import com.ecard.core.vo.CardUpdateHisAndUserInfo;
@@ -84,5 +85,10 @@ public class CardUpdateHistoryDAOImpl extends GenericDao implements CardUpdateHi
         }
         
         return result;
+    }
+
+    public void registerCardUpdateHistory(CardUpdateHistory cardUpdateHis){
+    	getEntityManager().persist(cardUpdateHis);
+    	getEntityManager().flush();
     }
 }
