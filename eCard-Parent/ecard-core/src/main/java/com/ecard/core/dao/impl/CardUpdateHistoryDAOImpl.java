@@ -85,4 +85,9 @@ public class CardUpdateHistoryDAOImpl extends GenericDao implements CardUpdateHi
         
         return result;
     }
+
+    public void registerCardUpdateHistory(CardUpdateHisAndUserInfo cardUpdateHis){
+    	getEntityManager().persist(cardUpdateHis);
+    	getEntityManager().flush();
+    }
 }

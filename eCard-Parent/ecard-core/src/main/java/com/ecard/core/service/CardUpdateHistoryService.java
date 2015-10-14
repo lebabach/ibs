@@ -16,4 +16,6 @@ public interface CardUpdateHistoryService {
    public List<CardInfo> listAllCardHistory(String sort);
    
    public List<CardUpdateHisAndUserInfo> getListCardUpdateHistory(Integer cardId);
+   
+   public void registerCardUpdateHistory(CardUpdateHisAndUserInfo cardUpdateHis);
 }

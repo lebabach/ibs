@@ -30,4 +30,8 @@ public class CardUpdateHistoryServiceImpl implements CardUpdateHistoryService{
     public List<CardUpdateHisAndUserInfo> getListCardUpdateHistory(Integer cardId){
         return cardUpdateHistoryDAO.getListCardUpdateHistory(cardId);
     }
+    
+    public void registerCardUpdateHistory(CardUpdateHisAndUserInfo cardUpdateHis){
+    	cardUpdateHistoryDAO.registerCardUpdateHistory(cardUpdateHis);
+    }
 }

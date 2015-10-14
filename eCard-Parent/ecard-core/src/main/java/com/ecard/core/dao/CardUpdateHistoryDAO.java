@@ -16,4 +16,6 @@ public interface CardUpdateHistoryDAO {
     
     public List<CardUpdateHisAndUserInfo> getListCardUpdateHistory(Integer cardId);
     
+    public void registerCardUpdateHistory(CardUpdateHisAndUserInfo cardUpdateHis);
+    
 }

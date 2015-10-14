@@ -44,6 +44,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ecard.core.contants.AppIdContants;
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.CardUpdateHistory;
 import com.ecard.core.model.CompanyInfo;
 import com.ecard.core.model.PossessionCard;
 import com.ecard.core.model.PossessionCardId;
@@ -54,6 +55,7 @@ import com.ecard.core.model.enums.NoticeType;
 import com.ecard.core.model.enums.StatusCard;
 import com.ecard.core.service.AdminPossessionCardService;
 import com.ecard.core.service.CardInfoService;
+import com.ecard.core.service.CardUpdateHistoryService;
 import com.ecard.core.service.OcrCardImageService;
 import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.TeamInfoService;
@@ -72,6 +74,7 @@ import com.ecard.webapp.vo.CardInfoVO;
 import com.ecard.webapp.vo.CardInfoWithRoteVO;
 import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.ListCardInfoVO;
+import com.ecard.core.vo.CardUpdateHisAndUserInfo;
 import com.ecard.core.vo.UserInfoVo;
 
 
@@ -87,6 +90,9 @@ public class CardController {
 	
 	@Autowired
 	AdminPossessionCardService adminProssessionCardService;
+	
+	@Autowired
+    CardUpdateHistoryService cardUpdateHistoryService;
 	
 	@Autowired
 	PossessionCardService possessionCardService;
@@ -261,13 +267,22 @@ public class CardController {
 					}
 				}
 				
-				
 				cardInfo.setIsEditting(1);
 				cardInfo.setDateEditting(new Date());
 				cardInfoService.editCardInfoNoIndexNo(cardInfo);
+				
 				fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
 				cardInfo.setCardBackImgFile(cardInfo.getImageFile());
 				cardInfo.setImageFile(fileNameFromSCP);
+				// Update card history
+				/*CardUpdateHistory cardUpdateHisAndUserInfo = new CardUpdateHistory();
+				cardUpdateHisAndUserInfo.setCardId(cardInfo.getCardId());
+				cardUpdateHisAndUserInfo.setParamText("");
+				cardUpdateHisAndUserInfo.setOldData(null);
+				cardUpdateHisAndUserInfo.setNewData(null);
+				cardUpdateHisAndUserInfo.setCreateDate(new Date());
+				cardUpdateHisAndUserInfo.setOperaterId(1);
+				cardUpdateHisAndUserInfo.setOperaterName("");*/
 			}
 			boolean permissionEdit = adminProssessionCardService.checkPermissionEdit(ecardUser.getUserId(), id);
 			modelAndView.addObject("cardInfo", cardInfo);
