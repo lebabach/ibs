@@ -367,12 +367,13 @@ function clickBox() {
 
 $(document).ready(function() {
 	
+	
 	dataTables = $('#tbl-cards').dataTable( {
 		"fnDrawCallback" : function() {
 			loadDataComplete();
 		},
 		"dom" : '<<t>ip>',
-		"iDisplayLength" : 5,
+		"iDisplayLength" : 10,
 		"processing": true,
 		"serverSide": true,
 		"searching": false,
@@ -424,7 +425,10 @@ $(document).ready(function() {
 		],
 	});
 	
-	
+	$("#btnSearch").click(function(){
+		var dataTableSearch = $('#tbl-cards').dataTable();
+		dataTableSearch.fnFilter();
+	})
 	
 });
 
@@ -449,12 +453,11 @@ $(document).ready(function() {
 											style="background-color: #fff; padding-left: 0;">履歴となる名刺検索</td>
 										<td colspan="9"
 											style="background-color: #fff; padding-left: 0; text-align: right;">
-											<%-- <form>
-												<input value="" id="criteriaSearch" style="width: 300px; height: 30px;">
-												<input value="検索"
-													style="padding-left: 10px; padding-right: 10px; height: 30px;"
-													type="button">
-											</form> --%>
+										
+											<input value="" id="criteriaSearch" style="width: 300px; height: 30px;">
+											<input value="検索" id="btnSearch"
+												style="padding-left: 10px; padding-right: 10px; height: 30px;"
+												type="button">
 										</td>
 									</tr> 
 									<tr>
