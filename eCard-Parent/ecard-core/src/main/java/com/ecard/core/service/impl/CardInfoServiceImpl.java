@@ -24,6 +24,7 @@ import com.ecard.core.util.DataIndexUtil;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
+import com.ecard.core.vo.CardInfoNotifyChange;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
@@ -246,8 +247,8 @@ public class CardInfoServiceImpl implements CardInfoService {
     }
     
     public List<Integer> getListUserPushToByCard(CardInfo cardInfo){
-    	return cardInfoDAO.getListUserPushToByCard(cardInfo);
-    }    
+    	return cardInfoDAO.getListUserPushToByCard(cardInfo);    
+    }
     
     public List<Integer> getListUserPushFromByCard(CardInfo cardInfo){
     	return cardInfoDAO.getListUserPushFromByCard(cardInfo);
@@ -296,5 +297,9 @@ public class CardInfoServiceImpl implements CardInfoService {
 	
 	public Long countSameCardInfoByOwner(CardInfo cardInfo){
 		return cardInfoDAO.countSameCardInfoByOwner(cardInfo);
+	}
+	
+	public List<CardInfoNotifyChange> getListCardInfoNotifyChange(CardInfo cardInfo){
+		return cardInfoDAO.getListCardInfoNotifyChange(cardInfo);
 	}
 }

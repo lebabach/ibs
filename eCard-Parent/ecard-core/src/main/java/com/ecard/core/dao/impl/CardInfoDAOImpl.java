@@ -30,6 +30,7 @@ import com.ecard.core.model.enums.SearchConditions;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
+import com.ecard.core.vo.CardInfoNotifyChange;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
@@ -1207,4 +1208,44 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         query.setParameter("companyName", cardInfo.getCompanyName());
         return (Long)getOrNull(query);
     }
+	
+	public List<CardInfoNotifyChange> getListCardInfoNotifyChange(CardInfo cardInfo){
+		String sqlStr="SELECT ci.card_id, ci.name, ci.company_name, ci.company_name_kana, ci.department_name, ci.position_name, ci.email, ci.tel_number_company,"
+				+ " ci.mobile_number, ci.address_full, ci.company_url, ci.card_owner_id, ci.group_company_id, MAX(ci.contact_date)"
+				+ " FROM card_info ci "
+				+ "	WHERE ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName))" 
+				+ " AND ci.old_card_flg = 0  AND ci.approval_status = 1 AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date comDate=new Date();
+		try {
+			comDate = formatter.parse(this.complianceDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		if(cardInfo.getContactDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(comDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate())){
+			if(cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 ||cardInfo.getGroupCompanyId() == 3 ||cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5){
+	    		sqlStr += "AND ( ci.group_company_id IN (1,2,3,4,5) OR ( ci.group_company_id NOT IN(1,2,3,4,5) AND ci.contact_date >= '"+ this.complianceDate +"' ))";
+	    	} else {
+	    		sqlStr += "AND ( ci.group_company_id = "+cardInfo.getGroupCompanyId() +""
+	    				+ " OR ( ci.group_company_id <> "+cardInfo.getGroupCompanyId() +" AND ci.contact_date >= '"+ this.complianceDate +"' ))";
+	    	}			
+		}
+		sqlStr+= " GROUP BY ci.card_owner_id";
+		
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		query.setParameter("name", cardInfo.getName());
+		query.setParameter("email", cardInfo.getEmail());
+		query.setParameter("companyName", cardInfo.getCompanyName());
+		query.setParameter("cardOwnerId", cardInfo.getCardOwnerId());
+		
+	    
+	    List<Object[]> listObj = query.getResultList();
+        List<CardInfoNotifyChange> lstcardInfoUserVo = new ArrayList<>();
+        for(Object[] object : listObj){
+        	CardInfoNotifyChange  cardInfoVo = new CardInfoNotifyChange((Integer)object[0], (String)object[1], (String)object[2], (String)object[3], (String)object[4], (String)object[5], 
+        			(String)object[6], (String)object[7], (String)object[8], (String)object[9], (String)object[10], (Integer)object[11], (Integer)object[12], (Date)object[13]);
+        	lstcardInfoUserVo.add(cardInfoVo);
+        }
+        return lstcardInfoUserVo;
+	}
 }
