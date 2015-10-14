@@ -342,32 +342,80 @@ function loadDataComplete() {
         radioClass: 'iradio_square-green',                
    		});
 	
-	$(document).on('ifClicked', '.iradio_square-green_combo', function(event){
-		var cardId=$(this).attr("id");
-		console.log(cardId);
-		$.ajax({
-		    type: 'POST',
-		    url: 'searchCards',
-		    dataType: 'json', 
-			 contentType: 'application/json',
-			 mimeType: 'application/json',
-		     data: JSON.stringify({ 
-		        'cardId':cardId,
-		    }),
-		    success: function(data){
-		    	setDataSearchLoadMore(data);
-		    }
-		});
-	});
+	
 }
 
-function clickBox() {
-	alert("ok");
+function setConnectCard(cardId,email,name,companyName,addressFull,departmentName,positionName,telNumberCompany,owner,contactDate){
+	var modal=	'<tr id='+cardId+'>'
+	+'<td>'+email+'</td>'
+	+'<td><div class="iradio_square-green_combo"><input type="radio" class="i-checks" name="bla1" value='+cardId+'></div></td>'
+	+'<td>'+name+'</td>'
+	+'<td>'+companyName+'</td>'
+	+'<td>'+addressFull+'</td>'
+	+'<td>'+departmentName+'</td>'
+	+'<td>'+positionName+'</td>'
+	+'<td>'+telNumberCompany+'</td>'
+	+'<td style="text-align:right">'+contactDate+'</td>'
+	+'<td>'+owner+'</td>'
+	+'</tr>'
+	return modal;
 }
 
 $(document).ready(function() {
+	$(document).on('ifClicked', '#tbl-cards .iradio_square-green_combo .iradio_square-green', function(event){
+		var cardId=$(this).attr("id");
+		var email=$(this).closest( "tr" ).find(".email").val();
+		var firstName=$(this).closest( "tr" ).find(".name").val();
+		var companyName=$(this).closest( "tr" ).find(".companyName").val();
+		var addressFull=$(this).closest( "tr" ).find(".addressFull").val();
+		var departmentName=$(this).closest( "tr" ).find(".departmentName").val();
+		var positionName=$(this).closest( "tr" ).find(".positionName").val();
+		var telNumberCompany=$(this).closest( "tr" ).find(".telNumberCompany").val();
+		var groupCompanyId=$(this).closest( "tr" ).find(".groupCompanyId").val(); 
+		$.ajax({
+			    type: 'POST',
+			    url: 'listConnectCards',
+			    dataType: 'json', 
+				 contentType: 'application/json',
+				 mimeType: 'application/json',
+			    data: JSON.stringify({ 
+			        'email':email,
+			        'companyName':companyName,
+			        'addressFull':addressFull,
+			        'departmentName':departmentName,
+			        'positionName':positionName,
+			        'telNumberCompany':telNumberCompany,
+			        'groupCompanyId':groupCompanyId,
+			        'firstName':firstName
+			    }),
+			    success: function(cards){
+			    	$("#tbl-connect-cards >tbody").remove();
+			    	$.each( cards, function( key, data ) {
+			    		$("#tbl-connect-cards").append(setConnectCard(data.cardId,data.email,data.name,data.companyName,data.addressFull,data.departmentName,data.positionName,data.telNumberCompany,data.owner,data.contactDateString));	
+			    	});
+			    	loadDataComplete();
+			    	return false;
+			    }
+		});
+	});
 	
-	
+	$(".btn.btn-primary").click(function(){
+		if(!($('#tbl-cards input[name=bla]:checked').val()==undefined || $('#tbl-connect-cards input[name=bla1]:checked').val()==undefined)){
+			var cardid1=$('#tbl-cards input[name=bla]:checked').val();
+			var cardid2=$('#tbl-connect-cards input[name=bla1]:checked').val();
+			$.ajax({
+			    type: 'POST',
+			    url: 'handleConnectCards',
+			    data: { 
+			        'cardid1':cardid1,
+			        'cardid2':cardid2
+			    },
+			    success: function(cards){
+			    	location.reload();
+			    }
+		});
+		}
+	})
 	dataTables = $('#tbl-cards').dataTable( {
 		"fnDrawCallback" : function() {
 			loadDataComplete();
@@ -402,26 +450,44 @@ $(document).ready(function() {
 			}
 		},
 		"columns": [
-			{ "data": "cardId",
+			{"data": "email",
 				"createdCell": function (td, cellData, rowData, row, col) {
-			       $(td).html("<input type='hidden' id='userId' value='"+rowData.cardId+"'/>"+ rowData.cardId );
-			}}, 
-			{"data": "email"},
+				       $(td).html("<input type='hidden' class='groupCompanyId' value='"+rowData.groupCompanyId+"'/>"+"<input type='hidden' class='email' groupCompanyId ='"+rowData.groupCompanyId+"' value='"+rowData.email+"'/>"+ rowData.email );
+				       
+				}},
 
 			 { "data": "cardId",
 				"className": "ch-color-link",
 				"createdCell": function (td, cellData, rowData, row, col) {
 					
-					$(td).html("<div class='iradio_square-green_combo' id='"+rowData.cardId+"'><input type='radio' class='i-checks' name='bla'></div>");
+					$(td).html("<div class='iradio_square-green_combo' id='"+rowData.cardId+"'><input type='radio' class='i-checks' value='"+rowData.cardId+"' name='bla'></div>");
 				}
 			},
-			{ "data": "name"},
-			{ "data": "companyName"},
-			{ "data": "addressFull"},
-			{ "data": "departmentName"},
-			{ "data": "positionName"},
-			{ "data": "telNumberCompany"},
-			{ "data": "contactDate"},
+			{ "data": "name",
+				"createdCell": function (td, cellData, rowData, row, col) {
+				       $(td).html("<input type='hidden' class='name' value='"+rowData.name+"'/>"+ rowData.name );
+				}},
+			{ "data": "companyName",
+				"createdCell": function (td, cellData, rowData, row, col) {
+				       $(td).html("<input type='hidden' class='companyName' value='"+rowData.companyName+"'/>"+ rowData.companyName );
+				}},
+			{ "data": "addressFull",
+				"createdCell": function (td, cellData, rowData, row, col) {
+				       $(td).html("<input type='hidden' class='addressFull' value='"+rowData.addressFull+"'/>"+ rowData.addressFull );
+				}},
+			{ "data": "departmentName",
+				"createdCell": function (td, cellData, rowData, row, col) {
+				       $(td).html("<input type='hidden' class='departmentName' value='"+rowData.departmentName+"'/>"+ rowData.departmentName );
+							}},
+			{ "data": "positionName",
+				"createdCell": function (td, cellData, rowData, row, col) {
+				       $(td).html("<input type='hidden' class='positionName' value='"+rowData.positionName+"'/>"+ rowData.positionName );
+								}},
+			{ "data": "telNumberCompany",
+				"createdCell": function (td, cellData, rowData, row, col) {
+				       $(td).html("<input type='hidden' class='telNumberCompany' value='"+rowData.telNumberCompany+"'/>"+ rowData.telNumberCompany );
+			}},
+			{ "data": "contactDateString"},
 		],
 	});
 	
@@ -461,7 +527,6 @@ $(document).ready(function() {
 										</td>
 									</tr> 
 									<tr>
-									    <th>Id</th>
 										<th><fmt:message key='overlap.cards.table1.email' /></th>
 										<th></th>
 										<th><fmt:message key='overlap.cards.table1.name' /></th>
@@ -480,7 +545,7 @@ $(document).ready(function() {
 				</div>
 				<!-- DATA TABLE -->
 				<div class="col-sm-12 table-list-operator">
-					<div class="row" id="tbl-connect-cards">
+					<div class="row">
 						<div class="ibox-content  ibox-content-question ibox-custom01"
 							style="padding: 0;">
 							<table id="tbl-connect-cards" class="table paging"

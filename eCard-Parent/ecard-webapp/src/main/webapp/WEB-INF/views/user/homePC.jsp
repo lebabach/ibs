@@ -583,10 +583,19 @@
 			 $('.business_card_book').html("");
 			   var listGroup = "";
 			   var listGroupItem = "";
-				$.each( resp.data, function( key, value ) {						
-					listGroup = $('.business_card_book').append(
-						'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
-				        +'<div class="list-group-item-title">'+value.nameSort+'</div></div>');
+				$.each( resp.data, function( key, value ) {
+					if(value.nameSort.replace("/","").trim()==""){
+						value.nameSort="NULL";
+						listGroup = $('.business_card_book').append(
+								'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
+						        +'<div class="list-group-item-title">'+"#"+'</div></div>');
+					}else
+						{
+						listGroup = $('.business_card_book').append(
+								'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
+						        +'<div class="list-group-item-title">'+value.nameSort+'</div></div>');
+						}
+					
 					 $.each( value.lstCardInfo, function (k,v) {
 						 listGroupItem += '<div class="list-group-item pointer">'
 				    					+'<div class="row row-new">'

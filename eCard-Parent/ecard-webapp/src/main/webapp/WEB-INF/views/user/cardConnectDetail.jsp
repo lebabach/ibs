@@ -105,14 +105,16 @@
 
 .list-profile li p {
 	width: 100%;
-	display: inline-block;
 	margin: 0;
 	padding: 0;
+	position: relative;
 }
 
 .list-profile li .p-1 {
 	color: #555;
 	font-size: 13px;
+	float:left;
+	width: 150px;
 }
 
 .list-profile li .p-2 {

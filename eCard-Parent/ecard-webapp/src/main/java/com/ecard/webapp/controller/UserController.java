@@ -15,6 +15,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -56,16 +58,16 @@ import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 import org.thymeleaf.context.Context;
-
+import com.ecard.core.dao.OldCardDAO;
 import com.ecard.core.model.ActionLog;
-import com.ecard.core.model.ActionLogId;
-import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.ActionLogId;import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.CardTagId;
 import com.ecard.core.model.CompanyInfo;
 import com.ecard.core.model.ContactHistoryId;
 import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.GroupCompanyInfo;
 import com.ecard.core.model.InquiryInfo;
+import com.ecard.core.model.OldCard;
 import com.ecard.core.model.PossessionCard;
 import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.UserCardMemoId;
@@ -95,7 +97,6 @@ import com.ecard.core.vo.CardInfoCSV;
 import com.ecard.core.vo.CardInfoMemo;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.NotificationList;
-import com.ecard.core.vo.OwnerCards;
 import com.ecard.core.vo.SearchInfo;
 import com.ecard.core.vo.TagForCard;
 import com.ecard.core.vo.TagGroup;
@@ -117,6 +118,7 @@ import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.ListCardDelete;
 import com.ecard.webapp.vo.ObjectCards;
 import com.ecard.webapp.vo.ObjectListSearchUsers;
+import com.ecard.webapp.vo.OwnerCards;
 import com.ecard.webapp.vo.TagUserHome;
 import com.ecard.webapp.vo.UserInfoResultVO;
 import com.ecard.webapp.vo.UserInfoVO;
@@ -1545,7 +1547,9 @@ public class UserController {
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
 		List<com.ecard.core.vo.CardInfo> cards= cardInfoService.getListCardSearch(userInfo.getUserId(), criteriaSearch,null, null, null, null,offset/limit, userInfo.getGroupCompanyId());
-		
+		cards.forEach(c->{
+			c.setContactDateString(c.getContactDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString());
+		});
 		
 		BigInteger totalRecord =cardInfoService.getTotalCardSearch(userInfo.getUserId(), criteriaSearch,null, null, null, null,userInfo.getGroupCompanyId());
 		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));
@@ -1555,6 +1559,49 @@ public class UserController {
 	
 		return dataTableResponse;
 	}
+	
+	
+	@RequestMapping(value = "listConnectCards", method = RequestMethod.POST)
+	@ResponseBody
+	public List<OwnerCards>  listConnectCards(@RequestBody final  com.ecard.core.vo.CardInfo cardInfo,HttpSession session) {
+		List<OwnerCards> ownerCards=new ArrayList<OwnerCards>();
+		OwnerCards ownerCard=null;
+		List<com.ecard.core.vo.CardInfo> cards= cardInfoService.getListConnectCards(cardInfo);
+		List<Integer> userIds=cards.stream().map(x->x.getCardOwnerId()).collect(Collectors.toList());
+		List<UserInfoVo> users= userInfoService.getUserInArrUserId(userIds);
+		UserInfoVo user=null;
+		LocalDate contactDate=null;
+		for(com.ecard.core.vo.CardInfo item : cards){
+			ownerCard=new OwnerCards();
+			ownerCard.setCardId(item.getCardId());
+			ownerCard.setAddressFull(item.getAddressFull());
+			ownerCard.setCompanyName(item.getCompanyName());
+			ownerCard.setContactDate(item.getContactDate());
+			ownerCard.setDepartmentName(item.getDepartmentName());
+			ownerCard.setEmail(item.getEmail());
+			ownerCard.setName(item.getName());;
+			ownerCard.setPositionName(item.getPositionName());
+			ownerCard.setTelNumberCompany(item.getTelNumberCompany());
+			user=users.stream().filter(x->x.getUserId()==item.getCardOwnerId()).findFirst().get();
+			ownerCard.setOwner(StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
+			ownerCard.setContactDateString(ownerCard.getContactDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString());
+			ownerCards.add(ownerCard);
+			
+		}
+		return ownerCards;
+	}
+	
+	@RequestMapping(value = "handleConnectCards", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean handleConnectCards(@RequestParam(value = "cardid1") int cardid1,@RequestParam(value = "cardid2") int cardid2) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserInfo user=userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+		return cardInfoService.handleConnectCards(cardid1,cardid2, ecardUser.getUserId(), StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
+	}
+	
+	
+	
 	
 	class UploadCardThread extends Thread {
 		CardInfo cardInfo;

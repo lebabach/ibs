@@ -119,5 +119,8 @@ public interface UserInfoDAO extends IGenericDao{
     public BigInteger countUserForList(String criteriaSearch);
     public List<UserInfoVo> searchUserOfMyCompanyForList(String criteriaSearch, int limit, int offet, int groupCompanyInfoId);
     public BigInteger countUserForList(String criteriaSearch, int groupCompanyInfoId);
+
+    public List<UserInfo> getAllListUser();
+
     public List<UserInfoVo> getAllUserOfCompany(int groupCompanyInfoId);
  }

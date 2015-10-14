@@ -250,8 +250,7 @@ public class CardController {
 
 		try {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-			UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();			
 			if ((CardInfo) session.getAttribute("cardInfo" + id) != null) {
 				cardInfo = (CardInfo) session.getAttribute("cardInfo" + id);
 				String imageFile = cardInfo.getImageFile().substring(cardInfo.getImageFile().indexOf(',') + 1);
@@ -276,20 +275,7 @@ public class CardController {
 				fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
 				cardInfo.setCardBackImgFile(cardInfo.getImageFile());
 				cardInfo.setImageFile(fileNameFromSCP);
-				// Update card history
-				CardUpdateHistory cardUpdateHistory = new CardUpdateHistory();
-				CardUpdateHistoryId cardUpdateHistoryId = new CardUpdateHistoryId();
-						
-				cardUpdateHistoryId.setParamType(CardUpdateHistoryType.APPROVAL.getValue());
-				cardUpdateHistoryId.setOldData(null);
-				cardUpdateHistoryId.setNewData(null);
-				cardUpdateHistoryId.setCreateDate(new Date());
-				cardUpdateHistoryId.setOperaterId(userInfo.getUserId());
 				
-				cardUpdateHistory.setId(cardUpdateHistoryId);
-				cardUpdateHistory.setCardInfo(cardInfo);
-				
-				cardUpdateHistoryService.registerCardUpdateHistory(cardUpdateHistory);
 			}
 			boolean permissionEdit = adminProssessionCardService.checkPermissionEdit(ecardUser.getUserId(), id);
 			modelAndView.addObject("cardInfo", cardInfo);
@@ -364,6 +350,9 @@ public class CardController {
 	
 	@RequestMapping (value = "editDirect", method = RequestMethod.POST)
 	public ModelAndView editSave(CardInfo cardInfo,int rote) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserInfo userOperatorInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
 		//review to wait for submit information
 		//bach.le rote image
 		String imageData = getCardImageFile(cardInfo.getImageFile());
@@ -416,6 +405,20 @@ public class CardController {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				return new ModelAndView("redirect:list");
+			}
+			if(nCardInfo.getApprovalStatus() != cardInfo.getApprovalStatus()){
+				// Update card history			
+				CardUpdateHistory cardUpdateHistory = new CardUpdateHistory();
+				CardUpdateHistoryId cardUpdateHistoryId = new CardUpdateHistoryId();
+				cardUpdateHistoryId.setParamType(cardInfo.getApprovalStatus());
+				cardUpdateHistoryId.setOldData(null);
+				cardUpdateHistoryId.setNewData(null);
+				cardUpdateHistoryId.setCreateDate(new Date());
+				cardUpdateHistoryId.setUpdateDate(new Date());
+				cardUpdateHistoryId.setOperaterId(userOperatorInfo.getUserId());
+				cardUpdateHistoryId.setCardId(cardInfo.getCardId());
+				cardUpdateHistory.setId(cardUpdateHistoryId);
+				cardUpdateHistoryService.registerCardUpdateHistory(cardUpdateHistory);
 			}
 			
 			// Push to other users
@@ -486,6 +489,10 @@ public class CardController {
 	
 	@RequestMapping (value = "editSuccess", method = RequestMethod.POST)
 	public ModelAndView editSubmit(CardInfo cardInfo,int rote) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserInfo userOperatorInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+		
 		List<String> listAddress = new ArrayList<String>(Arrays.asList(cardInfo.getAddressFull().trim().split(" ")));
 		cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
 		cardInfo.setAddress2(listAddress.get(1) != null ? listAddress.get(1) : "");
@@ -520,6 +527,18 @@ public class CardController {
 		}
 		
 		int result = cardInfoService.updateCardInfoAdmin(cardInfo);
+		// Update card history
+		CardUpdateHistory cardUpdateHistory = new CardUpdateHistory();
+		CardUpdateHistoryId cardUpdateHistoryId = new CardUpdateHistoryId();
+		cardUpdateHistoryId.setParamType(cardInfo.getApprovalStatus());
+		cardUpdateHistoryId.setOldData(null);
+		cardUpdateHistoryId.setNewData(null);
+		cardUpdateHistoryId.setCreateDate(new Date());
+		cardUpdateHistoryId.setUpdateDate(new Date());
+		cardUpdateHistoryId.setOperaterId(userOperatorInfo.getUserId());
+		cardUpdateHistoryId.setCardId(cardInfo.getCardId());
+		cardUpdateHistory.setId(cardUpdateHistoryId);
+		cardUpdateHistoryService.registerCardUpdateHistory(cardUpdateHistory);
 		if (result == 1)
 			return new ModelAndView("redirect:list");
 		return new ModelAndView("cardeditwaitsubmit", "cardInfo", cardInfo);
@@ -546,8 +565,26 @@ public class CardController {
 	@RequestMapping("delete")
 	@ResponseBody
 	public int delete(@RequestParam(value = "cardId") int cardId){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+		
 		try {
 			cardInfoService.deleteCardInfo(cardId);
+			
+			// Update card history
+			CardUpdateHistory cardUpdateHistory = new CardUpdateHistory();
+			CardUpdateHistoryId cardUpdateHistoryId = new CardUpdateHistoryId();
+			cardUpdateHistoryId.setParamType(CardUpdateHistoryType.DELETE.getValue());
+			cardUpdateHistoryId.setOldData(null);
+			cardUpdateHistoryId.setNewData(null);
+			cardUpdateHistoryId.setCreateDate(new Date());
+			cardUpdateHistoryId.setUpdateDate(new Date());
+			cardUpdateHistoryId.setOperaterId(userInfo.getUserId());	
+			cardUpdateHistoryId.setCardId(cardId);
+			cardUpdateHistory.setId(cardUpdateHistoryId);
+			
+			cardUpdateHistoryService.registerCardUpdateHistory(cardUpdateHistory);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return 0;

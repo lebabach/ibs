@@ -191,219 +191,211 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		return result;
 	}
 
-	public Boolean editCardInfo(CardInfo cardInfo) {
-
-		getEntityManager().merge(cardInfo);
-		getEntityManager().flush();
-
-		return true;
-	}
-
-	public CardInfo getCardInfoDetail(Integer cardId) {
-
-		Query query = getEntityManager()
-				.createQuery("SELECT c FROM CardInfo c " + "WHERE c.cardId = :cardId " + "ORDER BY c.createDate DESC");
-		query.setParameter("cardId", cardId);
-		return (CardInfo) query.getSingleResult();
-	}
-
-	public List<CardInfo> getListPossesionCard(Integer userId, String searchText, String sort, int pageNumber) {
-		String sqlStr = "SELECT c FROM CardInfo c "
-				+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 ";
-		Query query = null;
-		if (searchText != null) {
-			sqlStr += "AND ( c.name LIKE :searchText " + "OR c.firstName LIKE :searchText "
-					+ "OR c.lastName LIKE :searchText " + "OR c.firstNameKana LIKE :searchText "
-					+ "OR c.lastNameKana LIKE :searchText " + "OR c.telNumberCompany LIKE :searchText "
-					+ "OR c.addressFull LIKE :searchText " + "OR c.mobileNumber LIKE :searchText "
-					+ "OR c.nameKana LIKE :searchText " + "OR c.companyName LIKE :searchText "
-					+ "OR c.companyNameKana LIKE :searchText " + "OR c.departmentName LIKE :searchText "
-					+ "OR c.positionName LIKE :searchText " + "OR c.email LIKE :searchText ) ";
-			query = getEntityManager().createQuery(sqlStr);
-			query.setParameter("searchText", "%" + searchText.toLowerCase() + "%");
-		} else {
-			if (sort.equals(StringUtils.lowerCase(SearchConditions.NAME.name()))) {
-				sqlStr += "ORDER BY c.nameKana ASC ";
-			} else if (sort.equals(StringUtils.lowerCase(SearchConditions.COMPANY.name()))) {
-				sqlStr += "ORDER BY c.companyNameKana ASC ";
-			} else if (sort.equals(StringUtils.lowerCase(SearchConditions.CONTACT.name()))) {
-				sqlStr += "ORDER BY c.contactDate DESC ";
-			}
-			query = getEntityManager().createQuery(sqlStr);
-		}
-		query.setParameter("userId", userId);
-		query.setFirstResult(pageNumber * this.maxResult);
-		query.setMaxResults(this.maxResult);
-		return query.getResultList();
-	}
-
-	public List<com.ecard.core.vo.CardInfo> getListCardSearch(Integer userId, String searchText, String name,
-			String position, String department, String company, int pageNumber, int groupCompanyId) {
-		String sqlStr = "SELECT c.* FROM card_info c WHERE c.old_card_flg = 0 "
-				+ "AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id = :userId ";
-
-		/*
-		 * if (groupCompanyId == 1 || groupCompanyId ==2 || groupCompanyId ==3
-		 * || groupCompanyId == 4 || groupCompanyId == 5){ sqlStr +=
-		 * " AND (c.group_company_id IN(1,2,3,4,5) OR (c.group_company_id NOT IN(1,2,3,4,5) AND c.contact_date >= '"
-		 * + this.complianceDate +"')) "; } else { sqlStr +=
-		 * " AND (c.group_company_id = " + groupCompanyId +
-		 * " OR (c.group_company_id <> " + groupCompanyId +
-		 * "  AND c.contact_date >= '"+ this.complianceDate +"')) "; }
-		 */
-
-		if (position != null) {
-			String params[] = { "'*W1:0,2:0,3:0,4:0,5:0,6:1,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ",
-					position.toLowerCase(), "*'" };
-
-			sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
-					+ "c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
-					+ "AGAINST(%s %s %s IN BOOLEAN MODE)";
-
-			sqlStr = String.format(sqlStr, params);
-		}
-		if (name != null) {
-			String params[] = { "'*W1:1,2:1,3:1,4:1,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", name.toLowerCase(),
-					"*'" };
-
-			sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
-					+ "c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
-					+ "AGAINST(%s %s %s IN BOOLEAN MODE)";
-			sqlStr = String.format(sqlStr, params);
-		}
-		if (department != null) {
-			String params[] = { "'*W1:0,2:0,3:0,4:0,5:1,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ",
-					department.toLowerCase(), "*'" };
-
-			sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
-					+ "c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
-					+ "AGAINST(%s %s %s IN BOOLEAN MODE)";
-			sqlStr = String.format(sqlStr, params);
-		}
-		if (company != null) {
-			String params[] = { "'*W1:1,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ",
-					company.toLowerCase(), "*'" };
-
-			sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
-					+ "c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
-					+ "AGAINST(%s %s %s IN BOOLEAN MODE)";
-			sqlStr = String.format(sqlStr, params);
-		}
-		if (name == null || position == null || department == null || company == null) {
-			if (searchText != null) {
-				List<String> listSearchText = new ArrayList<String>(Arrays.asList(searchText.trim().split(" ")));
-				String searchTxt = "";
-				for (int i = 0; i < listSearchText.size(); i++) {
-					searchTxt += (listSearchText.get(i) != null) ? " +\"" + listSearchText.get(i) + "\" " : "";
-				}
-
-				// String params[] = { "'+{", searchText.toLowerCase(), "}'"};
-				String params[] = { "'*W1:1,2:1,3:1,4:1,5:0,6:0,7:1,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", searchTxt,
-						" '" };
-
-				sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
-						+ "c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
-						+ "AGAINST(%s %s %s IN BOOLEAN MODE)";
-				sqlStr = String.format(sqlStr, params);
-			}
-		}
-
-		Query query = getEntityManager().createNativeQuery(sqlStr);
-
-		query.setParameter("userId", userId);
-		// query.setParameter("groupCompanyId", groupCompanyId);
-		query.setFirstResult(pageNumber * this.maxResult);
-		query.setMaxResults(this.maxResult);
-
-		List<Object[]> rows = query.getResultList();
-		List<com.ecard.core.vo.CardInfo> result = new ArrayList<>(rows.size());
-		for (Object[] row : rows) {
-			result.add(new com.ecard.core.vo.CardInfo((Integer) row[0], (String) row[9], (String) row[11],
-					(String) row[10], (String) row[12], (String) row[14], (String) row[13], (String) row[5],
-					(String) row[7], (String) row[2], (String) row[8], (Date) row[47], (Integer) row[45],
-					(String) row[22], (String) row[15], (Integer) row[4], (Integer) row[53]));
-		}
-
-		return result;
-	}
-
-	public BigInteger getTotalCardSearch(Integer userId, String searchText, String name, String position,
-			String department, String company, int groupCompanyId) {
-		String sqlStr = "SELECT COUNT(*) FROM card_info c WHERE c.old_card_flg = 0 AND c.approval_status = 1 "
-				+ "AND c.delete_flg = 0 AND c.card_owner_id = :userId ";
-
-		/*
-		 * if (groupCompanyId == 1 || groupCompanyId ==2 || groupCompanyId ==3
-		 * || groupCompanyId == 4 || groupCompanyId == 5 ){ sqlStr +=
-		 * " AND (c.group_company_id IN(1,2,3,4,5) OR (c.group_company_id NOT IN(1,2,3,4,5) AND c.contact_date >= '"
-		 * + this.complianceDate +"')) "; } else { sqlStr +=
-		 * " AND (c.group_company_id = " + groupCompanyId +
-		 * " OR (c.group_company_id <> " + groupCompanyId +
-		 * "  AND c.contact_date >= '"+ this.complianceDate +"')) "; }
-		 */
-
-		if (position != null) {
-			String params[] = { "'*W1:0,2:0,3:0,4:0,5:0,6:1,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ",
-					position.toLowerCase(), "*'" };
-
-			sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
-					+ "c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
-					+ "AGAINST(%s %s %s IN BOOLEAN MODE)";
-
-			sqlStr = String.format(sqlStr, params);
-		}
-		if (name != null) {
-			String params[] = { "'*W1:1,2:1,3:1,4:1,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", name.toLowerCase(),
-					"*'" };
-
-			sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
-					+ "c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
-					+ "AGAINST(%s %s %s IN BOOLEAN MODE)";
-			sqlStr = String.format(sqlStr, params);
-		}
-		if (department != null) {
-			String params[] = { "'*W1:0,2:0,3:0,4:0,5:1,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ",
-					department.toLowerCase(), "*'" };
-
-			sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
-					+ "c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
-					+ "AGAINST(%s %s %s IN BOOLEAN MODE)";
-			sqlStr = String.format(sqlStr, params);
-		}
-		if (company != null) {
-			String params[] = { "'*W1:1,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ",
-					company.toLowerCase(), "*'" };
-
-			sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
-					+ "c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
-					+ "AGAINST(%s %s %s IN BOOLEAN MODE)";
-			sqlStr = String.format(sqlStr, params);
-		}
-		if (name == null || position == null || department == null || company == null) {
-			if (searchText != null) {
-				List<String> listSearchText = new ArrayList<String>(Arrays.asList(searchText.trim().split(" ")));
-				String searchTxt = "";
-				for (int i = 0; i < listSearchText.size(); i++) {
-					searchTxt += (listSearchText.get(i) != null) ? " +\"" + listSearchText.get(i) + "\" " : "";
-				}
-				// String params[] = { "'+{", searchText.toLowerCase(), "}'"};
-				String params[] = { "'*W1:1,2:1,3:1,4:1,5:0,6:0,7:1,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ",
-						searchTxt.toLowerCase(), " '" };
-
-				sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
-						+ "c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
-						+ "AGAINST(%s %s %s IN BOOLEAN MODE)";
-				sqlStr = String.format(sqlStr, params);
-			}
-		}
-
-		Query query = getEntityManager().createNativeQuery(sqlStr);
-
-		query.setParameter("userId", userId);
-		return (BigInteger) getOrNull(query);
-	}
-
-	public List<CardInfoAndPosCard> listCardPending(Integer userId) {
+    public Boolean editCardInfo(CardInfo cardInfo){
+    	
+    	getEntityManager().merge(cardInfo);
+    	getEntityManager().flush();
+    	
+    	return true;
+    }
+    
+    public CardInfo getCardInfoDetail(Integer cardId) {
+        
+        Query query = getEntityManager().createQuery("SELECT c FROM CardInfo c "
+                            + "WHERE c.cardId = :cardId "
+                            + "ORDER BY c.createDate DESC");
+        query.setParameter("cardId", cardId);
+        return (CardInfo)query.getSingleResult();
+    }
+    
+    public List<CardInfo> getListPossesionCard(Integer userId, String searchText, String sort, int pageNumber){
+        String sqlStr = "SELECT c FROM CardInfo c "
+                + "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 ";
+        Query query = null;
+        if(searchText != null) {
+            sqlStr += "AND ( c.name LIKE :searchText "
+                    + "OR c.firstName LIKE :searchText "
+                    + "OR c.lastName LIKE :searchText "
+                    + "OR c.firstNameKana LIKE :searchText "
+                    + "OR c.lastNameKana LIKE :searchText "
+                    + "OR c.telNumberCompany LIKE :searchText "
+                    + "OR c.addressFull LIKE :searchText "
+                    + "OR c.mobileNumber LIKE :searchText "
+                    + "OR c.nameKana LIKE :searchText "
+                    + "OR c.companyName LIKE :searchText "
+                    + "OR c.companyNameKana LIKE :searchText "
+                    + "OR c.departmentName LIKE :searchText "
+                    + "OR c.positionName LIKE :searchText "
+                    + "OR c.email LIKE :searchText ) ";
+            query = getEntityManager().createQuery(sqlStr);
+            query.setParameter("searchText", "%" + searchText.toLowerCase() + "%");
+        }
+        else {
+            if(sort.equals(StringUtils.lowerCase(SearchConditions.NAME.name()))) {
+                sqlStr += "ORDER BY c.nameKana ASC ";
+            }
+            else if(sort.equals(StringUtils.lowerCase(SearchConditions.COMPANY.name()))) {
+                sqlStr += "ORDER BY c.companyNameKana ASC ";
+            }
+            else if(sort.equals(StringUtils.lowerCase(SearchConditions.CONTACT.name()))) {
+                sqlStr += "ORDER BY c.contactDate DESC ";
+            }
+            query = getEntityManager().createQuery(sqlStr);
+        }
+        query.setParameter("userId", userId);
+        query.setFirstResult(pageNumber * this.maxResult);
+        query.setMaxResults(this.maxResult);
+        return query.getResultList();
+    }
+    
+    public List<com.ecard.core.vo.CardInfo> getListCardSearch(Integer userId, String searchText,String name, String position,String department,String company, int pageNumber, int groupCompanyId) {                
+        String sqlStr = "SELECT c.* FROM card_info c WHERE c.old_card_flg = 0 "
+                + "AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id = :userId ";
+        
+        /*if (groupCompanyId == 1 || groupCompanyId ==2 || groupCompanyId ==3 || groupCompanyId == 4 || groupCompanyId == 5){
+             sqlStr += " AND (c.group_company_id IN(1,2,3,4,5) OR (c.group_company_id NOT IN(1,2,3,4,5) AND c.contact_date >= '"+ this.complianceDate +"')) ";
+        } else {
+             sqlStr += " AND (c.group_company_id = " + groupCompanyId + " OR (c.group_company_id <> " + groupCompanyId 
+                     + "  AND c.contact_date >= '"+ this.complianceDate +"')) ";
+        }*/
+                
+        if(position != null) {
+            String params[] = { "'*W1:0,2:0,3:0,4:0,5:0,6:1,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", position.toLowerCase(), "*'"};
+        	
+            sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
+            		+"c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
+                    + "AGAINST(%s %s %s IN BOOLEAN MODE)";
+            
+            sqlStr = String.format(sqlStr, params);
+        }
+        if(name  != null) {
+        	String params[] = { "'*W1:1,2:1,3:1,4:1,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", name.toLowerCase(), "*'"};
+        	
+            sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
+            		+"c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
+                    + "AGAINST(%s %s %s IN BOOLEAN MODE)";
+            sqlStr = String.format(sqlStr, params);
+        }
+        if(department  != null) {
+        	String params[] = { "'*W1:0,2:0,3:0,4:0,5:1,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", department.toLowerCase(), "*'"};
+        	
+            sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
+            		+"c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
+                    + "AGAINST(%s %s %s IN BOOLEAN MODE)";
+            sqlStr = String.format(sqlStr, params);
+        }
+        if(company  != null) {
+        	String params[] = { "'*W1:1,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", company.toLowerCase(), "*'"};
+        	
+            sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
+            		+"c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
+                    + "AGAINST(%s %s %s IN BOOLEAN MODE)";
+            sqlStr = String.format(sqlStr, params);
+        }
+        if(name == null || position == null || department == null || company ==  null){
+            if(searchText != null) {
+                List<String> listSearchText= new ArrayList<String>( Arrays.asList(searchText.trim().split(" ")));
+                String searchTxt = "";
+                for(int i=0; i < listSearchText.size(); i++){
+                    searchTxt += (listSearchText.get(i) != null) ? " +\"" + listSearchText.get(i) + "\" " : "";
+                }
+                
+            	//String params[] = { "'+{", searchText.toLowerCase(), "}'"};
+                String params[] = { "'*W1:1,2:1,3:1,4:1,5:0,6:0,7:1,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", searchTxt, " '"};
+            	
+                sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
+                		+"c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
+                        + "AGAINST(%s %s %s IN BOOLEAN MODE)";
+                sqlStr = String.format(sqlStr, params);
+            }
+        }
+        
+      
+        Query query = getEntityManager().createNativeQuery(sqlStr);
+        
+        query.setParameter("userId", userId);
+        //query.setParameter("groupCompanyId", groupCompanyId);
+        query.setFirstResult(pageNumber * this.maxResult);
+        query.setMaxResults(this.maxResult);
+        
+        List<Object[]> rows = query.getResultList();
+        List<com.ecard.core.vo.CardInfo> result = new ArrayList<>(rows.size());
+        for (Object[] row : rows) {
+            result.add(new com.ecard.core.vo.CardInfo((Integer)row[0], (String)row[9], (String)row[11], (String)row[10], (String)row[12], (String)row[14],
+                    (String)row[13], (String)row[5], (String)row[7], (String)row[2],(String)row[8], (Date)row[47], (Integer)row[45], (String)row[22], (String)row[15], (Integer)row[4], (Integer)row[53]));
+        }
+        
+        return result;
+    }
+    
+    public BigInteger getTotalCardSearch(Integer userId, String searchText,String name, String position,String department,String company, int groupCompanyId) {                
+        String sqlStr = "SELECT COUNT(*) FROM card_info c WHERE c.old_card_flg = 0 AND c.approval_status = 1 "
+                + "AND c.delete_flg = 0 AND c.card_owner_id = :userId ";
+        
+       /* if (groupCompanyId == 1 || groupCompanyId ==2 || groupCompanyId ==3 || groupCompanyId == 4 || groupCompanyId == 5 ){
+             sqlStr += " AND (c.group_company_id IN(1,2,3,4,5) OR (c.group_company_id NOT IN(1,2,3,4,5) AND c.contact_date >= '"+ this.complianceDate +"')) ";
+        } else {
+             sqlStr += " AND (c.group_company_id = " + groupCompanyId + " OR (c.group_company_id <> " + groupCompanyId 
+                     + "  AND c.contact_date >= '"+ this.complianceDate +"')) ";
+        }*/
+                
+        if(position != null) {
+            String params[] = { "'*W1:0,2:0,3:0,4:0,5:0,6:1,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", position.toLowerCase(), "*'"};
+        	
+            sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
+            		+"c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
+                    + "AGAINST(%s %s %s IN BOOLEAN MODE)";
+            
+            sqlStr = String.format(sqlStr, params);
+        }
+        if(name  != null) {
+        	String params[] = { "'*W1:1,2:1,3:1,4:1,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", name.toLowerCase(), "*'"};
+        	
+            sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
+            		+"c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
+                    + "AGAINST(%s %s %s IN BOOLEAN MODE)";
+            sqlStr = String.format(sqlStr, params);
+        }
+        if(department  != null) {
+        	String params[] = { "'*W1:0,2:0,3:0,4:0,5:1,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", department.toLowerCase(), "*'"};
+        	
+            sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
+            		+"c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
+                    + "AGAINST(%s %s %s IN BOOLEAN MODE)";
+            sqlStr = String.format(sqlStr, params);
+        }
+        if(company  != null) {
+        	String params[] = { "'*W1:1,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", company.toLowerCase(), "*'"};
+        	
+            sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
+            		+"c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
+                    + "AGAINST(%s %s %s IN BOOLEAN MODE)";
+            sqlStr = String.format(sqlStr, params);
+        }
+        if(name == null || position == null || department == null || company ==  null){
+            if(searchText != null) {
+                List<String> listSearchText= new ArrayList<String>( Arrays.asList(searchText.trim().split(" ")));
+                String searchTxt = "";
+                for(int i=0; i < listSearchText.size(); i++){
+                    searchTxt += (listSearchText.get(i) != null) ? " +\"" + listSearchText.get(i) + "\" " : "";
+                }
+            	//String params[] = { "'+{", searchText.toLowerCase(), "}'"};
+                String params[] = { "'*W1:1,2:1,3:1,4:1,5:0,6:0,7:1,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", searchTxt.toLowerCase(), " '"};
+            	
+                sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
+                		+"c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
+                        + "AGAINST(%s %s %s IN BOOLEAN MODE)";
+                sqlStr = String.format(sqlStr, params);
+            }
+        }
+        
+        Query query = getEntityManager().createNativeQuery(sqlStr);
+        
+        query.setParameter("userId", userId);
+        return (BigInteger)getOrNull(query);
+    }
+    
+    public List<CardInfoAndPosCard> listCardPending(Integer userId) {
 
 		Query query = getEntityManager().createQuery(
 				"SELECT new com.ecard.core.vo.CardInfoAndPosCard(d.id.cardId, c.approvalStatus, c.imageFile, c.createDate) FROM PossessionCard d "
@@ -1384,8 +1376,40 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 
 		return cardInfoList;
 	}
-
-	@Override
+	
+	public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card) {
+        String sqlStr = "SELECT * FROM card_info"+
+		        		" WHERE"+
+		        		" old_card_flg = 0"+
+		        		" AND delete_flg = 0"+
+		        		" AND approval_status = 1"+
+		        		" AND newest_card_flg = 1"+
+		        		" AND ("+
+		        		"         (address_full <> '"+card.getAddressFull()+"')"+
+		        		"      OR (tel_number_company <> '"+card.getTelNumberCompany()+"')"+
+		        		"      OR (department_name <> '"+card.getDepartmentName()+"')"+
+		        		"      OR (position_name <> '"+card.getPositionName()+"')"+
+		        		")";
+        if (card.getGroupCompanyId() == 1 || card.getGroupCompanyId() ==2 || card.getGroupCompanyId() ==3 || card.getGroupCompanyId() == 4 || card.getGroupCompanyId() == 5 ){
+            sqlStr += "AND ((email = '"+card.getEmail()+"' AND email <> '') OR (name = '"+card.getFirstName()+"' AND company_name =  '"+card.getCompanyName()+"')) " 
+                    + "AND (group_company_id IN(1,2,3,4,5) OR (group_company_id NOT IN(1,2,3,4,5) AND contact_date >= '"+ this.complianceDate +"')) " ;
+        }
+        else{
+            sqlStr += "AND ((email = '"+card.getEmail()+"' AND email <> '') OR (name = '"+card.getFirstName()+"' AND company_name =  '"+card.getCompanyName()+"')) " 
+                    + "AND (group_company_id = "+ card.getGroupCompanyId() +" OR (group_company_id <> "+ card.getGroupCompanyId() +" AND contact_date >= '"+ this.complianceDate +"')) ";
+        }
+        Query query = getEntityManager().createNativeQuery(sqlStr);
+       
+        List<Object[]> rows = query.getResultList();
+        List<com.ecard.core.vo.CardInfo> result = new ArrayList<>(rows.size());
+        for (Object[] row : rows) {
+            result.add(new com.ecard.core.vo.CardInfo((Integer)row[0], (String)row[9], (String)row[11], (String)row[10], (String)row[12], (String)row[14],
+                    (String)row[13], (String)row[5], (String)row[7], (String)row[2],(String)row[8], (Date)row[47], (Integer)row[45], (String)row[22], (String)row[15], (Integer)row[4], (Integer)row[53], (String)row[17],(Date)row[55], (Integer)row[43]));
+        }
+        
+        return result;
+    }
+@Override
 	public BigInteger countListCardAllocationUser(int userId, int tagId) {
 		String sqlStr = "SELECT count(DISTINCT c.card_id) " 
 	            + " FROM card_info c LEFT JOIN card_tag ct ON c.card_id = ct.card_id "
