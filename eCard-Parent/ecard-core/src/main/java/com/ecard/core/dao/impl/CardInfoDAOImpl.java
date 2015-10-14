@@ -322,7 +322,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         List<com.ecard.core.vo.CardInfo> result = new ArrayList<>(rows.size());
         for (Object[] row : rows) {
             result.add(new com.ecard.core.vo.CardInfo((Integer)row[0], (String)row[9], (String)row[11], (String)row[10], (String)row[12], (String)row[14],
-                    (String)row[13], (String)row[5], (String)row[7], (String)row[2],(String)row[8], (Date)row[47], (Integer)row[45], (String)row[22], (String)row[15], (Integer)row[4], (Integer)row[53]));
+                    (String)row[13], (String)row[5], (String)row[7], (String)row[2],(String)row[8], (Date)row[47], (Integer)row[45], (String)row[22], (String)row[15], (Integer)row[4], (Integer)row[53], (String)row[17],(Date)row[55]));
         }
         
         return result;
