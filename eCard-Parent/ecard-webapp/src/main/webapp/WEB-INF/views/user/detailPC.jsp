@@ -790,19 +790,19 @@ label.error {
                     				},
                     				telNumberDirect : {
                     			    	required: false,
-                    			    	digits: true
+                    			    	customphone: true
                     			    },
                     			    telNumberDepartment : {
                     			    	required: false,
-                    			    	digits: true
+                    			    	customphone: true
                     			    },
                     			    telNumberCompany : {
                     			    	required: false,
-                    			    	digits: true
+                    			    	customphone: true
                     			    },
                     			    mobileNumber : {
                     			    	required: false,
-                    			    	digits: true
+                    			    	customphone: true
                     			    },
                     			    urlvalidation : { 
                     			    	urlvalidation : true, 
@@ -846,16 +846,9 @@ label.error {
                             
                     });        
                     
-                    function validateURL(value){
-                      // URL validation from http://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
-                      var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
-                      var regex = new RegExp(expression);
-                      return value.match(regex);
-                    }
-
-                    $.validator.addMethod("urlvalidation", function(value, element) {
-                      return this.optional(element) || validateURL(value);
-                    }, "<fmt:message key="valid.URL" />");
+                    $.validator.addMethod('customphone', function (value, element) {
+                        return this.optional(element) || /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(value);
+                    }, "<fmt:message key="valid.phoneNumber" />");
                     
                 </script>
                 
