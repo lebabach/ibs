@@ -4,6 +4,7 @@
 package com.ecard.core.dao;
 
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.CardUpdateHistory;
 import com.ecard.core.vo.CardUpdateHisAndUserInfo;
 import java.util.List;
 
@@ -16,6 +17,6 @@ public interface CardUpdateHistoryDAO {
     
     public List<CardUpdateHisAndUserInfo> getListCardUpdateHistory(Integer cardId);
     
-    public void registerCardUpdateHistory(CardUpdateHisAndUserInfo cardUpdateHis);
+    public void registerCardUpdateHistory(CardUpdateHistory cardUpdateHis);
     
 }

@@ -5,6 +5,7 @@ package com.ecard.core.service.impl;
 
 import com.ecard.core.dao.CardUpdateHistoryDAO;
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.CardUpdateHistory;
 import com.ecard.core.service.CardUpdateHistoryService;
 import com.ecard.core.vo.CardUpdateHisAndUserInfo;
 import java.util.List;
@@ -31,7 +32,7 @@ public class CardUpdateHistoryServiceImpl implements CardUpdateHistoryService{
         return cardUpdateHistoryDAO.getListCardUpdateHistory(cardId);
     }
     
-    public void registerCardUpdateHistory(CardUpdateHisAndUserInfo cardUpdateHis){
+    public void registerCardUpdateHistory(CardUpdateHistory cardUpdateHis){
     	cardUpdateHistoryDAO.registerCardUpdateHistory(cardUpdateHis);
     }
 }
