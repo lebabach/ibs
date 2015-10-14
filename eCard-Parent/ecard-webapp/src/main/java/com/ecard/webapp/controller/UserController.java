@@ -1567,27 +1567,32 @@ public class UserController {
 		List<OwnerCards> ownerCards=new ArrayList<OwnerCards>();
 		OwnerCards ownerCard=null;
 		List<com.ecard.core.vo.CardInfo> cards= cardInfoService.getListConnectCards(cardInfo);
-		List<Integer> userIds=cards.stream().map(x->x.getCardOwnerId()).collect(Collectors.toList());
-		List<UserInfoVo> users= userInfoService.getUserInArrUserId(userIds);
-		UserInfoVo user=null;
-		LocalDate contactDate=null;
-		for(com.ecard.core.vo.CardInfo item : cards){
-			ownerCard=new OwnerCards();
-			ownerCard.setCardId(item.getCardId());
-			ownerCard.setAddressFull(item.getAddressFull());
-			ownerCard.setCompanyName(item.getCompanyName());
-			ownerCard.setContactDate(item.getContactDate());
-			ownerCard.setDepartmentName(item.getDepartmentName());
-			ownerCard.setEmail(item.getEmail());
-			ownerCard.setName(item.getName());;
-			ownerCard.setPositionName(item.getPositionName());
-			ownerCard.setTelNumberCompany(item.getTelNumberCompany());
-			user=users.stream().filter(x->x.getUserId()==item.getCardOwnerId()).findFirst().get();
-			ownerCard.setOwner(StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
-			ownerCard.setContactDateString(ownerCard.getContactDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString());
-			ownerCards.add(ownerCard);
+		if(!CollectionUtils.isEmpty(cards)){
+			List<Integer> userIds=cards.stream().map(x->x.getCardOwnerId()).collect(Collectors.toList());
 			
+			List<UserInfoVo> users= userInfoService.getUserInArrUserId(userIds);
+			
+			UserInfoVo user=null;
+			LocalDate contactDate=null;
+			for(com.ecard.core.vo.CardInfo item : cards){
+				ownerCard=new OwnerCards();
+				ownerCard.setCardId(item.getCardId());
+				ownerCard.setAddressFull(item.getAddressFull());
+				ownerCard.setCompanyName(item.getCompanyName());
+				ownerCard.setContactDate(item.getContactDate());
+				ownerCard.setDepartmentName(item.getDepartmentName());
+				ownerCard.setEmail(item.getEmail());
+				ownerCard.setName(item.getName());;
+				ownerCard.setPositionName(item.getPositionName());
+				ownerCard.setTelNumberCompany(item.getTelNumberCompany());
+				user=users.stream().filter(x->x.getUserId()==item.getCardOwnerId()).findFirst().get();
+				ownerCard.setOwner(StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
+				ownerCard.setContactDateString(ownerCard.getContactDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString());
+				ownerCards.add(ownerCard);
+				
+			}
 		}
+		
 		return ownerCards;
 	}
 	
