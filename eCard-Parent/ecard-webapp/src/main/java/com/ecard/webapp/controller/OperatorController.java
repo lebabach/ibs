@@ -25,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +37,7 @@ import com.ecard.core.model.GroupCompanyInfo;
 import com.ecard.core.model.Roles;
 import com.ecard.core.model.TeamInfo;
 import com.ecard.core.model.UserInfo;
+import com.ecard.core.service.AdminPossessionCardService;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.EmailService;
 import com.ecard.core.service.GroupCompanyInfoService;
@@ -50,7 +52,10 @@ import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.security.RoleType;
 import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.vo.DataPagingJsonVO;
+import com.ecard.webapp.vo.ObjectCardNumber;
+import com.ecard.webapp.vo.ObjectTeamVO;
 import com.ecard.webapp.vo.OperatorEditVO;
+import com.ecard.webapp.vo.UpdateCardUser;
 import com.ecard.webapp.vo.UserInfoResultVO;
 
 @Controller
@@ -74,6 +79,8 @@ public class OperatorController {
 	@Autowired
 	CardInfoService cardInfoService;
 	
+	@Autowired
+	AdminPossessionCardService adminPossessionCardService;
 	
 	@Value("${mail.server.from}")
 	private String fromUser;
@@ -338,7 +345,7 @@ public class OperatorController {
     	ModelAndView modelAndView = new ModelAndView();
     	UserInfo userLeave = userInfoService.getUserInfoByUserId(id);
     	List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(id);
-    	List<UserInfoVo> lstUserInfo = userInfoService.getAllUserSearchInfo();
+    	List<UserInfoVo> lstUserInfo = userInfoService.getAllUserOfCompany(userLeave.getGroupCompanyId());
 		modelAndView.setViewName("changeowner");
 		modelAndView.addObject("userLeave", userLeave);
 		modelAndView.addObject("listCardInfo", listCardInfo);
@@ -371,5 +378,24 @@ public class OperatorController {
 	
 		return dataTableResponse;
 	}
+    
+    @RequestMapping(value="updateCardUser", method=RequestMethod.POST)
+	@ResponseBody
+	public int updateCardUser(@RequestBody final  UpdateCardUser updateCardUser) { 
+    	List<Integer> listCardId = new ArrayList<>();
+    	if(updateCardUser.isCheckAll()){
+    		List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(Integer.parseInt(updateCardUser.getUserLeave()));
+    		for(CardInfo cardId : listCardInfo){
+    			listCardId.add(cardId.getCardId());
+    		}
+    	}else{
+    		listCardId.addAll(updateCardUser.getListCardId());
+    	}
+    	
+    	if(listCardId.size() > 0){
+    		adminPossessionCardService.updateUserCard(listCardId,Integer.parseInt( updateCardUser.getUserLeave()), Integer.parseInt( updateCardUser.getUserAssign()));
+    	}
+    	return Integer.parseInt( updateCardUser.getUserLeave());
+    }
 	
 }

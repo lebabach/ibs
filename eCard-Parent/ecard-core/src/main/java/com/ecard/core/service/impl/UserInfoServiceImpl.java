@@ -323,4 +323,14 @@ public class UserInfoServiceImpl implements UserInfoService {
     public BigInteger countUserForList(String criteriaSearch, int groupCompanyInfoId){
     	return userInfoDAO.countUserForList(criteriaSearch, groupCompanyInfoId);
     }
+    
+    public List<UserInfo> getAllListUser(){
+    	return userInfoDAO.getAllListUser();
+    }
+
+	@Override
+	public List<UserInfoVo> getAllUserOfCompany(int groupCompanyInfoId) {
+		// TODO Auto-generated method stub
+		return userInfoDAO.getAllUserOfCompany(groupCompanyInfoId);
+	}
 }

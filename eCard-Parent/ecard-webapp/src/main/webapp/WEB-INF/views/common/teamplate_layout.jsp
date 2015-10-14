@@ -39,6 +39,7 @@
 <link rel="stylesheet"
 	href="<c:url value='/assets/css/plugins/datapicker/datepicker3.css'/>"
 	type="text/css" media="all" />
+	<link href="<c:url value='/assets/css/bootstrap-dialog.min.css'/>" rel="stylesheet" type="text/css" />
 
 <script src="<c:url value='/assets/js/jquery-2.1.1.js'/>"
 	type="text/javascript"></script>
@@ -73,6 +74,7 @@
 <script src="<c:url value='/assets/js/zoomsl-3.0.js'/>"
 	type="text/javascript"></script>
 
+<script src="<c:url value='/assets/js/bootstrap-dialog.min.js'/>"></script>
 <script src="<c:url value='/assets/js/jquery.autoKana.js'/>"
 	type="text/javascript"></script>
 <script src="<c:url value='/assets/js/yubinbango.js'/>"

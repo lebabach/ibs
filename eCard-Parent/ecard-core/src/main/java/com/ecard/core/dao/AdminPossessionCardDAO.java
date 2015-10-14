@@ -12,4 +12,5 @@ public interface AdminPossessionCardDAO {
 	public Boolean checkPermissionEdit(Integer userId, Integer cardId);
 	public BigInteger getTotalCardUserOfTeam(List<Integer> lstUserId);
 	public Integer resetAllocationTeam(Integer teamId);
+	public Integer updateUserCard(List<Integer> listCardUser, Integer userLeave, Integer userAssign);
 }
