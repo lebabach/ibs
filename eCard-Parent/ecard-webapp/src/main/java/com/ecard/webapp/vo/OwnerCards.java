@@ -1,4 +1,4 @@
-package com.ecard.core.vo;
+package com.ecard.webapp.vo;
 
 import java.util.Date;
 

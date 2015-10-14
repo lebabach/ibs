@@ -4,17 +4,30 @@
 package com.ecard.core.service.impl;
 
 import java.math.BigInteger;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ecard.core.dao.CardInfoDAO;
 import com.ecard.core.dao.DataIndexDAO;
+import com.ecard.core.dao.OldCardDAO;
+import com.ecard.core.model.AdminPossessionCard;
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.CompanyInfo;
+import com.ecard.core.model.ContactHistory;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.OldCard;
+import com.ecard.core.model.OldCardId;
+import com.ecard.core.model.PossessionCard;
+import com.ecard.core.model.PrusalHistory;
+import com.ecard.core.model.UserCardMemo;
 import com.ecard.core.model.enums.ActionTypeEnum;
 import com.ecard.core.model.enums.IndexTypeEnum;
 import com.ecard.core.model.enums.PropertyCodeEnum;
@@ -35,7 +48,10 @@ import com.ecard.core.vo.CompanyCardModel;
 @Service("cardInfoService")
 @Transactional
 public class CardInfoServiceImpl implements CardInfoService {
-    
+
+	@Autowired
+    OldCardDAO oldCardDAO;
+	
     @Autowired
     CardInfoDAO cardInfoDAO;
         
@@ -348,5 +364,138 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId) {
 		// TODO Auto-generated method stub
 		return cardInfoDAO.getListCardAllocationUser(userId);
+	}
+	
+	public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card){
+		return cardInfoDAO.getListConnectCards(card);
+	}
+	
+	public boolean handleConnectCards(int cardid1,int cardid2, int currentUserId, String name){
+		try{
+			CardInfo card1=this.getCardInfoDetail(cardid1);
+			CardInfo card2=this.getCardInfoDetail(cardid2);
+			//detach object
+			
+			/*card2.setCardTags(null);
+			card2.setCardUpdateHistories(null);
+			card2.setAdminPossessionCards(null);
+			card2.setContactHistories(null);
+			card2.setOldCards(null);
+			card2.setPossessionCards(null);
+			card2.setPrusalHistories(null);
+			card2.setUserCardMemos(null);*/
+			
+			int ownerUserId=card2.getCardOwnerId();
+			card1.setOldCardFlg(1);
+			this.updateCardInfoAdmin(card1);
+			if(ownerUserId!=currentUserId){
+				card2.setCardOwnerId(currentUserId);
+				card2.setCardOwnerName(name);
+				CardInfo newCard= this.registerCardImageManualPCOfAdmin(setCardInfo(card2));
+				OldCard oldcard=new OldCard();
+				oldcard.setCardInfo(newCard);
+				
+				OldCardId oldCardId=new OldCardId();
+				oldCardId.setCardId(newCard.getCardId());
+				oldCardId.setCardOwnerId(currentUserId);
+				oldCardId.setSeq(0);
+				oldCardId.setOldCardId(card2.getCardId());
+				oldcard.setId(oldCardId);
+			
+				oldCardDAO.saveOrUpdate(oldcard);
+				
+			}else{
+				OldCard oldcard=new OldCard();
+				CardInfo cardInfor=new CardInfo();
+				cardInfor.setCardId(card2.getCardId());
+				OldCardId oldCardId=new OldCardId();
+				oldCardId.setCardId(card2.getCardId());
+				oldCardId.setCardOwnerId(currentUserId);
+				oldCardId.setSeq(0);
+				oldCardId.setOldCardId(cardid1);
+				oldcard.setCardInfo(cardInfor);
+				
+				oldcard.setId(oldCardId);
+				oldCardDAO.persist(oldcard);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	private CardInfo setCardInfo(CardInfo card){
+		CardInfo newcard=new CardInfo();
+		newcard.setCompanyInfo(card.getCompanyInfo());
+		newcard.setCardType(card.getCardType());
+	     newcard.setImageFile(card.getImageFile());
+	     newcard.setCardBackImgFile(card.getCardBackImgFile());
+	     newcard.setCompanyName(card.getCompanyName());
+	     newcard.setCompanyNameKana(card.getCompanyNameKana());
+	     newcard.setDepartmentName(card.getDepartmentName());
+	     newcard.setPositionName(card.getPositionName());
+	     newcard.setName(card.getName());
+	     newcard.setLastName(card.getLastName());
+	     newcard.setFirstName(card.getFirstName());
+	     newcard.setNameKana(card.getNameKana());
+	     newcard.setLastNameKana(card.getLastNameKana());
+	     newcard.setFirstNameKana(card.getFirstNameKana());
+	     newcard.setEmail(card.getEmail());
+	     newcard.setZipCode(card.getZipCode());
+	     newcard.setAddressFull(card.getAddressFull());
+	     newcard.setAddress1(card.getAddress1());
+	     newcard.setAddress2(card.getAddress2());
+	     newcard.setAddress3(card.getAddress3());
+	     newcard.setAddress4(card.getAddress4());
+	     newcard.setTelNumberCompany(card.getTelNumberCompany());
+	     newcard.setTelNumberDepartment(card.getTelNumberDepartment());
+	     
+	     
+	     newcard.setTelNumberDirect(card.getTelNumberDirect());
+	     newcard.setFaxNumber(card.getFaxNumber());
+	     newcard.setMobileNumber(card.getMobileNumber());
+	     newcard.setCompanyUrl(card.getCompanyUrl());
+	     newcard.setSubAddressFull(card.getSubAddressFull());
+	     newcard.setSubZipCode(card.getSubZipCode());
+	     newcard.setSubAddress1(card.getSubAddress1());
+	     newcard.setSubAddress2(card.getSubAddress2());
+	     newcard.setSubAddress3(card.getSubAddress3());
+	     newcard.setSubAddress4(card.getSubAddress4());
+	     
+	     newcard.setSubTelNumberCompany(card.getSubTelNumberCompany());
+	     newcard.setSubTelNumberDepartment(card.getSubTelNumberDepartment());
+	     newcard.setSubTelNumberDirect(card.getSubTelNumberDirect());
+	     newcard.setSubFaxNumber(card.getSubFaxNumber());
+	     newcard.setFileOutputFlg(card.getFileOutputFlg());
+	     newcard.setHandMemo(card.getHandMemo());
+	     newcard.setAutoMemo(card.getAutoMemo());
+	     newcard.setMemo1(card.getMemo1());
+	     newcard.setMemo2(card.getMemo2());
+	     newcard.setMemo1(card.getMemo1());
+	     
+	     
+	     newcard.setCardOwnerId(card.getCardOwnerId());
+	     newcard.setPublishStatus(card.getPublishStatus());
+	     newcard.setApprovalStatus(card.getApprovalStatus());
+	     newcard.setOldCardFlg(card.getOldCardFlg());
+	     newcard.setCreateDate(card.getCreateDate());
+	     newcard.setUpdateDate(card.getUpdateDate());
+	     newcard.setOperaterId(card.getOperaterId());
+	     newcard.setDeletDate(card.getDeletDate());
+	     newcard.setDeleteFlg(card.getDeleteFlg());
+	     newcard.setCardOwnerName(card.getCardOwnerName());
+	     newcard.setGroupCompanyId(card.getGroupCompanyId());
+	     newcard.setNewestCardFlg(card.getNewestCardFlg());
+	     newcard.setContactDate(card.getContactDate());
+	     newcard.setCardIndexNo(card.getCardIndexNo());
+	     
+	     newcard.setSubMobileNumber(card.getSubMobileNumber());
+	     newcard.setSubEmail(card.getSubEmail());
+	     newcard.setSubCompanyUrl(card.getSubCompanyUrl());
+	     newcard.setImportanceLevel(card.getImportanceLevel());
+	     newcard.setIsEditting(card.getIsEditting());
+	     newcard.setDateEditting(card.getDateEditting());
+	     return newcard;
 	}
 }

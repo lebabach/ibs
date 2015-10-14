@@ -349,7 +349,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         List<com.ecard.core.vo.CardInfo> result = new ArrayList<>(rows.size());
         for (Object[] row : rows) {
             result.add(new com.ecard.core.vo.CardInfo((Integer)row[0], (String)row[9], (String)row[11], (String)row[10], (String)row[12], (String)row[14],
-                    (String)row[13], (String)row[5], (String)row[7], (String)row[2],(String)row[8], (Date)row[47], (Integer)row[45], (String)row[22], (String)row[15], (Integer)row[4], (Integer)row[53]));
+                    (String)row[13], (String)row[5], (String)row[7], (String)row[2],(String)row[8], (Date)row[47], (Integer)row[45], (String)row[22], (String)row[15], (Integer)row[4], (Integer)row[53], (String)row[17],(Date)row[55]));
         }
         
         return result;
@@ -1358,4 +1358,37 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	    
 	    return cardInfoList;
 	}
+	
+	public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card) {
+        String sqlStr = "SELECT * FROM card_info"+
+		        		" WHERE"+
+		        		" old_card_flg = 0"+
+		        		" AND delete_flg = 0"+
+		        		" AND approval_status = 1"+
+		        		" AND newest_card_flg = 1"+
+		        		" AND ("+
+		        		"         (address_full <> '"+card.getAddressFull()+"')"+
+		        		"      OR (tel_number_company <> '"+card.getTelNumberCompany()+"')"+
+		        		"      OR (department_name <> '"+card.getDepartmentName()+"')"+
+		        		"      OR (position_name <> '"+card.getPositionName()+"')"+
+		        		")";
+        if (card.getGroupCompanyId() == 1 || card.getGroupCompanyId() ==2 || card.getGroupCompanyId() ==3 || card.getGroupCompanyId() == 4 || card.getGroupCompanyId() == 5 ){
+            sqlStr += "AND ((email = '"+card.getEmail()+"' AND email <> '') OR (name = '"+card.getFirstName()+"' AND company_name =  '"+card.getCompanyName()+"')) " 
+                    + "AND (group_company_id IN(1,2,3,4,5) OR (group_company_id NOT IN(1,2,3,4,5) AND contact_date >= '"+ this.complianceDate +"')) " ;
+        }
+        else{
+            sqlStr += "AND ((email = '"+card.getEmail()+"' AND email <> '') OR (name = '"+card.getFirstName()+"' AND company_name =  '"+card.getCompanyName()+"')) " 
+                    + "AND (group_company_id = "+ card.getGroupCompanyId() +" OR (group_company_id <> "+ card.getGroupCompanyId() +" AND contact_date >= '"+ this.complianceDate +"')) ";
+        }
+        Query query = getEntityManager().createNativeQuery(sqlStr);
+       
+        List<Object[]> rows = query.getResultList();
+        List<com.ecard.core.vo.CardInfo> result = new ArrayList<>(rows.size());
+        for (Object[] row : rows) {
+            result.add(new com.ecard.core.vo.CardInfo((Integer)row[0], (String)row[9], (String)row[11], (String)row[10], (String)row[12], (String)row[14],
+                    (String)row[13], (String)row[5], (String)row[7], (String)row[2],(String)row[8], (Date)row[47], (Integer)row[45], (String)row[22], (String)row[15], (Integer)row[4], (Integer)row[53], (String)row[17],(Date)row[55], (Integer)row[43]));
+        }
+        
+        return result;
+    }
 }
