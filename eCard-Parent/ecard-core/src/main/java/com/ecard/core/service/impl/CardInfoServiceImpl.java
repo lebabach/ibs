@@ -41,6 +41,7 @@ import com.ecard.core.vo.CardInfoConnectUser;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
+import com.ecard.core.vo.TagUser;
 
 /**
  *
@@ -366,9 +367,21 @@ public class CardInfoServiceImpl implements CardInfoService {
 	}
 
 	@Override
-	public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId) {
+	public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId,int tagId,int limit,int offset) {
 		// TODO Auto-generated method stub
-		return cardInfoDAO.getListCardAllocationUser(userId);
+		return cardInfoDAO.getListCardAllocationUser(userId,tagId,limit,offset);
+	}
+
+	@Override
+	public BigInteger countListCardAllocationUser(int userId, int tagId) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.countListCardAllocationUser(userId,tagId);
+	}
+
+	@Override
+	public List<TagUser> getAllTagUser(int userId) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.getAllTagUser(userId);
 	}
 	
 	public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card){

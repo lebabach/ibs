@@ -70,7 +70,8 @@ public class CardInfo {
     private int is_editting;
     private Date contactDate;
     private BigInteger count;   
-    private String fullName;
+    private String tagName;
+private String fullName;
     private String contactDateString;
     public int getIs_editting() {
 		return is_editting;
@@ -159,6 +160,28 @@ public class CardInfo {
         this.createDate = createDate;
         this.telNumberCompany = telNumberCompany;
         this.email = email;
+    
+    }
+    public CardInfo(Integer cardId, String name, String firstName, String lastName, String nameKana, String firstNameKana, String lastNameKana, 
+            String companyName, String companyNameKana, String departmentName, String imageFile, String positionName, Date createDate, Integer approvalStatus, 
+            String telNumberCompany, String email,String tagName){
+        this.cardId = cardId;
+        this.name = name;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.nameKana = nameKana;
+        this.lastNameKana = lastNameKana;
+        this.firstNameKana = firstNameKana;
+        this.companyName = companyName;
+        this.companyNameKana = companyNameKana;
+        this.departmentName = departmentName;
+        this.positionName = positionName;    
+        this.imageFile = imageFile;
+        this.approvalStatus = approvalStatus;
+        this.createDate = createDate;
+        this.telNumberCompany = telNumberCompany;
+        this.email = email;
+        this.tagName = tagName;
     }
     
     public CardInfo(Integer cardId, String name, String firstName, String lastName, String nameKana, String firstNameKana, String lastNameKana, 
@@ -865,7 +888,13 @@ public class CardInfo {
 		this.contactDateString = contactDateString;
 	}
 
-	
+	public String getTagName() {
+		return tagName;
+	}
+
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
+	}
     
     
 }

@@ -11,12 +11,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -39,6 +42,7 @@ import com.ecard.core.model.TeamInfo;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.service.AdminPossessionCardService;
 import com.ecard.core.service.CardInfoService;
+import com.ecard.core.service.CardTagService;
 import com.ecard.core.service.EmailService;
 import com.ecard.core.service.GroupCompanyInfoService;
 import com.ecard.core.service.MasterService;
@@ -46,6 +50,9 @@ import com.ecard.core.service.TeamInfoService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.vo.CardInfo;
 import com.ecard.core.vo.GroupDepartmentVO;
+import com.ecard.core.vo.TagForCard;
+import com.ecard.core.vo.TagGroup;
+import com.ecard.core.vo.TagUser;
 import com.ecard.core.vo.UserInfoVo;
 import com.ecard.webapp.constant.CommonConstants;
 import com.ecard.webapp.security.EcardUser;
@@ -61,6 +68,7 @@ import com.ecard.webapp.vo.UserInfoResultVO;
 @Controller
 @RequestMapping("/operators/*")
 public class OperatorController {
+	private static final Logger logger = LoggerFactory.getLogger(OperatorController.class);
 	@Autowired
 	UserInfoService userInfoService;
 	
@@ -81,6 +89,9 @@ public class OperatorController {
 	
 	@Autowired
 	AdminPossessionCardService adminPossessionCardService;
+	
+	@Autowired
+    CardTagService cardTagService;
 	
 	@Value("${mail.server.from}")
 	private String fromUser;
@@ -344,12 +355,28 @@ public class OperatorController {
 	public ModelAndView changeowner(@PathVariable("id") int id) {
     	ModelAndView modelAndView = new ModelAndView();
     	UserInfo userLeave = userInfoService.getUserInfoByUserId(id);
-    	List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(id);
     	List<UserInfoVo> lstUserInfo = userInfoService.getAllUserOfCompany(userLeave.getGroupCompanyId());
+    	List<TagGroup> listTagGroup = null;
+		try{
+	
+			//List tag
+			List<TagForCard> listCardTag = getAllTagForCard(id);
+			List<TagForCard> listUserTag = cardTagService.listUserTagByUserId(id);
+            if(listCardTag.size() == 0){
+            	listTagGroup = convertCardTagIdList(listUserTag);
+            }
+            else{
+            	listTagGroup = convertCardTagIdList(listCardTag);
+            }
+		}
+		catch(Exception ex){
+			logger.debug("Exception : ", ex.getMessage());
+		}
+
 		modelAndView.setViewName("changeowner");
 		modelAndView.addObject("userLeave", userLeave);
-		modelAndView.addObject("listCardInfo", listCardInfo);
 		modelAndView.addObject("lstUserInfo", lstUserInfo);
+		modelAndView.addObject("listTagGroup", listTagGroup);
 		return modelAndView;
 		
 	}
@@ -359,8 +386,6 @@ public class OperatorController {
 	public DataPagingJsonVO<UserInfoResultVO> searchList(HttpServletRequest request) {
 		DataPagingJsonVO<UserInfoResultVO> dataTableResponse = new DataPagingJsonVO<UserInfoResultVO>();
 		List<UserInfoResultVO> userInfoResultVOs = new ArrayList<UserInfoResultVO>();
-		int limit = parseIntParameter(request.getParameter("length"), 0);
-		int offset = parseIntParameter(request.getParameter("start"), 0);
 		String criteriaSearch = request.getParameter("criteriaSearch");
 		String textSearch = criteriaSearch.trim().replaceAll(" +", "|");
 		
@@ -384,7 +409,7 @@ public class OperatorController {
 	public int updateCardUser(@RequestBody final  UpdateCardUser updateCardUser) { 
     	List<Integer> listCardId = new ArrayList<>();
     	if(updateCardUser.isCheckAll()){
-    		List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(Integer.parseInt(updateCardUser.getUserLeave()));
+    		List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(Integer.parseInt(updateCardUser.getUserLeave()),0,-1,-1);
     		for(CardInfo cardId : listCardInfo){
     			listCardId.add(cardId.getCardId());
     		}
@@ -397,5 +422,68 @@ public class OperatorController {
     	}
     	return Integer.parseInt( updateCardUser.getUserLeave());
     }
+    
+    @RequestMapping(value = "searchCardTag", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public DataPagingJsonVO<CardInfo> searchCardTag(HttpServletRequest request) {
+		DataPagingJsonVO<CardInfo> dataTableResponse = new DataPagingJsonVO<CardInfo>();
+		int tagId = parseIntParameter(request.getParameter("tagId"), 0);
+		int userLeave = parseIntParameter(request.getParameter("id"), 0);
+		int limit = parseIntParameter(request.getParameter("length"), 0);
+		int offset = parseIntParameter(request.getParameter("start"), 0);
+		List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(userLeave,tagId,limit,offset);
+		BigInteger count = cardInfoService.countListCardAllocationUser(userLeave, tagId);
+		List<TagUser> lstTagUser = cardInfoService.getAllTagUser(userLeave);
+		for(CardInfo cardInfo :listCardInfo){
+			for(TagUser tagUser : lstTagUser){
+				if(cardInfo.getCardId().intValue()==tagUser.getCardId().intValue()){
+					cardInfo.setTagName(tagUser.getTagName());
+				}
+			}
+		}
+		long totalRecord = count.longValue();
+		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));
+		dataTableResponse.setRecordsTotal(totalRecord);
+		dataTableResponse.setRecordsFiltered(totalRecord);
+		dataTableResponse.setData(listCardInfo);
+	
+		return dataTableResponse;
+	}
+    
+    private List<TagGroup> convertCardTagIdList(List<TagForCard> cardTagModelList){
+		List<TagGroup> tagGroups = new ArrayList<TagGroup>();
+        TagForCard cardTagId;
+        
+        if (cardTagModelList.size() != 0){            
+            tagGroups= cardTagModelList.stream().collect(Collectors.groupingBy(g->g.getTagId())).entrySet().stream().map(t->{
+               TagGroup tg = new TagGroup();
+               List<Integer> cardIds = new ArrayList<Integer>();
+               
+               tg.setTagId(t.getKey());
+               tg.setUserId(t.getValue().stream().map(x->x.getUserId()).findFirst().get());
+               if(t.getValue().get(0).getCardId() != null){
+                   tg.setListCardIds(t.getValue().stream().map(x->x.getCardId()).collect(Collectors.toList()));
+               } 
+               else{
+                   tg.setListCardIds(cardIds);
+               }
+               tg.setTagName(t.getValue().stream().map(x->x.getTagName()).findFirst().get());               
+            return tg;  
+           }).collect(Collectors.toList());           
+        }
+        
+        return tagGroups;
+	}
+    
+    private List<TagForCard> getAllTagForCard(Integer userId){
+		List<TagForCard> listCardTag = null;
+		try{
+			listCardTag = cardTagService.listCardTagByCardId(userId);
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		return listCardTag;
+	}
 	
 }
