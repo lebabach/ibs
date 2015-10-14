@@ -807,6 +807,10 @@ label.error {
                     			    urlvalidation : { 
                     			    	urlvalidation : true, 
                     			    	required: false
+                    			    },
+                    			    zipCode : {
+                    			    	required: false,
+                    			    	digits : true
                     			    }
                     			},
                     			messages: {
@@ -845,6 +849,17 @@ label.error {
                             });
                             
                     });        
+                    
+                    function validateURL(value){
+                      // URL validation from http://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+                      var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+                      var regex = new RegExp(expression);
+                      return value.match(regex);
+                    }
+
+                    $.validator.addMethod("urlvalidation", function(value, element) {
+                      return this.optional(element) || validateURL(value);
+                    }, "<fmt:message key="valid.URL" />");
                     
                     $.validator.addMethod('customphone', function (value, element) {
                         return this.optional(element) || /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(value);
@@ -958,7 +973,7 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.zipCode}" name="zipCode" readonly="readonly">
+										value="${cardInfo.zipCode}" name="zipCode" id="zipCode" readonly="readonly">
 								</dd>
 							</dl>
 						</div>
