@@ -57,6 +57,8 @@ import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 import org.thymeleaf.context.Context;
 
+import com.ecard.core.model.ActionLog;
+import com.ecard.core.model.ActionLogId;
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.CardTagId;
 import com.ecard.core.model.CompanyInfo;
@@ -71,6 +73,7 @@ import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.UserNotification;
 import com.ecard.core.model.UserSearch;
 import com.ecard.core.model.UserTag;
+import com.ecard.core.model.enums.ActionLogType;
 import com.ecard.core.model.enums.SearchConditions;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.CardMemoService;
@@ -78,6 +81,7 @@ import com.ecard.core.service.CardTagService;
 import com.ecard.core.service.ContactHistoryService;
 import com.ecard.core.service.EmailService;
 import com.ecard.core.service.GroupCompanyInfoService;
+import com.ecard.core.service.LogEventService;
 import com.ecard.core.service.NotificationInfoService;
 import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.SearchInfoService;
@@ -151,6 +155,9 @@ public class UserController {
 	@Autowired
     EmailService emailService;
 	
+	@Autowired
+	LogEventService logEventService;
+	
 	@Value("${mail.server.from}")
     private String fromUser;
 
@@ -169,6 +176,9 @@ public class UserController {
 	@Value("${compliace.date}")
 	private String compliaceDate;
 
+	@Value("${msg.download.log}")
+    private String msgDownloadLog;
+	
 	@Autowired
 	SettingsInfoService settingsInfoService;
 
@@ -403,6 +413,16 @@ public class UserController {
 				createCSVFile(response, fileName, listUserInfoCSV, CsvConstant.DOWNLOAD_DIRECT);
 				cardInfoService.saveDownloadHistory(downloadCsvId);
 			}
+			// Save history download
+			ActionLogId actionLogId = new ActionLogId();
+            actionLogId.setActionDate(new Date());
+            actionLogId.setActionMessage(this.msgDownloadLog);
+            actionLogId.setActionType(ActionLogType.DOWNLOAD.getValue());
+            actionLogId.setUserId(userInfo.getUserId());
+            
+            ActionLog actionLog = new ActionLog();
+            actionLog.setId(actionLogId);
+            userInfoService.saveActionLog(actionLog);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -459,6 +479,8 @@ public class UserController {
 			ctx.setVariable("dateDownload",downloadCsv.getApprovalDate());
 //			ctx.setVariable("recordNumber",answerText);			
 			sendMailDownload(listUserId,ctx);
+			
+			// 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
