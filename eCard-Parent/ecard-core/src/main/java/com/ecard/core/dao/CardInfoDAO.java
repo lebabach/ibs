@@ -145,7 +145,8 @@ public interface CardInfoDAO {
     public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName);
     
     public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName);
-   public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card);
     public BigInteger countListCardAllocationUser(int userId, int tagId);
     public List<TagUser> getAllTagUser(int userId);
+    public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card);
+
 }
