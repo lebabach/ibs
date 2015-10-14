@@ -1443,18 +1443,25 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			TagUser tag = new TagUser((Integer)obj[0],(String) obj[1]);
 			lstTag.add(tag);
 		}
+		
+		/*boolean checkDuplicate = false;
 		if(lstTag.size() > 0){
 			for(int i = 0; i< lstTag.size(); i++){
-				for(int j = i+1;j< lstTag.size();j++){
-					if(lstTag.get(i).getCardId() == lstTag.get(j).getCardId()){
+				for(int j = i+1;j < lstTag.size();j++){
+					if(lstTag.get(i).getCardId().intValue() == lstTag.get(j).getCardId().intValue()){
 						String str = lstTag.get(i).getTagName() + "," + lstTag.get(j).getTagName();
 						TagUser tagAppend = new TagUser(lstTag.get(i).getCardId(),str);
 						lstTagAppend.add(tagAppend);
+						checkDuplicate = true;
 					}
 				}
+				if(checkDuplicate == false){
+					TagUser tagAppend = new TagUser(lstTag.get(i).getCardId(),lstTag.get(i).getTagName());
+					lstTagAppend.add(tagAppend);
+				}
 			}
-		}
+		}*/
 		
-		return lstTagAppend;
+		return lstTag;
 	}
 }

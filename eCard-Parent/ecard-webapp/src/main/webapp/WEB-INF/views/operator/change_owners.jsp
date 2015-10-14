@@ -126,6 +126,8 @@ $(document).ready(function() {
 				}
 			}
 	    } ); */
+	    
+
 	   
 	     $(document).on('click', '#checkAll', function() { 
 	    	 checkAll = true;
@@ -184,6 +186,7 @@ $(document).ready(function() {
 	    	  	}
 	    	  	
 	    });
+	 
 });
 
   $(document).on('click', '#criteriaSearch', function() {

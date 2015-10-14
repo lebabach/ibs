@@ -434,6 +434,13 @@ public class OperatorController {
 		List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(userLeave,tagId,limit,offset);
 		BigInteger count = cardInfoService.countListCardAllocationUser(userLeave, tagId);
 		List<TagUser> lstTagUser = cardInfoService.getAllTagUser(userLeave);
+		for(CardInfo cardInfo :listCardInfo){
+			for(TagUser tagUser : lstTagUser){
+				if(cardInfo.getCardId().intValue()==tagUser.getCardId().intValue()){
+					cardInfo.setTagName(tagUser.getTagName());
+				}
+			}
+		}
 		long totalRecord = count.longValue();
 		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));
 		dataTableResponse.setRecordsTotal(totalRecord);
