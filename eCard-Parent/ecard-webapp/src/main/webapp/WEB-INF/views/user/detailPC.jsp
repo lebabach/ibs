@@ -142,7 +142,7 @@ a {
 				<%-- <img src="<c:url value='/assets/img/bg-1.jpg'/>"> --%>
 			</div>
 			<div>
-				<a href="<c:url value="/user/home"/>" class="btn_back"><span><img
+				<a href="javascript:window.history.back();" class="btn_back"><span><img
 						src="<c:url value='/assets/img/mt.png'/>">戻る</span></a>
 			</div>
 			<div class="abs">
@@ -371,10 +371,10 @@ a {
                         	$("#lblContactDate").show();
                    	   	    $("#frmEditContactDate input[name=contactDate]").hide();
                         	$('.p-date').datepicker({
- 	      							language : 'en',
+ 	      							language : 'ja',
  	      							todayHighlight : true,
  	      							keyboardNavigation : false,
- 	      							format : 'yyyy-mm-dd',
+ 	      							format : 'yyyy年MM月dd日',
  	      							forceParse : true,
  	      							autoclose : true,
  	      							calendarWeeks : true
@@ -422,10 +422,13 @@ a {
 	                              });     
                               
                               	$("#editContactDate").click(function(){
+                              		var dateTime = new Date($("input[name=contactDate]").datepicker("getDate"));
+                              		var strDateTime =  dateTime.getFullYear() + "-" + (dateTime.getMonth()+1) + "-" + dateTime.getDate();
+                              		//console.log(strDateTime);
                               		$.ajax({
 										  type: "POST",
 										  url: "<c:url value='/user/editContactDate' />",
-										  data: 'contactDate='+ $("input[name=contactDate]").val() +'&cardId='+$("input[name=cardId]").val(),
+										  data: 'contactDate='+ strDateTime +'&cardId='+$("input[name=cardId]").val(),
 										  success: function(){
 											  BootstrapDialog.show({
 					                				title: 'Information',
@@ -448,8 +451,9 @@ a {
 					<div class="panel-body" style="padding: 12px 0 0 0;">
 						<form name="frmEditContactDate" id="frmEditContactDate">
 							<input type="hidden" value="${ cardInfo.cardId }" name="cardId" />
-							<label id="lblContactDate" style="display:none;margin-left:15px;font-weight:normal;"><fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy-MM-dd"/></label>
-							<input value="<fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy-MM-dd"/>" class="p-date" name="contactDate" readonly="readonly">
+							<label id="lblContactDate" style="display:none;margin-left:15px;font-weight:normal;"><fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy年MM月dd日"/></label>
+							<input value="<fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy年MM月dd日"/>" class="p-date" name="contactDate" readonly="readonly">
+							
 							<p class="p-fomr" style="display: none">
 								<input type="button" class="input-submit-date" value="保存" id="editContactDate"> 
 								<input type="reset" class="input-reset-date" value="キャンセル">
@@ -1116,15 +1120,15 @@ label.error {
          });
          
          $('#contactDate').datepicker({
-   			language : 'en',
+   			language : 'ja',
    			todayHighlight : true,
    			keyboardNavigation : false,
-   			format : 'yyyy-mm-dd',
+   			format : 'yyyy年MM月dd日',
    			forceParse : true,
    			autoclose : true,
    			calendarWeeks : true
        	 });
-         
+                  
          $("#saveContactHistory").click(function(){
        		saveContactHistory(); 
          });
