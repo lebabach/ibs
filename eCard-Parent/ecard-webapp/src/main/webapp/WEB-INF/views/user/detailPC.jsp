@@ -142,7 +142,7 @@ a {
 				<%-- <img src="<c:url value='/assets/img/bg-1.jpg'/>"> --%>
 			</div>
 			<div>
-				<a href="javascript:window.history.back();" class="btn_back"><span><img
+				<a href="javascript:goBack();" class="btn_back"><span><img
 						src="<c:url value='/assets/img/mt.png'/>">戻る</span></a>
 			</div>
 			<div class="abs">
@@ -367,6 +367,11 @@ a {
 }
 </style>
 					<script type="text/javascript">
+						function goBack(){
+							window.history.back();
+							return false;
+						}
+						
                           $(document).ready(function(){
                         	$("#lblContactDate").show();
                    	   	    $("#frmEditContactDate input[name=contactDate]").hide();
@@ -1135,7 +1140,7 @@ label.error {
          
          $('.delContactHist').on({
            'click':function(){
-        	   console.log(this.id);
+        	   //console.log(this.id);
         	     var json = {"cardId" : $("input[name=cardId]").val(), "userId" : this.id};  
         	   	 delContactHistory(json);
               }
@@ -1158,7 +1163,6 @@ label.error {
      	      		});
         	 }
         	 else{
-        		 console.log("aaaaaa");
         		 $(this).attr("data-target", "#modal-login-saleforce");
         	 }
          });
@@ -1197,7 +1201,7 @@ label.error {
     	//Delete card tag
          //$(".delTag").click(function(){
        	 $(document).on("click",".delTag",function(e){
-       		console.log("tagId : "+e.target.id + "==> a: "+this.id);
+       		//console.log("tagId : "+e.target.id + "==> a: "+this.id);
        		deleteTag(this.id);
          });
     	
@@ -1221,13 +1225,13 @@ label.error {
        });
 
        $("input[name=checkTag]").on('ifChecked', function(event){
-         	console.log("ifChecked 111");
+         	//console.log("ifChecked 111");
          	var json = {"tagId" : $(this).val(), "cardId" : $("input[name=cardId]").val()};
     	    addCardTag(json);
        });
        
        $("input[name=checkTag]").on('ifUnchecked', function(event){     
-    	   console.log("ifUnchecked 111");
+    	   //console.log("ifUnchecked 111");
            var json = {"tagId" : $(this).val(), "cardId" : $("input[name=cardId]").val()};
            deleteCardTag(json);
        });
@@ -1256,13 +1260,13 @@ label.error {
 
        });
        $('.mail').click(function(e) {
-         console.log('Go to mailbox');
+         //console.log('Go to mailbox');
          e.stopPropagation();
        });
 
        // Click to personal details page
        $('.business_card_book .list-group-item').click( function() {
-         console.log("Move to personal details page"); 
+         //console.log("Move to personal details page"); 
          window.location.href = "personal_details.html"
        }).hover(function() {
          $(this).toggleClass('hover');
@@ -1361,7 +1365,7 @@ label.error {
            id_manager =id_manager + 1;          
          this.value = '';
        } else {
-         console.log('AA',this.value);  
+        //console.log('AA',this.value);  
          this.value = '';
        }
        return false;
