@@ -1735,5 +1735,31 @@ public class UserController {
 
 		return jsonObj;
 	}
+	
+	@RequestMapping(value = "companyTree/list")
+	public ModelAndView listCardByName(@RequestParam String name, HttpServletRequest request) {
+		logger.debug("listCardByName", UserController.class);
+
+		ModelAndView modelAndView = new ModelAndView();
+		try{
+			List<CardInfo> cardList = cardInfoService.searchCardInfoByName(name);
+			
+			String fileNameFromSCP = "";
+			
+			if(cardList.size() > 0){
+				for(CardInfo cardInfo : cardList){
+					fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser,
+							scpPassword, Integer.parseInt(scpPort));
+				}
+				modelAndView.addObject("cardInfoList", cardList);
+				modelAndView.addObject("imageFile", cardList);
+			}
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		modelAndView.setViewName("listCardByName");
+		return modelAndView;
+	}
 
 }
