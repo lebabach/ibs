@@ -13,7 +13,7 @@
 }
 
 .clearfix {
-	margin-bottom: 4px !important;
+	margin-bottom: 10px !important;
 }
 
 .navbar-right {
@@ -105,12 +105,17 @@
               margin-top:0px !important;
               right: inherit !important;
           }
+          .btn-goto-admin{
+		      padding: 4px 5px;
+		  }
           </style>
            <p class="abc-ex">${pageContext.request.remoteUser}</p>
+		   <c:if test="${pageContext.request.isUserInRole('ROLE_LEADER') or pageContext.request.isUserInRole('ROLE_OPERATOR') or pageContext.request.isUserInRole('ROLE_SUPERVISOR') or pageContext.request.isUserInRole('ROLE_ADMIN') or pageContext.request.isUserInRole('ROLE_AUTHORITY_USER') or pageContext.request.isUserInRole('ROLE_OPERATOR_MANAGER') }">				
+				 <p style=" position: absolute;right: 100px;top: 50px; width:141px"><button class="btn btn-primary btn-goto-admin" onclick="location.href='<c:url value='/manager/home'/>';">管理画面へ戻る</button></p>
+		   </c:if>	
            <ul class="nav navbar-top-links navbar-right">
-                <li class="dropdown" style="margin-top:-9px; text-align:right">
-                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" style=" position: relative;">
-                        
+           		           		
+                <li class="dropdown" style="margin-top:-9px; text-align:right"><a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" style=" position: relative;">
                         <span style=" position: absolute;right: 3px;top: 6px; width:121px;">お知らせ
                         	<img src="<c:url value='/assets/img/icon-notice.png'/>" width="44px;" >
                         </span>
@@ -209,8 +214,8 @@
                       </li>
                     </ul>
                 </li>
-              </ul>
-
+           		
+           </ul>
             <nav class="navbar navbar-static-top nav-menu-left" role="navigation">   
                 <ul class="nav navbar-top-links">
                      <li style="position: relative; text-align:left">
@@ -221,17 +226,19 @@
                         </a>
                         <ul class="dropdown-menu animated fadeInLeft m-t-xs" style=" margin-top: 47px; margin-left: 11px;">
                           <li><a href="<c:url value='/user/profile' />">プロフィール</a></li>
-                          <li><a href="<c:url value='/user/download' />">自分の名刺ダウンロード</a></li>
-                          <li><a href="<c:url value='/user/changepass' />">パスワード設定</a></li>
-                          <li><a href="<c:url value='/user/faq' />">FAQ</a></li>
-                          <li><a href="<c:url value='/user/companyTree' />">顧客組織ツリー</a></li>
-                          <li><a href="<c:url value='/user/contact' />">ご意見・不具合の連絡</a></li>
-                          <li><a href="<c:url value='/user/overlapcards' />">繋がった名刺検索</a></li>
+                          <li class="divider"></li>
                           <li><a href="<c:url value='/user/addBusinessCard' />">名刺データ作成</a></li>
-                          <c:if test="${pageContext.request.isUserInRole('ROLE_LEADER') or pageContext.request.isUserInRole('ROLE_OPERATOR') or pageContext.request.isUserInRole('ROLE_SUPERVISOR') or pageContext.request.isUserInRole('ROLE_ADMIN') or pageContext.request.isUserInRole('ROLE_AUTHORITY_USER') or pageContext.request.isUserInRole('ROLE_OPERATOR_MANAGER') }">
+                          <li><a href="<c:url value='/user/companyTree' />">顧客組織一覧</a></li>
+                          <li><a href="<c:url value='/user/overlapcards' />">名刺の最新化（名寄せ）</a></li>
+                          <li><a href="<c:url value='/user/download' />">自分の名刺ダウンロード</a></li>                          
+                          <li class="divider"></li>
+                          <li><a href="<c:url value='/user/faq' />">FAQ</a></li>                          
+                          <li><a href="<c:url value='/user/contact' />">ご意見・不具合の連絡</a></li>
+                          <li><a href="<c:url value='/user/changepass' />">パスワード設定</a></li>                          
+<%--                           <c:if test="${pageContext.request.isUserInRole('ROLE_LEADER') or pageContext.request.isUserInRole('ROLE_OPERATOR') or pageContext.request.isUserInRole('ROLE_SUPERVISOR') or pageContext.request.isUserInRole('ROLE_ADMIN') or pageContext.request.isUserInRole('ROLE_AUTHORITY_USER') or pageContext.request.isUserInRole('ROLE_OPERATOR_MANAGER') }">
 						    <li><a href="<c:url value='/manager/home'/>">管理ページ</a></li>
 					      </c:if>
-                         <!-- Profile -->
+ --%>                         <!-- Profile -->
                           <li class="divider"></li>
                           <li><a href="<c:url value='/j_spring_security_logout'/>">ログアウト</a></li>
                         </ul>

@@ -329,9 +329,18 @@ $(document).ready(function(){
 	
 	$("#searchCompany").click(function(e){
 		if($("#searchForm").valid()){
+			$.removeCookie("respHTML");
 			searchCompanyTree();
 		}
 	});
+	
+});
+
+$(window).load(function() {
+	if($.cookie('respHTML')){
+		console.log("onload :"+ $.cookie('respHTML'));
+		$(".show-list-s").html($.cookie('respHTML'));
+	}
 });
 
 function searchCompanyTree(){
@@ -358,9 +367,11 @@ function searchCompanyTree(){
        		respHTML += "</ul>";
        		
        		$(".show-list-s").html(respHTML);
+       		$.cookie('respHTML', $(".show-list-s").html());
+       		//console.log($.cookie("respHTML"));
     	},
     	error: function(xhr, status, error){
-    		console.log("Error :"+ xhr.responseText);
+    		console.log("Error :"+ error);
 	  	}
     });
 }
@@ -391,6 +402,8 @@ function searchDepartmentTree(companyName, id){
        		respHTML += "</ul>";
        		
        		$("#div_"+id).html(respHTML);
+       		$.cookie('respHTML', $(".show-list-s").html());
+       		//console.log($.cookie("respHTML"));
     	},
     	error: function(xhr, status, error){
     		console.log("Error :"+ xhr.responseText);
@@ -410,7 +423,7 @@ function searchCardInfo(deptName, compName, id){
     		xhr.setRequestHeader("Content-Type", "application/json");
     	},
     	success: function(response) {
-       		console.log(JSON.stringify(response));
+       		//console.log(JSON.stringify(response));
        		var respHTML = "<ul style='display: inline-block;' class='ul-3'>";
        		$.each(response, function(index, value){
        			respHTML += "<li class='li-3' id='"+ value["cardId"] +"'><a href='<c:url value='/user/card/details/"+ value["cardId"] +"' />'>"+ value["name"] +"</a></li>";
@@ -418,6 +431,9 @@ function searchCardInfo(deptName, compName, id){
        		respHTML += "</ul>";
        		
        		$("#div_"+id).html(respHTML);
+       		
+       		$.cookie('respHTML', $(".show-list-s").html());
+       		console.log($.cookie("respHTML"));
     	},
     	error: function(xhr, status, error){
     		console.log("Error :"+ xhr.responseText);
@@ -425,3 +441,5 @@ function searchCardInfo(deptName, compName, id){
     });
 }
 </script>
+
+<script src="<c:url value='/assets/js/jquery.cookie.js'/>" type="text/javascript"></script>
