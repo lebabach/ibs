@@ -1463,7 +1463,6 @@
 	    
 	     //check add tag card
 	     $(document).on('ifChecked', "#paging tbody input[type='checkbox']", function(e) {
-	    	 alert("ok1");
 	    	 $(this).parent().removeClass('not_chk');
 	    	 $(this).parent().removeClass('some_chk');
 	    	 var listCardId = [];
@@ -1482,7 +1481,6 @@
 	       
 	     //uncheck remove tag card
 	        $(document).on('ifUnchecked', "#paging tbody input[type='checkbox']", function(e) {
-	    	   alert("ok2");
 	    	   $(this).parent().removeClass('not_chk');
 		    	 $(this).parent().removeClass('checked');
 	    	   var listCardId = [];
