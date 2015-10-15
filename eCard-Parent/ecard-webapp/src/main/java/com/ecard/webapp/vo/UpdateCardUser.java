@@ -7,6 +7,9 @@ public class UpdateCardUser {
 	String userAssign;
 	boolean checkAll;
 	List<Integer> listCardId;
+	List<Integer> listUncheckAll;
+	String nameAssign;
+	Integer tagId;
 
 	public String getUserLeave() {
 		return userLeave;
@@ -39,5 +42,31 @@ public class UpdateCardUser {
 	public void setListCardId(List<Integer> listCardId) {
 		this.listCardId = listCardId;
 	}
+
+	public List<Integer> getListUncheckAll() {
+		return listUncheckAll;
+	}
+
+	public void setListUncheckAll(List<Integer> listUncheckAll) {
+		this.listUncheckAll = listUncheckAll;
+	}
+
+	public String getNameAssign() {
+		return nameAssign;
+	}
+
+	public void setNameAssign(String nameAssign) {
+		this.nameAssign = nameAssign;
+	}
+
+	public Integer getTagId() {
+		return tagId;
+	}
+
+	public void setTagId(Integer tagId) {
+		this.tagId = tagId;
+	}
+	
+	
 
 }

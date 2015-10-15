@@ -148,5 +148,6 @@ public interface CardInfoDAO extends IGenericDao{
     public BigInteger countListCardAllocationUser(int userId, int tagId);
     public List<TagUser> getAllTagUser(int userId);
     public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card);
+    public Integer updateUserCard(List<Integer> listCardUser, Integer userLeave, Integer userAssign,String nameAssign);
 
 }

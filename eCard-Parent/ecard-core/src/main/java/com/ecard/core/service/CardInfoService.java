@@ -153,4 +153,5 @@ public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.Ca
    public boolean handleConnectCards(int cardid1,int cardid2, int currentUserId, String name);
    public BigInteger countListCardAllocationUser(int userId,int tagId);
    public List<TagUser> getAllTagUser(int userId);
+   public Integer updateUserCard(List<Integer> listCardUser,Integer userLeave,Integer userAssign,String nameAssign);
 }

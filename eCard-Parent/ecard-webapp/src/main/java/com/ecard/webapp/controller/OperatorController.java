@@ -88,9 +88,6 @@ public class OperatorController {
 	CardInfoService cardInfoService;
 	
 	@Autowired
-	AdminPossessionCardService adminPossessionCardService;
-	
-	@Autowired
     CardTagService cardTagService;
 	
 	@Value("${mail.server.from}")
@@ -409,16 +406,27 @@ public class OperatorController {
 	public int updateCardUser(@RequestBody final  UpdateCardUser updateCardUser) { 
     	List<Integer> listCardId = new ArrayList<>();
     	if(updateCardUser.isCheckAll()){
-    		List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(Integer.parseInt(updateCardUser.getUserLeave()),0,-1,-1);
+    		List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(Integer.parseInt(updateCardUser.getUserLeave()),updateCardUser.getTagId(),-1,-1);
+    		
     		for(CardInfo cardId : listCardInfo){
     			listCardId.add(cardId.getCardId());
+    		}
+            if(updateCardUser.getListUncheckAll().size() > 0){
+    			for(Integer cardIdUnckeck : updateCardUser.getListUncheckAll()){
+    				for(Integer cardId:listCardId){
+    					if(cardIdUnckeck.intValue() == cardId.intValue()){
+    						listCardId.remove(cardId);
+    						break;
+    					}
+    				}
+    			}
     		}
     	}else{
     		listCardId.addAll(updateCardUser.getListCardId());
     	}
     	
     	if(listCardId.size() > 0){
-    		adminPossessionCardService.updateUserCard(listCardId,Integer.parseInt( updateCardUser.getUserLeave()), Integer.parseInt( updateCardUser.getUserAssign()));
+    		cardInfoService.updateUserCard(listCardId,Integer.parseInt(updateCardUser.getUserLeave()) , Integer.parseInt(updateCardUser.getUserAssign()), updateCardUser.getNameAssign());
     	}
     	return Integer.parseInt( updateCardUser.getUserLeave());
     }
@@ -433,9 +441,29 @@ public class OperatorController {
 		int offset = parseIntParameter(request.getParameter("start"), 0);
 		List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(userLeave,tagId,limit,offset);
 		BigInteger count = cardInfoService.countListCardAllocationUser(userLeave, tagId);
+		List<Integer> lstCardId = new ArrayList<>();
 		List<TagUser> lstTagUser = cardInfoService.getAllTagUser(userLeave);
-		for(CardInfo cardInfo :listCardInfo){
+		List<TagUser> lstTagUserApp = new ArrayList<>();
+		for(TagUser tagUser : lstTagUser){
+			lstCardId.add(tagUser.getCardId());
+		}
+		lstCardId = lstCardId.stream().distinct().collect(Collectors.toList());
+		for(Integer cardId : lstCardId ){
+			String tagName = "";
 			for(TagUser tagUser : lstTagUser){
+				 if(cardId.intValue()== tagUser.getCardId().intValue()){
+					 tagName = tagName +"," +tagUser.getTagName();
+				 }
+			}
+			if(tagName.length() > 0){
+				tagName = tagName.substring(1, tagName.length());
+			}
+			TagUser tag = new TagUser(cardId, tagName);
+			lstTagUserApp.add(tag);
+		}
+		
+		for(CardInfo cardInfo :listCardInfo){
+			for(TagUser tagUser : lstTagUserApp){
 				if(cardInfo.getCardId().intValue()==tagUser.getCardId().intValue()){
 					cardInfo.setTagName(tagUser.getTagName());
 				}

@@ -4,6 +4,8 @@
 <script>
 var listCardId = [];
 var checkAll = false;
+var check = "";
+var listUncheckAll = [];
 var dataTables;
 $(document).ready(function() {
 	dataTables = $('#table-1').dataTable( {
@@ -40,8 +42,11 @@ $(document).ready(function() {
 		"columns": [
 			{ "data": "cardId",
 				"createdCell": function (td, cellData, rowData, row, col) {
-					 $(td).html('<div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" class = "i-checks-chk_all" value="'+rowData.cardId+'" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div>');
-					 
+					if(listCardId.length > 0 && listCardId.indexOf(rowData.cardId)>-1){
+						$(td).html('<div class="i-checks"><label class=""> <div class="icheckbox_square-green checked" style="position: relative;"><input type="checkbox" class = "i-checks-chk_all" value="'+rowData.cardId+'" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div>');
+					}else{
+					 $(td).html('<div class="i-checks"><label class=""> <div class="icheckbox_square-green '+check+'" style="position: relative;"><input type="checkbox" class = "i-checks-chk_all" value="'+rowData.cardId+'" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div>');
+					}
 				}
 					
 			},
@@ -61,6 +66,7 @@ $(document).ready(function() {
 	
 	$('#tagId').on('change', function() {
 		var tagId = $(this).val();
+		$("input[name=tagId]").val(tagId);
 		dataTables.api().destroy();
 		dataTables = $('#table-1').dataTable( {
 			"dom" : '<<t>ip>',
@@ -95,8 +101,11 @@ $(document).ready(function() {
 			"columns": [
 				{ "data": "cardId",
 					"createdCell": function (td, cellData, rowData, row, col) {
-						 $(td).html('<div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" class = "i-checks-chk_all" value="'+rowData.cardId+'" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div>');
-						
+						if(listCardId.length > 0 && listCardId.indexOf(rowData.cardId)> -1){
+							$(td).html('<div class="i-checks"><label class=""> <div class="icheckbox_square-green checked" style="position: relative;"><input type="checkbox" class = "i-checks-chk_all" value="'+rowData.cardId+'" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div>');
+						}else{
+						 $(td).html('<div class="i-checks"><label class=""> <div class="icheckbox_square-green '+check+'" style="position: relative;"><input type="checkbox" class = "i-checks-chk_all" value="'+rowData.cardId+'" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div>');
+						}
 					}},
 				{ "data": "lastName",
 					"createdCell": function (td, cellData, rowData, row, col) {
@@ -131,6 +140,9 @@ $(document).ready(function() {
 	   
 	     $(document).on('click', '#checkAll', function() { 
 	    	 checkAll = true;
+	    	 listUncheckAll = [];
+	    	 listCardId = [];
+	    	 check = "checked";
 			$("#table-1 tbody").find(".i-checks-chk_all").each(function( index ) {
 				 $(this).prop('checked', true);
 				 $(this).parent().attr("class","icheckbox_square-green checked");
@@ -138,6 +150,9 @@ $(document).ready(function() {
 		});
 	     $(document).on('click', '#removeAll', function() {
 	    	 checkAll = false;
+	    	 check="";
+	    	 listUncheckAll = [];
+	    	 listCardId = [];
 			$("#table-1 tbody").find(".i-checks-chk_all").each(function( index ) {
 				  $(this).prop('checked', false);
 				  $(this).parent().attr("class","icheckbox_square-green");  
@@ -178,6 +193,7 @@ $(document).ready(function() {
 	    	  		$(this).removeClass("icheckbox_square-green checked");
 	    	  		 $(this).addClass("icheckbox_square-green"); 
 	    	  		var cardId =$(this).find("input[type=checkbox]").val();
+	    	  		listUncheckAll.push(parseInt(cardId));
 	    	  		 var i = listCardId.indexOf(parseInt(cardId));
 	    	    	 if(i != -1) {
 	    	    		 listCardId.splice(i, 1);
@@ -249,17 +265,18 @@ $(document).ready(function() {
 	  var userLeave = parseInt($("input[name=userLeave]").val());
 	  var userAssign = $("input[name=userAssign]").val();
 	  var nameAssign = $("input[name=nameAssign]").val();
+	  var tagId =    $("input[name=tagId]").val();
 	  if(!checkAll && listCardId.length == 0){
 		  BootstrapDialog.show({
-	             title: 'Waring',
-	             message: 'Please choose card need assign'
+	             title: '警告',
+	             message: '名刺を選択してください'
 	        });
 		  return false;
 	  }
 	  if(userAssign == ""){
 		  BootstrapDialog.show({
-	             title: 'Waring',
-	             message: 'Please choose user need assign'
+	             title: '警告',
+	             message: 'ユーザを選択してください'
 	        });
 		  return false;
 	  }
@@ -270,13 +287,13 @@ $(document).ready(function() {
 				 dataType: 'json', 
 				 contentType: 'application/json',
 				 mimeType: 'application/json',
-				data:JSON.stringify({"userLeave":userLeave,"userAssign":userAssign,"checkAll":checkAll,"listCardId":listCardId}) 
+				data:JSON.stringify({"userLeave":userLeave,"userAssign":userAssign,"nameAssign":nameAssign,"tagId":tagId,"checkAll":checkAll,"listCardId":listCardId,"listUncheckAll":listUncheckAll}) 
 			}).done(function(resp, status, xhr) {
 				document.location.href="<c:url value='/operators/changeowner/"+resp+" '/>";
 			}).fail(function(xhr, status, err) {
 				BootstrapDialog.show({
-		             title: 'Error',
-		             message: 'Assign error'
+		             title: 'エラー',
+		             message: 'エラーアサイン'
 		        });
 			  return false;
 			});
@@ -330,6 +347,7 @@ $(document).ready(function() {
                 <input  name="userLeave" value="<c:out value="${userLeave.userId}"/>" type = "hidden">
                 <input  name="userAssign" value="" type = "hidden">
                  <input  name="nameAssign" value="" type = "hidden">
+                  <input  name="tagId" value="0" type = "hidden">
                 <!-- DATA TABLE -->
                 <div class="col-sm-12 container table-list-operator">
                     <div class="row" id="data-table" >
