@@ -1183,19 +1183,19 @@
 	         $(this).toggleClass('hover');
         });
 	 
-       $(document).on('click','.business_card_book input[name=bla]',function(event) {
-    	   $(".balloon").css("display","none");
+       $(document).on('ifChecked','.business_card_book input[name=bla]',function(event) {
+    	   //$(".balloon").css("display","block");
            $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
 	  	     
         });
         
-      /*   $(document).on('ifUnchecked','.business_card_book input',function(event){  
+       $(document).on('ifUnchecked','.business_card_book input[name=bla]',function(event){  
         	$(".balloon").css("display","none");
-          if($(".icheckbox_square-green").find('.checked').size() == 1){ 
+          if($(".icheckbox_square-green.checked").size() == 1){ 
             $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
             $(".addTagCard").css("display","none");  
           }          
-        }); */
+        }); 
 
         $(document).on('click','#addTag',function(e){
        	  
