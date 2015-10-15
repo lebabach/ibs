@@ -43,4 +43,15 @@ public class NotificationInfoServiceImpl implements NotificationInfoService {
     public int updateReadFlgById(UserNotification notify){
         return notificationListDAO.updateReadFlgById(notify);
     }
+    
+    public boolean deleteAllNotify(List<NotificationList> notifies){
+    	UserNotification notify = null;
+    	for(NotificationList item:notifies){
+			notify = new UserNotification();
+			notify.setNoticeId(item.getNotice_id());
+			notify.setReadFlg(1);
+			this.updateReadFlgById(notify);
+		}
+    	return true;
+    }
 }

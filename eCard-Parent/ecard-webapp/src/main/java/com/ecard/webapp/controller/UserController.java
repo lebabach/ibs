@@ -117,6 +117,7 @@ import com.ecard.webapp.vo.CardInfoPCVo;
 import com.ecard.webapp.vo.CardInfoSaleforce;
 import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.ListCardDelete;
+import com.ecard.webapp.vo.NotificationOfUserVO;
 import com.ecard.webapp.vo.ObjectCards;
 import com.ecard.webapp.vo.ObjectListSearchUsers;
 import com.ecard.webapp.vo.OwnerCards;
@@ -1760,6 +1761,16 @@ public class UserController {
 		}
 		modelAndView.setViewName("listCardByName");
 		return modelAndView;
+	}
+	
+	@RequestMapping(value = "deleteAllNotify", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean deleteAllNotify() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<NotificationList> listUpdate = notificationInfoService.listAllNofiticationUser(ecardUser.getUserId());
+		notificationInfoService.deleteAllNotify(listUpdate);
+		return true;
 	}
 
 }
