@@ -596,54 +596,58 @@ public class CardController {
         try {
         	List<CardInfoVO> cardsVO=Cards.getListCards().stream().map(x->x.getCard()).collect(Collectors.toList());
         	for (CardInfoVO cardInfoVo : cardsVO) {
-        		cardInfo = new CardInfo();
-				Integer userId = cardInfoVo.getUserId();
-				if (userId == null) {
-					statusOfResult = 2;
-					break;
-				}
-				String imageData = cardInfoVo.getImageFile();
+        		String imageData = cardInfoVo.getImageFile();
 				String imageFile = imageData.substring(imageData.indexOf(',') + 1);
-				userInfo = userInfoService.getUserInfoByUserId(userId);
-	            //Set id for user login
-	            cardInfo.setCardOwnerId(userId);
-	            cardInfo.setOperaterId(userId);
-	            companyInfo = new CompanyInfo();
-	            companyInfo.setCompanyId(0);
-	           
-	            cardInfo.setGroupCompanyId(userInfo.getGroupCompanyId());
-	            cardInfo.setCompanyInfo(companyInfo);
-	            cardInfo.setCreateDate(new Date());
-	            cardInfo.setUpdateDate(new Date());
-	            cardInfo.setApprovalStatus(2);
-	            
-	            cardInfo.setContactDate(new Date());
-				cardInfo.setNewestCardFlg(0);
-				
-	            CardInfo cardInfoObject = cardInfoService.registerCardImageOfAdmin(cardInfo);
-	            FileUploadModel fileUploadModel=UploadFileUtil.uploadImageDefault(imageFile, cardInfoObject.getImageFile(), this.scpHostName, this.scpUser, this.scpPassword,0); 
-	            if(!fileUploadModel.isStatus()){
-	            	statusOfResult=UploadFileUtil.writeLostImage(imageFile, cardInfoObject.getImageFile());
-	            	if(statusOfResult==3){
-	            		cardInfoService.deleteCardInfo(cardInfoObject.getCardId());
-	            		return statusOfResult;
-	            	}
+				if(imageFile.length()>0){
+					cardInfo = new CardInfo();
+					Integer userId = cardInfoVo.getUserId();
+					if (userId == null) {
+						statusOfResult = 2;
+						break;
+					}
+					
+					userInfo = userInfoService.getUserInfoByUserId(userId);
+		            //Set id for user login
+		            cardInfo.setCardOwnerId(userId);
+		            cardInfo.setOperaterId(userId);
+		            companyInfo = new CompanyInfo();
+		            companyInfo.setCompanyId(0);
+		           
+		            cardInfo.setGroupCompanyId(userInfo.getGroupCompanyId());
+		            cardInfo.setCompanyInfo(companyInfo);
+		            cardInfo.setCreateDate(new Date());
+		            cardInfo.setUpdateDate(new Date());
+		            cardInfo.setApprovalStatus(2);
+		            
+		            cardInfo.setContactDate(new Date());
+					cardInfo.setNewestCardFlg(0);
+					
+		            CardInfo cardInfoObject = cardInfoService.registerCardImageOfAdmin(cardInfo);
+		            FileUploadModel fileUploadModel=UploadFileUtil.uploadImageDefault(imageFile, cardInfoObject.getImageFile(), this.scpHostName, this.scpUser, this.scpPassword,0); 
+		            if(!fileUploadModel.isStatus()){
+		            	statusOfResult=UploadFileUtil.writeLostImage(imageFile, cardInfoObject.getImageFile());
+		            	if(statusOfResult==3){
+		            		cardInfoService.deleteCardInfo(cardInfoObject.getCardId());
+		            		return statusOfResult;
+		            	}
+					}
+		            
+		            PossessionCardId possessionCardId = new PossessionCardId();
+		            possessionCardId.setCardId(cardInfoObject.getCardId());
+		            possessionCardId.setUserId(userId);
+		            possessionCardId.setContactDate(new Date());
+		            possessionCardId.setCreateDate(new Date());
+		            
+		            PossessionCard posCard = new PossessionCard();
+		            posCard.setId(possessionCardId);
+		            posCard.setCardInfo(cardInfoObject);
+		            possessionCardService.registerPosCard(posCard);   
+		            
+					// Create new thread to processing card image
+					OcrProcessCardThread newThread = new OcrProcessCardThread(userId, cardInfoObject.getCardId(), imageFile,cardInfoObject);
+					newThread.start();
 				}
-	            
-	            PossessionCardId possessionCardId = new PossessionCardId();
-	            possessionCardId.setCardId(cardInfoObject.getCardId());
-	            possessionCardId.setUserId(userId);
-	            possessionCardId.setContactDate(new Date());
-	            possessionCardId.setCreateDate(new Date());
-	            
-	            PossessionCard posCard = new PossessionCard();
-	            posCard.setId(possessionCardId);
-	            posCard.setCardInfo(cardInfoObject);
-	            possessionCardService.registerPosCard(posCard);   
-	            
-				// Create new thread to processing card image
-				OcrProcessCardThread newThread = new OcrProcessCardThread(userId, cardInfoObject.getCardId(), imageFile,cardInfoObject);
-				newThread.start();
+        		
         	}
             
         } catch(Exception ex) {	          

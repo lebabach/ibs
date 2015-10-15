@@ -205,16 +205,17 @@ $(document).ready(function(){
 							location.reload();
 						}else if(data == 1){
 							alert("データ通信が利用できません");
-							//checkNotOk=0;
+							location.reload();
 						}else if(data == 3){
 							alert("データ通信が利用できません");
-							//checkNotOk=0;
+							location.reload();
 						}else{
 							alert("<fmt:message key="card.scancard.user.error"/>");
 							//checkNotOk=0;
 						}
 					}).fail(function(xhr, status, err) {
 						alert('エラー !!!');
+						location.reload();
 					});
 			   } 
 		   }else{
