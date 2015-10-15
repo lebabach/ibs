@@ -567,7 +567,7 @@ $(document).ready(function() {
 											<input value="" id="criteriaSearch" style="width: 300px; height: 30px;">
 											<input value="検索" id="btnSearch"
 												style="padding-left: 10px; padding-right: 10px; height: 30px;"
-												type="button">
+												type="button" class="btn-primary">
 										</td>
 									</tr> 
 									<tr>
@@ -580,7 +580,7 @@ $(document).ready(function() {
 										<th><fmt:message key='overlap.cards.table1.position' /></th>
 										<th><fmt:message key='overlap.cards.table1.TEL' /></th>--%>
 										
-										<th>最新化したい自分の名刺を１枚選択 <br>※最新化後は、履歴として保存されます。</th>
+										<th><fmt:message key='overlap.cards.table1.name.company' /> <br><fmt:message key='overlap.cards.table1.email.company' /></th>
 										<th><fmt:message key='overlap.cards.table1.address' /> <br><fmt:message key='overlap.cards.table1.TEL' /></th>
 										<th><fmt:message key='overlap.cards.table1.department' /> <br><fmt:message key='overlap.cards.table1.position' /></th>
 										
@@ -615,7 +615,7 @@ $(document).ready(function() {
 										<th><fmt:message key='overlap.cards.table1.exchanges' /></th>
 										<th><fmt:message key='overlap.cards.table1.owner' /></th> --%>
 										
-										<th style="width: 378px">上記の名刺を最新化する名刺を１枚選択</th>
+										<th style="width: 378px"><fmt:message key='overlap.cards.table1.name.email.company' /></th>
 										<th style="width: 380px"><fmt:message key='overlap.cards.table1.address' /> <br><fmt:message key='overlap.cards.table1.TEL' /></th>
 										<th style="width: 173px"><fmt:message key='overlap.cards.table1.department' /> <br><fmt:message key='overlap.cards.table1.position' /></th>
 										<th><fmt:message key='overlap.cards.table1.exchanges' /><br>名刺所有者</th>
