@@ -1205,7 +1205,7 @@
             var listCardIdCheck = [];
     	   	var carIdCheck = 0;
         	var listCardTag = [];
-        	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+        	$(".business_card_book .icheckbox_square-green.checked").each(function(){
    	            cardId = $(this).find('input[name=bla]').val();
    	            listCardIdCheck.push(parseInt(cardId));    	         
    			});
@@ -1232,7 +1232,8 @@
  	  	    		return false;
  	              }
  	  	    	});
- 	  	       if (check && intSame ==countCard) {
+ 	  	    	  
+ 	  	       if (intSame ==countCard) {
  	  	    	  $(this).find("td .icheckbox_square-green").removeClass("some_chk");
 	  	          $(this).find("td .icheckbox_square-green").removeClass("not_chk");
  	  	    	   $(this).find("td .icheckbox_square-green").addClass("checked");
@@ -1342,10 +1343,10 @@
 	       $.xhrPool.abortAll();
 	    	var listCardId = [];
 	    	var cardId = 0 ;
-	    	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+	    	 $(".business_card_book .icheckbox_square-green.checked").each(function(){
    	            cardId = $(this).find('input[name=bla]').val();
    	            listCardId.push({"cardId":cardId});    	         
-   			});
+   			}); 
 	    	//var cardId = $("input[name=cardId]").val();
 	    	var tagName = $("#tagCardName").val();
 			if(tagName =="" ){
@@ -1378,7 +1379,7 @@
 					        		var respHTML = "";
 					        		var isChecked = "";
 					        		var listCardId = [];
-				        			$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+				        			$(".business_card_book .icheckbox_square-green.checked").each(function(){
 				           	            cardId = $(this).find('input[name=bla]').val();
 				           	            listCardId.push(parseInt(cardId));    	         
 				           			});
@@ -1404,7 +1405,7 @@
 					        	 	  	    		return false;
 					        	 	         }
 					        			});
-					        			 if (check && intSame == countCard) {
+					        			 if (intSame == countCard) {
 					        				 console.log("Check");
 					        				 respHTML += "<tr id='rowData'>"
 						        					+ "<td><div style='position: relative;' class='icheckbox_square-green checked' id='"+value["tagId"]+"'>"
@@ -1461,7 +1462,8 @@
 	     });
 	    
 	     //check add tag card
-	     $("#paging input[type='checkbox']").on('ifChecked', function(event){
+	     $(document).on('ifChecked', "#paging tbody input[type='checkbox']", function(e) {
+	    	 alert("ok1");
 	    	 $(this).parent().removeClass('not_chk');
 	    	 $(this).parent().removeClass('some_chk');
 	    	 var listCardId = [];
@@ -1479,7 +1481,8 @@
 	       });
 	       
 	     //uncheck remove tag card
-	       $("#paging input[type='checkbox']").on('ifUnchecked', function(event){ 
+	        $(document).on('ifUnchecked', "#paging tbody input[type='checkbox']", function(e) {
+	    	   alert("ok2");
 	    	   $(this).parent().removeClass('not_chk');
 		    	 $(this).parent().removeClass('checked');
 	    	   var listCardId = [];
@@ -1498,10 +1501,10 @@
 
 	    
 	 	// Card tag
-		    $(document).on('click', '#paging .icheckbox_square-green', function(e) {
+		    $(document).on('click', '#paging tbody .icheckbox_square-green', function(e) {
 		    	var listCardId = [];
 		    	var cardId = 0 ;
-		    	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+		    	$(".business_card_book .icheckbox_square-green.checked").each(function(){
 	   	            cardId = $(this).find('input[name=bla]').val();
 	   	            listCardId.push({"cardId":cardId});    	         
 	   			});
@@ -1651,7 +1654,7 @@
 						var same = false;
 						var intSame = 0;
 						var listCardId = [];
-	        			$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+	        			$(".business_card_book .icheckbox_square-green.checked").each(function(){
 	           	            cardId = $(this).find('input[name=bla]').val();
 	           	            listCardId.push(parseInt(cardId));    	         
 	           			});
@@ -1671,7 +1674,7 @@
 	        	 	  	    		return false;
 	        	 	         }
 	        			});
-	        			 if (check && intSame == countCard) {
+	        			 if (intSame == countCard) {
 	        				 console.log("Check");
 	        				 respHTML += "<tr id='rowData'>"
 		        					+ "<td><div style='position: relative;' class='icheckbox_square-green checked' id='"+value["tagId"]+"'>"
@@ -1739,7 +1742,7 @@
 						var same = false;
 						var intSame = 0;
 						var listCardId = [];
-	        			$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+	        			$(".business_card_book .icheckbox_square-green.checked").each(function(){
 	           	            cardId = $(this).find('input[name=bla]').val();
 	           	            listCardId.push(parseInt(cardId));    	         
 	           			});
@@ -1759,7 +1762,7 @@
         	 	  	    		return false;
         	 	           }
 	        			});
-	        			 if (check && intSame == countCard) {
+	        			 if (intSame == countCard) {
 	        				 console.log("Check");
 	        				 respHTML += "<tr id='rowData'>"
 		        					+ "<td><div style='position: relative;' class='icheckbox_square-green checked' id='"+value["tagId"]+"'>"
@@ -1828,7 +1831,7 @@
 						var same = false;
 						var intSame = 0;
 						var listCardId = [];
-	        			$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+	        			$(".business_card_book .icheckbox_square-green.checked").each(function(){
 	           	            cardId = $(this).find('input[name=bla]').val();
 	           	            listCardId.push(parseInt(cardId));    	         
 	           			});
@@ -1848,7 +1851,7 @@
         	 	  	    		return false;
         	 	            }
 	        			});
-	        			 if (check  && intSame == countCard) {
+	        			 if (intSame == countCard) {
 	        				 console.log("Check");
 	        				 respHTML += "<tr id='rowData'>"
 		        					+ "<td><div style='position: relative;' class='icheckbox_square-green checked' id='"+value["tagId"]+"'>"
