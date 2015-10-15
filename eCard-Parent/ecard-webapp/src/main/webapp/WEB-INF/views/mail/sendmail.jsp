@@ -10,6 +10,8 @@
 <title>Insert title here</title>
 </head>
 <script type="text/javascript">
+var dataTables;
+var listUserId = [];
 function validateFrom(){
 	var chechValidate= true;
 	var tileMail = $(".titleMail").val();
@@ -27,6 +29,113 @@ function validateFrom(){
 
 
 $(document).ready(function() {
+	dataTables = $('#listUser').dataTable( {
+		"dom" : '<<t>ip>',
+		"iDisplayLength" : 5,
+		"processing": true,
+		"serverSide": true,
+		"searching": false,
+		"ordering": false,
+		"language": {
+			"zeroRecords": '<fmt:message key="operator.list.table.emptyTable"/>',
+			"emptyTable": '<fmt:message key="operator.list.table.emptyTable"/>',
+			"info": '<fmt:message key="operator.list.table.info"/>',
+			"infoEmpty": '<fmt:message key="operator.list.table.info"/>',
+			"paginate": {
+				"previous": '<fmt:message key="operator.list.table.paginate.previous"/>',
+				"next": '<fmt:message key="operator.list.table.paginate.next"/>'
+			}
+		},
+		"ajax": {
+			"url": 'search',
+			"type": "POST",
+			"data": function (dataTableRequest) {
+				dataTableRequest.criteriaSearch = $("input[name=criteriaSearch]").val();
+				return dataTableRequest;
+			},
+			"dataSrc": "data",
+			"error": function(xhr) {
+				alert('error datatable')
+			}
+			
+		},
+		"columns": [
+			{ "data": "userId",
+				"createdCell": function (td, cellData, rowData, row, col) {
+					$(td).html('<div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" class = "i-checks-chk_all" value="'+rowData.userId+'" name= "userId" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div>');	
+				}
+					
+			},
+				
+			{ "data": "lastName",
+				"createdCell": function (td, cellData, rowData, row, col) {
+					 $(td).html(rowData.lastName + ' ' + rowData.firstName );
+					
+			}},
+			{ "data": "companyName"},
+			{ "data": "departmentName"},
+			{ "data": "positionName"},
+		],
+		
+	}); 
+	
+	$(document).on('click', '.btn-search', function() {
+		dataTables.api().destroy();
+		dataTables = $('#listUser').dataTable( {
+			"dom" : '<<t>ip>',
+			"iDisplayLength" : 5,
+			"processing": true,
+			"serverSide": true,
+			"searching": false,
+			"ordering": false,
+			"language": {
+				"zeroRecords": '<fmt:message key="operator.list.table.emptyTable"/>',
+				"emptyTable": '<fmt:message key="operator.list.table.emptyTable"/>',
+				"info": '<fmt:message key="operator.list.table.info"/>',
+				"infoEmpty": '<fmt:message key="operator.list.table.info"/>',
+				"paginate": {
+					"previous": '<fmt:message key="operator.list.table.paginate.previous"/>',
+					"next": '<fmt:message key="operator.list.table.paginate.next"/>'
+				}
+			},
+			"ajax": {
+				"url": 'search',
+				"type": "POST",
+				"data": function (dataTableRequest) {
+					dataTableRequest.criteriaSearch = $("input[name=criteriaSearch]").val();
+					return dataTableRequest;
+				},
+				"dataSrc": "data",
+				"error": function(xhr) {
+					alert('error datatable')
+				}
+			},
+			"columns": [
+				{ "data": "userId",
+					"createdCell": function (td, cellData, rowData, row, col) {
+							$(td).html('<div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" class = "i-checks-chk_all" value="'+rowData.userId+'" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div>');
+						
+					}},
+				{ "data": "lastName",
+					"createdCell": function (td, cellData, rowData, row, col) {
+						 $(td).html(rowData.lastName + ' ' + rowData.firstName );
+						
+				}},
+				{ "data": "companyName"},
+				{ "data": "departmentName"},
+				{ "data": "positionName"},
+				
+			],
+	   });
+	 });
+	
+	$(".criteriaSearch").keyup(function (e) {
+		  if (e.which == 13) {
+			  $('.btn-search').trigger('click');
+		  }
+	 });
+	
+	
 	 $(document).on('click', '.btn_back_reply', function() {
 		 document.location.href="<c:url value='/manager/home'/>";
 	 });
@@ -46,19 +155,50 @@ $(document).ready(function() {
 			}
 	    } );
 	 
-	    $(document).on('ifClicked', '#paging .icheckbox_square-green', function(event){
+	    $(document).on('ifClicked', '#listUser .icheckbox_square-green', function(event){
+	    	alert(abc);
 	    	$('.btn_add').removeAttr("disabled");
 	    	$('#paging1').css("border","none");
 		});
-	     $(document).on('ifUnchecked', '#paging .icheckbox_square-green input', function(event){     
+	    var check=0;
+	    $(document).on('click', '#listUser .icheckbox_square-green', function(e) {
+    	  	if($(this).attr("class").indexOf("checked") == -1){
+    	  		$(this).removeClass('icheckbox_square-green');
+    	  		 $(this).removeClass("icheckbox_square-green hover");
+    	      	 $(this).addClass("icheckbox_square-green checked");
+    	      	$('.btn_add').removeAttr("disabled");
+    	      	$('#paging1').css("border","none");
+    	      	var userId = $(this).find("input[type=checkbox]").val();
+    	      	listUserId.push(parseInt(userId));
+    	      	check++;
+    	      	 return false;
+    	  	}else{
+    	  		$(this).removeClass("icheckbox_square-green checked");
+    	  		 $(this).addClass("icheckbox_square-green"); 
+    	  		 check--;
+    	  		var userId =$(this).find("input[type=checkbox]").val();
+	   	  		 var i = listUserId.indexOf(parseInt(userId));
+	   	    	 if(i != -1) {
+	   	    		listUserId.splice(i, 1);
+	   	    	 }
+    	  		 if(check == 0){
+    	  			 $('.btn_add').attr("disabled",true);
+    	  		 }
+    	  		 return false;
+    	  		 
+    	  	}
+    	  	
+        });
+	     /* $(document).on('click', '#listUser .icheckbox_square-green input', function(event){     
 	          if($(".icheckbox_square-green").find('.checked').size() == 1){
 	        	  $('.btn_add').attr("disabled",true);
 	          }          
-	   });
+	     }); */
+	     
 	     $(document).on('ifClicked', '#paging1 .icheckbox_square-green', function(event){
 		    	$('.btn_remove').removeAttr("disabled");
 			});
-		     $(document).on('ifUnchecked', '#paging1 .icheckbox_square-green input', function(event){     
+		 $(document).on('ifUnchecked', '#paging1 .icheckbox_square-green input', function(event){     
 		          if($(".icheckbox_square-green").find('.checked').size() == 1){
 		        	  $('.btn_remove').attr("disabled",true);
 		          }          
@@ -66,11 +206,6 @@ $(document).ready(function() {
 		     
 		  
 	     $(document).on('click', '.btn_add', function(event){
-			 var listUserId = new Array();
-			 $("#paging .icheckbox_square-green").find('.checked').each( function(event){
-				var userId = $(this).find("input[name=userId]").val();
-		    	listUserId.push( parseInt(userId));
-			}); 
 			 $.ajax({
 					type: 'POST',
 					url: 'adduser',
@@ -96,9 +231,9 @@ $(document).ready(function() {
 						 
 					});
 					
-					$("#paging .icheckbox_square-green").find('.checked').each( function(){
-						//$(this).removeClass('checked');	
-						$('#paging input').iCheck('uncheck');
+					$("#listUser .icheckbox_square-green.checked").each( function(){
+						$(this).removeClass('checked');	
+						
 					}); 
 					 $('.btn_add').attr("disabled",true);
 					 
@@ -123,10 +258,11 @@ $(document).ready(function() {
 			
 		});
 	     
-	     $("#paging *").prop('disabled', true);
-		 $("#paging1 *").prop('disabled', true);
+	     $(".ibox-custom01 *").prop('disabled', true);
+		 $("#paging1 *").attr("disabled", "disabled");
 		 $(".btn-search").prop('disabled', true);
-		 $(".btnSend").prop('disabled', true);
+		 $(".criteriaSearch").prop('disabled', true);
+		 $("#companyId").prop('disabled', true);
 		 
 		 
 	     $(document).on('ifClicked', '.iradio_square-green', function(event){
@@ -135,13 +271,22 @@ $(document).ready(function() {
 				$("input[name=sendType]").val(sendType);
 				
 				if(sendType ==1 | sendType == 2){
-					$("#paging *").attr("disabled", "disabled");
+					$(".ibox-custom01 *").attr("disabled", "disabled");
 					$("#paging1 *").attr("disabled", "disabled");
 					$(".btn-search").attr("disabled", "disabled");
+					$(".criteriaSearch").prop('disabled', true);
+					if(sendType == 1){
+						$("#companyId").prop('disabled', true);
+					}
+					if(sendType == 2){
+						 $("#companyId").prop('disabled', false);
+					}
 				}else if(sendType == 3){
-					$("#paging *").prop('disabled', false);
+					$(".ibox-custom01 *").prop('disabled', false);
 					$("#paging1 *").prop('disabled', false);
 					$(".btn-search").prop('disabled', false);
+					 $("#companyId").prop('disabled', true);
+					$(".criteriaSearch").prop('disabled', false);
 				}
 				
 			});
@@ -154,6 +299,10 @@ $(document).ready(function() {
 		});
 	     
 	     $('.btnSend').on('click', function() {
+	    	    if($("input[name=sendType]").val() == ""){
+	    	    	alert("タイプの送信を選択してください");
+					return false;
+	    	    }
 				var sendType =parseInt($("input[name=sendType]").val());
 				var companyId =parseInt($("input[name=companyId]").val());
 				var tileMail = $(".titleMail").val();
@@ -324,20 +473,20 @@ $(document).ready(function() {
 											</label>
 										</div>
 									</td>
-									<form method="post" id="formSearchUser" action="displayMail">
+									
 										<td>
 											<div style="margin-left: 10px;">
 												<input type="text" placeholder=""
-													class="form-control seach_user" name="criteriaSearch"
+													class="form-control seach_user criteriaSearch" name="criteriaSearch"
 													style="width: 201px">
 											</div>
 										</td>
 										<td>
 											<div style="margin-left: 100px">
-												<button type="submit" class="btn btn-primary btn-search">検索</button>
+												<button type="button" class="btn btn-primary btn-search">検索</button>
 											</div>
 										</td>
-									</form>
+									
 								</tr>
 							</table>
 
@@ -350,7 +499,7 @@ $(document).ready(function() {
 				<div class="col-sm-12 container table-list-operator">
 					<div class="row" id="data-table">
 						<div class="ibox-content   ibox-custom01">
-							<table class="table container paging" id="paging"
+							<table class="table container paging" id="listUser"
 								style="margin-top: -84px; padding: 0;">
 								<thead>
 									<tr>
@@ -362,7 +511,7 @@ $(document).ready(function() {
 									</tr>
 								</thead>
 								<tbody class="content_user1">
-									<c:forEach var="user" items="${mailGroupVO.userInfoResultVOs}">
+									<%-- <c:forEach var="user" items="${mailGroupVO.userInfoResultVOs}">
 										<tr id="">
 											<td><div class="i-checks">
 													<label class="">
@@ -390,7 +539,7 @@ $(document).ready(function() {
 											<td><c:out value="${user.departmentName}" /></td>
 											<td><c:out value="${user.positionName}" /></td>
 										</tr>
-									</c:forEach>
+									</c:forEach> --%>
 								</tbody>
 							</table>
 

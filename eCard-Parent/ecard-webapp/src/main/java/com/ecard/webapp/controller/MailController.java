@@ -1,16 +1,22 @@
 package com.ecard.webapp.controller;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,8 +34,11 @@ import com.ecard.core.service.GroupCompanyInfoService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.vo.UserInfoVo;
 import com.ecard.webapp.constant.CommonConstants;
+import com.ecard.webapp.security.EcardUser;
+import com.ecard.webapp.security.RoleType;
 import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.vo.CompanyDisplayVO;
+import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.MailGroupVO;
 import com.ecard.webapp.vo.ShowHistoryMailVO;
 
@@ -95,6 +104,29 @@ public class MailController {
 		return new ModelAndView("displayMail","mailGroupVO",mailGroupVO);
 	}
 	
+	@RequestMapping(value = "search", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public DataPagingJsonVO<UserInfoResultVO> search(HttpServletRequest request) {
+		DataPagingJsonVO<UserInfoResultVO> dataTableResponse = new DataPagingJsonVO<UserInfoResultVO>();
+		List<UserInfoResultVO> userInfoResultVOs = new ArrayList<UserInfoResultVO>();
+		String criteriaSearch = request.getParameter("criteriaSearch");
+		String textSearch = criteriaSearch.trim().replaceAll(" +", "|");
+		int limit = parseIntParameter(request.getParameter("length"), 0);
+		int offset = parseIntParameter(request.getParameter("start"), 0);
+		List<UserInfoVo> userInfos = userInfoService.searchUser(textSearch, limit, offset) ;
+		BigInteger count = userInfoService.countUser(textSearch); 
+		long totalRecord = count.longValue();
+		for (UserInfoVo info : userInfos) {
+			UserInfoResultVO userInfoResultVO = new UserInfoResultVO(info.getUserId(), info.getName(), info.getCompanyName(), info.getPositionName(), info.getEmail(), info.getMobileNumber(), info.getCreateDate().toString() ,info.getFirstName(),info.getLastName(),info.getFirstNameKana(),info.getLastNameKana(),info.getDepartmentName(),info.getUserIndexNo());
+			userInfoResultVOs.add(userInfoResultVO);
+		}
+		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));
+		dataTableResponse.setRecordsTotal(totalRecord);
+		dataTableResponse.setRecordsFiltered(totalRecord);
+		dataTableResponse.setData(userInfoResultVOs);
+	
+		return dataTableResponse;
+	}
 	@RequestMapping(value="adduser", method=RequestMethod.POST)
 	@ResponseBody
 	public List<UserInfoResultVO> addUser(@RequestParam(value="listUserId") ArrayList<Integer> listUserId) {  
@@ -262,4 +294,12 @@ public class MailController {
          List<Integer> seqList = Arrays.asList(intarray);
         return seqList;
     }
+	
+	private int parseIntParameter(String parameter, int defaultValue) {
+		try {
+			return Integer.parseInt(parameter);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
 }
