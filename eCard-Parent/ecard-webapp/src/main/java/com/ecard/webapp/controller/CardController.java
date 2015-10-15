@@ -603,6 +603,7 @@ public class CardController {
 					break;
 				}
 				String imageData = cardInfoVo.getImageFile();
+				String imageFile = imageData.substring(imageData.indexOf(',') + 1);
 				userInfo = userInfoService.getUserInfoByUserId(userId);
 	            //Set id for user login
 	            cardInfo.setCardOwnerId(userId);
@@ -620,9 +621,9 @@ public class CardController {
 				cardInfo.setNewestCardFlg(0);
 				
 	            CardInfo cardInfoObject = cardInfoService.registerCardImageOfAdmin(cardInfo);
-	            FileUploadModel fileUploadModel=UploadFileUtil.uploadImageDefault(imageData, cardInfoObject.getImageFile(), this.scpHostName, this.scpUser, this.scpPassword,0); 
+	            FileUploadModel fileUploadModel=UploadFileUtil.uploadImageDefault(imageFile, cardInfoObject.getImageFile(), this.scpHostName, this.scpUser, this.scpPassword,0); 
 	            if(!fileUploadModel.isStatus()){
-	            	statusOfResult=UploadFileUtil.writeLostImage(imageData, cardInfoObject.getImageFile());
+	            	statusOfResult=UploadFileUtil.writeLostImage(imageFile, cardInfoObject.getImageFile());
 	            	if(statusOfResult==3){
 	            		cardInfoService.deleteCardInfo(cardInfoObject.getCardId());
 	            		return statusOfResult;
@@ -641,7 +642,7 @@ public class CardController {
 	            possessionCardService.registerPosCard(posCard);   
 	            
 				// Create new thread to processing card image
-				OcrProcessCardThread newThread = new OcrProcessCardThread(userId, cardInfoObject.getCardId(), imageData,cardInfoObject);
+				OcrProcessCardThread newThread = new OcrProcessCardThread(userId, cardInfoObject.getCardId(), imageFile,cardInfoObject);
 				newThread.start();
         	}
             

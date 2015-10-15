@@ -37,19 +37,19 @@ function callback(base64data) {
 var picFile = "";
 
 $(document).ready(function(){
-	
+	 var output = document.getElementById("result");
+     var file = null;
+     var picReader = null;
 	$("#files").on("change",function(event){
 		var files = event.target.files; //FileList object
-        var output = document.getElementById("result");
-		
         for(var i = 0; i< files.length; i++)
         {
-            var file = files[i];
+            file = files[i];
             //Only pics
             if(!file.type.match('image'))
               continue;
             
-            var picReader = new FileReader();
+            picReader = new FileReader();
             
             picReader.addEventListener("load",function(event){
             	base64 = event.target.result;
@@ -58,7 +58,7 @@ $(document).ready(function(){
                 var div = document.createElement("div");
                 
                 div.className = 'list-view';
-                div.innerHTML = "<canvas id='c' style='display:none'></canvas><img class='thumbnail img-icon-rotated' src='" + picFile.result + "'" +
+                div.innerHTML = "<img class='thumbnail img-icon-rotated' src='" + picFile.result + "'" +
                         "title='" + picFile.name + "'/>" + "<div class='lable'><input type='checkbox' class='i-checks i-checks-chk_all' checked name='bla'>"+ ' 取り込み</div>';
                 output.insertBefore(div,null);
                  $('.i-checks').iCheck({
@@ -68,8 +68,7 @@ $(document).ready(function(){
                 });
                 $('.btn_process').removeClass('disabled')
             
-            });
-            
+            }); 
              //Read the image
             picReader.readAsDataURL(file);
         }
@@ -181,17 +180,18 @@ $(document).ready(function(){
 		   var userId = $('.user_id').val();
 		   var rote = $("#rote-image").val();
 		   var listCards = new Array();
+		 
 		   $('.list-view').each(function() {
 				if($(this).find('.lable input[name=bla][type=checkbox]:checked').length != 0){
-					
-				   var imagesource = $(this).find('img').attr('src');  
-			       var n = imagesource.indexOf(",");
-				   var image = imagesource.substring(n+1, base64.length);
+				  /*  var imagesource = $(this).find('img').attr('src');  
+			       var n = imagesource.indexOf(","); */
+				   var image = $(this).find('img').attr('src'); //imagesource.substring(n+1, base64.length);
 				   var card = { "imageFile":image,"userId":userId,"rote":rote};
 				   listCards.push({ 'card' : card});
 			     }  
 		    });
-		   if($("#exampleInputName2").val()!=""){
+		   
+		  if($("#exampleInputName2").val()!=""){
 			   if(listCards.length>0){
 				   $.ajax({
 						type: 'POST',
