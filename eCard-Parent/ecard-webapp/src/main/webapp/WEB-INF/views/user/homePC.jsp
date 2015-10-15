@@ -1323,6 +1323,7 @@
 	   		$("#position").val(position);
 	   		$("#name").val(name);
 	   		$("#parameterFlg").val(parameterFlg);
+	   		$( "#parameterFlg" ).click();
 	   		return modal;
 	   	}
 	   	
