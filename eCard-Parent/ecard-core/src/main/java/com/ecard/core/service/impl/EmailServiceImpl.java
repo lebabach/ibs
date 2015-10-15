@@ -109,7 +109,8 @@ public class EmailServiceImpl implements EmailService{
         
         message.setSubject(subject);
         message.setFrom(mailFrom);
-        message.setTo(mailTo.toArray(new String[mailTo.size()]));              
+        message.setBcc(mailTo.toArray(new String[mailTo.size()])); 
+        //message.setTo(mailTo.toArray(new String[mailTo.size()]));              
         // Create the HTML body using Thymeleaf
         final String htmlContent = this.templateEngine.process(htmlFile, ctx);
         
