@@ -1466,6 +1466,8 @@ public class UserController {
 		cardInfo.setDateEditting(new Date());
 		
 		cardInfo.setName(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastName(), cardInfo.getFirstName(), " "));
+		cardInfo.setNameKana(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastNameKana(), cardInfo.getFirstNameKana(), " "));
+		
         CardInfo cardInfoObject = cardInfoService.registerCardImageManualPCOfAdmin(cardInfo);
       
         PossessionCardId possessionCardId = new PossessionCardId();
