@@ -89,7 +89,7 @@ public interface CardInfoDAO extends IGenericDao{
 //    
 //    public BigInteger getTotalCardSearchAllByMroonga(Integer groupCompanyId, List<Integer> listUserId, String searchText,String name, String position,String department,String company, int pageNumber); 
     
-    public List<CardInfoUserVo> getListPossesionCard(Integer userId, int pageNumber);
+    public List<CardInfoUserVo> getListPossesionCard(Integer userId, String strDate);
     
     public void updateOldCardInfo(CardInfo cardInfo);
     

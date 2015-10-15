@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -201,22 +202,25 @@ public class UserController {
 		Long listTotalCardInfo = new Long(0);
 		List<TagGroup> listTagGroup = null;
 		List<CardInfoPCVo> lstCardInfoPCVo = new ArrayList<>();
+		List<String> lstNameSort = new ArrayList<>();
 		if (ecardUser != null) {
-			List<String> lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
-			List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), 0);
+			// Get listNameSort [2015/10,2015/11, .... ]
+			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
+			
 			listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId());
 			listTagGroup = getCardTag();
-			for (String nameSort : lstNameSort) {
+			
+				List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), lstNameSort.get(0));
 				List<CardInfo> cardInfoDisp = new ArrayList<>();
 				for (CardInfoUserVo cardInfo : lstCardInfo) {
-					if (nameSort.trim().equals(cardInfo.getSortType().trim())) {
+					if (lstNameSort.get(0).trim().equals(cardInfo.getSortType().trim())) {
 						cardInfoDisp.add(cardInfo.getCardInfo());
 					}
 				}
 				CardInfoPCVo cardInfoPCVo;
 				try {
 					if (cardInfoDisp.size() > 0) {
-						cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp));
+						cardInfoPCVo = new CardInfoPCVo(lstNameSort.get(0), CardInfoConverter.convertCardInforList(cardInfoDisp));
 						lstCardInfoPCVo.add(cardInfoPCVo);
 					}
 				} catch (IllegalAccessException e) {
@@ -224,8 +228,7 @@ public class UserController {
 				} catch (InvocationTargetException e) {
 					e.printStackTrace();
 				}
-			}
-
+			
 		}
 		appendCardId(listTagGroup);
 
@@ -233,6 +236,7 @@ public class UserController {
 		// u=(UserSearchVO)request.getSession().getAttribute("searchDetail");
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("homePC");
+		modelAndView.addObject("lstNameSort",lstNameSort);
 		modelAndView.addObject("lstCardInfoPCVo", lstCardInfoPCVo);
 		modelAndView.addObject("totalCardInfo", listTotalCardInfo);
 		modelAndView.addObject("listTagGroup", listTagGroup);
@@ -245,23 +249,30 @@ public class UserController {
 	public DataPagingJsonVO<CardInfoPCVo> search(HttpServletRequest request, HttpSession session) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		int limit = parseIntParameter(request.getParameter("page"), 0);
+//		int limit = parseIntParameter(request.getParameter("page"), 0);
 		int searchType = parseIntParameter(request.getParameter("typeSearch"), 0);
 		int typeSort = parseIntParameter(request.getParameter("typeSort"), 0);
+		String valueSearch = request.getParameter("page");
 		DataPagingJsonVO<CardInfoPCVo> dataTableResponse = new DataPagingJsonVO<CardInfoPCVo>();
 		List<CardInfoPCVo> cardInfoSearchResponses = new ArrayList<CardInfoPCVo>();
 		List<String> lstNameSort = null;
 		List<CardInfo> listCardSortNameCompany = null;
 		List<CardInfoUserVo> lstCardInfo = null;
-		String sortType = "";
-		// Search with possessionCard
-		if (searchType == 0) {
+		
+		// Search all
+		// 
+		if(searchType == 0){
 			if (typeSort == SearchConditions.CONTACT.getValue()) {
 				lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
-				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), limit);
+				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), valueSearch);				
+			}
+		}
+		/*if (searchType == 0) {
+			if (typeSort == SearchConditions.CONTACT.getValue()) {
+				lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
+				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), "10/2015");
 			} else if (typeSort == SearchConditions.NAME.getValue()) {
-				listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(), null,
-						SearchConditions.NAME.name().toLowerCase(), limit);
+				listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(), null, SearchConditions.NAME.name().toLowerCase(), 0);
 				lstCardInfo = new ArrayList<>();
 				lstNameSort = new ArrayList<>();
 				for (CardInfo cardInfoModel : listCardSortNameCompany) {
@@ -274,8 +285,7 @@ public class UserController {
 
 				}
 			} else {
-				listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(), null,
-						SearchConditions.COMPANY.name().toLowerCase(), limit);
+				listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(), null, SearchConditions.COMPANY.name().toLowerCase(), 0);
 				lstCardInfo = new ArrayList<>();
 				lstNameSort = new ArrayList<>();
 				for (CardInfo cardInfoModel : listCardSortNameCompany) {
@@ -289,30 +299,16 @@ public class UserController {
 				}
 			}
 
-		} else {
-			// get List Card follow by TagName : tagId, userId, sort condition,
-			// limit
-			/*
-			 * listCardSortNameCompany =
-			 * cardInfoService.getListPossessionCardByTag(ecardUser.getUserId(),
-			 * searchType, SearchConditions.NAME.name().toLowerCase(),limit);
-			 * lstCardInfo = new ArrayList<>(); lstNameSort = new ArrayList<>();
-			 * for(CardInfo cardInfoModel : listCardSortNameCompany){
-			 * System.out.println("AA="+cardInfoModel.getCardId()); String
-			 * sortType = cardInfoModel.getCompanyNameKana().substring(0, 1);
-			 * lstNameSort.add(sortType.toUpperCase()); CardInfoUserVo
-			 * cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(),
-			 * cardInfoModel); lstCardInfo.add(cardInfoUserVo); }
-			 */
+		} else {			
 			if (typeSort == SearchConditions.CONTACT.getValue()) {
-				lstCardInfo = cardInfoService.getListPossessionCardByTag(ecardUser.getUserId(), searchType, limit);
+				lstCardInfo = cardInfoService.getListPossessionCardByTag(ecardUser.getUserId(), searchType, 0);
 				lstNameSort = cardInfoService.getListSortTypeByTag(ecardUser.getUserId(), searchType);
 				// lstCardInfo =
 				// cardInfoService.getListPossesionCard(ecardUser.getUserId(),
 				// limit);
 			} else if (typeSort == SearchConditions.NAME.getValue()) {
 				listCardSortNameCompany = cardInfoService.getListPossessionCardByTag(ecardUser.getUserId(), searchType,
-						SearchConditions.NAME.name().toLowerCase(), limit);
+						SearchConditions.NAME.name().toLowerCase(), 0);
 				lstCardInfo = new ArrayList<>();
 				lstNameSort = new ArrayList<>();
 				for (CardInfo cardInfoModel : listCardSortNameCompany) {
@@ -325,7 +321,7 @@ public class UserController {
 				}
 			} else {
 				listCardSortNameCompany = cardInfoService.getListPossessionCardByTag(ecardUser.getUserId(), searchType,
-						SearchConditions.COMPANY.name().toLowerCase(), limit);
+						SearchConditions.COMPANY.name().toLowerCase(), 0);
 				lstCardInfo = new ArrayList<>();
 				lstNameSort = new ArrayList<>();
 				for (CardInfo cardInfoModel : listCardSortNameCompany) {
@@ -337,7 +333,7 @@ public class UserController {
 					lstCardInfo.add(cardInfoUserVo);
 				}
 			}
-		}
+		}*/
 		if (typeSort == SearchConditions.NAME.getValue() || typeSort == SearchConditions.COMPANY.getValue()) {
 			lstNameSort = lstNameSort.stream().distinct().sorted().collect(Collectors.toList());
 		}
@@ -1735,5 +1731,17 @@ public class UserController {
 
 		return jsonObj;
 	}
+
+	private Date convertStringToDate(String strDate){
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM");
+		Date date = null;
+		try {
+			date = formatter.parse(strDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
+	}
+	
 
 }

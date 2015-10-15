@@ -62,6 +62,23 @@
      display: block;
      padding-bottom: 5px;
   }
+  
+  .ul-left-li.active{
+      background: url(/ecard-webapp/assets/img/faq1.png) no-repeat left 15px;
+   }
+   .ul-left-li{
+      background: url(/ecard-webapp/assets/img/faq2.png) no-repeat left 15px;
+      
+
+   }
+
+   .no-show-content {
+    display : none;
+   }
+   .show-content {
+    display : block;
+   }
+   
   .list-group-item-title{
     background: -moz-linear-gradient(center top , #f4f4f4, #e6e6e6) repeat scroll 0 0 rgba(0, 0, 0, 0);
     border: 1px solid #b1b1b1;
@@ -388,7 +405,7 @@
   <div id="container" class="container" style= "padding-top: 20px !important;" >
   	<h4>名刺一覧</h4>
   	<div class="row " style="margin-bottom: 10px">
-          <div class="col-md-2 m-b-xs setDisplayTerm" style="width:140px;padding-right: 0 !important;">
+          <div class="col-md-2 m-b-xs setDisplayTerm" style="width:180px;padding-right: 0 !important;">
             <select id="selectSortBox" class="input-sm form-control input-s-sm inline">
               <option value="0" selected>すべて</option>
               <option value="1" >最近取り込んだ名刺</option>
@@ -397,15 +414,15 @@
             </select>
           </div>
           
-          <div class="col-md-2 m-b-xs setDisplayTerm" style="width:140px;padding-left: 5px !important;">
+          <%-- <div class="col-md-2 m-b-xs setDisplayTerm" style="width:140px;padding-left: 5px !important;">
             <select id="selectTagBox" class="input-sm form-control input-s-sm inline">
-              <option value="0" selected>タグ一覧から</option>
+              <option value="0" selected>(タグ一覧から)</option>
               <c:forEach var="cardTag" items="${listTagGroup}">
               	<option value="${cardTag.tagId}"><c:out value="${cardTag.tagName}"/></option>
               </c:forEach>
                                         
             </select>
-          </div>         
+          </div>    --%>      
           
           <div class="col-md-3 m-b-xs setDisplayTerm" style="width:200px; padding-left: 10px !important;padding-right: 0px !important;">            
             <div class="btn-group" role="group" aria-label="..." style="float:right;">
@@ -457,74 +474,59 @@
             </div>            
           </div>
           
-          <div class="col-md-2 setDisplayTerm" style="max-width:120px;padding-left : 5px !important;">
+          <div class="col-md-3 setDisplayTerm" style="max-width:120px;padding-left : 5px !important;float:right">
               <select class="input-sm form-control input-s-sm inline" id = "sort-card-cnd" >
                 <option value="5" selected>交換月順</option>
                 <option value="1">氏名順</option>
-                <option value="2">会社名順</option>                          
+                <option value="2">会社名順</option>
+                <option value="6">タグ一覧から</option>                          
             </select>
           </div>
           
           
 	  </div>
     <div class="business_card_book">
-    <!-- for here  -->
-    <c:choose>
-	    <c:when test="${empty searchDetail}">
-		      <c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">
-			      <div class="list-group" style="margin-bottom: 10px !important;" id= "<c:out value='${cardInfoPCVo.nameSort}' />">
-			        <div class="list-group-item-title"><c:out value="${cardInfoPCVo.nameSort}" /></div>
-			        <!-- for item here  -->
-			        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
-				        <div class="list-group-item pointer">
-				          <div class="row row-new">
-				            <div class="col-md-1 col-xs-1">
-				              <div class="icheckbox_square-green">
-				                <input type="checkbox" class="i-checks" name="bla" value="<c:out value='${cardInfo.cardId}' />">
-				              </div>
-				            </div>
-				            <div class="col-md-5">
-				              <div class="col-xs-11 mg-top">
-				                <p class="name"><c:out value="${cardInfo.lastName}" />  <c:out value="${cardInfo.firstName}" /></p>
-				                <p class="livepass"><c:out value="${cardInfo.companyName}" /></p>
-				                <p class="department_and_position"><c:out value="${cardInfo.departmentName}" /> <c:out value="${cardInfo.positionName}" /></p>
-				                <p class="num"><c:out value="${cardInfo.telNumberCompany}" /></p>
-				                <p class="mail"><a href="#"><c:out value="${cardInfo.email}" /></a></p>
-				              </div>
-				            </div>
-				            <div class="col-md-6">
-				              <div class="col-xs-5" style=" display: table;">
-				                </div>
-				                  <div class="col-xs-7">
-				                    <img src="<c:url value='/assets/img/loading.gif'/>" class="img-responsive img-thumb pull-right" alt="Responsive image">
-				                    <input class="hidden" name="fileImageName" value="${cardInfo.imageFile}">
-				                  </div> 
-				            </div>
-				          </div>          
-				        </div>
-			        </c:forEach>
-			      </div>
-	     	</c:forEach>
-	    </c:when>
-	    <c:otherwise>
-				<input class="hidden" id="hid-freeText" name="hid-freeText"
-					value="${searchDetail.freeText}">
-				<input class="hidden" id="hid-owner" name="hid-owner"
-					value="${searchDetail.owner}">
-				<input class="hidden" id="hid-company" name="hid-company"
-					value="${searchDetail.company}">
-				<input class="hidden" id="hid-department" name="hid-department"
-					value="${searchDetail.department}">
-				<input class="hidden" id="hid-position" name="hid-position"
-					value="${searchDetail.position}">
-				<input class="hidden" id="hid-name" name="hid-name"
-					value="${searchDetail.name}">
-				<input class="hidden" id="hid-parameterFlg" name="hid-parameterFlg"
-					value="${searchDetail.parameterFlg}">
-			</c:otherwise>
-	</c:choose>
-    
-      <!-- end eaxh  -->
+		<c:forEach var="nameSort" items="${lstNameSort}" varStatus="loopCount">
+	   		<div class="list-group" style="margin-bottom: 0px !important" id="<c:out value='${nameSort}'/>">
+	   			<c:if test="${loopCount.count == 1}">
+		        	<div class="ul-left-li active list-group-item-title "><c:out value="${nameSort}" /></div>       		
+       				<c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">  						        
+				        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
+					        <div class="list-group-item pointer show-content">
+					          <div class="row row-new">
+					            <div class="col-md-1 col-xs-1">
+					              <div class="icheckbox_square-green">
+					                <input type="checkbox" class="i-checks" name="bla" value="<c:out value='${cardInfo.cardId}' />">
+					              </div>
+					            </div>
+					            <div class="col-md-5">
+					              <div class="col-xs-11 mg-top">
+					                <p class="name"><c:out value="${cardInfo.lastName}" />  <c:out value="${cardInfo.firstName}" /></p>
+					                <p class="livepass"><c:out value="${cardInfo.companyName}" /></p>
+					                <p class="department_and_position"><c:out value="${cardInfo.departmentName}" /> <c:out value="${cardInfo.positionName}" /></p>
+					                <p class="num"><c:out value="${cardInfo.telNumberCompany}" /></p>
+					                <p class="mail"><a href="#"><c:out value="${cardInfo.email}" /></a></p>
+					              </div>
+					            </div>
+					            <div class="col-md-6">
+					              <div class="col-xs-5" style=" display: table;">
+					                </div>
+					                  <div class="col-xs-7">
+					                    <img src="<c:url value='/assets/img/loading.gif'/>" class="img-responsive img-thumb pull-right" alt="Responsive image">
+					                    <input class="hidden" name="fileImageName" value="${cardInfo.imageFile}">
+					                  </div> 
+					            </div>
+					          </div>          
+					        </div>
+				        </c:forEach>						      
+			     	</c:forEach>	       			
+		        </c:if>
+		        <c:if test="${loopCount.count != 1}">
+		       		<div class="ul-left-li list-group-item-title "><c:out value="${nameSort}" />		       			
+		       		</div>
+	       		</c:if>
+	       	</div>       	
+      </c:forEach>  
     </div>
 </div>
 
@@ -570,109 +572,86 @@
 	   	}
       var page = 1;
       var isLoading = 0;
-      $(window).scroll(function() {     	  
-    	  if($('.row-new').length < parseInt(totalCardInfo)){
-    		   var typeSort = $('#sort-card-cnd').val();
-    		   var typeSearch = $("#selectSortBox option:selected").val();
-    		   /* if(isLoading != 0){    			   
-    			   $('body').scrollTop($(window).height()*2);
-    			   return false;
-    		   }  */
-	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
-	    	    	// Call ajax here	
-	    	    	if(!$('#titleOfSearch').length){
-	    	    		request = $.ajax({
-							type: 'POST',
-							url: 'search',
-							data: 'page=' +id_manager + "&typeSort=" +typeSort
-						}).done(function(resp, status, xhr) {
-							var lastDate = $('.business_card_book .list-group').last().attr("id");
-							$.each( resp.data, function( key, value ) {
-								 if(value.nameSort.replace("/","").trim() == lastDate.trim()){
-									 $.each( value.lstCardInfo, function (k,v) {									 
-										 createTableHasGroup(lastDate, v);
-										 reloadICheck();
-										 isLoading=isLoading+1;
-										 getImageFromSCP(v.imageFile); 
-									 });
-								 } else {
-									 $.each( value.lstCardInfo, function (k,v) {
-										 var lastDate = $('.business_card_book .list-group').last().attr("id");
-										if(value.nameSort.replace("/","").trim() != lastDate.trim()){											
-											 createTableNoGroup(value.nameSort, v);	 
-											 reloadICheck();
-											 isLoading=isLoading+1;
-											 getImageFromSCP(v.imageFile);
-										 }else{										 
-											 createTableHasGroup(lastDate, v);
-											 reloadICheck();
-											 isLoading=isLoading+1;
-											 getImageFromSCP(v.imageFile);
-										 }
-									 });
-								 }
-								 
-							});
-							
-							
-						}).fail(function(xhr, status, err) {
-							//alert('Error');
-						});
-		        	    id_manager++;
-	    	    	}else{
-	    	    		//search
-	    	    		var freeText = $("#freeText").val();
-	           	   		var owner = $("#owner").val();
-	           	   		var company = $("#company").val();
-	           	   		var department = $("#department").val();
-	           	   		var position = $("#position").val();
-	           	   		var name = $("#name").val();
-	           	   		var parameterFlg = $("#parameterFlg").val()
-	           	   		
-	           			if($("#parameterFlg").val()==0){
-	           				owner="";	
-	           	        }
-		           	   	$.ajax({
-		       			    type: 'POST',
-		       			    url: 'searchCards',
-		       			    dataType: 'json', 
-		       				 contentType: 'application/json',
-		       				 mimeType: 'application/json',
-		       			     data: JSON.stringify({ 
-		       			        'freeText':freeText,
-		       			        'owner':owner,
-		       			        'company':company,
-		       			        'department':department,
-		       			        'position':position,
-		       			        'name':name,
-		       			        'parameterFlg':parameterFlg,
-		       			        'page':++id_manager
-		       			    }),
-		       			    success: function(data){
-		       			    	setDataSearchLoadMore(data);
-		       			    }
-		       			});
-	    	    	}
-	        		
-	    	    } 
-    	  }
-    	}); 
+      
 
  $(document).ready(function(){
-    	     	  
-	   	$(".business_card_book .list-group").each(function() {
-	   		var id  = $(this).attr("id").replace('/', '');
-	   		$(this).attr("id",id);
-	   	});
-       $('.i-checks').iCheck({
-         checkboxClass: 'icheckbox_square-green',
-         radioClass: 'iradio_square-green',                
-       });
+	 $(document).on('click', '.list-group', function(event)  {
+		// Hidden others and change icon
+        $(".list-group" ).not($(this)).find('.list-group-item-title').removeClass('active');
+        $(".list-group" ).not($(this)).find('.list-group-item ').removeClass('show-content');
+        $(".list-group" ).not($(this)).find('.list-group-item ').addClass('no-show-content');
+        // Show data end change icon
+        if($(this).find('.list-group-item-title').hasClass('active')){
+        	$(this).find('.list-group-item-title').removeClass('active');
+            $(this).find('.list-group-item ').removeClass('show-content');
+            $(this).find('.list-group-item ').addClass('no-show-content');
+        } else {
+        	$(this).find('.list-group-item-title').addClass('active');
+            $(this).find('.list-group-item ').removeClass('no-show-content');
+            $(this).find('.list-group-item ').addClass('show-content');	
+        }
+        if($(this).find('.list-group-item').length <= 0){
+        	var self = $(this);
+            var strDate = $(this).attr("id");
+        	var typeSort = 5;
+           	var typeSearch = $("#selectSortBox option:selected").val();
+           	strDate = strDate.slice(0,2)+"/"+strDate.slice(2,strDate.length+1);
+              $.ajax({
+    			type: 'POST',
+    			url: 'search',
+    			data: 'page=' +strDate + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch
+    		  }).done(function(resp, status, xhr) {
+    			   var listGroupItem = "";
+    				$.each( resp.data, function( key, value ) {
+    					 $.each( value.lstCardInfo, function (k,v) {
+    						 listGroupItem += '<div class="list-group-item pointer show-content">'
+    				    					+'<div class="row row-new">'
+    				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
+    				    					+    '<input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
+    				    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
+    				    					+	 '</div></div>'
+    				    					+	'<div class="col-md-5">'
+    				    					+		'<div class="col-xs-11 mg-top">'
+    				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+    				    					+			'<p class="livepass">'+v.companyName+'</p>'
+    				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+    				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+    				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+    				    					+ '</div></div>'
+    				    					+	'<div class="col-md-6">'
+    				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+    				    					+	'<div class="col-xs-7">'								
+    				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+    				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+    				    					+	'</div> </div> </div> </div>';				    		 
+    							 isLoading++;
+    							 reloadICheck();
+    							 getImageFromSCP(v.imageFile);
+    					 });
+    					 self.append(listGroupItem);
+    				});
+    				
+    			}).fail(function(xhr, status, err) {
+    				
+    			});
+        }
+        
+     });
+	 
+   	 $(".business_card_book .list-group").each(function() {
+   		var id  = $(this).attr("id").replace('/', '');
+   		$(this).attr("id",id);
+   	 });
+   	 
+     $('.i-checks').iCheck({
+       checkboxClass: 'icheckbox_square-green',
+       radioClass: 'iradio_square-green',                
+     });
 
        $("#deletePeople").click(function(e){
     	   if (confirm('<fmt:message key="card.list.confirmDelete"/>')) {
     		   var listCardId=[];
-    			$(".icheckbox_square-green").find('.checked').each(function(){
+    			$(".icheckbox_square-green.checked").each(function(){
     	         cardId = $(this).find('input[name=bla]').val();
     	         listCardId.push({"cardId":cardId});    	         
     			});
@@ -704,8 +683,30 @@
     	   
     	   
        });
+       var i = 0;
+     $(document).on('click', '.list-group .icheckbox_square-green', function(e) {
+   	  	if($(this).attr("class").indexOf("checked") == -1){
+   	  		$(this).removeClass('icheckbox_square-green');
+   	  		 $(this).removeClass("icheckbox_square-green hover");
+   	      	 $(this).addClass("icheckbox_square-green checked");
+   	      	 i++;
+          	 $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
+   	      	 return false;
+   	  	}else{
+   	  		$(this).removeClass("icheckbox_square-green checked");
+   	  		 $(this).addClass("icheckbox_square-green"); 
+   	  		 i--;
+   	  		 if(i== 0){
+   	  	 	    $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
+   	  		 }
+     	
+   	  		
+   	  		 return false;
+   	  	}
+   	  
+   }); 
 
-       $('#sort-card-cnd').on('change', function() {
+       /* $('#sort-card-cnd').on('change', function() {
        	$.xhrPool.abortAll();
         $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
        	var typeSort = $(this).val();
@@ -760,18 +761,24 @@
 				
 				id_manager++;
 			}).fail(function(xhr, status, err) {
-				//alert('Error');
+				
 			});
-       });
+       }); */
        
-       $('#selectSortBox').on('change', function(event) {
+       /* $('#selectSortBox').on('change', function(event) {
+    	   
+    	   if($("#selectSortBox option:selected").val() != 0){
+    		   disableTagSort("none");   
+    	   } else {
+    		   disableTagSort("block");
+    	   }
+    	   
+    	   
     	   $.xhrPool.abortAll();
     	   $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
     	   var tagName = $("#selectSortBox option:selected").text(); 
     	   var typeSort = $("#sort-card-cnd option:selected").val();
           	var typeSearch = $("#selectSortBox option:selected").val();    	   
-    	   // If tagId == 0 => sortAll
-		   // tagId != 0 => sortByTagName
 		   id_manager= 0;
 		   $.ajax({
 			type: 'POST',
@@ -811,10 +818,10 @@
 				});
 				id_manager++;
 			}).fail(function(xhr, status, err) {
-				//alert('Error');
+				
 			});
     	   
-       });
+       }); */
        
        $( "#btn-success" ).click(function() {
     	   resetValidationForm();
@@ -1176,19 +1183,19 @@
 	         $(this).toggleClass('hover');
         });
 	 
-       $(document).on('ifChecked','.business_card_book input[name=bla]',function(event) {
+       $(document).on('click','.business_card_book input[name=bla]',function(event) {
     	   $(".balloon").css("display","none");
            $(".btn-group").find("#addTag, #deletePeople").removeClass("disabled");
 	  	     
         });
         
-        $(document).on('ifUnchecked','.business_card_book input',function(event){  
+      /*   $(document).on('ifUnchecked','.business_card_book input',function(event){  
         	$(".balloon").css("display","none");
           if($(".icheckbox_square-green").find('.checked').size() == 1){ 
             $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
             $(".addTagCard").css("display","none");  
           }          
-        });
+        }); */
 
         $(document).on('click','#addTag',function(e){
        	  
@@ -1357,7 +1364,7 @@
 			    		}
 			    	});
 					if(check){
-							$('#selectSortBox').find('option[value!=0]').remove();
+							$('#selectTagBox').find('option[value!=0]').remove();
 							
 							$.ajax({
 					        	url: "<c:url value='/user/addTagHome' />",
@@ -1432,7 +1439,7 @@
 							    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
 					        		        }
 					        			 
-					        			 $('#selectSortBox').append('<option value="'+value["tagId"]+'">'+value["tagName"]+'</option>');					        			    
+					        			 $('#selectTagBox').append('<option value="'+value["tagId"]+'">'+value["tagName"]+'</option>');					        			    
 					        			
 
 
@@ -1612,6 +1619,13 @@
 	   		$(".btn-group").attr('style', "display:none !important");
 	   		$("#sort-card-cnd").attr('style', "display:none !important");
 	   	}
+	   	
+	   	function disableTagSort(style) {
+	   		var str = "display:"+style+" !important"
+	   		$("#sort-card-cnd").attr('style', str);
+	   		$("#selectTagBox").attr('style', str);	   		
+	   	}
+	   	
 		function reloadICheck(){
 			$('.i-checks').iCheck({
      	          checkboxClass: 'icheckbox_square-green',
@@ -1796,7 +1810,7 @@
 		}
 		
 		function deleteTag(id){
-			$('#selectSortBox').find('option[value!=0]').remove();
+			$('#selectTagBox').find('option[value!=0]').remove();
 	     	$.ajax({
 	        	url: "<c:url value='/user/deleteTag' />",
 	        	data: 'tagId='+ id,
@@ -1868,7 +1882,7 @@
 			    					+ "<td class='nametag' >"+value["tagName"]+"</td>"
 			    					+ "<td><a href='javascript:void(0);' class='delTag' id='"+value["tagId"]+"'><i class='fa fa-trash'></i></a></td></tr>";
 	        		        }
-	        			 	$('#selectSortBox').append('<option value="'+value["tagId"]+'">'+value["tagName"]+'</option>');
+	        			 	$('#selectTagBox').append('<option value="'+value["tagId"]+'">'+value["tagName"]+'</option>');
 	        		});
 	        		$("#tagCardName").val('');
 	        		$("#paging tbody").html("");

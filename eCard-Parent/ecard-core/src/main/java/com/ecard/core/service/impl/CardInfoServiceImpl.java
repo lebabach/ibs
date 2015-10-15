@@ -253,8 +253,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 //	}
 
 	@Override
-	public List<CardInfoUserVo> getListPossesionCard(Integer userId, int pageNumber) {
-		return cardInfoDAO.getListPossesionCard(userId, pageNumber);
+	public List<CardInfoUserVo> getListPossesionCard(Integer userId, String strDate) {
+		return cardInfoDAO.getListPossesionCard(userId, strDate);
 	}
 	public void updateOldCardInfo (CardInfo cardInfo){
 		cardInfoDAO.updateOldCardInfo(cardInfo);

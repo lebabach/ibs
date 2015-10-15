@@ -285,7 +285,7 @@
       font-size: 14px;
       display: inline-block;
       text-align: left;
-      background: url(img/faq2.png) no-repeat left 5px;
+      background: url(/ecard-webapp/assets/img/faq2.png) no-repeat left 5px;
       width: 185px;
       padding-left: 15px;
    }

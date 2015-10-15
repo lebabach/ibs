@@ -12,7 +12,9 @@ public enum SearchConditions {
     COMPANY(2),
     POSITION(3),
     UPDATE_DATE(4),
-    CONTACT(5);
+    CONTACT(5),
+    TAG(6)
+    ;
     
     private int value;
 

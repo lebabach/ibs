@@ -926,13 +926,14 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	}
 
 	@Override
-	public List<CardInfoUserVo> getListPossesionCard(Integer userId, int pageNumber) {
+	public List<CardInfoUserVo> getListPossesionCard(Integer userId, String strDate) {
 
 		String sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c "
-				+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 ORDER BY c.contactDate DESC ";
+				+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+				+ "AND date_format(date(c.contactDate),'%m/%Y') = :strDate";
 		Query query = getEntityManager().createQuery(sqlStr);
-		query.setParameter("userId", userId);
-		query.setFirstResult(pageNumber * this.maxResult).setMaxResults(this.maxResult);
+		query.setParameter("userId", userId);		
+		query.setParameter("strDate", strDate);
 		List<Object[]> listObj = query.getResultList();
 		List<CardInfoUserVo> lstcardInfoUserVo = new ArrayList<>();
 		for (Object[] object : listObj) {
