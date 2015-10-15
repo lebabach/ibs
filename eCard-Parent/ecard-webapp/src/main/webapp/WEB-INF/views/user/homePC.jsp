@@ -950,6 +950,34 @@
        	   		
        	   		ListSearch(freeText,owner,company,department,position,name,parameterFlg);
               });
+          
+          $("#btn-success3").click(function(){
+		   		$('.modal-content').hide(); 
+	            $('.modal-content-new').show(); 
+		   		var id="";
+		   		$(".modal-content-new .i-checks").each(function() {
+		   			if($(this).is(':checked')){
+		   				id=$(this).closest(".row.row-new").find(".hidden.id").val();
+		   				return false;
+		   			}
+		   		});
+		   		$.ajax({
+	   			    type: 'POST',
+	   			    url: 'deleteUserSearch',
+	   			    data: { 
+	   			        'id':id
+	   			    },
+	   			    success: function(data){
+	   			    	if(data.hasData){
+	   			         	DisplayContents(data.userSearchs);
+	   			        }else{
+	   			        	$(".error_common").text("検索条件を保存できるのは5件までです。");
+	   					     $(".mesage_error").css("display", "block");
+	   			        }
+	   			    }
+	   			});
+		   		
+		   	 })
 });/* END READY DOCUMENT  */
  
       
@@ -1250,33 +1278,7 @@
 
 	         });
 		   	
-		   	 $("#btn-success3").click(function(){
-		   		$('.modal-content').hide(); 
-	            $('.modal-content-new').show(); 
-		   		var id="";
-		   		$(".modal-content-new .i-checks").each(function() {
-		   			if($(this).is(':checked')){
-		   				id=$(this).closest(".row.row-new").find(".hidden.id").val();
-		   				return false;
-		   			}
-		   		});
-		   		$.ajax({
-	   			    type: 'POST',
-	   			    url: 'deleteUserSearch',
-	   			    data: { 
-	   			        'id':id
-	   			    },
-	   			    success: function(data){
-	   			    	if(data.hasData){
-	   			         	DisplayContents(data.userSearchs);
-	   			        }else{
-	   			        	$(".error_common").text("検索条件を保存できるのは5件までです。");
-	   					     $(".mesage_error").css("display", "block");
-	   			        }
-	   			    }
-	   			});
-		   		
-		   	 })
+		   	 
 	   	}
 	   	
 	   	function setModalBody(freeText,owner,company,department,position,name,seq,parameterFlg){
@@ -1323,6 +1325,7 @@
 	   		$("#position").val(position);
 	   		$("#name").val(name);
 	   		$("#parameterFlg").val(parameterFlg);
+	   		$( "#parameterFlg" ).click();
 	   		return modal;
 	   	}
 	   	
