@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ecard.core.dao.CardInfoDAO;
 import com.ecard.core.dao.DataIndexDAO;
 import com.ecard.core.dao.OldCardDAO;
+import com.ecard.core.dao.UserInfoDAO;
 import com.ecard.core.model.AdminPossessionCard;
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.CompanyInfo;
@@ -28,12 +29,14 @@ import com.ecard.core.model.OldCardId;
 import com.ecard.core.model.PossessionCard;
 import com.ecard.core.model.PrusalHistory;
 import com.ecard.core.model.UserCardMemo;
+import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.enums.ActionTypeEnum;
 import com.ecard.core.model.enums.IndexTypeEnum;
 import com.ecard.core.model.enums.PropertyCodeEnum;
 import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.util.DataIndexUtil;
+import com.ecard.core.util.StringUtilsHelper;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
@@ -58,6 +61,9 @@ public class CardInfoServiceImpl implements CardInfoService {
         
     @Autowired
     DataIndexDAO dataIndexDAO;
+    
+    @Autowired
+    UserInfoDAO userInfoDAO;
 
     public List<CardInfo> listAllCardInfo(){
     	return cardInfoDAO.listAllCardInfo();
@@ -253,6 +259,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public void updateOldCardInfo (CardInfo cardInfo){
 		cardInfoDAO.updateOldCardInfo(cardInfo);
 	}
+	
+	public void updateCardInfoNotCreateIndex (CardInfo cardInfo){
+		cardInfoDAO.saveOrUpdate(cardInfo);
+	}
     
     public CardInfo importCardInfoFromCsv(CardInfo cardInfo){
     	/*String cardIndexNo=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Migration);
@@ -389,16 +399,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 			CardInfo card2=this.getCardInfoDetail(cardid2);
 			//detach object
 			
-			/*card2.setCardTags(null);
-			card2.setCardUpdateHistories(null);
-			card2.setAdminPossessionCards(null);
-			card2.setContactHistories(null);
-			card2.setOldCards(null);
-			card2.setPossessionCards(null);
-			card2.setPrusalHistories(null);
-			card2.setUserCardMemos(null);*/
-			
 			int ownerUserId=card2.getCardOwnerId();
+			String ownerName=card2.getCardOwnerName();
 			card1.setOldCardFlg(1);
 			this.updateCardInfoAdmin(card1);
 			if(ownerUserId!=currentUserId){
@@ -416,6 +418,9 @@ public class CardInfoServiceImpl implements CardInfoService {
 				oldcard.setId(oldCardId);
 			
 				oldCardDAO.saveOrUpdate(oldcard);
+				card2.setCardOwnerId(ownerUserId);
+				card2.setCardOwnerName(ownerName);
+				this.updateCardInfoNotCreateIndex(card2);
 				
 			}else{
 				OldCard oldcard=new OldCard();

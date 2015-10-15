@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author vinhla
  */
-public interface CardInfoDAO {
+public interface CardInfoDAO extends IGenericDao{
 	public List<CardInfo> listAllCardInfo();
 	
     public List<CardInfo> listCardRecent();
