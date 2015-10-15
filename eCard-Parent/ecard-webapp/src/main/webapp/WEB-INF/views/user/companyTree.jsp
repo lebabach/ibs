@@ -277,7 +277,7 @@ margin: 20px auto 30px auto;
 
 <div class="div-list">  
    	<div class="box-1">
-    	<div class="title-box-1">顧客組織ツリー</div>
+    	<div class="title-box-1">顧客組織一覧</div>
     	<div class="content-box-1">  
            <form class="form-cm" name="searchForm" id="searchForm" method="post">
                <div class="form-group col-md-11">
@@ -334,11 +334,19 @@ $(document).ready(function(){
 		}
 	});
 	
+	$(document).on('click','li.li-3 > a', function () {  
+    	window.location.href = "<c:url value='/user/companyTree/list' />?name="+this.id;
+    });
+	
 });
 
 $(window).load(function() {
+	if($("input[name=companyName]").val() == ""){
+		$.removeCookie('respHTML');
+	}
+	
 	if($.cookie('respHTML')){
-		console.log("onload :"+ $.cookie('respHTML'));
+		//console.log("onload :"+ $.cookie('respHTML'));
 		$(".show-list-s").html($.cookie('respHTML'));
 	}
 });
@@ -423,17 +431,18 @@ function searchCardInfo(deptName, compName, id){
     		xhr.setRequestHeader("Content-Type", "application/json");
     	},
     	success: function(response) {
-       		//console.log(JSON.stringify(response));
+       		console.log(JSON.stringify(response));
        		var respHTML = "<ul style='display: inline-block;' class='ul-3'>";
        		$.each(response, function(index, value){
-       			respHTML += "<li class='li-3' id='"+ value["cardId"] +"'><a href='<c:url value='/user/card/details/"+ value["cardId"] +"' />'>"+ value["name"] +"</a></li>";
+       			respHTML += "<li class='li-3' id='"+ value["cardId"] +"'><a href='#' id='"+ value["companyName"] +"'>"
+       						+ value["companyName"] +"("+ value["count"] +")</a></li>";
        		}); 
        		respHTML += "</ul>";
        		
        		$("#div_"+id).html(respHTML);
        		
        		$.cookie('respHTML', $(".show-list-s").html());
-       		console.log($.cookie("respHTML"));
+       		//console.log($.cookie("respHTML"));
     	},
     	error: function(xhr, status, error){
     		console.log("Error :"+ xhr.responseText);

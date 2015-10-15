@@ -131,7 +131,8 @@
                     <ul class="dropdown-menu notification dropdown-messages " style="padding:0;">
                         <li>
                             <div class="dropdown-messages-box">
-                                <p style="padding:10px 10px 0 10px;">アップデート</p>
+                                <span style="padding:10px 10px 0 10px;">お知らせ</span>
+                                <button class="btn btn-primary" style="margin-top:2px;margin-bottom:2px; margin-left: 137px; padding-top: 2px;padding-bottom: 2px" onclick="deleteAllNotify()">一括既読化</button>
                             </div>
                         </li>
                         <li>                  
@@ -249,6 +250,19 @@
           </div>
         </div>
 <script>
+function deleteAllNotify(){
+	$.ajax({
+	    type: 'POST',
+	    url: 'deleteAllNotify',
+	    data: { 
+	        'id':$(this).find("a").attr("onclick")
+	    },
+	    success: function(msg){
+	    	location.reload();
+	    }
+	});
+}
+
 $(document).ready(function() {
     $('#notification tr').click(function() {
         var href = $(this).find("a").attr("href");

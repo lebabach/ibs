@@ -370,6 +370,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName){
 		return cardInfoDAO.searchCardInfo(companyName, departmentName);
 	}
+	
+	public List<CardInfo> searchCardInfoByName(String name){
+		return cardInfoDAO.searchCardInfoByName(name);
+	}
 
 	@Override
 	public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId,int tagId,int limit,int offset) {

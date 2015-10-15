@@ -148,7 +148,10 @@ public interface CardInfoService {
    public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName);
    
    public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName);
-public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card);
+   
+   public List<CardInfo> searchCardInfoByName(String name);
+   
+   public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card);
    
    public boolean handleConnectCards(int cardid1,int cardid2, int currentUserId, String name);
    public BigInteger countListCardAllocationUser(int userId,int tagId);

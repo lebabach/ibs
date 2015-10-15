@@ -1361,7 +1361,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	}
 
 	public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName) {
-		String sqlStr = "SELECT c.card_id AS cardId, c.name AS name FROM card_info AS c WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 AND c.newest_card_flg = 1 "
+		String sqlStr = "SELECT c.name AS name, count(*) AS cnt, c.card_id AS cardId FROM card_info AS c WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 AND c.newest_card_flg = 1 "
 				+ "AND c.company_name = :companyName AND c.department_name = :departmentName";
 		Query query = getEntityManager().createNativeQuery(sqlStr);
 		query.setParameter("companyName", companyName);
@@ -1370,8 +1370,8 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		List<Object[]> listObj = query.getResultList();
 		List<com.ecard.core.vo.CardInfo> cardInfoList = new ArrayList<>();
 		for (Object[] object : listObj) {
-			com.ecard.core.vo.CardInfo cardInfoVo = new com.ecard.core.vo.CardInfo((Integer) object[0],
-					(String) object[1]);
+			com.ecard.core.vo.CardInfo cardInfoVo = new com.ecard.core.vo.CardInfo((String) object[0],
+					(BigInteger) object[1], (Integer) object[2]);
 			cardInfoList.add(cardInfoVo);
 		}
 
@@ -1455,5 +1455,12 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		query.setParameter("nameAssign", nameAssign);
 		query.setParameter("listCardUser", listCardUser);
 		return query.executeUpdate();
+	}
+	
+	public List<CardInfo> searchCardInfoByName(String name){
+		String sqlStr = "SELECT c FROM CardInfo c WHERE c.approvalStatus = 1 AND c.oldCardFlg = 0 AND c.deleteFlg = 0 AND c.newestCardFlg = 1 AND c.name = :name";
+		Query query = getEntityManager().createQuery(sqlStr);
+		query.setParameter("name", name);
+		return (List<CardInfo>)query.getResultList();
 	}
 }

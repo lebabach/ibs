@@ -143,9 +143,15 @@
     </definition>
     
     <definition name="companyTree" extends="base.pc.definition">   	
-        <put-attribute name="title" value="顧客組織ツリー" />
+        <put-attribute name="title" value="顧客組織一覧" />
         <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
         <put-attribute name="body" value="/WEB-INF/views/user/companyTree.jsp" />  
+    </definition>
+    
+    <definition name="listCardByName" extends="base.pc.definition">   	
+        <put-attribute name="title" value="顧客組織一覧" />
+        <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/user/listCardByName.jsp" />  
     </definition>
     
     <definition name="detailPC" extends="base.pc.definition">   	
@@ -191,7 +197,7 @@
     </definition>
     
     <definition name="overlapcards" extends="base.pc.definition">   	
-        <put-attribute name="title" value="名刺データ作成" />  
+        <put-attribute name="title" value="名刺の最新化（名寄せ）" />  
         <put-attribute name="body" value="/WEB-INF/views/user/overlap_cards.jsp" />  
     </definition>
     
