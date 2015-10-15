@@ -8,6 +8,8 @@ package com.ecard.core.service.impl;
 import com.ecard.core.dao.EmailDAO;
 import com.ecard.core.model.HistorySendEmail;
 import com.ecard.core.service.EmailService;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -104,19 +106,50 @@ public class EmailServiceImpl implements EmailService{
         this.mailSender.send(mimeMessage);
     }
     public void sendMailContact(final String mailFrom, final List<String> mailTo, final String subject, Context ctx, String htmlFile) throws MessagingException {
-    	final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
-        final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8"); // true = multipart
-        
-        message.setSubject(subject);
-        message.setFrom(mailFrom);
-        message.setBcc(mailTo.toArray(new String[mailTo.size()])); 
-        //message.setTo(mailTo.toArray(new String[mailTo.size()]));              
-        // Create the HTML body using Thymeleaf
-        final String htmlContent = this.templateEngine.process(htmlFile, ctx);
-        
-        message.setText(htmlContent, true); 
-        
-        this.mailSender.send(mimeMessage);
+    	if(mailTo.size() > 15){
+    		  int batchSize = 15; 
+			  int totalRecords = mailTo.size();
+			  int startIndex = 0;
+			  int lastIndex;
+		      if (batchSize > 1){
+		        // import data with batchSize record for one time
+		        for (int i = 0; i < ((float) totalRecords / batchSize); i++) {
+		          startIndex = i * batchSize;
+			        lastIndex = (i + 1) * batchSize;
+			        if (lastIndex > totalRecords) {
+			            lastIndex = totalRecords;
+			        }
+		        
+		           List<String> subList = mailTo.subList(startIndex, lastIndex);
+		           final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
+			        final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8"); // true = multipart
+			        message.setSubject(subject);
+			        message.setFrom(mailFrom);
+			        message.setBcc(subList.toArray(new String[subList.size()])); 
+			        //message.setTo(mailTo.toArray(new String[mailTo.size()]));              
+			        // Create the HTML body using Thymeleaf
+			        final String htmlContent = this.templateEngine.process(htmlFile, ctx);
+			        
+			        message.setText(htmlContent, true); 
+			        
+			        this.mailSender.send(mimeMessage);
+		        }
+		      }
+    	}else{
+	    	final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
+	        final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8"); // true = multipart
+	        
+	        message.setSubject(subject);
+	        message.setFrom(mailFrom);
+	        message.setBcc(mailTo.toArray(new String[mailTo.size()])); 
+	        //message.setTo(mailTo.toArray(new String[mailTo.size()]));              
+	        // Create the HTML body using Thymeleaf
+	        final String htmlContent = this.templateEngine.process(htmlFile, ctx);
+	        
+	        message.setText(htmlContent, true); 
+	        
+	        this.mailSender.send(mimeMessage);
+    	}
     }
 
     public List<HistorySendEmail> getAllEmail(){
