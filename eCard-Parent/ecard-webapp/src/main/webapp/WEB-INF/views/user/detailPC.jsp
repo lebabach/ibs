@@ -125,6 +125,10 @@ a {
 	width: 290px;
 	float: none;
 }
+
+.career_section{
+	padding: 0px;
+}
 </style>
 
 <c:if test="${not empty isExpried and isExpried == true}">
@@ -184,7 +188,7 @@ a {
 		<c:if test="${ isMyCard == true }">
 		<button id="addTag" class="btn btn-primary " type="button">
 			<i class="fa fa-tag"></i>
-		</button>
+		</button> <span style="font-weight: bold;"><fmt:message key="button.addTag" /></span>
 		</c:if>
 
 		<c:if test="${ isMyCard == true and sfManualLinkFlg == true}">
@@ -256,8 +260,8 @@ a {
 
 						<c:if test="${ isMyCard == true }">
 						<div class="div-pen div-pen-contact" style="float: right">
-							<a> <i class="fa fa-pencil"></i>
-							</a>
+							<span><fmt:message key="pen.contact" /></span>
+							<a> <i class="fa fa-pencil"></i></a>
 						</div>
 						</c:if>
 					</div>
@@ -469,12 +473,23 @@ a {
                        <button class="btn btn-sm btn-primary" type="submit">Save</button>
                        </div> -->
 				</div>
+				
+				<c:if test="${ fn:length(listCardMemo) gt 5 }">
+					<style type="text/css">
+						.panel-memo{
+							height : 500px;
+							overflow-y: auto;
+							overflow-x: hidden; 
+						}
+					</style>
+				</c:if>
+				
 				<c:if test="${ isMyCard == true }">
-				<div class="panel panel-default">
+				<div class="panel panel-default panel-memo">
 					<div class="panel-heading">
 						<h5>メモ</h5>
 					</div>
-					<style type="text/css">
+<style type="text/css">
 .ul-memo {
 	width: 100%;
 	display: inline-block;
@@ -534,6 +549,10 @@ a {
                                      else{
                                           var json = {"memo" : memo, "cardId" : $("input[name=cardId]").val()};
                                           addCardMemo(json);
+                                     }
+                                     //Show scrollbar
+                                     if($('.ul-memo li').length > 5){
+                                    	 $(".panel-memo").attr("style", "height:500px; overflow-x:hidden; overflow-y:auto;")
                                      }
                               });    
                              
@@ -702,6 +721,7 @@ a {
 						</div>
 						<c:if test="${ isMyCard == true }">
 						<div class="edit2" style="float: right">
+							<span><fmt:message key="pen.contact" /></span>
 							<a id="editPersonalInfo"> <i class="fa fa-pencil"></i>
 							</a>
 						</div>
@@ -1811,7 +1831,9 @@ label.error {
 	}
 	
 	function saveContactHistory(){
-		var json = {"cardId" : $("input[name=cardId]").val(), "contactDate" : $("#contactDate").val(), "contactMemo" : $("#contactMemo").val()};
+		var dateTime = new Date($("input[name=contactDate]").datepicker("getDate"));
+  		var strDateTime =  dateTime.getFullYear() + "-" + (dateTime.getMonth()+1) + "-" + dateTime.getDate();
+		var json = {"cardId" : $("input[name=cardId]").val(), "contactDate" : strDateTime, "contactMemo" : $("#contactMemo").val()};
 		$.ajax({
         	url: "<c:url value='/user/addContactHistory' />",
         	data: JSON.stringify(json),
