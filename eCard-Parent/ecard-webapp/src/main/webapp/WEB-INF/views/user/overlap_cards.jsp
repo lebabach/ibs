@@ -333,6 +333,10 @@
 td {
 	text-align: left;
 }
+
+.ch-color-link{
+    text-align: center;
+}
 </style>
 <script type="text/javascript">
 var dataTables;
@@ -347,8 +351,8 @@ function loadDataComplete() {
 
 function setConnectCard(cardId,email,name,companyName,addressFull,departmentName,positionName,telNumberCompany,owner,contactDate){
 	var modal=	'<tr id='+cardId+'>'
+	+'<td style="text-align: center;"><div class="iradio_square-green_combo"><input type="radio" class="i-checks" name="bla1" value='+cardId+'></div></td>'
 	+'<td>'+email+'</td>'
-	+'<td><div class="iradio_square-green_combo"><input type="radio" class="i-checks" name="bla1" value='+cardId+'></div></td>'
 	+'<td>'+name+'</td>'
 	+'<td>'+companyName+'</td>'
 	+'<td>'+addressFull+'</td>'
@@ -357,6 +361,17 @@ function setConnectCard(cardId,email,name,companyName,addressFull,departmentName
 	+'<td>'+telNumberCompany+'</td>'
 	+'<td style="text-align:right">'+contactDate+'</td>'
 	+'<td>'+owner+'</td>'
+	+'</tr>'
+	return modal;
+}
+
+function setNewConnectCard(cardId,email,name,companyName,addressFull,departmentName,positionName,telNumberCompany,owner,contactDate){
+	var modal=	'<tr id='+cardId+'>'
+	+'<td style="text-align: center;"><div class="iradio_square-green_combo"><input type="radio" class="i-checks" name="bla1" value='+cardId+'></div></td>'
+	+'<td>'+name+'<br><br>'+companyName+'<br>'+email+'</td>'
+	+'<td>'+addressFull+'<br><br>'+telNumberCompany+'</td>'
+	+'<td>'+positionName+'<br><br>'+departmentName+'</td>'
+	+'<td>'+contactDate+'<br><br>'+owner+'</td>'
 	+'</tr>'
 	return modal;
 }
@@ -391,7 +406,7 @@ $(document).ready(function() {
 			    success: function(cards){
 			    	$("#tbl-connect-cards >tbody").remove();
 			    	$.each( cards, function( key, data ) {
-			    		$("#tbl-connect-cards").append(setConnectCard(data.cardId,data.email,data.name,data.companyName,data.addressFull,data.departmentName,data.positionName,data.telNumberCompany,data.owner,data.contactDateString));	
+			    		$("#tbl-connect-cards").append(setNewConnectCard(data.cardId,data.email,data.name,data.companyName,data.addressFull,data.departmentName,data.positionName,data.telNumberCompany,data.owner,data.contactDateString));	
 			    	});
 			    	loadDataComplete();
 			    	return false;
@@ -450,20 +465,14 @@ $(document).ready(function() {
 			}
 		},
 		"columns": [
-			{"data": "email",
-				"createdCell": function (td, cellData, rowData, row, col) {
-				       $(td).html("<input type='hidden' class='groupCompanyId' value='"+rowData.groupCompanyId+"'/>"+"<input type='hidden' class='email' groupCompanyId ='"+rowData.groupCompanyId+"' value='"+rowData.email+"'/>"+ rowData.email );
-				       
-				}},
-
-			 { "data": "cardId",
+			{ "data": "cardId",
 				"className": "ch-color-link",
 				"createdCell": function (td, cellData, rowData, row, col) {
 					
 					$(td).html("<div class='iradio_square-green_combo' id='"+rowData.cardId+"'><input type='radio' class='i-checks' value='"+rowData.cardId+"' name='bla'></div>");
 				}
 			},
-			{ "data": "name",
+			/* { "data": "name",
 				"createdCell": function (td, cellData, rowData, row, col) {
 				       $(td).html("<input type='hidden' class='name' value='"+rowData.name+"'/>"+ rowData.name );
 				}},
@@ -471,24 +480,59 @@ $(document).ready(function() {
 				"createdCell": function (td, cellData, rowData, row, col) {
 				       $(td).html("<input type='hidden' class='companyName' value='"+rowData.companyName+"'/>"+ rowData.companyName );
 				}},
-			{ "data": "addressFull",
+			{"data": "email",
+				"createdCell": function (td, cellData, rowData, row, col) {
+				       $(td).html("<input type='hidden' class='groupCompanyId' value='"+rowData.groupCompanyId+"'/>"+"<input type='hidden' class='email' groupCompanyId ='"+rowData.groupCompanyId+"' value='"+rowData.email+"'/>"+ rowData.email );
+				       
+				}}, */
+			{ "data": "name",
+				"createdCell": function (td, cellData, rowData, row, col) {
+						var name= "<input type='hidden' class='name' value='"+rowData.name+"'/>"+ rowData.name +'<br><br>';
+						name+="<input type='hidden' class='companyName' value='"+rowData.companyName+"'/>"+ rowData.companyName+'<br>';
+						name+="<input type='hidden' class='groupCompanyId' value='"+rowData.groupCompanyId+"'/>"+"<input type='hidden' class='email' groupCompanyId ='"+rowData.groupCompanyId+"' value='"+rowData.email+"'/>"+ rowData.email;
+				       	$(td).html(name);
+				}},
+				
+				
+			/* { "data": "addressFull",
 				"createdCell": function (td, cellData, rowData, row, col) {
 				       $(td).html("<input type='hidden' class='addressFull' value='"+rowData.addressFull+"'/>"+ rowData.addressFull );
 				}},
 			{ "data": "departmentName",
 				"createdCell": function (td, cellData, rowData, row, col) {
 				       $(td).html("<input type='hidden' class='departmentName' value='"+rowData.departmentName+"'/>"+ rowData.departmentName );
-							}},
-			{ "data": "positionName",
+							}}, */
+			{ "data": "addressFull",
+				"createdCell": function (td, cellData, rowData, row, col) {
+						var address= "<input type='hidden' class='addressFull' value='"+rowData.addressFull+"'/>"+ rowData.addressFull +'<br><br>';
+						address+="<input type='hidden' class='telNumberCompany' value='"+rowData.telNumberCompany+"'/>"+ rowData.telNumberCompany;
+				      	$(td).html(address);
+				}},
+				
+			/* { "data": "positionName",
 				"createdCell": function (td, cellData, rowData, row, col) {
 				       $(td).html("<input type='hidden' class='positionName' value='"+rowData.positionName+"'/>"+ rowData.positionName );
 								}},
 			{ "data": "telNumberCompany",
 				"createdCell": function (td, cellData, rowData, row, col) {
 				       $(td).html("<input type='hidden' class='telNumberCompany' value='"+rowData.telNumberCompany+"'/>"+ rowData.telNumberCompany );
+			}}, */
+			
+			{ "data": "positionName",
+				"createdCell": function (td, cellData, rowData, row, col) {
+						var position = "<input type='hidden' class='departmentName' value='"+rowData.departmentName+"'/>"+ rowData.departmentName +'<br><br>';
+						position += "<input type='hidden' class='positionName' value='"+rowData.positionName+"'/>"+ rowData.positionName;
+		       			$(td).html(position);
 			}},
+				
 			{ "data": "contactDateString"},
 		],
+		"columnDefs": [
+		               { "width": "1px", "targets": 0 },
+		               { "width": "330px", "targets": 1 },
+		               { "width": "350px", "targets": 2 },
+		               { "width": "135px", "targets": 3 }
+		             ],
 	});
 	
 	$("#btnSearch").click(function(){
@@ -502,7 +546,7 @@ $(document).ready(function() {
 
 <div class="div-list">
 	<div class="box-1" style="width: 1200px;">
-		<div class="title-box-1">繋がった名刺検索</div>
+		<div class="title-box-1">名刺の最新化（名寄せ）</div>
 		<div class="content-box-1" style="padding: 0">
 
 			<div class="row bg-white box-shadow  padding-top-bottom"
@@ -516,7 +560,7 @@ $(document).ready(function() {
 								<thead>
 									<tr>
 										<td colspan="2"
-											style="background-color: #fff; padding-left: 0;">履歴となる名刺検索</td>
+											style="background-color: #fff; padding-left: 31px;">最新化したい自分の名刺を検索</td>
 										<td colspan="9"
 											style="background-color: #fff; padding-left: 0; text-align: right;">
 										
@@ -527,14 +571,21 @@ $(document).ready(function() {
 										</td>
 									</tr> 
 									<tr>
-										<th><fmt:message key='overlap.cards.table1.email' /></th>
 										<th></th>
-										<th><fmt:message key='overlap.cards.table1.name' /></th>
+										<%-- <th><fmt:message key='overlap.cards.table1.name' /></th>
 										<th><fmt:message key='overlap.cards.table1.company' /></th>
+										<th><fmt:message key='overlap.cards.table1.email' /></th> 
 										<th><fmt:message key='overlap.cards.table1.address' /></th>
 										<th><fmt:message key='overlap.cards.table1.department' /></th>
 										<th><fmt:message key='overlap.cards.table1.position' /></th>
-										<th><fmt:message key='overlap.cards.table1.TEL' /></th>
+										<th><fmt:message key='overlap.cards.table1.TEL' /></th>--%>
+										
+										<th>最新化したい自分の名刺を１枚選択 <br>※最新化後は、履歴として保存されます。</th>
+										<th><fmt:message key='overlap.cards.table1.address' /> <br><fmt:message key='overlap.cards.table1.TEL' /></th>
+										<th><fmt:message key='overlap.cards.table1.department' /> <br><fmt:message key='overlap.cards.table1.position' /></th>
+										
+										
+										
 										<th><fmt:message key='overlap.cards.table1.exchanges' /></th>
 									</tr>
 								</thead>
@@ -553,8 +604,8 @@ $(document).ready(function() {
 								<thead>
 
 									<tr>
-										<th><fmt:message key='overlap.cards.table1.email' /></th>
-										<th></th>
+										<th style="width: 1px; text-align: center"></th>
+										<%-- <th><fmt:message key='overlap.cards.table1.email' /></th>
 										<th><fmt:message key='overlap.cards.table1.name' /></th>
 										<th><fmt:message key='overlap.cards.table1.company' /></th>
 										<th><fmt:message key='overlap.cards.table1.address' /></th>
@@ -562,7 +613,12 @@ $(document).ready(function() {
 										<th><fmt:message key='overlap.cards.table1.position' /></th>
 										<th><fmt:message key='overlap.cards.table1.TEL' /></th>
 										<th><fmt:message key='overlap.cards.table1.exchanges' /></th>
-										<th><fmt:message key='overlap.cards.table1.owner' /></th>
+										<th><fmt:message key='overlap.cards.table1.owner' /></th> --%>
+										
+										<th style="width: 378px">上記の名刺を最新化する名刺を１枚選択</th>
+										<th style="width: 380px"><fmt:message key='overlap.cards.table1.address' /> <br><fmt:message key='overlap.cards.table1.TEL' /></th>
+										<th style="width: 173px"><fmt:message key='overlap.cards.table1.department' /> <br><fmt:message key='overlap.cards.table1.position' /></th>
+										<th><fmt:message key='overlap.cards.table1.exchanges' /><br>名刺所有者</th>
 									</tr>
 								</thead>
 							</table>
@@ -571,7 +627,7 @@ $(document).ready(function() {
 				</div>
 				<div>
 					<button type="submit" class="btn btn-primary"
-						style="width: 150px !important">履歴として統合する</button>
+						style="width: 345px !important">自分の名刺を選択した名刺の情報で最新化する</button>
 				</div>
 			</div>
 		</div>

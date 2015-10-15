@@ -197,7 +197,7 @@
     </definition>
     
     <definition name="overlapcards" extends="base.pc.definition">   	
-        <put-attribute name="title" value="名刺データ作成" />  
+        <put-attribute name="title" value="名刺の最新化（名寄せ）" />  
         <put-attribute name="body" value="/WEB-INF/views/user/overlap_cards.jsp" />  
     </definition>
     

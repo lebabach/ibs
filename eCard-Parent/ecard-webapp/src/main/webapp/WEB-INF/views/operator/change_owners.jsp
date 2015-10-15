@@ -224,7 +224,7 @@ $(document).ready(function() {
 					 var str = "";
 					 $('.content_user').html(" ");
 			            $.each(response.data, function(i, item) {
-			            	$('.content_user').append($('<tr id="rowData" class="tr1">').append(
+			            	$('.content_user').append($('<tr  class="tr1">').append(
 			            			    $('<td>').append(
 			            			    		$('<div class="i-checks">').append(
 			            			    				' <input type="radio" name = "bla" value="'+item.userId+'"  style="position: absolute; opacity: 0;">'
@@ -423,7 +423,7 @@ $(document).ready(function() {
                                 </thead>
                                 <tbody class="content_user">
 		                                <c:forEach var="userInfo" items="${lstUserInfo}">
-			                                <tr id="rowData">
+			                                <tr id="">
 			                                    <td><div class="i-checks"><input type="radio" name = "bla" value="<c:out value="${userInfo.userId}" />" style="position: absolute; opacity: 0;"></div></td>
 			                                    <td><c:out value="${userInfo.lastName}" />　<c:out value="${userInfo.firstName}" /></td>
 			                                    <td><c:out value="${userInfo.companyName}" /></td>
