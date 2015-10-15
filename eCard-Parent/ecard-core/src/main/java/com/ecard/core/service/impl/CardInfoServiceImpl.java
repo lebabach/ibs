@@ -511,4 +511,11 @@ public class CardInfoServiceImpl implements CardInfoService {
 	     newcard.setDateEditting(card.getDateEditting());
 	     return newcard;
 	}
+
+	@Override
+	public Integer updateUserCard(List<Integer> listCardUser, Integer userLeave, Integer userAssign,
+			String nameAssign) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.updateUserCard(listCardUser,userLeave,userAssign,nameAssign);
+	}
 }

@@ -1438,30 +1438,21 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		query.setParameter("userId", userId);
 		List<Object[]> lstCardTag = query.getResultList();
 		List<TagUser> lstTag = new ArrayList<>();
-		List<TagUser> lstTagAppend = new ArrayList<>();
 		for (Object[] obj : lstCardTag) {
 			TagUser tag = new TagUser((Integer)obj[0],(String) obj[1]);
 			lstTag.add(tag);
-		}
-		
-		/*boolean checkDuplicate = false;
-		if(lstTag.size() > 0){
-			for(int i = 0; i< lstTag.size(); i++){
-				for(int j = i+1;j < lstTag.size();j++){
-					if(lstTag.get(i).getCardId().intValue() == lstTag.get(j).getCardId().intValue()){
-						String str = lstTag.get(i).getTagName() + "," + lstTag.get(j).getTagName();
-						TagUser tagAppend = new TagUser(lstTag.get(i).getCardId(),str);
-						lstTagAppend.add(tagAppend);
-						checkDuplicate = true;
-					}
-				}
-				if(checkDuplicate == false){
-					TagUser tagAppend = new TagUser(lstTag.get(i).getCardId(),lstTag.get(i).getTagName());
-					lstTagAppend.add(tagAppend);
-				}
-			}
-		}*/
-		
+		}		
 		return lstTag;
+	}
+
+	@Override
+	public Integer updateUserCard(List<Integer> listCardUser, Integer userLeave, Integer userAssign,
+			String nameAssign) {
+		String sql = "UPDATE card_info c SET  c.card_owner_id = :userAssign,c.card_owner_name= :nameAssign  WHERE  c.card_id IN (:listCardUser)";
+		Query query = getEntityManager().createNativeQuery(sql);
+		query.setParameter("userAssign", userAssign);
+		query.setParameter("nameAssign", nameAssign);
+		query.setParameter("listCardUser", listCardUser);
+		return query.executeUpdate();
 	}
 }
