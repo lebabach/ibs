@@ -18,7 +18,7 @@
     margin-bottom: 0;
   }
   .clearfix{
-    margin-bottom: 4px;
+    margin-bottom: 10px;
   }
 
   .clearfix a.active{
@@ -123,17 +123,15 @@
 </style>
 <!-- START HEADER -->
 <div class="" style="border: solid 1px #f3f3f4;background: #e3e3e3;">
-      <div class="row clearfix">
-        
-          <div class="col-md-2" style="width: 150px; display:inline-block">
+      <div class="row clearfix">        
+          <div class="col-md-2 " style="width: 150px; display:inline-block">
             <div class="form-group">
                 <div class="icon-addon addon-md">
                     <!-- <form name="myform">  -->
-						<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-example">検索画面</button>
+						<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-example">自分の名刺を検索</button>
                                 <!-- modal -->
                                 <div class="modal" id="modal-example" tabindex="-1">
-                                    <div class="modal-dialog">
-                                        
+                                    <div class="modal-dialog">                                        
                                         <!-- modal content -->
                                         <style type="text/css">
                                             .modal-content-new{
@@ -254,36 +252,167 @@
             </div>
             
           </div>
-          <div class="col-md-2 m-b-xs setDisplayTerm" style="width:188px; display:inline-block">
+		  <div class="col-md-2 col-md-offset-1" style="width: 150px; display:inline-block">
+            <div class="form-group">
+                <div class="icon-addon addon-md">                    
+						<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-example">グループ名刺を検索</button>
+                                <!-- modal -->
+                                <div class="modal" id="modal-example" tabindex="-1">
+                                    <div class="modal-dialog">                                        
+                                        <!-- modal content -->
+                                        <style type="text/css">
+                                            .modal-content-new{
+                                                background-clip: padding-box;
+                                                background-color: #FFFFFF;
+                                                border: 1px solid rgba(0, 0, 0, 0);
+                                                border-radius: 4px;
+                                                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+                                                outline: 0 none;
+                                                position: relative;
+                                                margin-top: 180px;
+                                            }
+                                        .list-new-n{
+                                            display: table;
+                                            width: 100%;
+                                            margin: 0;
+                                            padding: 0;
+                                        }
+                                        .checkbox-new{
+                                            display: table-cell;
+                                            vertical-align: middle;
+                                            width: 50px;
+                                        }
+                                        .list-contetn{
+                                            display: table-cell;
+                                            vertical-align: middle;
+                                            text-align: left;
+                                        }
+                                        .list-contetn p{
+                                            display: block;
+                                            width: auto;
+                                            
+                                        }
+                                        .a-new-n{
+                                            background:#dc0069;
+                                            display: inline-block;
+                                            border:none;
+                                        }
+                                        </style>
+                                        
+                                        
+                                        <div class="modal-content-new" style="display:none">
+                                            <div class="modal-header" id="lsUserSearchs">
+                                                <a class="close" id="close-x">
+                                                    <span aria-hidden="true">×</span>
+                                                </a>
+                                                
+                                                <h4 class="modal-title" id="modal-label">検索条件管理</h4>
+                                            </div>
+                                            <div class="modal-footer" style="width: 100%;
+                                                display: inline-block;
+                                                margin: 0 auto;
+                                                text-align: center;">
+                                                
+                                                <a id="btn-success2" class="btn btn-success a-new-n">選択した検索条件を使用する</a>
+                                                
+                                                <a id="btn-success3" class="btn btn-success a-new-n">選択した検索条件を削除</a>
+                                            </div>
+                                        </div>
+                                        <div class="modal-content">
+                                            <!-- modal header -->
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                <h4 class="modal-title" id="modal-label">検索条件を入力してください</h4>
+                                            </div>
+                                            <!-- modal body -->
+                                            <div class="modal-body">
+                                                <label for="parameterFlg">検索対象</label>
+                                                <select class="form-control" id="parameterFlg" name="parameterFlg">
+                                                    <option value="0">自分の名刺</option>
+                                                    <option value="1">グループネットワーク</option>
+                                                </select>
+                                                <div class="form-group">
+                                                    <label for="freeText">フリーワード</label>
+                                                    <input type="email" class="form-control" name="freeText" id="freeText" placeholder="会社名・氏名・emailを入力 * and * でAND検索">
+                                                        </div>
+                                                <h4 class="modal-title" id="modal-label">必要に応じて入力してください</h4>
+                                                <div class="form-group" style="display:none">
+                                                    <label for="owner">所有者</label>
+                                                    <input type="email" class="form-control" name="owner" id="owner" placeholder="">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="company">会社名</label>
+                                                    <input type="email" class="form-control" name="company" id="company" placeholder="">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="department">部署</label>
+                                                    <input type="email" class="form-control" name="department" id="department" placeholder="">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="position">役職</label>
+                                                    <input type="email" class="form-control" name="position" id="position" placeholder="">
+                                                        </div>
+                                                <div class="form-group">
+                                                    <label for="name">氏名</label>
+                                                    <input type="email" class="form-control" name="name" id="name" placeholder="">
+                                                    <p class="mesage_error error_common">121121</p>
+                                                        </div>
+                                            </div>
+                                            <!-- modal footer -->
+                                            <div class="modal-footer">
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-primary btn-lg">検索</button>
+                                                </div>
+                                                <a id="btn-success" class="btn btn-success" >保存済みの検索条件を呼び出す</a>
+                                                <button type="button" class="btn btn-info">検索条件を保存する</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                </div>
+            
+            </div>
+            
+          </div>
+
+      </div>
+
+	      
+</div>
+  
+  <!--  End Header -->
+
+  <!-- Start Container -->
+  <div id="container" class="container" style= "padding-top: 20px !important;" >
+  	<h4>名刺一覧</h4>
+  	<div class="row " style="margin-bottom: 10px">
+          <div class="col-md-2 m-b-xs setDisplayTerm" style="width:140px;padding-right: 0 !important;">
             <select id="selectSortBox" class="input-sm form-control input-s-sm inline">
               <option value="0" selected>すべて</option>
+              <option value="1" >最近取り込んだ名刺</option>
+              <option value="2" >最近見た名刺</option>
+              <option value="3" >データ入力待ち</option>
+            </select>
+          </div>
+          
+          <div class="col-md-2 m-b-xs setDisplayTerm" style="width:140px;padding-left: 5px !important;">
+            <select id="selectTagBox" class="input-sm form-control input-s-sm inline">
+              <option value="0" selected>タグ一覧から</option>
               <c:forEach var="cardTag" items="${listTagGroup}">
               	<option value="${cardTag.tagId}"><c:out value="${cardTag.tagName}"/></option>
               </c:forEach>
                                         
             </select>
-          </div>
-         
-          <div class="col-md-2 setDisplayTerm" style="float:right; margin-right:0;">
-              <select class="input-sm form-control input-s-sm inline" id = "sort-card-cnd" >
-                <option value="5" selected>名刺交換日順</option>
-                <option value="1">氏名順</option>
-                <option value="2">会社名順</option>                          
-            </select>
-          </div>    
-          <div class="col-md-2 m-b-xs setDisplayTerm" style="float:right; width:155px; margin-right:0">
-            <!--<img src="img/img-p-c-1.png" class="img-p-c-1" style="float:left; margin-top:-3px;">-->
+          </div>         
+          
+          <div class="col-md-3 m-b-xs setDisplayTerm" style="width:200px; padding-left: 10px !important;padding-right: 0px !important;">            
             <div class="btn-group" role="group" aria-label="..." style="float:right;">
-              <button id="addTag" class="btn btn-primary disabled" type="button">                  
+              <button id="addTag" class="btn btn-primary disabled" type="button" style="height: 30px !important;text-align: center;padding-top: 3px;">選択名刺に一括タグ付け             
                 <i class="fa fa-tag"></i>               
               </button>
               <div class="balloon lbl_balloon" style="display: none;">
-                <!--<div class="lbl_srh">
-                  <dl class="srhbox_round">
-                    <dt><a class="search_tag_index_btn" href="javascript: void(0);"></a><i class="fa fa-search"></i></dt>
-                    <dd><span class="iptxt"><input type="text" class="search_tag_index" value="" style="color: rgb(171, 171, 171);"></span></dd>
-                  </dl>
-                </div>-->
                 <div class="">
                   <div class="col-sm-12" style="border-bottom: solid 1px #c1c1c1;overflow-y: auto; max-height: 280px;">
                     <table class="table tagNameTable" id="paging" >
@@ -316,21 +445,28 @@
                       </span>
                   </div>
                 </div>
-              </div>               
-              <button id="deletePeople" class="btn btn-primary disabled" type="button">
-                <i class="fa fa-trash"></i></button>
+              </div>                             
             </div>
             
+          </div>    
+          
+          <div class="col-md-3 m-b-xs setDisplayTerm" style="width:200px;padding-left : 5px !important;">            
+            <div class="btn-group" role="group" aria-label="..." style="float:right;">           
+              <button id="deletePeople" class="btn btn-primary disabled" type="button" style="height: 30px !important;text-align: center;padding-top: 3px;">選択名刺を一括削除
+                <i class="fa fa-trash"></i></button>
+            </div>            
           </div>
-              
-     
-      </div>
-    </div>
-  
-  <!--  End Header -->
-
-  <!-- Start Container -->
-  <div id="container" class="container" style= "padding-top: 20px !important;" >
+          
+          <div class="col-md-2 setDisplayTerm" style="max-width:120px;padding-left : 5px !important;">
+              <select class="input-sm form-control input-s-sm inline" id = "sort-card-cnd" >
+                <option value="5" selected>交換月順</option>
+                <option value="1">氏名順</option>
+                <option value="2">会社名順</option>                          
+            </select>
+          </div>
+          
+          
+	  </div>
     <div class="business_card_book">
     <!-- for here  -->
     <c:choose>
