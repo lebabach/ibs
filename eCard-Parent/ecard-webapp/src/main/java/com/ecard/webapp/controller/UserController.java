@@ -1350,7 +1350,7 @@ public class UserController {
 		List<SearchInfo> listSearchInfo = searchInfoService.listSearchText(ecardUser.getUserId());
 		ObjectListSearchUsers obj = new ObjectListSearchUsers();
 		obj.setUserSearchs(listSearchInfo);
-		obj.setHasData(listSearchInfo.size() > 0 ? true : false);
+		obj.setHasData(listSearchInfo.size() >= 0 ? true : false);
 		return obj;
 	}
 
