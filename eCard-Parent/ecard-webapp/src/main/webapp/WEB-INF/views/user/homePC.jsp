@@ -729,7 +729,7 @@
 								+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 								+   '<input class="hidden" name="fileImageName" value="'+v.imageFile+'">'
 								+	'</div> </div> </div> </div>');
-			 					//getImageFromSCP(v.imageFile);
+			 					getImageFromSCP(v.imageFile);
 					});
 					
 				}).fail(function(xhr, status, err) {
