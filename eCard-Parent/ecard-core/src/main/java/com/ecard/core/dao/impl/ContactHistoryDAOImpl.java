@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.ecard.core.dao.ContactHistoryDAO;
 import com.ecard.core.model.ContactHistory;
-import com.ecard.core.model.ContactHistoryId;
 
 /**
 *
@@ -39,10 +38,9 @@ public class ContactHistoryDAOImpl extends GenericDao implements ContactHistoryD
         return result;
 	}
 	
-	public int deleteContactHistory(ContactHistoryId contactHistoryId){
-		Query query = getEntityManager().createQuery("DELETE FROM ContactHistory ct WHERE ct.id.cardId = :cardId AND ct.id.userId = :userId");
-		query.setParameter("cardId", contactHistoryId.getCardId());
-		query.setParameter("userId", contactHistoryId.getUserId());
+	public int deleteContactHistory(Integer contactHistoryId){
+		Query query = getEntityManager().createQuery("DELETE FROM ContactHistory ct WHERE ct.contactHistoryId = :contactHistoryId");
+		query.setParameter("contactHistoryId", contactHistoryId);
 		
 		return query.executeUpdate();
 	}

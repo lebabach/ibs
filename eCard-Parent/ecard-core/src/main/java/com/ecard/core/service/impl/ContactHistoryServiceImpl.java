@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ecard.core.dao.ContactHistoryDAO;
 import com.ecard.core.model.ContactHistory;
-import com.ecard.core.model.ContactHistoryId;
 import com.ecard.core.service.ContactHistoryService;
 
 @Service("contactHistoryService")
@@ -26,7 +25,7 @@ public class ContactHistoryServiceImpl implements ContactHistoryService {
 		return contactHistoryDAO.getListContactHistoryById(cardId);
 	}
 	
-	public int deleteContactHistory(ContactHistoryId contactHistoryId){
+	public int deleteContactHistory(Integer contactHistoryId){
 		return contactHistoryDAO.deleteContactHistory(contactHistoryId);
 	}
 }
