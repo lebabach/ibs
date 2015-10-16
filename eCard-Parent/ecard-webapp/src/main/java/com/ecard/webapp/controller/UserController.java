@@ -1703,22 +1703,15 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "companyTree/list")
-	public ModelAndView listCardByName(@RequestParam String name, HttpServletRequest request) {
+	public ModelAndView listCardByName(@RequestParam String compName, @RequestParam String deptName, HttpServletRequest request) {
 		logger.debug("listCardByName", UserController.class);
 
 		ModelAndView modelAndView = new ModelAndView();
 		try{
-			List<CardInfo> cardList = cardInfoService.searchCardInfoByName(name);
-			
-			String fileNameFromSCP = "";
+			List<CardInfo> cardList = cardInfoService.searchCardInfoByName(compName, deptName);
 			
 			if(cardList.size() > 0){
-				for(CardInfo cardInfo : cardList){
-					fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser,
-							scpPassword, Integer.parseInt(scpPort));
-				}
 				modelAndView.addObject("cardInfoList", cardList);
-				modelAndView.addObject("imageFile", cardList);
 			}
 		}
 		catch(Exception ex){
