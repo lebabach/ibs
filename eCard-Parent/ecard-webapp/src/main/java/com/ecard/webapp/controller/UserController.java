@@ -1543,10 +1543,9 @@ public class UserController {
 				ownerCard.setDepartmentName(item.getDepartmentName());
 				ownerCard.setEmail(item.getEmail());
 				ownerCard.setName(item.getName());
-				;
 				ownerCard.setPositionName(item.getPositionName());
 				ownerCard.setTelNumberCompany(item.getTelNumberCompany());
-				user = users.stream().filter(x -> x.getUserId() == item.getCardOwnerId()).findFirst().get();
+				user = users.stream().filter(x -> x.getUserId().intValue() == item.getCardOwnerId().intValue()).findFirst().get();
 				ownerCard.setOwner(
 						StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
 				ownerCard.setContactDateString(
