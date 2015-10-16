@@ -612,7 +612,8 @@
  					 contentType: 'application/json',
  					 mimeType: 'application/json',
  					data:JSON.stringify({"listCardId":listCardId}) 
- 				}).done(function(resp, status, xhr) { 					
+ 				}).done(function(resp, status, xhr) {
+ 					i = 0;
  					if(resp != 0){
  						$(".list-group-item .checked").closest('.list-group-item').each(function(){
  						$(this).removeClass("checked")
@@ -634,7 +635,7 @@
     	   
        });
        var i = 0;
-     $(document).on('click', '.list-group-item .icheckbox_square-green', function(e) {
+     $(document).on('click', '.business_card_book .list-group-item .icheckbox_square-green', function(e) {
    	  	if($(this).attr("class").indexOf("checked") == -1){
    	  		$(this).removeClass('icheckbox_square-green');
    	  		 $(this).removeClass("icheckbox_square-green hover");
