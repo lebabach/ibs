@@ -250,16 +250,15 @@ public class UserController {
 		String valueSearch = request.getParameter("page");		
 		DataPagingJsonVO<CardInfoPCVo> dataTableResponse = new DataPagingJsonVO<CardInfoPCVo>();
 		List<CardInfoPCVo> cardInfoSearchResponses = new ArrayList<CardInfoPCVo>();
-		List<String> lstNameSort = null;
-		List<CardInfo> listCardSortNameCompany = null;
+		List<String> lstNameSort = null;		
 		List<CardInfoUserVo> lstCardInfo = null;
 		
 		// Search all
 		// 
 		if(searchType == 0) {
 			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), typeSort);
-			if(valueSearch == "" || valueSearch == null){
-				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).substring(0,1));
+			if(valueSearch == "" || valueSearch == null){				
+				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0));
 			} else {
 				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, valueSearch);
 			}
@@ -270,94 +269,33 @@ public class UserController {
 			}
 			
 		}
-		/*if (searchType == 0) {
-			if (typeSort == SearchConditions.CONTACT.getValue()) {
-				lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
-				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), "10/2015");
-			} else if (typeSort == SearchConditions.NAME.getValue()) {
-				listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(), null, SearchConditions.NAME.name().toLowerCase(), 0);
-				lstCardInfo = new ArrayList<>();
-				lstNameSort = new ArrayList<>();
-				for (CardInfo cardInfoModel : listCardSortNameCompany) {
-					if (!cardInfoModel.getNameKana().equals("")) {
-						sortType = cardInfoModel.getNameKana().substring(0, 1);
-					}
-					lstNameSort.add(sortType.toUpperCase());
-					CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
-					lstCardInfo.add(cardInfoUserVo);
-
-				}
-			} else {
-				listCardSortNameCompany = cardInfoService.getListPossesionCard(ecardUser.getUserId(), null, SearchConditions.COMPANY.name().toLowerCase(), 0);
-				lstCardInfo = new ArrayList<>();
-				lstNameSort = new ArrayList<>();
-				for (CardInfo cardInfoModel : listCardSortNameCompany) {
-					if (!cardInfoModel.getCompanyNameKana().equals("")) {
-						sortType = cardInfoModel.getCompanyNameKana().substring(0, 1);
-					}
-					lstNameSort.add(sortType.toUpperCase());
-					CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
-					lstCardInfo.add(cardInfoUserVo);
-
-				}
-			}
-
-		} else {			
-			if (typeSort == SearchConditions.CONTACT.getValue()) {
-				lstCardInfo = cardInfoService.getListPossessionCardByTag(ecardUser.getUserId(), searchType, 0);
-				lstNameSort = cardInfoService.getListSortTypeByTag(ecardUser.getUserId(), searchType);
-				// lstCardInfo =
-				// cardInfoService.getListPossesionCard(ecardUser.getUserId(),
-				// limit);
-			} else if (typeSort == SearchConditions.NAME.getValue()) {
-				listCardSortNameCompany = cardInfoService.getListPossessionCardByTag(ecardUser.getUserId(), searchType,
-						SearchConditions.NAME.name().toLowerCase(), 0);
-				lstCardInfo = new ArrayList<>();
-				lstNameSort = new ArrayList<>();
-				for (CardInfo cardInfoModel : listCardSortNameCompany) {
-					if (!cardInfoModel.getNameKana().equals("")) {
-						sortType = cardInfoModel.getNameKana().substring(0, 1);
-					}
-					lstNameSort.add(sortType.toUpperCase());
-					CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
-					lstCardInfo.add(cardInfoUserVo);
-				}
-			} else {
-				listCardSortNameCompany = cardInfoService.getListPossessionCardByTag(ecardUser.getUserId(), searchType,
-						SearchConditions.COMPANY.name().toLowerCase(), 0);
-				lstCardInfo = new ArrayList<>();
-				lstNameSort = new ArrayList<>();
-				for (CardInfo cardInfoModel : listCardSortNameCompany) {
-					if (!cardInfoModel.getCompanyNameKana().equals("")) {
-						sortType = cardInfoModel.getCompanyNameKana().substring(0, 1);
-					}
-					lstNameSort.add(sortType.toUpperCase());
-					CardInfoUserVo cardInfoUserVo = new CardInfoUserVo(sortType.toUpperCase(), cardInfoModel);
-					lstCardInfo.add(cardInfoUserVo);
-				}
-			}
-		}*/
-/*		if (typeSort == SearchConditions.NAME.getValue() || typeSort == SearchConditions.COMPANY.getValue() || typeSort == SearchConditions.TAG.getValue()) {
-			lstNameSort = lstNameSort.stream().distinct().sorted().collect(Collectors.toList());
-		}*/
+		
+		
 		for (String nameSort : lstNameSort) {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
 			for (CardInfoUserVo cardInfo : lstCardInfo) {
-				//if (nameSort.trim().equals(cardInfo.getSortType().trim())) {
-					cardInfoDisp.add(cardInfo.getCardInfo());
-				//}
+				if(typeSort == SearchConditions.NAME.getValue()){
+					if (nameSort.equals(cardInfo.getSortType().toUpperCase().substring(0,1))) {
+						cardInfoDisp.add(cardInfo.getCardInfo());
+					}
+				} else {
+					if (nameSort.equals(cardInfo.getSortType())) {
+						cardInfoDisp.add(cardInfo.getCardInfo());
+					}
+				}
+				
 			}
 			CardInfoPCVo cardInfoPCVo;
 			try {
-				if (cardInfoDisp.size() > 0) {
+//				if (cardInfoDisp.size() > 0) {
 					cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp));
 					cardInfoSearchResponses.add(cardInfoPCVo);
-				}
+//				}
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
-			}
+			}	
 		}
 
 		dataTableResponse.setData(cardInfoSearchResponses);
@@ -677,10 +615,8 @@ public class UserController {
 
 		List<com.ecard.core.vo.ContactHistory> contactHistoryList = null;
 		try {
-			int rs = contactHistoryService.deleteContactHistory(contactHistory.getContactHistoryId());
-			if (rs > 0) {
-				contactHistoryList = contactHistoryService.getListContactHistoryById(contactHistory.getCardInfo().getCardId());
-			}
+			contactHistoryService.deleteContactHistory(contactHistory.getContactHistoryId());
+			contactHistoryList = contactHistoryService.getListContactHistoryById(contactHistory.getCardInfo().getCardId());
 		} catch (Exception ex) {
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
