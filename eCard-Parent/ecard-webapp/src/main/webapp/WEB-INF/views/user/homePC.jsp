@@ -663,6 +663,7 @@
         	 $("#sort_cnd").show();
         	 $("#bulk_tag").show();
         	 $("#deleteTag").show();
+        	 $("#sort-card-cnd").trigger("change");
          }else if(parseInt(typeSort) == 1){
         	 $("#sort_cnd").hide();
         	 $("#bulk_tag").show();
@@ -813,13 +814,13 @@
 					    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 					    					+	'</div> </div> </div> </div>';				    		 
 		    			    
-		    					 
+					    		/* listGroup.append(listGroupItem);			  */
 								 isLoading++;
 								 reloadICheck();
 								 getImageFromSCP(v.imageFile);
 						 });
-						 listGroup.append(listGroupItem);
-						 /* $('.business_card_book').find("#"+value.nameSort.replace("/","").trim()).append(listGroupItem); */
+						 
+						 $('.business_card_book').find("#"+value.nameSort.replace("/","").trim()).append(listGroupItem); 
 					 } else {
 						 if(value.nameSort.replace("/","").trim()==""){
 								value.nameSort="NULL";
