@@ -212,12 +212,12 @@ public class UserController {
 		List<String> lstNameSort = new ArrayList<>();
 		if (ecardUser != null) {
 			// Get listNameSort [2015/10,2015/11, .... ]
-			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
+			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), SearchConditions.CONTACT.getValue());
 			
 			listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId());
 			listTagGroup = getCardTag();
 			
-				List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), lstNameSort.get(0));
+				List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.CONTACT.getValue() ,lstNameSort.get(0));
 				List<CardInfo> cardInfoDisp = new ArrayList<>();
 				for (CardInfoUserVo cardInfo : lstCardInfo) {
 					if (lstNameSort.get(0).trim().equals(cardInfo.getSortType().trim())) {
@@ -259,7 +259,7 @@ public class UserController {
 //		int limit = parseIntParameter(request.getParameter("page"), 0);
 		int searchType = parseIntParameter(request.getParameter("typeSearch"), 0);
 		int typeSort = parseIntParameter(request.getParameter("typeSort"), 0);
-		String valueSearch = request.getParameter("page");
+		String valueSearch = request.getParameter("page");		
 		DataPagingJsonVO<CardInfoPCVo> dataTableResponse = new DataPagingJsonVO<CardInfoPCVo>();
 		List<CardInfoPCVo> cardInfoSearchResponses = new ArrayList<CardInfoPCVo>();
 		List<String> lstNameSort = null;
@@ -268,11 +268,19 @@ public class UserController {
 		
 		// Search all
 		// 
-		if(searchType == 0){
-			if (typeSort == SearchConditions.CONTACT.getValue()) {
-				lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId());
-				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), valueSearch);				
+		if(searchType == 0) {
+			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), typeSort);
+			if(valueSearch == "" || valueSearch == null){
+				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).substring(0,1));
+			} else {
+				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, valueSearch);
 			}
+			
+			
+			if (typeSort == SearchConditions.NAME.getValue()) {
+				lstNameSort = lstNameSort.stream().map(str->str.substring(0, 1).toUpperCase()).collect(Collectors.toList());
+			}
+			
 		}
 		/*if (searchType == 0) {
 			if (typeSort == SearchConditions.CONTACT.getValue()) {
@@ -341,15 +349,15 @@ public class UserController {
 				}
 			}
 		}*/
-		if (typeSort == SearchConditions.NAME.getValue() || typeSort == SearchConditions.COMPANY.getValue()) {
+/*		if (typeSort == SearchConditions.NAME.getValue() || typeSort == SearchConditions.COMPANY.getValue() || typeSort == SearchConditions.TAG.getValue()) {
 			lstNameSort = lstNameSort.stream().distinct().sorted().collect(Collectors.toList());
-		}
+		}*/
 		for (String nameSort : lstNameSort) {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
 			for (CardInfoUserVo cardInfo : lstCardInfo) {
-				if (nameSort.trim().equals(cardInfo.getSortType().trim())) {
+				//if (nameSort.trim().equals(cardInfo.getSortType().trim())) {
 					cardInfoDisp.add(cardInfo.getCardInfo());
-				}
+				//}
 			}
 			CardInfoPCVo cardInfoPCVo;
 			try {

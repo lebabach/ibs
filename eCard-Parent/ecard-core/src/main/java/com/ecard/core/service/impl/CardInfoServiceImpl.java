@@ -253,8 +253,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 //	}
 
 	@Override
-	public List<CardInfoUserVo> getListPossesionCard(Integer userId, String strDate) {
-		return cardInfoDAO.getListPossesionCard(userId, strDate);
+	public List<CardInfoUserVo> getListPossesionCard(Integer userId,Integer typeSort, String valueSearch) {
+		return cardInfoDAO.getListPossesionCard(userId, typeSort, valueSearch);
 	}
 	public void updateOldCardInfo (CardInfo cardInfo){
 		cardInfoDAO.updateOldCardInfo(cardInfo);
@@ -315,8 +315,8 @@ public class CardInfoServiceImpl implements CardInfoService {
     }
 
 	@Override
-	public List<String> getListSortType(Integer userId) {
-		return cardInfoDAO.getListSortType(userId);
+	public List<String> getListSortType(Integer userId, Integer sortType) {
+		return cardInfoDAO.getListSortType(userId, sortType);
 	}
 	
 	public int updateContactDate(CardInfo cardInfo){
