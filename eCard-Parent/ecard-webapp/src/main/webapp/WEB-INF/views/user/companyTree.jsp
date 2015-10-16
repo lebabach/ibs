@@ -371,6 +371,9 @@ function searchCompanyTree(){
 	                    	+ "<input type='hidden' value='"+ value["companyName"] +"' name='companyName_"+ value["cardId"] +"' />"
 	                    	+ "</li><div id='div_"+ value["cardId"] +"'></div>";
        			}
+       			else{
+       				respHTML += "<li class='li-1' id='"+ value["cardId"] +"'>"+ <fmt:message key="company.blank" /> +"</li><div id='div_"+ value["cardId"] +"'></div>"
+       			}
        		});
        		respHTML += "</ul>";
        		

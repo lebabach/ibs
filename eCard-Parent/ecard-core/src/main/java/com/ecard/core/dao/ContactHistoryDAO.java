@@ -3,7 +3,6 @@ package com.ecard.core.dao;
 import java.util.List;
 
 import com.ecard.core.model.ContactHistory;
-import com.ecard.core.model.ContactHistoryId;
 
 /**
 *
@@ -14,5 +13,5 @@ public interface ContactHistoryDAO {
 	
 	public List<com.ecard.core.vo.ContactHistory> getListContactHistoryById(Integer cardId);
 	
-	public int deleteContactHistory(ContactHistoryId contactHistoryId);
+	public int deleteContactHistory(Integer contactHistoryId);
 }
