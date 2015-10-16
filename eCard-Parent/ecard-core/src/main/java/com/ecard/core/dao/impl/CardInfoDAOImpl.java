@@ -954,7 +954,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		query.setParameter("userId", userId);
 		
 		if (sortType == SearchConditions.NAME.getValue()) {
-			query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
+			if(valueSearch != "")
+				query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
+			else 
+				query.setParameter("valueSearch", valueSearch + "%");
 		} else {
 			query.setParameter("valueSearch", valueSearch);
 		}

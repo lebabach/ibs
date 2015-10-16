@@ -271,7 +271,7 @@
 						<!-- end panel 5 -->
 
 						<!-- panel 6 -->
-						<div class="panel panel-success">
+						<%-- <div class="panel panel-success">
 							<div class="panel-heading">
 								<h4 class="panel-title">
 									<a class="accordion-toggle"
@@ -280,7 +280,7 @@
 									</a>
 								</h4>
 							</div>
-						</div>
+						</div> --%>
 						<!-- end panel 6 -->
 
 
@@ -361,7 +361,7 @@
 						<!-- end panel 5 -->
 
 						<!-- panel 6 -->
-						<div class="panel panel-success">
+						<%-- <div class="panel panel-success">
 							<div class="panel-heading">
 								<h4 class="panel-title">
 									<a class="accordion-toggle"
@@ -370,7 +370,7 @@
 									</a>
 								</h4>
 							</div>
-						</div>
+						</div> --%>
 						<!-- end panel 6 -->
 
 						<!-- panel 7 -->
@@ -572,7 +572,7 @@
 						<!-- end panel 5 -->
 
 						<!-- panel 6 -->
-						<div class="panel panel-success">
+						<%-- <div class="panel panel-success">
 							<div class="panel-heading">
 								<h4 class="panel-title">
 									<a class="accordion-toggle"
@@ -581,7 +581,7 @@
 									</a>
 								</h4>
 							</div>
-						</div>
+						</div> --%>
 						<!-- end panel 6 -->
 
 					</c:if>
@@ -832,7 +832,7 @@
 						<!-- end panel 5 -->
 
 						<!-- panel 6 -->
-						<div class="panel panel-success">
+						<%-- <div class="panel panel-success">
 							<div class="panel-heading">
 								<h4 class="panel-title">
 									<a class="accordion-toggle"
@@ -841,7 +841,7 @@
 									</a>
 								</h4>
 							</div>
-						</div>
+						</div> --%>
 						<!-- end panel 6 -->
 
 					</c:if>
