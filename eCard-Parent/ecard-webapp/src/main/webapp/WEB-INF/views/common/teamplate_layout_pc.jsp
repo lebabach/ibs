@@ -16,7 +16,7 @@
 	type="text/css" media="all" />
 <link rel="stylesheet" href="<c:url value='/assets/css/animate.css'/>"
 	type="text/css" media="all" />
-<link rel="stylesheet" href="<c:url value='/assets/css/style.css'/>"
+<link rel="stylesheet" href="<c:url value='/assets/css/style_pc.css'/>"
 	type="text/css" media="all" />
 <link rel="stylesheet"
 	href="<c:url value='/assets/css/plugins/iCheck/custom.css'/>"
