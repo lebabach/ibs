@@ -569,7 +569,7 @@ a {
 					<c:forEach var="cardMemo" items="${listCardMemo}" varStatus="loop">
 						<li>
 							<p style="font-size:1.4em;"><c:out value="${ cardMemo.memo }"></c:out> </p>
-							<p class="p-date-n"><fmt:formatDate value='${ cardMemo.create_date }' pattern="yyyy-MM-dd"/></p><span class="delMemo" id="${ cardMemo.seq }" class='span-close'>x</span>
+							<p class="p-date-n"><fmt:formatDate value='${ cardMemo.create_date }' pattern="yyyy年MM月dd日"/></p><span class="delMemo" id="${ cardMemo.seq }" class='span-close'>x</span>
 						</li>
 					</c:forEach>
 					</ul>
@@ -605,8 +605,7 @@ a {
 	                                  <div class="modal-body">
 	                                    <div class="form-group">
 	                                        <label for="contactDate">コンタクト日付</label>
-	                                        <input class="form-control" id="contactDate" name="contactDate_" placeholder="" value="">
-	                                        <input class="form-control" name="contactDate" type="hidden">
+	                                        <input class="form-control" id="contactDate" name="contactDate" placeholder="" value="">
 	                                    </div>
 	                                    <div class="form-group">
 	                                      <label for="contactMemo">内容</label>
@@ -648,9 +647,8 @@ a {
                         	<c:forEach var="contactHistory" items="${contactHistoryList}" varStatus="loop">
 	                        <div class="career_section selected">
 	                            <div class="career_date" style="font-weight: bold !important;">
-	                            	<fmt:formatDate value='${ contactHistory.contactDate }' pattern="yyyy/MM/dd"/>
-	                            	<input type='hidden' value='${ contactHistory.contactDate }' name='chDate' />
-	                            	<div class="delContactHist" id="${ contactHistory.userId }">x</div>
+	                            	<fmt:formatDate value='${ contactHistory.contactDate }' pattern="yyyy年MM月dd日"/>
+	                            	<div class="delContactHist" id="${ contactHistory.contactHistoryId }">x</div>
 	                            </div>
 	                            <div>
 	                                <table class="table">
@@ -1163,7 +1161,7 @@ label.error {
          $('.delContactHist').on({
            'click':function(){
         	   //console.log(this.id);
-        	     var json = {"cardId" : $("input[name=cardId]").val(), "userId" : this.id};  
+        	     var json = {"cardInfo" : {"cardId" : $("input[name=cardId]").val()}, "contactHistoryId" : this.id};  
         	   	 delContactHistory(json);
               }
           });
@@ -1834,14 +1832,14 @@ label.error {
 	    if (month.length < 2) month = '0' + month;
 	    if (day.length < 2) day = '0' + day;
 
-	    return [year, month, day].join('/');
+	    return year + "年" + month + "月" + day + "日";
 	}
 		
 	function saveContactHistory(){
 		var dateTime = new Date($("#saveContactFrm input[name=contactDate]").datepicker("getDate"));
   		var strDateTime =  dateTime.getFullYear() + "-" + (dateTime.getMonth()+1) + "-" + dateTime.getDate();
   		
-		var json = {"cardId" : $("input[name=cardId]").val(), "contactDate" : strDateTime, "contactMemo" : $("#contactMemo").val()};
+		var json = {"cardInfo" : { "cardId" : $("input[name=cardId]").val() }, "contactDate" : strDateTime, "contactMemo" : $("#contactMemo").val()};
 		$.ajax({
         	url: "<c:url value='/user/addContactHistory' />",
         	data: JSON.stringify(json),
@@ -1885,14 +1883,13 @@ label.error {
         		xhr.setRequestHeader("Content-Type", "application/json");
         	},
         	success: function(response) {
-	       		//console.log(response);
+	       		console.log(response);
 	       		var responseHTML = "";
 	       		$.each(response, function(index, value){
 		       		var contactDate = formatDate(value["contactDate"]);
 	       			responseHTML += "<div class='career_section selected'><div class='career_date ' style='font-weight: bold !important;'>"
 	            				+ contactDate 
-	            				+ "<input type='hidden' value='"+ contactDate +"' name='chDate' />"
-	            				+ "<span class='delContactHist' id='"+ value["userId"] +"'>x</span></div>"
+	            				+ "<span class='delContactHist' id='"+ value["contactHistoryId"] +"'>x</span></div>"
 	            				+ "<div><table class='table'><tbody>"
 	                        	+ "<tr id='rowData'><td>"
 	                            + "    <p>"+ value["contactMemo"] +"</p></td></tr></tbody></table></div></div>";
