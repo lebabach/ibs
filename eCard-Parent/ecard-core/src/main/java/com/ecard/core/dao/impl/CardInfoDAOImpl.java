@@ -926,14 +926,46 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	}
 
 	@Override
-	public List<CardInfoUserVo> getListPossesionCard(Integer userId, String strDate) {
-
-		String sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c "
+	public List<CardInfoUserVo> getListPossesionCard(Integer userId, Integer sortType, String valueSearch) {
+		String sqlStr = "";
+		 
+		if (sortType == SearchConditions.CONTACT.getValue()) {
+			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ "AND date_format(date(c.contactDate),'%m/%Y') = :valueSearch";
+			
+		} else if (sortType == SearchConditions.NAME.getValue()) {
+			sqlStr = "SELECT c.nameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ "AND c.nameKana LIKE :valueSearch";
+			
+		} else if (sortType == SearchConditions.COMPANY.getValue()) {			
+			sqlStr = "SELECT c.companyNameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ "AND c.companyNameKana = :valueSearch";
+			
+		} else if (sortType == SearchConditions.TAG.getValue()) {
+			sqlStr = "SELECT ut.tagName AS groupDate, c FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
+					+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0"
+					+" AND ut.tagName = :valueSearch";
+		} else {
+			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ "AND date_format(date(c.contactDate),'%m/%Y') = :valueSearch";
+		}
+		
+		Query query = getEntityManager().createQuery(sqlStr);
+		query.setParameter("userId", userId);
+		
+		if (sortType == SearchConditions.NAME.getValue()) {
+			query.setParameter("valueSearch", "%" + valueSearch.toLowerCase() + "%");
+		} else {
+			query.setParameter("valueSearch", valueSearch);
+		}
+		
+		
+		/*String sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c "
 				+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
 				+ "AND date_format(date(c.contactDate),'%m/%Y') = :strDate";
 		Query query = getEntityManager().createQuery(sqlStr);
 		query.setParameter("userId", userId);		
-		query.setParameter("strDate", strDate);
+		query.setParameter("strDate", valueSearch);*/
 		List<Object[]> listObj = query.getResultList();
 		List<CardInfoUserVo> lstcardInfoUserVo = new ArrayList<>();
 		for (Object[] object : listObj) {
@@ -1157,9 +1189,32 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	}
 
 	@Override
-	public List<String> getListSortType(Integer userId) {
-		String sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate FROM CardInfo c "
-				+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 GROUP BY DATE_FORMAT(c.contactDate,'%m/%Y') ORDER BY c.contactDate DESC ";
+	public List<String> getListSortType(Integer userId, Integer sortType) {
+		String sqlStr = "";
+		 
+		if (sortType == SearchConditions.CONTACT.getValue()) {
+			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate FROM CardInfo c "
+					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 GROUP BY DATE_FORMAT(c.contactDate,'%m/%Y') ORDER BY c.contactDate DESC ";
+			
+		} else if (sortType == SearchConditions.NAME.getValue()) {
+			sqlStr = "SELECT c.nameKana AS groupDate FROM CardInfo c "
+					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 GROUP BY SUBSTR((c.nameKana),1,1) ORDER BY c.nameKana ASC ";
+			
+		} else if (sortType == SearchConditions.COMPANY.getValue()) {
+			sqlStr = "SELECT c.companyNameKana AS groupDate FROM CardInfo c "
+					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 GROUP BY c.companyNameKana ORDER BY c.companyNameKana ASC ";
+			
+		} else if (sortType == SearchConditions.TAG.getValue()) {
+			sqlStr = "SELECT ut.tagName AS groupDate FROM CardTag ct INNER JOIN ct.userTag ut"
+					+" WHERE ut.userInfo.userId = :userId "
+					+" GROUP BY ut.tagName ORDER BY ut.tagName ASC" ;
+					
+			
+		} else {
+			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate FROM CardInfo c "
+					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 GROUP BY DATE_FORMAT(c.contactDate,'%m/%Y') ORDER BY c.contactDate DESC ";
+		}
+		
 		Query query = getEntityManager().createQuery(sqlStr);
 		query.setParameter("userId", userId);
 		return query.getResultList();
@@ -1283,7 +1338,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 
 	@Override
 	public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId, int tagId,int limit,int offset) {
-		// TODO Auto-generated method stub
+
 		String sqlStr = "SELECT c.card_id,name,first_name,last_name,name_kana,first_name_kana,last_name_kana,  company_name,company_name_kana,department_name,image_file, "
 				+ " position_name,  c.create_date,approval_status,tel_number_company,email ,ut.tag_name "
 				+ " FROM card_info c LEFT JOIN card_tag ct ON c.card_id = ct.card_id "
