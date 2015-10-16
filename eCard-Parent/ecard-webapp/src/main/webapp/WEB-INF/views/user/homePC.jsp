@@ -1467,7 +1467,7 @@
 	    	 $(this).parent().removeClass('some_chk');
 	    	 var listCardId = [];
 		    	var cardId = 0 ;
-		    	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+		    	$(".business_card_book .icheckbox_square-green.checked").each(function(){
 	   	            cardId = $(this).find('input[name=bla]').val();
 	   	            listCardId.push({"cardId":cardId});    	         
 	   			});
@@ -1485,7 +1485,7 @@
 		    	 $(this).parent().removeClass('checked');
 	    	   var listCardId = [];
 		    	var cardId = 0 ;
-		    	$(".business_card_book .icheckbox_square-green").find('.checked').each(function(){
+		    	$(".business_card_book .icheckbox_square-green.checked").each(function(){
 	   	            cardId = $(this).find('input[name=bla]').val();
 	   	            listCardId.push({"cardId":cardId});    	         
 	   			});
