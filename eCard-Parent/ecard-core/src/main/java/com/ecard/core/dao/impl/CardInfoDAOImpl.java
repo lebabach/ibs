@@ -954,7 +954,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		query.setParameter("userId", userId);
 		
 		if (sortType == SearchConditions.NAME.getValue()) {
-			query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
+			if(valueSearch != "")
+				query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
+			else 
+				query.setParameter("valueSearch", valueSearch + "%");
 		} else {
 			query.setParameter("valueSearch", valueSearch);
 		}
@@ -1512,10 +1515,12 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		return query.executeUpdate();
 	}
 	
-	public List<CardInfo> searchCardInfoByName(String name){
-		String sqlStr = "SELECT c FROM CardInfo c WHERE c.approvalStatus = 1 AND c.oldCardFlg = 0 AND c.deleteFlg = 0 AND c.newestCardFlg = 1 AND c.name = :name";
+	public List<CardInfo> searchCardInfoByName(String companyName, String departmentName){
+		String sqlStr = "SELECT c FROM CardInfo c WHERE c.approvalStatus = 1 AND c.oldCardFlg = 0 AND c.deleteFlg = 0 AND c.newestCardFlg = 1 "
+				+ "AND c.companyName = :companyName AND c.departmentName = :departmentName";
 		Query query = getEntityManager().createQuery(sqlStr);
-		query.setParameter("name", name);
+		query.setParameter("companyName", companyName);
+		query.setParameter("departmentName", departmentName);
 		return (List<CardInfo>)query.getResultList();
 	}
 }

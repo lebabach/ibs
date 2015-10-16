@@ -382,8 +382,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 		return cardInfoDAO.searchCardInfo(companyName, departmentName);
 	}
 	
-	public List<CardInfo> searchCardInfoByName(String name){
-		return cardInfoDAO.searchCardInfoByName(name);
+	public List<CardInfo> searchCardInfoByName(String companyName, String departmentName){
+		return cardInfoDAO.searchCardInfoByName(companyName, departmentName);
 	}
 
 	@Override
