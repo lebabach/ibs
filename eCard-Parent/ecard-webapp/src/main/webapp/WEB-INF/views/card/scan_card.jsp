@@ -180,50 +180,53 @@ $(document).ready(function(){
 		   var userId = $('.user_id').val();
 		   var rote = $("#rote-image").val();
 		   var listCards = new Array();
-		 
+		   var isSubmit = true; 
 		   $('.list-view').each(function() {
 				if($(this).find('.lable input[name=bla][type=checkbox]:checked').length != 0){
-				  /*  var imagesource = $(this).find('img').attr('src');  
-			       var n = imagesource.indexOf(","); */
-				   var image = $(this).find('img').attr('src'); //imagesource.substring(n+1, base64.length);
+				   var image = $(this).find('img').attr('src');
+				   if(image.length==0){
+					   isSubmit= false;
+					   return false;
+				   }
 				   var card = { "imageFile":image,"userId":userId,"rote":rote};
 				   listCards.push({ 'card' : card});
 			     }  
 		    });
-		   
-		  if($("#exampleInputName2").val()!=""){
-			   if(listCards.length>0){
-				   $.ajax({
-						type: 'POST',
-						url: 'registerCardImage',
-						 dataType: 'json', 
-						 contentType: 'application/json',
-						 mimeType: 'application/json',
-						data:JSON.stringify({"listCards":listCards}) 
-					}).done(function(data) {
-						if(data == 0){
+		  if(isSubmit){
+			  if($("#exampleInputName2").val()!=""){
+				   if(listCards.length>0){
+					   $.ajax({
+							type: 'POST',
+							url: 'registerCardImage',
+							 dataType: 'json', 
+							 contentType: 'application/json',
+							 mimeType: 'application/json',
+							data:JSON.stringify({"listCards":listCards}) 
+						}).done(function(data) {
+							if(data == 0){
+								location.reload();
+							}else if(data == 1){
+								alert("データ通信が利用できません");
+								location.reload();
+							}else if(data == 3){
+								alert("データ通信が利用できません");
+								location.reload();
+							}else{
+								alert("<fmt:message key="card.scancard.user.error"/>");
+								//checkNotOk=0;
+							}
+						}).fail(function(xhr, status, err) {
+							alert('エラー !!!');
 							location.reload();
-						}else if(data == 1){
-							alert("データ通信が利用できません");
-							location.reload();
-						}else if(data == 3){
-							alert("データ通信が利用できません");
-							location.reload();
-						}else{
-							alert("<fmt:message key="card.scancard.user.error"/>");
-							//checkNotOk=0;
-						}
-					}).fail(function(xhr, status, err) {
-						alert('エラー !!!');
-						location.reload();
-					});
-			   } 
-		   }else{
-			   alert('ユーザを選択してください');
-		   }
-			   
-		   
-		   
+						});
+				   } 
+			   }else{
+				   alert('ユーザを選択してください');
+			   }  
+		  }else{
+			  alert('画像データはエラーが発生しました'); 
+			  location.reload();
+		  }
 		});
  	//bach.le reset rotation
    function resetRotationOfImages(){
