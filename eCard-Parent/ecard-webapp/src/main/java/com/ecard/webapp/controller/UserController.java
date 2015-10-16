@@ -535,6 +535,16 @@ public class UserController {
 			} else {
 				modelAndView.addObject("isMyCard", true);
 			}
+			
+			// Check compliance date
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date dateCompliance = sdf.parse(compliaceDate);
+
+			if (cardInfo.getContactDate().before(dateCompliance)) {
+				modelAndView.addObject("isExpried", true);
+			} else {
+				modelAndView.addObject("isExpried", false);
+			}
 
 			// Get user information
 			UserInfo userInfo = userInfoService.getUserInfoByUserId(userId);
@@ -543,7 +553,31 @@ public class UserController {
 			} else {
 				modelAndView.addObject("sfManualLinkFlg", false);
 			}
+			
+			if(!cardInfo.getCardOwnerId().equals(userId)){
+				if((userInfo.getGroupCompanyId() == 1 || userInfo.getGroupCompanyId() == 2 || userInfo.getGroupCompanyId() == 3 
+						|| userInfo.getGroupCompanyId() == 4 || userInfo.getGroupCompanyId() == 5)){
+					if((cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 || cardInfo.getGroupCompanyId() == 3 
+							|| cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5) 
+							|| ( (cardInfo.getGroupCompanyId() != 1 || cardInfo.getGroupCompanyId() != 2 || cardInfo.getGroupCompanyId() != 3 
+									|| cardInfo.getGroupCompanyId() != 4 || cardInfo.getGroupCompanyId() != 5)  && cardInfo.getContactDate().before(dateCompliance) )){
+						//Nothing
+					}
+					else{
+						return new ModelAndView("redirect:/user/home");
+					}
+				}else{
+					if(cardInfo.getGroupCompanyId() == userInfo.getGroupCompanyId() 
+							|| (cardInfo.getGroupCompanyId() != userInfo.getGroupCompanyId() && cardInfo.getContactDate().before(dateCompliance))){
+						//Nothing
+					}
+					else{
+						return new ModelAndView("redirect:/user/home");
+					}
+				}
+			}
 
+			
 			// Get old cards
 			// List<CardInfo> listOldCard = cardInfoService.getOldCardInfor();
 			// modelAndView.addObject("listOldCard", listOldCard);
@@ -553,16 +587,6 @@ public class UserController {
 				UserSearchVO userSearch = (UserSearchVO) session.getAttribute("searchDetail");
 				userSearch.setDetail(true);
 				session.setAttribute("searchDetail", userSearch);
-			}
-
-			// Check compliance date
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date dateCompliance = sdf.parse(compliaceDate);
-
-			if (cardInfo.getContactDate().before(dateCompliance)) {
-				modelAndView.addObject("isExpried", true);
-			} else {
-				modelAndView.addObject("isExpried", false);
 			}
 
 			// Get contact history
