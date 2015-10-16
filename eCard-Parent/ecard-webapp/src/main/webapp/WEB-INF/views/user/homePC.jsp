@@ -522,6 +522,7 @@
 
  $(document).ready(function(){
 	 $(document).on('click', '.list-group', function(event)  {
+		 $.xhrPool.abortAll();
 		// Hidden others and change icon
         $(".list-group" ).not($(this)).find('.list-group-item-title').removeClass('active');
         $(".list-group" ).not($(this)).find('.list-group-item ').removeClass('show-content');

@@ -107,6 +107,7 @@ import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardAndUserTagHome;
+import com.ecard.webapp.vo.CardInfoAndPosCardVO;
 import com.ecard.webapp.vo.CardInfoLoadMoreVO;
 import com.ecard.webapp.vo.CardInfoPCVo;
 import com.ecard.webapp.vo.CardInfoSaleforce;
@@ -535,6 +536,16 @@ public class UserController {
 			} else {
 				modelAndView.addObject("isMyCard", true);
 			}
+			
+			// Check compliance date
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date dateCompliance = sdf.parse(compliaceDate);
+
+			if (cardInfo.getContactDate().before(dateCompliance)) {
+				modelAndView.addObject("isExpried", true);
+			} else {
+				modelAndView.addObject("isExpried", false);
+			}
 
 			// Get user information
 			UserInfo userInfo = userInfoService.getUserInfoByUserId(userId);
@@ -543,7 +554,31 @@ public class UserController {
 			} else {
 				modelAndView.addObject("sfManualLinkFlg", false);
 			}
+			
+			if(!cardInfo.getCardOwnerId().equals(userId)){
+				if((userInfo.getGroupCompanyId() == 1 || userInfo.getGroupCompanyId() == 2 || userInfo.getGroupCompanyId() == 3 
+						|| userInfo.getGroupCompanyId() == 4 || userInfo.getGroupCompanyId() == 5)){
+					if((cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 || cardInfo.getGroupCompanyId() == 3 
+							|| cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5) 
+							|| ( (cardInfo.getGroupCompanyId() != 1 || cardInfo.getGroupCompanyId() != 2 || cardInfo.getGroupCompanyId() != 3 
+									|| cardInfo.getGroupCompanyId() != 4 || cardInfo.getGroupCompanyId() != 5)  && cardInfo.getContactDate().before(dateCompliance) )){
+						//Nothing
+					}
+					else{
+						return new ModelAndView("redirect:/user/home");
+					}
+				}else{
+					if(cardInfo.getGroupCompanyId() == userInfo.getGroupCompanyId() 
+							|| (cardInfo.getGroupCompanyId() != userInfo.getGroupCompanyId() && cardInfo.getContactDate().before(dateCompliance))){
+						//Nothing
+					}
+					else{
+						return new ModelAndView("redirect:/user/home");
+					}
+				}
+			}
 
+			
 			// Get old cards
 			// List<CardInfo> listOldCard = cardInfoService.getOldCardInfor();
 			// modelAndView.addObject("listOldCard", listOldCard);
@@ -553,16 +588,6 @@ public class UserController {
 				UserSearchVO userSearch = (UserSearchVO) session.getAttribute("searchDetail");
 				userSearch.setDetail(true);
 				session.setAttribute("searchDetail", userSearch);
-			}
-
-			// Check compliance date
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date dateCompliance = sdf.parse(compliaceDate);
-
-			if (cardInfo.getContactDate().before(dateCompliance)) {
-				modelAndView.addObject("isExpried", true);
-			} else {
-				modelAndView.addObject("isExpried", false);
 			}
 
 			// Get contact history
@@ -1543,10 +1568,9 @@ public class UserController {
 				ownerCard.setDepartmentName(item.getDepartmentName());
 				ownerCard.setEmail(item.getEmail());
 				ownerCard.setName(item.getName());
-				;
 				ownerCard.setPositionName(item.getPositionName());
 				ownerCard.setTelNumberCompany(item.getTelNumberCompany());
-				user = users.stream().filter(x -> x.getUserId() == item.getCardOwnerId()).findFirst().get();
+				user = users.stream().filter(x -> x.getUserId().intValue() == item.getCardOwnerId().intValue()).findFirst().get();
 				ownerCard.setOwner(
 						StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
 				ownerCard.setContactDateString(
@@ -1747,12 +1771,19 @@ public class UserController {
 	
 	@RequestMapping(value = "listCardPending", method = RequestMethod.POST)
 	@ResponseBody
-    public List<CardInfoAndPosCard> listCardPending(HttpServletRequest request) {
+    public List<CardInfoAndPosCardVO> listCardPending(HttpServletRequest request) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		List<CardInfoAndPosCard> lstCardInfo = null;
-		lstCardInfo = cardInfoService.listCardPending(ecardUser.getUserId());
-	  return lstCardInfo;
+		List<CardInfoAndPosCard> lstCardInfo =  cardInfoService.listCardPending(ecardUser.getUserId());
+		List<CardInfoAndPosCardVO> lstcardInfoAndPosCardVO = new ArrayList<>();
+		
+		for(CardInfoAndPosCard cardInfo : lstCardInfo){
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
+		    String date = formatter.format(cardInfo.getCreateDate());
+			CardInfoAndPosCardVO cardInfoAndPosCardVO = new CardInfoAndPosCardVO(cardInfo.getCardId(), cardInfo.getApprovalStatus(), cardInfo.getImageFile(), date);
+			lstcardInfoAndPosCardVO.add(cardInfoAndPosCardVO);
+		}
+	  return lstcardInfoAndPosCardVO;
 	}
 
 }
