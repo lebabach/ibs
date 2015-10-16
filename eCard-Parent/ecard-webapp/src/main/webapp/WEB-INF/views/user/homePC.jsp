@@ -1233,7 +1233,7 @@
         
        $(document).on('ifUnchecked','.business_card_book input[name=bla]',function(event){  
         	$(".balloon").css("display","none");
-          if($(".icheckbox_square-green.checked").size() == 1){ 
+          if($(".business_card_book .icheckbox_square-green.checked").size() == 1){ 
             $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
             $(".addTagCard").css("display","none");  
           }          
