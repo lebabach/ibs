@@ -86,6 +86,7 @@ import com.ecard.core.service.ContactHistoryService;
 import com.ecard.core.service.EmailService;
 import com.ecard.core.service.GroupCompanyInfoService;
 import com.ecard.core.service.LogEventService;
+import com.ecard.core.service.MyCardService;
 import com.ecard.core.service.NotificationInfoService;
 import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.SearchInfoService;
@@ -95,8 +96,10 @@ import com.ecard.core.service.UserTagService;
 import com.ecard.core.service.converter.CardInfoConverter;
 import com.ecard.core.vo.CardAndUserTag;
 import com.ecard.core.vo.CardConnectModel;
+import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoCSV;
 import com.ecard.core.vo.CardInfoMemo;
+import com.ecard.core.vo.CardInfoResponse;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.SearchInfo;
@@ -162,6 +165,9 @@ public class UserController {
 
 	@Autowired
 	LogEventService logEventService;
+	
+	@Autowired
+    MyCardService myCardService;
 
 	@Value("${mail.server.from}")
 	private String fromUser;
@@ -1788,5 +1794,34 @@ public class UserController {
 		return date;
 	}
 	
+	@RequestMapping(value = "/getListPossesionCardRecent", method = RequestMethod.POST)
+	@ResponseBody
+    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(HttpServletRequest request) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<com.ecard.core.vo.CardInfo> lstCardInfo = null;
+		lstCardInfo = cardInfoService.getListPossesionCardRecent(ecardUser.getUserId());
+	  return lstCardInfo;
+	}
+	
+	@RequestMapping(value = "/listCardRecent", method = RequestMethod.POST)
+	@ResponseBody
+    public List<com.ecard.core.vo.CardInfo> listCardRecent(HttpServletRequest request) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<com.ecard.core.vo.CardInfo> lstCardInfo = null;
+		lstCardInfo = myCardService.listCardRecent(ecardUser.getUserId());
+	  return lstCardInfo;
+	}
+	
+	@RequestMapping(value = "/listCardPending", method = RequestMethod.POST)
+	@ResponseBody
+    public List<CardInfoAndPosCard> listCardPending(HttpServletRequest request) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<CardInfoAndPosCard> lstCardInfo = null;
+		lstCardInfo = cardInfoService.listCardPending(ecardUser.getUserId());
+	  return lstCardInfo;
+	}
 
 }
