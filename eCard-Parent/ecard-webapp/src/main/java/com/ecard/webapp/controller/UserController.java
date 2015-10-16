@@ -107,6 +107,7 @@ import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardAndUserTagHome;
+import com.ecard.webapp.vo.CardInfoAndPosCardVO;
 import com.ecard.webapp.vo.CardInfoLoadMoreVO;
 import com.ecard.webapp.vo.CardInfoPCVo;
 import com.ecard.webapp.vo.CardInfoSaleforce;
@@ -1747,12 +1748,19 @@ public class UserController {
 	
 	@RequestMapping(value = "listCardPending", method = RequestMethod.POST)
 	@ResponseBody
-    public List<CardInfoAndPosCard> listCardPending(HttpServletRequest request) {
+    public List<CardInfoAndPosCardVO> listCardPending(HttpServletRequest request) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		List<CardInfoAndPosCard> lstCardInfo = null;
-		lstCardInfo = cardInfoService.listCardPending(ecardUser.getUserId());
-	  return lstCardInfo;
+		List<CardInfoAndPosCard> lstCardInfo =  cardInfoService.listCardPending(ecardUser.getUserId());
+		List<CardInfoAndPosCardVO> lstcardInfoAndPosCardVO = new ArrayList<>();
+		
+		for(CardInfoAndPosCard cardInfo : lstCardInfo){
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
+		    String date = formatter.format(cardInfo.getCreateDate());
+			CardInfoAndPosCardVO cardInfoAndPosCardVO = new CardInfoAndPosCardVO(cardInfo.getCardId(), cardInfo.getApprovalStatus(), cardInfo.getImageFile(), date);
+			lstcardInfoAndPosCardVO.add(cardInfoAndPosCardVO);
+		}
+	  return lstcardInfoAndPosCardVO;
 	}
 
 }
