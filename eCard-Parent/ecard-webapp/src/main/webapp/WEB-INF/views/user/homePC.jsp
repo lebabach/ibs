@@ -1558,7 +1558,7 @@
 		        	 $(this).addClass("icheckbox_square-green checked");
 		        	 //Add card tag
 		        	 var json = {"tagId" : tagId, "listCardId" : listCardId};
-		        	 deleteCardTag(json);
+		        	 //deleteCardTag(json);
 		     	     addCardTag(json);
 		    	 }else {
 			    		console.log("tagId remove : " + tagId);
