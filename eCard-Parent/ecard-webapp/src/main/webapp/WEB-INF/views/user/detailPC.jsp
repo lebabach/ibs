@@ -440,15 +440,15 @@ a {
 										  data: 'contactDate='+ strDateTime +'&cardId='+$("input[name=cardId]").val(),
 										  success: function(){
 											  BootstrapDialog.show({
-					                				title: 'Information',
-					               	             	message: 'Edit contact date success'
+					                				title: '<fmt:message key="popup.title.info" />',
+					               	             	message: '<fmt:message key="edit.contactDate.success" />'
 					                	      });
 											  window.location.href = "<c:url value='/user/card/details/' />"+$("input[name=cardId]").val();
 										  },
 										  error: function(){
 											  BootstrapDialog.show({
-					                				title: 'Warning',
-					               	             	message: 'Edit contact date failed'
+					                				title: '<fmt:message key="popup.title.info" />',
+					               	             	message: '<fmt:message key="edit.contactDate.failed" />'
 					                	      });
 										  }
 									});
@@ -1180,7 +1180,7 @@ label.error {
         	 var companyName = $("input[name=companyName]").val();
         	 if(lastName == "" || firstName == "" || companyName == ""){
         		 BootstrapDialog.show({
-     				title: 'Warning',
+     				title: '<fmt:message key="popup.title.info" />',
     	             	message: '<fmt:message key="valid.login.saleforce" />'
      	      		});
         	 }
@@ -1205,8 +1205,8 @@ label.error {
 		   			  },
 		   			  error: function(){
 		   				  BootstrapDialog.show({
-		        				title: 'Information',
-		       	             	message: 'Remove card failed'
+		        				title: '<fmt:message key="popup.title.info" />',
+		       	             	message: '<fmt:message key="remove.card.failed" />'
 		        	      		});
 		   			  }
 	   			});
@@ -1230,14 +1230,14 @@ label.error {
     	 var isEdit = (getUrlParameter('isEdit') != null) ? getUrlParameter('isEdit') : "";
     	 if(isEdit){
     		 BootstrapDialog.show({
-	             title: 'Information',
-	             message: 'Edit card success'
+	             title: '<fmt:message key="popup.title.info" />',
+	             message: '<fmt:message key="popup.edit.card.success" />'
 	        });
     	 }
     	 if(isEdit == false && getUrlParameter('isEdit') != null){
     		BootstrapDialog.show({
- 				title: 'Information',
-	             	message: 'Edit card failed'
+ 				title: '<fmt:message key="popup.title.info" />',
+	             	message: '<fmt:message key="edit.card.failed" />'
  	        });
     	 }
     	 
@@ -1434,8 +1434,8 @@ label.error {
 	   	 
 		if($("#tagName").val() == ""){
 			BootstrapDialog.show({
-				title: 'Warning',
-             	message: 'Please enter tag name'
+				title: '<fmt:message key="popup.title.info" />',
+             	message: '<fmt:message key="enter.tag.name" />'
 	        });
 		}
 		else{
@@ -1489,8 +1489,8 @@ label.error {
 	        	},
 	        	error: function(){
 				  BootstrapDialog.show({
-       				title: 'Information',
-      	             	message: 'Add tag failed'
+       				title: '<fmt:message key="popup.title.info" />',
+      	             	message: '<fmt:message key="add.tag.failed" />'
        	      		});
 			  	}
 	        });
@@ -1575,8 +1575,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Add card tag failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="add.card.tag.failed" />'
    	      		});
 		  	}
         });	
@@ -1635,8 +1635,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Delete card tag failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="delete.card.tag.failed" />'
    	      		});
 		  	}
         });	
@@ -1695,8 +1695,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Delete tag failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="delete.tag.failed" />'
    	      		});
 		  	}
         });	
@@ -1725,8 +1725,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Add card memo failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="add.card.memo.failed" />'
    	      		});
 		  	}
         });	
@@ -1755,8 +1755,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Delete card memo failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="delete.card.memo.failed" />'
    	      		});
 		  	}
         });	
@@ -1818,8 +1818,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'List card tag failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="list.card.tag.failed" />'
    	      		});
 		  	}
         });	
@@ -1865,8 +1865,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Add card memo failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="add.card.memo.failed" />'
    	      		});
 		  	}
         });	
@@ -1901,8 +1901,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Delete contact history failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="delete.contact.hist.failed" />'
    	      		});
 		  	}
         });	 
