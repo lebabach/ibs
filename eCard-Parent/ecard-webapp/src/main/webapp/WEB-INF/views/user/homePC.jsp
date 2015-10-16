@@ -145,7 +145,7 @@
             <div class="form-group">
                 <div class="icon-addon addon-md">
                     <!-- <form name="myform">  -->
-						<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-example">自分の名刺を検索</button>
+						<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-example">検索画面</button>
                                 <!-- modal -->
                                 <div class="modal" id="modal-example" tabindex="-1">
                                     <div class="modal-dialog">                                        
