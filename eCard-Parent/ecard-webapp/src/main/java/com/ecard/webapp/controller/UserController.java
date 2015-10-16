@@ -1780,5 +1780,4 @@ public class UserController {
 		return date;
 	}
 	
-
 }
