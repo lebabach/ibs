@@ -383,7 +383,7 @@ a {
  	      							language : 'ja',
  	      							todayHighlight : true,
  	      							keyboardNavigation : false,
- 	      							format : 'yyyy年MM月dd日',
+ 	      							format : 'yyyy年MMdd日',
  	      							forceParse : true,
  	      							autoclose : true,
  	      							calendarWeeks : true
@@ -440,15 +440,15 @@ a {
 										  data: 'contactDate='+ strDateTime +'&cardId='+$("input[name=cardId]").val(),
 										  success: function(){
 											  BootstrapDialog.show({
-					                				title: 'Information',
-					               	             	message: 'Edit contact date success'
+					                				title: '<fmt:message key="popup.title.info" />',
+					               	             	message: '<fmt:message key="edit.contactDate.success" />'
 					                	      });
 											  window.location.href = "<c:url value='/user/card/details/' />"+$("input[name=cardId]").val();
 										  },
 										  error: function(){
 											  BootstrapDialog.show({
-					                				title: 'Warning',
-					               	             	message: 'Edit contact date failed'
+					                				title: '<fmt:message key="popup.title.info" />',
+					               	             	message: '<fmt:message key="edit.contactDate.failed" />'
 					                	      });
 										  }
 									});
@@ -559,13 +559,10 @@ a {
                            });     
                       </script>
 					<div class="panel-body">
-
 						<textarea id="textarea-memo" class="form-control custom-control"
 							rows="3" style="resize: vertical; margin-bottom: 5px;"
 							placeholder="出会いの記録をメモしておきましょう"></textarea>
-
 						<button class="btn btn-sm btn-primary pull-right click-memo">保存</button>
-
 					</div>
 					
 					<ul class="ul-memo">
@@ -579,6 +576,9 @@ a {
 				</div>
 				</c:if>
 				
+				<div class="row" style="padding: 10px;">
+					<p style="color:red;">コンタクト履歴は公開されるため、機密情報を入力しないで下さい。</p>
+				</div>
 				<!-- Contact history -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -605,7 +605,8 @@ a {
 	                                  <div class="modal-body">
 	                                    <div class="form-group">
 	                                        <label for="contactDate">コンタクト日付</label>
-	                                        <input class="form-control" id="contactDate" name="contactDate" placeholder="" value="">
+	                                        <input class="form-control" id="contactDate" name="contactDate_" placeholder="" value="">
+	                                        <input class="form-control" name="contactDate" type="hidden">
 	                                    </div>
 	                                    <div class="form-group">
 	                                      <label for="contactMemo">内容</label>
@@ -648,6 +649,7 @@ a {
 	                        <div class="career_section selected">
 	                            <div class="career_date" style="font-weight: bold !important;">
 	                            	<fmt:formatDate value='${ contactHistory.contactDate }' pattern="yyyy/MM/dd"/>
+	                            	<input type='hidden' value='${ contactHistory.contactDate }' name='chDate' />
 	                            	<div class="delContactHist" id="${ contactHistory.userId }">x</div>
 	                            </div>
 	                            <div>
@@ -1140,20 +1142,20 @@ label.error {
          var hCardId = $("#rowData").find('.card-Id').val();
          
          //Add contact history
-         $('#contactDate').click(function(){
+         $('#saveContactFrm #contactDate').click(function(){
         	 $(".datepicker").css("zIndex", 100000000000);
          });
          
-         $('#contactDate').datepicker({
+         $('#saveContactFrm #contactDate').datepicker({
    			language : 'ja',
    			todayHighlight : true,
    			keyboardNavigation : false,
-   			format : 'yyyy年MM月dd日',
+   			format : 'yyyy年MMdd日',
    			forceParse : true,
    			autoclose : true,
-   			calendarWeeks : true
+   			calendarWeeks : true 
        	 });
-                  
+                           
          $("#saveContactHistory").click(function(){
        		saveContactHistory(); 
          });
@@ -1178,7 +1180,7 @@ label.error {
         	 var companyName = $("input[name=companyName]").val();
         	 if(lastName == "" || firstName == "" || companyName == ""){
         		 BootstrapDialog.show({
-     				title: 'Warning',
+     				title: '<fmt:message key="popup.title.info" />',
     	             	message: '<fmt:message key="valid.login.saleforce" />'
      	      		});
         	 }
@@ -1203,8 +1205,8 @@ label.error {
 		   			  },
 		   			  error: function(){
 		   				  BootstrapDialog.show({
-		        				title: 'Information',
-		       	             	message: 'Remove card failed'
+		        				title: '<fmt:message key="popup.title.info" />',
+		       	             	message: '<fmt:message key="remove.card.failed" />'
 		        	      		});
 		   			  }
 	   			});
@@ -1228,14 +1230,14 @@ label.error {
     	 var isEdit = (getUrlParameter('isEdit') != null) ? getUrlParameter('isEdit') : "";
     	 if(isEdit){
     		 BootstrapDialog.show({
-	             title: 'Information',
-	             message: 'Edit card success'
+	             title: '<fmt:message key="popup.title.info" />',
+	             message: '<fmt:message key="popup.edit.card.success" />'
 	        });
     	 }
     	 if(isEdit == false && getUrlParameter('isEdit') != null){
     		BootstrapDialog.show({
- 				title: 'Information',
-	             	message: 'Edit card failed'
+ 				title: '<fmt:message key="popup.title.info" />',
+	             	message: '<fmt:message key="edit.card.failed" />'
  	        });
     	 }
     	 
@@ -1432,8 +1434,8 @@ label.error {
 	   	 
 		if($("#tagName").val() == ""){
 			BootstrapDialog.show({
-				title: 'Warning',
-             	message: 'Please enter tag name'
+				title: '<fmt:message key="popup.title.info" />',
+             	message: '<fmt:message key="enter.tag.name" />'
 	        });
 		}
 		else{
@@ -1487,8 +1489,8 @@ label.error {
 	        	},
 	        	error: function(){
 				  BootstrapDialog.show({
-       				title: 'Information',
-      	             	message: 'Add tag failed'
+       				title: '<fmt:message key="popup.title.info" />',
+      	             	message: '<fmt:message key="add.tag.failed" />'
        	      		});
 			  	}
 	        });
@@ -1573,8 +1575,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Add card tag failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="add.card.tag.failed" />'
    	      		});
 		  	}
         });	
@@ -1633,8 +1635,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Delete card tag failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="delete.card.tag.failed" />'
    	      		});
 		  	}
         });	
@@ -1693,8 +1695,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Delete tag failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="delete.tag.failed" />'
    	      		});
 		  	}
         });	
@@ -1723,8 +1725,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Add card memo failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="add.card.memo.failed" />'
    	      		});
 		  	}
         });	
@@ -1753,12 +1755,17 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Delete card memo failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="delete.card.memo.failed" />'
    	      		});
 		  	}
         });	
 		$("#textarea-memo").val('');
+		
+		//Hide scrollbar
+        if($('.ul-memo li').length <= 5){
+       	 	$(".panel-memo").attr("style", "height:auto; overflow-x:hidden; overflow-y:hidden;")
+        }
 	}
 	
 	function getTagForCard(){
@@ -1811,8 +1818,8 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'List card tag failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="list.card.tag.failed" />'
    	      		});
 		  	}
         });	
@@ -1829,10 +1836,11 @@ label.error {
 
 	    return [year, month, day].join('/');
 	}
-	
+		
 	function saveContactHistory(){
-		var dateTime = new Date($("input[name=contactDate]").datepicker("getDate"));
+		var dateTime = new Date($("#saveContactFrm input[name=contactDate]").datepicker("getDate"));
   		var strDateTime =  dateTime.getFullYear() + "-" + (dateTime.getMonth()+1) + "-" + dateTime.getDate();
+  		
 		var json = {"cardId" : $("input[name=cardId]").val(), "contactDate" : strDateTime, "contactMemo" : $("#contactMemo").val()};
 		$.ajax({
         	url: "<c:url value='/user/addContactHistory' />",
@@ -1844,21 +1852,21 @@ label.error {
         		xhr.setRequestHeader("Content-Type", "application/json");
         	},
         	success: function(response) {
-        		var respHTML = "";
+        		//var respHTML = "";
         		$.each(response, function(index, value){
         			if(value != null){
         				window.location.reload(true);
         			}
         		});
         		
-        		$(".ul-memo").html(resp);
+        		//$(".ul-memo").html(resp);
         		$('.ul-memo').show();
                 $('.panel-body').addClass('panel-body-memo');
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Add card memo failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="add.card.memo.failed" />'
    	      		});
 		  	}
         });	
@@ -1881,8 +1889,9 @@ label.error {
 	       		var responseHTML = "";
 	       		$.each(response, function(index, value){
 		       		var contactDate = formatDate(value["contactDate"]);
-	       			responseHTML = "<div class='career_section selected'><div class='career_date ' style='font-weight: bold !important;'>"
-	            				+ contactDate
+	       			responseHTML += "<div class='career_section selected'><div class='career_date ' style='font-weight: bold !important;'>"
+	            				+ contactDate 
+	            				+ "<input type='hidden' value='"+ contactDate +"' name='chDate' />"
 	            				+ "<span class='delContactHist' id='"+ value["userId"] +"'>x</span></div>"
 	            				+ "<div><table class='table'><tbody>"
 	                        	+ "<tr id='rowData'><td>"
@@ -1892,11 +1901,13 @@ label.error {
         	},
         	error: function(){
 			  BootstrapDialog.show({
-   				title: 'Warning',
-  	             	message: 'Delete contact history failed'
+   				title: '<fmt:message key="popup.title.info" />',
+  	             	message: '<fmt:message key="delete.contact.hist.failed" />'
    	      		});
 		  	}
         });	 
+		//Hide scrollbar
+       	//$("#contact-hist-body").attr("style", "height:auto; overflow-x:hidden; overflow-y:hidden;")
 	}
 	
 	function loginSaleForce(){
@@ -1960,3 +1971,4 @@ label.error {
 		}
 	}
    </script>
+   

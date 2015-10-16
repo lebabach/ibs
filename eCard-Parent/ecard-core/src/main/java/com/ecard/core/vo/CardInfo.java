@@ -118,6 +118,24 @@ private String fullName;
         this.approvalStatus = approvalStatus;
         this.createDate = createDate;
     }
+    public CardInfo(Integer cardId, String name, String lastName, String firstName, String nameKana, String lastNameKana, String firstNameKana,
+            String companyName, String departmentName, String positionName, String imageFile, Integer approvalStatus ,Date createDate,String email,String telNumberCompany ){
+        this.cardId = cardId;
+        this.name = name;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.nameKana = nameKana;
+        this.lastNameKana = lastNameKana;
+        this.firstNameKana = firstNameKana;
+        this.companyName = companyName;
+        this.departmentName = departmentName;
+        this.positionName = positionName;    
+        this.imageFile = imageFile;
+        this.approvalStatus = approvalStatus;
+        this.createDate = createDate;
+        this.email = email;
+        this.telNumberCompany = telNumberCompany;
+    }
     
     public CardInfo(Integer cardId, String name, String firstName, String lastName, String nameKana, String firstNameKana, String lastNameKana, 
             String companyName, String departmentName, String imageFile, String positionName, Date createDate, Integer approvalStatus, String telNumberCompany, String email,
