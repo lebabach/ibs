@@ -614,7 +614,8 @@
  					 contentType: 'application/json',
  					 mimeType: 'application/json',
  					data:JSON.stringify({"listCardId":listCardId}) 
- 				}).done(function(resp, status, xhr) { 					
+ 				}).done(function(resp, status, xhr) {
+ 					i = 0;
  					if(resp != 0){
  						$(".list-group-item .checked").closest('.list-group-item').each(function(){
  						$(this).removeClass("checked")
@@ -636,7 +637,7 @@
     	   
        });
        var i = 0;
-     $(document).on('click', '.list-group-item .icheckbox_square-green', function(e) {
+     $(document).on('click', '.business_card_book .list-group-item .icheckbox_square-green', function(e) {
    	  	if($(this).attr("class").indexOf("checked") == -1){
    	  		$(this).removeClass('icheckbox_square-green');
    	  		 $(this).removeClass("icheckbox_square-green hover");
@@ -730,7 +731,7 @@
 								+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 								+   '<input class="hidden" name="fileImageName" value="'+v.imageFile+'">'
 								+	'</div> </div> </div> </div>');
-			 					//getImageFromSCP(v.imageFile);
+			 					getImageFromSCP(v.imageFile);
 					});
 					
 				}).fail(function(xhr, status, err) {
@@ -1555,7 +1556,7 @@
 		        	 $(this).addClass("icheckbox_square-green checked");
 		        	 //Add card tag
 		        	 var json = {"tagId" : tagId, "listCardId" : listCardId};
-		        	 deleteCardTag(json);
+		        	 //deleteCardTag(json);
 		     	     addCardTag(json);
 		    	 }else {
 			    		console.log("tagId remove : " + tagId);

@@ -17,6 +17,9 @@
     left: 10px !important;
     bottom: 20px !important;
 }
+.img-thumb{
+	margin-top: 32px;
+}
 </style>
 	
 <!-- Start Container -->
@@ -89,7 +92,7 @@ $(document).ready(function(){
 	$(".business_card_book .img-responsive").each(function () {
 	  	isLoading=isLoading+1;
 		var target = $(this);
-	    var fileImageName =$(this).parent().find('input[name=fileImageName]').val();
+	    var fileImageName =$(this).parent().parent().find('input[name=fileImageName]').val();
 
 	    $.ajax({
 	        type: 'POST',

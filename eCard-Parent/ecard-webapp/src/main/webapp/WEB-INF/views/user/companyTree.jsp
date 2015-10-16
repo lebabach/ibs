@@ -334,8 +334,11 @@ $(document).ready(function(){
 		}
 	});
 	
-	$(document).on('click','li.li-3 > a', function () {  
-    	window.location.href = "<c:url value='/user/companyTree/list' />?name="+this.id;
+	$(document).on('click','li.li-3 > a', function () {
+		var deptName = $(".li-3").find("input[name=c_dep_"+this.id+"]").val();
+		var compName = $(".li-3").find("input[name=c_comp_"+this.id+"]").val();
+		//console.log("deptName :"+deptName+" compName : "+compName);
+    	window.location.href = "<c:url value='/user/companyTree/list' />?compName="+compName+"&deptName="+deptName;
     });
 	
 });
@@ -366,13 +369,13 @@ function searchCompanyTree(){
     		//console.log(JSON.stringify(response));
     		var respHTML = "<ul class='ul-1'>";
        		$.each(response, function(index, value){
-       			if(value["companyName"] != "" || value["companyName"] != null){
+       			if(value["companyName"] != ""){
 	       			respHTML += "<li class='li-1' id='"+ value["cardId"] +"'>"+ value["companyName"] +" ("+ value["count"] +")"
 	                    	+ "<input type='hidden' value='"+ value["companyName"] +"' name='companyName_"+ value["cardId"] +"' />"
 	                    	+ "</li><div id='div_"+ value["cardId"] +"'></div>";
        			}
        			else{
-       				respHTML += "<li class='li-1' id='"+ value["cardId"] +"'>"+ <fmt:message key="company.blank" /> +"</li><div id='div_"+ value["cardId"] +"'></div>"
+       				respHTML += "<li class='li-1' id='"+ value["cardId"] +"' style='color:red;'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_"+ value["cardId"] +"'></div>"
        			}
        		});
        		respHTML += "</ul>";
@@ -409,6 +412,9 @@ function searchDepartmentTree(companyName, id){
        						+ "<input type='hidden' value='"+ compName +"' name='comp_"+ value["cardId"] +"' />"
        						+ "</li><div id='div_dep_"+ value["cardId"] +"'></div>";
        			}
+       			else{
+       				respHTML += "<li class='li-11' id='dep_"+ value["cardId"] +"' style='color:red;'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_dep_"+ value["cardId"] +"'></div>"
+       			}
        		}); 
        		respHTML += "</ul>";
        		
@@ -437,8 +443,16 @@ function searchCardInfo(deptName, compName, id){
        		console.log(JSON.stringify(response));
        		var respHTML = "<ul style='display: inline-block;' class='ul-3'>";
        		$.each(response, function(index, value){
-       			respHTML += "<li class='li-3' id='"+ value["cardId"] +"'><a href='#' id='"+ value["companyName"] +"'>"
-       						+ value["companyName"] +"("+ value["count"] +")</a></li>";
+       			if(value["companyName"] != ""){
+	       			respHTML += "<li class='li-3'><a href='#' id='"+ value["cardId"] +"'>"
+	       						+ value["companyName"] +"("+ value["count"] +")</a>"
+	       						+"<input value='"+ deptName +"' name='c_dep_"+ value["cardId"] +"' type='hidden'>"
+	       						+ "<input value='"+ compName +"' name='c_comp_"+ value["cardId"] +"' type='hidden'>"
+	       						+ "</li>";
+       			}
+       			else{
+       				respHTML += "<li class='li-3' style='color:red;'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_"+ value["cardId"] +"'></div>"
+       			}
        		}); 
        		respHTML += "</ul>";
        		

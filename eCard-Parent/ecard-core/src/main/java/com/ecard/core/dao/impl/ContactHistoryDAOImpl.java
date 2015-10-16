@@ -33,7 +33,7 @@ public class ContactHistoryDAOImpl extends GenericDao implements ContactHistoryD
 		List<Object[]> rows = query.getResultList();
         List<com.ecard.core.vo.ContactHistory> result = new ArrayList<>(rows.size());
         for (Object[] row : rows) {
-            result.add(new com.ecard.core.vo.ContactHistory((Integer)row[0], (Integer)row[1], (Integer)row[2], (Date)row[3], (String)row[4]));
+            result.add(new com.ecard.core.vo.ContactHistory((Integer)row[0], (Integer)row[1], (Integer)row[2], (Date)row[3], (String)row[4], (String)row[5], (String)row[6]));
         }
         return result;
 	}
@@ -44,4 +44,6 @@ public class ContactHistoryDAOImpl extends GenericDao implements ContactHistoryD
 		
 		return query.executeUpdate();
 	}
+	
+	
 }
