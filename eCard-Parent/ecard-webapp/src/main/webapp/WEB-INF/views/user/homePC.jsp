@@ -614,12 +614,13 @@
         	 $("#deleteTag").show();
          }else if(parseInt(typeSort) == 1){
         	 $("#sort_cnd").hide();
+        	 $("#bulk_tag").show();
+        	 $("#deleteTag").show();
         		$.ajax({
  					type: 'POST',
  					url: 'getListPossesionCardRecent'
  				}).done(function(resp, status, xhr) { 					
  					$(".business_card_book").html("");
- 					console.log("AAAAAAAAAA: "+resp[0]);
  					$.each( resp, function( k, v ) {
  						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
  			 					+'<div class="row row-new">'
@@ -656,7 +657,6 @@
 					url: 'listCardRecent'
 				}).done(function(resp, status, xhr) { 					
 					$(".business_card_book").html("");
-					console.log("AAAAAAAAAA: "+resp[0]);
 					$.each( resp, function( k, v ) {
 						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
 			 					+'<div class="row row-new">'
@@ -690,7 +690,6 @@
 					url: 'listCardPending'
 				}).done(function(resp, status, xhr) { 					
 					$(".business_card_book").html("");
-					console.log("AAAAAAAAAA: "+resp[0]);
 					$.each( resp, function( k, v ) {
 						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
 			 					+'<div class="row row-new">'
