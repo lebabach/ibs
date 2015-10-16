@@ -931,30 +931,35 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		 
 		if (sortType == SearchConditions.CONTACT.getValue()) {
 			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
 					+ "AND date_format(date(c.contactDate),'%m/%Y') = :valueSearch";
 			
 		} else if (sortType == SearchConditions.NAME.getValue()) {
 			sqlStr = "SELECT c.nameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+" AND (c.nameKana is not null AND c.nameKana <> '') "
 					+ "AND c.nameKana LIKE :valueSearch";
 			
 		} else if (sortType == SearchConditions.COMPANY.getValue()) {			
 			sqlStr = "SELECT c.companyNameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ " AND (c.companyNameKana is not null AND c.companyNameKana <> '') "
 					+ "AND c.companyNameKana = :valueSearch";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
 			sqlStr = "SELECT ut.tagName AS groupDate, c FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
 					+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0"
+					+" AND (ut.tagName is not null AND ut.tagName <> '') "
 					+" AND ut.tagName = :valueSearch";
 		} else {
 			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
-					+ "AND date_format(date(c.contactDate),'%m/%Y') = :valueSearch";
+					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
+					+ " AND date_format(date(c.contactDate),'%m/%Y') = :valueSearch";
 		}
 		
 		Query query = getEntityManager().createQuery(sqlStr);
 		query.setParameter("userId", userId);
 		
 		if (sortType == SearchConditions.NAME.getValue()) {
-			if(valueSearch != "")
+			if(valueSearch != "" || valueSearch != null)
 				query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
 			else 
 				query.setParameter("valueSearch", valueSearch + "%");
@@ -1197,25 +1202,34 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		 
 		if (sortType == SearchConditions.CONTACT.getValue()) {
 			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate FROM CardInfo c "
-					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 GROUP BY DATE_FORMAT(c.contactDate,'%m/%Y') ORDER BY c.contactDate DESC ";
+					+ " WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
+					+ " GROUP BY DATE_FORMAT(c.contactDate,'%m/%Y') ORDER BY c.contactDate DESC ";
 			
 		} else if (sortType == SearchConditions.NAME.getValue()) {
-			sqlStr = "SELECT c.nameKana AS groupDate FROM CardInfo c "
-					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 GROUP BY SUBSTR((c.nameKana),1,1) ORDER BY c.nameKana ASC ";
+			sqlStr = "SELECT c.nameKana  AS groupDate FROM CardInfo c "
+					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ " AND (c.nameKana is not null AND c.nameKana <> '') "
+					+ "GROUP BY SUBSTR((c.nameKana),1,1) ORDER BY c.nameKana ASC ";
 			
 		} else if (sortType == SearchConditions.COMPANY.getValue()) {
 			sqlStr = "SELECT c.companyNameKana AS groupDate FROM CardInfo c "
-					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 GROUP BY c.companyNameKana ORDER BY c.companyNameKana ASC ";
+					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ " AND (c.companyNameKana is not null AND c.companyNameKana <> '') "
+					+ "GROUP BY c.companyNameKana ORDER BY c.companyNameKana ASC ";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
 			sqlStr = "SELECT ut.tagName AS groupDate FROM CardTag ct INNER JOIN ct.userTag ut"
 					+" WHERE ut.userInfo.userId = :userId "
+					+ " AND (ut.tagName is not null AND ut.tagName <> '') "
 					+" GROUP BY ut.tagName ORDER BY ut.tagName ASC" ;
 					
 			
 		} else {
 			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate FROM CardInfo c "
-					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 GROUP BY DATE_FORMAT(c.contactDate,'%m/%Y') ORDER BY c.contactDate DESC ";
+					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
+					+ "GROUP BY DATE_FORMAT(c.contactDate,'%m/%Y') ORDER BY c.contactDate DESC ";
 		}
 		
 		Query query = getEntityManager().createQuery(sqlStr);

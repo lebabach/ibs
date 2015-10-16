@@ -259,14 +259,15 @@ public class UserController {
 		if(searchType == 0) {
 			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), typeSort);
 			if(valueSearch == "" || valueSearch == null){				
-				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0));
+				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).trim());
 			} else {
 				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, valueSearch);
 			}
 			
 			
 			if (typeSort == SearchConditions.NAME.getValue()) {
-				lstNameSort = lstNameSort.stream().map(str->str.substring(0, 1).toUpperCase()).collect(Collectors.toList());
+				lstNameSort = lstNameSort.stream().map(str-> str!= "" ? str.substring(0, 1).toUpperCase() : str).collect(Collectors.toList());
+				
 			}
 			
 		}
@@ -276,7 +277,11 @@ public class UserController {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
 			for (CardInfoUserVo cardInfo : lstCardInfo) {
 				if(typeSort == SearchConditions.NAME.getValue()){
-					if (nameSort.equals(cardInfo.getSortType().toUpperCase().substring(0,1))) {
+					if(cardInfo.getSortType() != ""){
+						if (nameSort.equals(cardInfo.getSortType().toUpperCase().substring(0,1))) {
+							cardInfoDisp.add(cardInfo.getCardInfo());
+						}
+					} else {
 						cardInfoDisp.add(cardInfo.getCardInfo());
 					}
 				} else {
