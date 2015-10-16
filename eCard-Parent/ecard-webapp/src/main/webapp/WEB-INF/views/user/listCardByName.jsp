@@ -78,7 +78,7 @@
 var isLoading = 0;
 $(document).ready(function(){
 	$("#backListCard").click(function(){
-		window.location.href = "<c:url value='/user/home' />";
+		goBack();
 	});
 	
 	$(".row-new").click(function(){
@@ -111,4 +111,8 @@ $(document).ready(function(){
 	
 });
 
+function goBack(){
+	window.history.back();
+	return false;
+}
 </script>

@@ -1793,7 +1793,7 @@ public class UserController {
 		}
 		return date;
 	}
-	
+
 	@RequestMapping(value = "getListPossesionCardRecent", method = RequestMethod.POST)
 	@ResponseBody
     public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(HttpServletRequest request) {
