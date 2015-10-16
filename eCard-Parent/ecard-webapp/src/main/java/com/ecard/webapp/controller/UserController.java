@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
@@ -29,6 +30,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.HttpMethod;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -39,6 +41,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -56,15 +59,17 @@ import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 import org.thymeleaf.context.Context;
-
+import com.ecard.core.dao.OldCardDAO;
 import com.ecard.core.model.ActionLog;
 import com.ecard.core.model.ActionLogId;
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.CardTagId;
 import com.ecard.core.model.CompanyInfo;
-import com.ecard.core.model.ContactHistory;
+import com.ecard.core.model.ContactHistoryId;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.GroupCompanyInfo;
 import com.ecard.core.model.InquiryInfo;
+import com.ecard.core.model.OldCard;
 import com.ecard.core.model.PossessionCard;
 import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.UserCardMemoId;
@@ -94,16 +99,21 @@ import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoCSV;
 import com.ecard.core.vo.CardInfoMemo;
+import com.ecard.core.vo.CardInfoResponse;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.SearchInfo;
 import com.ecard.core.vo.TagForCard;
 import com.ecard.core.vo.TagGroup;
+import com.ecard.core.vo.UserDownloadPermission;
 import com.ecard.core.vo.UserInfoVo;
 import com.ecard.core.vo.UserTagAndCardTag;
 import com.ecard.webapp.constant.CommonConstants;
+import com.ecard.webapp.controller.DataProcessController.UploadDefaultCardThread;
 import com.ecard.webapp.constant.CsvConstant;
 import com.ecard.webapp.security.EcardUser;
+import com.ecard.webapp.security.RoleType;
+import com.ecard.webapp.util.FileUploadModel;
 import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardAndUserTagHome;
@@ -111,13 +121,16 @@ import com.ecard.webapp.vo.CardInfoPCVo;
 import com.ecard.webapp.vo.CardInfoSaleforce;
 import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.ListCardDelete;
+import com.ecard.webapp.vo.NotificationOfUserVO;
 import com.ecard.webapp.vo.ObjectCards;
 import com.ecard.webapp.vo.ObjectListSearchUsers;
 import com.ecard.webapp.vo.OwnerCards;
 import com.ecard.webapp.vo.TagUserHome;
+import com.ecard.webapp.vo.UserInfoResultVO;
 import com.ecard.webapp.vo.UserInfoVO;
 import com.ecard.webapp.vo.UserSearchVO;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/user/*")
@@ -645,7 +658,7 @@ public class UserController {
 
 	@RequestMapping(value = "addContactHistory", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<com.ecard.core.vo.ContactHistory> addContactHistory(@RequestBody ContactHistory contactHistoryModel,
+	public List<com.ecard.core.vo.ContactHistory> addContactHistory(@RequestBody ContactHistoryId contactHistoryId,
 			HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("addContactHistory", UserController.class);
 
@@ -656,12 +669,13 @@ public class UserController {
 			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 			Integer userId = ecardUser.getUserId();
 
-			contactHistoryModel.setUserId(userId);
+			contactHistoryId.setUserId(userId);
+			contactHistModel.setId(contactHistoryId);
 
 			com.ecard.core.model.ContactHistory contactHistory = contactHistoryService
-					.saveContactHistory(contactHistoryModel);
+					.saveContactHistory(contactHistModel);
 
-			contactHistoryList = contactHistoryService.getListContactHistoryById(contactHistoryModel.getCardInfo().getCardId());
+			contactHistoryList = contactHistoryService.getListContactHistoryById(contactHistoryId.getCardId());
 		} catch (Exception ex) {
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
@@ -670,15 +684,16 @@ public class UserController {
 
 	@RequestMapping(value = "deleteContactHistory", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<com.ecard.core.vo.ContactHistory> deleteContactHistory(@RequestBody ContactHistory contactHistory,
+	public List<com.ecard.core.vo.ContactHistory> deleteContactHistory(@RequestBody ContactHistoryId contactHistoryId,
 			HttpServletRequest request, HttpServletResponse response) {
 		logger.debug("deleteContactHistory", UserController.class);
 
+		com.ecard.core.model.ContactHistory contactHistModel = new com.ecard.core.model.ContactHistory();
 		List<com.ecard.core.vo.ContactHistory> contactHistoryList = null;
 		try {
-			int rs = contactHistoryService.deleteContactHistory(contactHistory.getContactHistoryId());
+			int rs = contactHistoryService.deleteContactHistory(contactHistoryId);
 			if (rs > 0) {
-				contactHistoryList = contactHistoryService.getListContactHistoryById(contactHistory.getCardInfo().getCardId());
+				contactHistoryList = contactHistoryService.getListContactHistoryById(contactHistoryId.getCardId());
 			}
 		} catch (Exception ex) {
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
@@ -1778,7 +1793,7 @@ public class UserController {
 		}
 		return date;
 	}
-
+	
 	@RequestMapping(value = "getListPossesionCardRecent", method = RequestMethod.POST)
 	@ResponseBody
     public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(HttpServletRequest request) {
