@@ -191,7 +191,7 @@
                                         
                                         
                                         <div class="modal-content-new" style="display:none">
-                                            <div class="modal-header" id="lsUserSearchs">
+                                            <div class="modal-header" id="lsUserSearchs" style="height: 579px;overflow-y: scroll;">
                                                 <a class="close" id="close-x">
                                                     <span aria-hidden="true">×</span>
                                                 </a>
@@ -264,130 +264,6 @@
                     <!-- </form> -->
                     
                     <!-- <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>  -->
-                </div>
-            
-            </div>
-            
-          </div>
-		  <div class="col-md-2 col-md-offset-1" style="width: 150px; display:inline-block">
-            <div class="form-group">
-                <div class="icon-addon addon-md">                    
-						<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-example">グループ名刺を検索</button>
-                                <!-- modal -->
-                                <div class="modal" id="modal-example" tabindex="-1">
-                                    <div class="modal-dialog">                                        
-                                        <!-- modal content -->
-                                        <style type="text/css">
-                                            .modal-content-new{
-                                                background-clip: padding-box;
-                                                background-color: #FFFFFF;
-                                                border: 1px solid rgba(0, 0, 0, 0);
-                                                border-radius: 4px;
-                                                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-                                                outline: 0 none;
-                                                position: relative;
-                                                margin-top: 180px;
-                                            }
-                                        .list-new-n{
-                                            display: table;
-                                            width: 100%;
-                                            margin: 0;
-                                            padding: 0;
-                                        }
-                                        .checkbox-new{
-                                            display: table-cell;
-                                            vertical-align: middle;
-                                            width: 50px;
-                                        }
-                                        .list-contetn{
-                                            display: table-cell;
-                                            vertical-align: middle;
-                                            text-align: left;
-                                        }
-                                        .list-contetn p{
-                                            display: block;
-                                            width: auto;
-                                            
-                                        }
-                                        .a-new-n{
-                                            background:#dc0069;
-                                            display: inline-block;
-                                            border:none;
-                                        }
-                                        </style>
-                                        
-                                        
-                                        <div class="modal-content-new" style="display:none">
-                                            <div class="modal-header" id="lsUserSearchs">
-                                                <a class="close" id="close-x">
-                                                    <span aria-hidden="true">×</span>
-                                                </a>
-                                                
-                                                <h4 class="modal-title" id="modal-label">検索条件管理</h4>
-                                            </div>
-                                            <div class="modal-footer" style="width: 100%;
-                                                display: inline-block;
-                                                margin: 0 auto;
-                                                text-align: center;">
-                                                
-                                                <a id="btn-success2" class="btn btn-success a-new-n">選択した検索条件を使用する</a>
-                                                
-                                                <a id="btn-success3" class="btn btn-success a-new-n">選択した検索条件を削除</a>
-                                            </div>
-                                        </div>
-                                        <div class="modal-content">
-                                            <!-- modal header -->
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                                <h4 class="modal-title" id="modal-label">検索条件を入力してください</h4>
-                                            </div>
-                                            <!-- modal body -->
-                                            <div class="modal-body">
-                                                <label for="parameterFlg">検索対象</label>
-                                                <select class="form-control" id="parameterFlg" name="parameterFlg">
-                                                    <option value="0">自分の名刺</option>
-                                                    <option value="1">グループネットワーク</option>
-                                                </select>
-                                                <div class="form-group">
-                                                    <label for="freeText">フリーワード</label>
-                                                    <input type="email" class="form-control" name="freeText" id="freeText" placeholder="会社名・氏名・emailを入力 * and * でAND検索">
-                                                        </div>
-                                                <h4 class="modal-title" id="modal-label">必要に応じて入力してください</h4>
-                                                <div class="form-group" style="display:none">
-                                                    <label for="owner">所有者</label>
-                                                    <input type="email" class="form-control" name="owner" id="owner" placeholder="">
-                                                        </div>
-                                                <div class="form-group">
-                                                    <label for="company">会社名</label>
-                                                    <input type="email" class="form-control" name="company" id="company" placeholder="">
-                                                        </div>
-                                                <div class="form-group">
-                                                    <label for="department">部署</label>
-                                                    <input type="email" class="form-control" name="department" id="department" placeholder="">
-                                                        </div>
-                                                <div class="form-group">
-                                                    <label for="position">役職</label>
-                                                    <input type="email" class="form-control" name="position" id="position" placeholder="">
-                                                        </div>
-                                                <div class="form-group">
-                                                    <label for="name">氏名</label>
-                                                    <input type="email" class="form-control" name="name" id="name" placeholder="">
-                                                    <p class="mesage_error error_common">121121</p>
-                                                        </div>
-                                            </div>
-                                            <!-- modal footer -->
-                                            <div class="modal-footer">
-                                                <div class="col-md-3">
-                                                    <button type="button" class="btn btn-primary btn-lg">検索</button>
-                                                </div>
-                                                <a id="btn-success" class="btn btn-success" >保存済みの検索条件を呼び出す</a>
-                                                <button type="button" class="btn btn-info">検索条件を保存する</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                 </div>
             
             </div>
@@ -486,47 +362,68 @@
           
 	  </div>
     <div class="business_card_book">
-		<c:forEach var="nameSort" items="${lstNameSort}" varStatus="loopCount">
-	   		<div class="list-group" style="margin-bottom: 0px !important" id="<c:out value='${nameSort}'/>">
-	   			<c:if test="${loopCount.count == 1}">
-		        	<div class="ul-left-li active list-group-item-title "><c:out value="${nameSort}" /></div>       		
-       				<c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">  						        
-				        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
-					        <div class="list-group-item pointer show-content">
-					          <div class="row row-new">
-					            <div class="col-md-1 col-xs-1">
-					              <div class="icheckbox_square-green">
-					                <input type="checkbox" class="i-checks" name="bla" value="<c:out value='${cardInfo.cardId}' />">
-					              </div>
-					            </div>
-					            <div class="col-md-5">
-					              <div class="col-xs-11 mg-top">
-					                <p class="name"><c:out value="${cardInfo.lastName}" />  <c:out value="${cardInfo.firstName}" /></p>
-					                <p class="livepass"><c:out value="${cardInfo.companyName}" /></p>
-					                <p class="department_and_position"><c:out value="${cardInfo.departmentName}" /> <c:out value="${cardInfo.positionName}" /></p>
-					                <p class="num"><c:out value="${cardInfo.telNumberCompany}" /></p>
-					                <p class="mail"><a href="#"><c:out value="${cardInfo.email}" /></a></p>
-					              </div>
-					            </div>
-					            <div class="col-md-6">
-					              <div class="col-xs-5" style=" display: table;">
-					                </div>
-					                  <div class="col-xs-7">
-					                    <img src="<c:url value='/assets/img/loading.gif'/>" class="img-responsive img-thumb pull-right" alt="Responsive image">
-					                    <input class="hidden" name="fileImageName" value="${cardInfo.imageFile}">
-					                  </div> 
-					            </div>
-					          </div>          
-					        </div>
-				        </c:forEach>						      
-			     	</c:forEach>	       			
-		        </c:if>
-		        <c:if test="${loopCount.count != 1}">
-		       		<div class="ul-left-li list-group-item-title "><c:out value="${nameSort}" />		       			
-		       		</div>
-	       		</c:if>
-	       	</div>       	
-      </c:forEach>  
+    <c:choose>
+	     <c:when test="${empty searchDetail}">
+		     <c:forEach var="nameSort" items="${lstNameSort}" varStatus="loopCount">
+		   		<div class="list-group" style="margin-bottom: 0px !important" id="<c:out value='${nameSort}'/>">
+		   			<c:if test="${loopCount.count == 1}">
+			        	<div class="ul-left-li active list-group-item-title "><c:out value="${nameSort}" /></div>       		
+	       				<c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">  						        
+					        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
+						        <div class="list-group-item pointer show-content">
+						          <div class="row row-new">
+						            <div class="col-md-1 col-xs-1">
+						              <div class="icheckbox_square-green">
+						                <input type="checkbox" class="i-checks" name="bla" value="<c:out value='${cardInfo.cardId}' />">
+						              </div>
+						            </div>
+						            <div class="col-md-5">
+						              <div class="col-xs-11 mg-top">
+						                <p class="name"><c:out value="${cardInfo.lastName}" />  <c:out value="${cardInfo.firstName}" /></p>
+						                <p class="livepass"><c:out value="${cardInfo.companyName}" /></p>
+						                <p class="department_and_position"><c:out value="${cardInfo.departmentName}" /> <c:out value="${cardInfo.positionName}" /></p>
+						                <p class="num"><c:out value="${cardInfo.telNumberCompany}" /></p>
+						                <p class="mail"><a href="#"><c:out value="${cardInfo.email}" /></a></p>
+						              </div>
+						            </div>
+						            <div class="col-md-6">
+						              <div class="col-xs-5" style=" display: table;">
+						                </div>
+						                  <div class="col-xs-7">
+						                    <img src="<c:url value='/assets/img/loading.gif'/>" class="img-responsive img-thumb pull-right" alt="Responsive image">
+						                    <input class="hidden" name="fileImageName" value="${cardInfo.imageFile}">
+						                  </div> 
+						            </div>
+						          </div>          
+						        </div>
+					        </c:forEach>						      
+				     	</c:forEach>	       			
+			        </c:if>
+			        <c:if test="${loopCount.count != 1}">
+			       		<div class="ul-left-li list-group-item-title "><c:out value="${nameSort}" />		       			
+			       		</div>
+		       		</c:if>
+		       	</div>       	
+	      	</c:forEach>
+	     </c:when>
+	    <c:otherwise>
+				<input class="hidden" id="hid-freeText" name="hid-freeText"
+					value="${searchDetail.freeText}">
+				<input class="hidden" id="hid-owner" name="hid-owner"
+					value="${searchDetail.owner}">
+				<input class="hidden" id="hid-company" name="hid-company"
+					value="${searchDetail.company}">
+				<input class="hidden" id="hid-department" name="hid-department"
+					value="${searchDetail.department}">
+				<input class="hidden" id="hid-position" name="hid-position"
+					value="${searchDetail.position}">
+				<input class="hidden" id="hid-name" name="hid-name"
+					value="${searchDetail.name}">
+				<input class="hidden" id="hid-parameterFlg" name="hid-parameterFlg"
+					value="${searchDetail.parameterFlg}">
+			</c:otherwise>
+	</c:choose>
+		  
     </div>
 </div>
 
@@ -570,6 +467,7 @@
 	   		$("#name").val(name);
 	   		$("#parameterFlg").val(parameterFlg);
 	   	}
+      
       var page = 1;
       var isLoading = 0;
       
@@ -853,6 +751,7 @@
        $( "#btn-success2" ).click(function() {
  	         $('.modal-content').show(); 
  	         $('.modal-content-new').hide(); 
+ 	         var isCheck=false;
  	     	var freeText="",owner="",company="",department="",position="",name="",parameterFlg="";
 	   		$(".modal-content-new .i-checks").each(function() {
 	   			if($(this).is(':checked')){
@@ -864,10 +763,14 @@
 	   				name=$(this).closest(".row.row-new").find(".hidden.name").val();
 	   				parameterFlg=$(this).closest(".row.row-new").find(".hidden.parameterFlg").val();
 	   				setDisplayResearch(freeText,owner,company,department,position,name,parameterFlg);
+	   				isCheck=true;
 	   				return false;
 	   			}
 	   		});
-	   		setDisplayResearch(freeText,owner,company,department,position,name,0);
+	   		if(!isCheck){
+	   			setDisplayResearch(freeText,owner,company,department,position,name,0);	
+	   		}
+	   		return false;
          });
          
          $( "#close-x" ).click(function() {
@@ -985,6 +888,7 @@
 	   			});
 		   		
 		   	 })
+		   	 
 });/* END READY DOCUMENT  */
  
       
@@ -1334,7 +1238,7 @@
 	   		$("#name").val(name);
 	   		$("#parameterFlg").val(parameterFlg);
 	   		$( "#parameterFlg" ).click();
-	   		return modal;
+	   		return false;
 	   	}
 	   	
 
