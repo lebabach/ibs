@@ -4,10 +4,12 @@
 package com.ecard.core.service.impl;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ecard.core.dao.CardInfoDAO;
+import com.ecard.core.dao.ContactHistoryDAO;
 import com.ecard.core.dao.DataIndexDAO;
 import com.ecard.core.dao.OldCardDAO;
+import com.ecard.core.dao.UserCardMemoDAO;
 import com.ecard.core.dao.UserInfoDAO;
 import com.ecard.core.model.AdminPossessionCard;
 import com.ecard.core.model.CardInfo;
@@ -35,6 +39,7 @@ import com.ecard.core.model.enums.IndexTypeEnum;
 import com.ecard.core.model.enums.PropertyCodeEnum;
 import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.service.CardInfoService;
+import com.ecard.core.service.ContactHistoryService;
 import com.ecard.core.util.DataIndexUtil;
 import com.ecard.core.util.StringUtilsHelper;
 import com.ecard.core.vo.CardConnectModel;
@@ -64,6 +69,12 @@ public class CardInfoServiceImpl implements CardInfoService {
     
     @Autowired
     UserInfoDAO userInfoDAO;
+    
+    @Autowired
+    UserCardMemoDAO userCardMemoDAO;
+    
+    @Autowired
+    ContactHistoryDAO contactHistoryDAO;
 
     public List<CardInfo> listAllCardInfo(){
     	return cardInfoDAO.listAllCardInfo();
@@ -439,6 +450,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 				
 				oldcard.setId(oldCardId);
 				oldCardDAO.persist(oldcard);
+				
+				
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -526,5 +539,62 @@ public class CardInfoServiceImpl implements CardInfoService {
 			String nameAssign) {
 		// TODO Auto-generated method stub
 		return cardInfoDAO.updateUserCard(listCardUser,userLeave,userAssign,nameAssign);
+	}
+	
+	
+	
+	class UploadCardThread extends Thread {
+		int card1;
+		int card2;
+		int userId;
+
+		UploadCardThread(int cardId1,int userId,int cardId2) {
+			
+		}
+		
+		public boolean changeUserCardMemmo(int cardId1,int userId,int cardId2){
+			List<UserCardMemo> memos=userCardMemoDAO.findAll(UserCardMemo.class).stream().filter(x->x.getCardInfo().getCardId().intValue()==cardId1 && x.getUserInfo().getUserId()==userId).collect(Collectors.toList());
+			memos.forEach(m->{
+				CardInfo card2=new CardInfo();
+				card2.setCardId(cardId2);
+				m.setCardInfo(card2);
+				userCardMemoDAO.saveOrUpdate(m);
+			});
+			
+			return true;
+		}
+		
+		public boolean changeContactHistory(int cardId1,int userId,int cardId2){
+			List<com.ecard.core.vo.ContactHistory> histories=contactHistoryDAO.getListContactHistoryById(cardId1).stream().filter(h->h.getUserId()==userId).collect(Collectors.toList());
+			List<ContactHistory> historyEntities=new ArrayList<ContactHistory>();
+			
+			histories.forEach(h->{
+				ContactHistory history=new ContactHistory();
+				CardInfo card2=new CardInfo();
+				card2.setCardId(cardId2);
+				
+				
+				history.setCardInfo(card2);
+				history.setContactDate(h.getContactDate());
+				history.setContactHistoryId(h.getContactHistoryId());
+				history.setContactMemo(h.getContactMemo());
+				history.setPlace(h.getPlace());
+				history.setTitle(h.getTitle());
+				history.setUserId(h.getUserId());
+				historyEntities.add(history);
+			});
+			historyEntities.forEach(h->{
+				contactHistoryDAO.saveContactHistory(h);
+			});
+			
+			return true;
+		}
+
+		public void run() {
+			try {
+				
+			} catch (Exception ex) {
+			}
+		}
 	}
 }

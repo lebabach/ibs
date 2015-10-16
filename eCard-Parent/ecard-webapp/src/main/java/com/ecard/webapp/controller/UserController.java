@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -1555,7 +1556,7 @@ public class UserController {
 			List<Integer> userIds = cards.stream().map(x -> x.getCardOwnerId()).collect(Collectors.toList());
 
 			List<UserInfoVo> users = userInfoService.getUserInArrUserId(userIds);
-
+			List<UserInfoVo> userTemps=null;
 			UserInfoVo user = null;
 			LocalDate contactDate = null;
 			for (com.ecard.core.vo.CardInfo item : cards) {
@@ -1569,12 +1570,16 @@ public class UserController {
 				ownerCard.setName(item.getName());
 				ownerCard.setPositionName(item.getPositionName());
 				ownerCard.setTelNumberCompany(item.getTelNumberCompany());
-				user = users.stream().filter(x -> x.getUserId().intValue() == item.getCardOwnerId().intValue()).findFirst().get();
-				ownerCard.setOwner(
-						StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
-				ownerCard.setContactDateString(
-						ownerCard.getContactDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString());
-				ownerCards.add(ownerCard);
+				userTemps = users.stream().filter(x -> x.getUserId().intValue() == item.getCardOwnerId().intValue()).collect(Collectors.toList());
+				if(!CollectionUtils.isEmpty(userTemps)){
+					user = userTemps.stream().findFirst().get();
+					ownerCard.setOwner(
+							StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
+					ownerCard.setContactDateString(
+							ownerCard.getContactDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString());
+					ownerCards.add(ownerCard);
+				}
+				
 
 			}
 		}

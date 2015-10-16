@@ -8,6 +8,8 @@ public class ContactHistory {
     private int userId;
     private Date contactDate;
     private String contactMemo;
+    private String place;
+    private String title;
     
     public ContactHistory(){}
     
@@ -17,7 +19,17 @@ public class ContactHistory {
     	this.userId = userId;
     	this.contactDate = contactDate;
     	this.contactMemo = contactMemo;
-    }    
+    }   
+    
+    public ContactHistory(int contactHistoryId, int cardId, int userId, Date contactDate, String contactMemo,String place,String title){
+    	this.setContactHistoryId(contactHistoryId);
+    	this.cardId = cardId;
+    	this.userId = userId;
+    	this.contactDate = contactDate;
+    	this.contactMemo = contactMemo;
+    	this.place=place;
+    	this.title=title;
+    }
     
 	public int getCardId() {
 		return cardId;
@@ -51,4 +63,22 @@ public class ContactHistory {
 	public void setContactHistoryId(int contactHistoryId) {
 		this.contactHistoryId = contactHistoryId;
 	}
+
+	public String getPlace() {
+		return place;
+	}
+
+	public void setPlace(String place) {
+		this.place = place;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	
 }
