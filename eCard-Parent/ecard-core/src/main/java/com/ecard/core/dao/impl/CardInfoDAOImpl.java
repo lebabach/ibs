@@ -1200,8 +1200,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
     }
 	
 	public Long countSameCardInfoByOwner(CardInfo cardInfo){
-        String sqlStr = "SELECT count(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND (c.email = :email OR (c.name = :name AND c.companyName = :companyName))";
+        String sqlStr = "SELECT count(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND (c.email = :email OR (c.name = :name AND c.companyName = :companyName)) "
+        		+ " AND c.cardId <> :cardId";        
         Query query = getEntityManager().createQuery(sqlStr);
+        query.setParameter("cardId", cardInfo.getCardId());
         query.setParameter("userId", cardInfo.getCardOwnerId());
         query.setParameter("email", cardInfo.getEmail());
         query.setParameter("name", cardInfo.getName());

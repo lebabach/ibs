@@ -481,7 +481,7 @@ public class CardController {
 						userNotification.setNoticeDate(new Date());
 						userNotification.setReadFlg(0);				
 		            	userNotification.setChangeParamType(1);            	
-		            	userNotification.setNoticeType(NoticeType.NOTIFICATION_TO_OTHER_USER.getValue());
+		            	userNotification.setNoticeType(NoticeType.REGISTRATION_CARD_CHANGE.getValue());
 		            	userNotification.setNotifyMessage(strPush);            	
 		            	userInfoService.saveHistoryNotification(userNotification);
 					}
