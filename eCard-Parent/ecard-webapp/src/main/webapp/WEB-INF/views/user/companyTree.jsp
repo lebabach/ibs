@@ -375,7 +375,7 @@ function searchCompanyTree(){
 	                    	+ "</li><div id='div_"+ value["cardId"] +"'></div>";
        			}
        			else{
-       				respHTML += "<li class='li-1' id='"+ value["cardId"] +"'>"+ <fmt:message key="company.blank" /> +"</li><div id='div_"+ value["cardId"] +"'></div>"
+       				respHTML += "<li class='li-1' id='"+ value["cardId"] +"' style='color:red;'>"+ <fmt:message key="company.blank" /> +"("+ value["count"] +")</li><div id='div_"+ value["cardId"] +"'></div>"
        			}
        		});
        		respHTML += "</ul>";
