@@ -612,6 +612,9 @@
         	 $("#sort_cnd").show();
         	 $("#bulk_tag").show();
         	 $("#deleteTag").show();
+        	 var sortCard = $('#sort-card-cnd').val();
+        	 console.log("AAA");
+        	 $('#sort-card-cnd').trigger('change');
          }else if(parseInt(typeSort) == 1){
         	 $("#sort_cnd").hide();
         	 $("#bulk_tag").show();
@@ -660,7 +663,7 @@
 					$.each( resp, function( k, v ) {
 						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
 			 					+'<div class="row row-new">'
-								+	'<div class="col-md-1 col-xs-1"></div>'
+								+	'<div class="col-md-1 col-xs-1"><input type="hidden" name="cardId" value = "'+v.cardId+'"></div>'
 								+	'<div class="col-md-5">'
 								+		'<div class="col-xs-11 mg-top">'
 								+ 			'<p class="name">'+v.firstName +' '+ v.lastName+'</p>'
@@ -693,7 +696,7 @@
 					$.each( resp, function( k, v ) {
 						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
 			 					+'<div class="row row-new">'
-								+	'<div class="col-md-1 col-xs-1"></div>'
+								+	'<div class="col-md-1 col-xs-1"><input type="hidden" name="cardId" value = "none"></div>'
 								+	'<div class="col-md-5">'
 								+		'<div class="col-xs-11 mg-top">'
 								+ 			'<p class="name">データ入力中</p>'
@@ -1147,8 +1150,14 @@
 	   	}
 	   	
 	 	$(document).on('click', '.business_card_book .list-group-item', function() {
-        	cardId = parseInt($(this).find('input[name=bla]').val());
-            window.location.href = '<c:url value="/user/card/details/'+cardId+'"/>';
+	 		var cardIdStr = $(this).find('input[name=bla]').val();
+	 		if(cardIdStr == undefined){
+	 			cardIdStr = $(this).find('input[name=cardId]').val();
+	 		}
+	 		if(cardIdStr != "none"){
+        	    cardId = parseInt(cardIdStr);
+                 window.location.href = '<c:url value="/user/card/details/'+cardId+'"/>';
+	 		}
 	       }).hover(function() {
 	         $(this).toggleClass('hover');
         }); 
