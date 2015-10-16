@@ -1794,7 +1794,7 @@ public class UserController {
 		return date;
 	}
 	
-	@RequestMapping(value = "/getListPossesionCardRecent", method = RequestMethod.POST)
+	@RequestMapping(value = "getListPossesionCardRecent", method = RequestMethod.POST)
 	@ResponseBody
     public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(HttpServletRequest request) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -1804,7 +1804,7 @@ public class UserController {
 	  return lstCardInfo;
 	}
 	
-	@RequestMapping(value = "/listCardRecent", method = RequestMethod.POST)
+	@RequestMapping(value = "listCardRecent", method = RequestMethod.POST)
 	@ResponseBody
     public List<com.ecard.core.vo.CardInfo> listCardRecent(HttpServletRequest request) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -1814,7 +1814,7 @@ public class UserController {
 	  return lstCardInfo;
 	}
 	
-	@RequestMapping(value = "/listCardPending", method = RequestMethod.POST)
+	@RequestMapping(value = "listCardPending", method = RequestMethod.POST)
 	@ResponseBody
     public List<CardInfoAndPosCard> listCardPending(HttpServletRequest request) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
