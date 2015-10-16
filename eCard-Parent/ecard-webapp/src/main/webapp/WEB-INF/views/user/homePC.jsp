@@ -706,64 +706,77 @@
    	  
    }); 
 
-       /* $('#sort-card-cnd').on('change', function() {
-       	$.xhrPool.abortAll();
-        $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
-       	var typeSort = $(this).val();
-       	var typeSearch = $("#selectSortBox option:selected").val();
-       	id_manager = 0;
-          $.ajax({
-			type: 'POST',
-			url: 'search',
-			data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch
-		  }).done(function(resp, status, xhr) {
-			 $('.business_card_book').html("");
-			   var listGroup = "";
-			   var listGroupItem = "";
-				$.each( resp.data, function( key, value ) {
-					if(value.nameSort.replace("/","").trim()==""){
-						value.nameSort="NULL";
-						listGroup = $('.business_card_book').append(
-								'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
-						        +'<div class="list-group-item-title">'+"#"+'</div></div>');
-					}else
-						{
-						listGroup = $('.business_card_book').append(
-								'<div class="list-group" style="margin-bottom: 0px !important; margin-top: 10px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
-						        +'<div class="list-group-item-title">'+value.nameSort+'</div></div>');
-						}
-					
-					 $.each( value.lstCardInfo, function (k,v) {
-						 listGroupItem += '<div class="list-group-item pointer">'
-				    					+'<div class="row row-new">'
-				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla"></div></div>'
-				    					+	'<div class="col-md-5">'
-				    					+		'<div class="col-xs-11 mg-top">'
-				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
-				    					+			'<p class="livepass">'+v.companyName+'</p>'
-				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
-				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
-				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
-				    					+ '</div></div>'
-				    					+	'<div class="col-md-6">'
-				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
-				    					+	'<div class="col-xs-7">'								
-				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
-				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-				    					+	'</div> </div> </div> </div>';				    		 
-	    					 $('.business_card_book').find("#"+value.nameSort.replace("/","").trim()).append(listGroupItem);    
-							 isLoading++;
-							 reloadICheck();
-							 getImageFromSCP(v.imageFile);
-					 });
-					 
-				});
-				
-				id_manager++;
+       $('#sort-card-cnd').on('change', function() {
+	       	$.xhrPool.abortAll();
+	        $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
+	       	var typeSort = $(this).val();
+	       	var typeSearch = $("#selectSortBox option:selected").val();
+	       	id_manager = "";
+	          $.ajax({
+				type: 'POST',
+				url: 'search',
+				data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch
+			  }).done(function(resp, status, xhr) {
+				 var listGroup = "";
+				 var listGroupItem = "";
+				 $('.business_card_book').html("");
+				 $.each( resp.data, function( key, value ) {
+					 if(key == 0){
+						 if(value.nameSort.replace("/","").trim()==""){
+								value.nameSort="NULL";
+								listGroup = $('.business_card_book').append(
+										'<div class="list-group" style="margin-bottom: 0px !important;" id="NULL">'
+								        +'<div class="ul-left-li active list-group-item-title">'+"#"+'</div></div>');
+						 } else {
+								listGroup = $('.business_card_book').append(
+										'<div class="list-group" style="margin-bottom: 0px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
+								        +'<div class="ul-left-li active list-group-item-title">'+value.nameSort+'</div></div>');
+						 }
+						 $.each( value.lstCardInfo, function (k,v) {
+							 listGroupItem += '<div class="list-group-item pointer show-content">'
+					    					+'<div class="row row-new">'
+					    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
+					    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
+					    					+		'</div></div>'
+					    					+	'<div class="col-md-5">'
+					    					+		'<div class="col-xs-11 mg-top">'
+					    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+					    					+			'<p class="livepass">'+v.companyName+'</p>'
+					    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+					    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+					    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+					    					+ '</div></div>'
+					    					+	'<div class="col-md-6">'
+					    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+					    					+	'<div class="col-xs-7">'								
+					    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+					    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+					    					+	'</div> </div> </div> </div>';				    		 
+		    			    
+		    					 
+								 isLoading++;
+								 reloadICheck();
+								 getImageFromSCP(v.imageFile);
+						 });
+						 listGroup.append(listGroupItem);
+						 /* $('.business_card_book').find("#"+value.nameSort.replace("/","").trim()).append(listGroupItem); */
+					 } else {
+						 if(value.nameSort.replace("/","").trim()==""){
+								value.nameSort="NULL";
+								listGroup = $('.business_card_book').append(
+										'<div class="list-group" style="margin-bottom: 0px !important;" id="NULL">'
+								        +'<div class="ul-left-li list-group-item-title">'+"#"+'</div></div>');
+						 } else {
+								listGroup = $('.business_card_book').append(
+										'<div class="list-group" style="margin-bottom: 0px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
+								        +'<div class="ul-left-li list-group-item-title">'+value.nameSort+'</div></div>');
+						 }
+					 }
+				 });
 			}).fail(function(xhr, status, err) {
 				
 			});
-       }); */
+       });
        
        /* $('#selectSortBox').on('change', function(event) {
     	   
