@@ -676,10 +676,8 @@ public class UserController {
 
 		List<com.ecard.core.vo.ContactHistory> contactHistoryList = null;
 		try {
-			int rs = contactHistoryService.deleteContactHistory(contactHistory.getContactHistoryId());
-			if (rs > 0) {
-				contactHistoryList = contactHistoryService.getListContactHistoryById(contactHistory.getCardInfo().getCardId());
-			}
+			contactHistoryService.deleteContactHistory(contactHistory.getContactHistoryId());
+			contactHistoryList = contactHistoryService.getListContactHistoryById(contactHistory.getCardInfo().getCardId());
 		} catch (Exception ex) {
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
