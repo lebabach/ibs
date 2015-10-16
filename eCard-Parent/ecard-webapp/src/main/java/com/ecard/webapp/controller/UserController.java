@@ -117,6 +117,7 @@ import com.ecard.webapp.util.FileUploadModel;
 import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardAndUserTagHome;
+import com.ecard.webapp.vo.CardInfoLoadMoreVO;
 import com.ecard.webapp.vo.CardInfoPCVo;
 import com.ecard.webapp.vo.CardInfoSaleforce;
 import com.ecard.webapp.vo.DataPagingJsonVO;
@@ -1394,12 +1395,14 @@ public class UserController {
 
 	@RequestMapping(value = "searchCards", method = RequestMethod.POST)
 	@ResponseBody
-	public List<com.ecard.core.vo.CardInfo> searchCards(@RequestBody final UserSearchVO userSearchVO,
+	public CardInfoLoadMoreVO searchCards(@RequestBody final UserSearchVO userSearchVO,
 			HttpSession session) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
 		List<com.ecard.core.vo.CardInfo> cardInfo = null;
+		BigInteger count;
+		CardInfoLoadMoreVO cardLoadMore=new CardInfoLoadMoreVO();
 		if (!userSearchVO.getFreeText().equals("")) {
 			userSearchVO.setCompany(null);
 			userSearchVO.setName(null);
@@ -1414,8 +1417,13 @@ public class UserController {
 			cardInfo = cardInfoService.getListCardSearch(userInfo.getUserId(), userSearchVO.getFreeText(),
 					userSearchVO.getName(), userSearchVO.getPosition(), userSearchVO.getDepartment(),
 					userSearchVO.getCompany(), userSearchVO.getPage(), userInfo.getGroupCompanyId());
+			count=cardInfoService.getTotalCardSearch(userInfo.getUserId(), userSearchVO.getFreeText(),userSearchVO.getName(), userSearchVO.getPosition(), userSearchVO.getDepartment(),
+					userSearchVO.getCompany(),userInfo.getGroupCompanyId());
 		} else {
 			cardInfo = cardInfoService.getListCardSearchAll(userSearchVO.getOwner(), userSearchVO.getFreeText(),
+					userSearchVO.getName(), userSearchVO.getPosition(), userSearchVO.getDepartment(),
+					userSearchVO.getCompany(), userSearchVO.getPage(), userInfo.getGroupCompanyId());
+			count=cardInfoService.getTotalCardSearchAll(userSearchVO.getOwner(), userSearchVO.getFreeText(),
 					userSearchVO.getName(), userSearchVO.getPosition(), userSearchVO.getDepartment(),
 					userSearchVO.getCompany(), userSearchVO.getPage(), userInfo.getGroupCompanyId());
 		}
@@ -1423,7 +1431,9 @@ public class UserController {
 			userSearchVO.setDetail(false);
 			session.setAttribute("searchDetail", userSearchVO);
 		}
-		return cardInfo;
+		cardLoadMore.setCardInfo(cardInfo);
+		cardLoadMore.setCount(count);
+		return cardLoadMore;
 	}
 
 	@RequestMapping(value = "deleteListCard", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -141,11 +141,12 @@
 <!-- START HEADER -->
 <div class="" style="border: solid 1px #f3f3f4;background: #e3e3e3;">
       <div class="row clearfix">        
-          <div class="col-md-2 " style="width: 150px; display:inline-block">
+          <div class="col-md-2 " style="width: 250px; display:inline-block">
             <div class="form-group">
                 <div class="icon-addon addon-md">
                     <!-- <form name="myform">  -->
-						<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-example">検索画面</button>
+                    	<button class="btn btn-primary btn-lg" id="btn-home">名刺一覧</button>
+						<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-example">名刺検索</button>
                                 <!-- modal -->
                                 <div class="modal" id="modal-example" tabindex="-1">
                                     <div class="modal-dialog">                                        
@@ -279,7 +280,7 @@
 
   <!-- Start Container -->
   <div id="container" class="container" style= "padding-top: 20px !important;" >
-  	<h4>名刺一覧</h4>
+  	<h4>名刺一覧 <span id="count-search"></span></h4>
   	<div class="row " style="margin-bottom: 10px">
           <div class="col-md-2 m-b-xs setDisplayTerm" style="width:180px;padding-right: 0 !important;">
             <select id="selectSortBox" class="input-sm form-control input-s-sm inline">
@@ -470,7 +471,54 @@
       
       var page = 1;
       var isLoading = 0;
-      
+      $(window).scroll(function() {     	  
+    	  if($('.row-new').length < parseInt(totalCardInfo)){
+    		   var typeSort = $('#sort-card-cnd').val();
+    		   var typeSearch = $("#selectSortBox option:selected").val();
+    		   /* if(isLoading != 0){    			   
+    			   $('body').scrollTop($(window).height()*2);
+    			   return false;
+    		   }  */
+	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
+	    	    	// Call ajax here	
+	    	    	if($('#titleOfSearch').length){
+	    	    		//search
+	    	    		var freeText = $("#freeText").val();
+	           	   		var owner = $("#owner").val();
+	           	   		var company = $("#company").val();
+	           	   		var department = $("#department").val();
+	           	   		var position = $("#position").val();
+	           	   		var name = $("#name").val();
+	           	   		var parameterFlg = $("#parameterFlg").val()
+	           	   		
+	           			if($("#parameterFlg").val()==0){
+	           				owner="";	
+	           	        }
+		           	   	$.ajax({
+		       			    type: 'POST',
+		       			    url: 'searchCards',
+		       			    dataType: 'json', 
+		       				 contentType: 'application/json',
+		       				 mimeType: 'application/json',
+		       			     data: JSON.stringify({ 
+		       			        'freeText':freeText,
+		       			        'owner':owner,
+		       			        'company':company,
+		       			        'department':department,
+		       			        'position':position,
+		       			        'name':name,
+		       			        'parameterFlg':parameterFlg,
+		       			        'page':++id_manager
+		       			    }),
+		       			    success: function(data){
+		       			    	setDataSearchLoadMore(data.cardInfo);
+		       			    	loadICheck();
+		       			    }
+		       			});
+	    	    	}
+	    	    } 
+    	  }
+    	});
 
  $(document).ready(function(){
 	 $(document).on('click', '.list-group', function(event)  {
@@ -984,13 +1032,21 @@
 	   			    }
 	   			});
 		   		
-		   	 })
+		   	 });
+		   	 
+        	$("#btn-home").click(function(){
+	    		 <%  
+	    		 session.setAttribute("searchDetail", null);
+	    		 %>
+	    		location.reload();
+	    		
+	    	});
 		   	 
 });/* END READY DOCUMENT  */
  
       
       function ListSearch(freeText,owner,company,department,position,name,parameterFlg){
-    	  	disableBtnSort();
+    	  	
  	   		id_manager=0;
  			$.ajax({
  			    type: 'POST',
@@ -1009,8 +1065,11 @@
  			        'page':0
  			    }),
  			    success: function(data){
- 			    	setDataSearch(data);
- 			    	$("#titleSearch").text($('#parameterFlg').find(":selected").text());
+ 			    	
+ 			    	$("#count-search").text(": "+data.count);
+ 			    	setDataSearch(data.cardInfo);
+ 			    	disableBtnSort();
+ 			    	loadICheck();
  			    	$("#btnCloseUserSearch").click(function(){
  			    		 <%  
  			    		 session.setAttribute("searchDetail", null);
@@ -1020,6 +1079,7 @@
  			    	});
  			    }
  			});
+ 			
       }
 
       /* $(".balloon").on('click', '.delTag', function() {
@@ -1559,10 +1619,18 @@
 	   	}
 	   	
 	   	function setListSearch(cardId,firstName,lastName,companyName,departmentName,positionName,telNumberCompany,imageFile,email){
+	   		debugger;
+	   		$("#titleSearch").text($('#parameterFlg').find(":selected").text());
+	   		var checkBox="";
+	   		if($("#titleSearch").text()!="自分の名刺"){	
+	   			checkBox='<div class="icheckbox_square-green" style="display:none">';	
+	   		}else{
+	   			checkBox='<div class="icheckbox_square-green">';
+	   		}
 	   		var modal=	'<div class="list-group-item pointer">'
 	   			+  '<div class="row row-new">'
 	   			+	'<div class="col-md-1 col-xs-1">'
-	   			+	 '<div class="icheckbox_square-green" style="display:none">'
+	   			+	 checkBox
 	   			+		'<input type="checkbox" class="i-checks" name="bla" value='+cardId+'>'
 	   			+	 '</div>'
 	   			+	'</div>'
@@ -1605,8 +1673,8 @@
 	   	}
 	   	
 	   	function SetListGroupSearch(){
-	   		var data='<div class="list-group" id= "titleOfSearch">'
-	   			+'<div class="list-group-item-title" style="height:46px">'
+	   		var data='<div class="list-group" id= "titleOfSearch" >'
+	   			+'<div class="list-group-item-title" style="height:46px; display:none" >'
 	   			+'<button type="button" class="close" data-dismiss="modal" id="btnCloseUserSearch">'
 	   			+'<span aria-hidden="true">×</span>'
 	   			+'</button>'
@@ -1618,8 +1686,11 @@
 	   	
 	   	function disableBtnSort(){
 	   		$("#selectSortBox").attr('style', "display:none !important");
-	   		$(".btn-group").attr('style', "display:none !important");
 	   		$("#sort-card-cnd").attr('style', "display:none !important");
+	   		$(".btn-group").attr('style', "display:none !important");
+	   		if($("#titleSearch").text()=="自分の名刺"){	
+	   			$(".btn-group").removeAttr('style');	
+	   		}
 	   	}
 	   	
 	   	function disableTagSort(style) {
@@ -1897,6 +1968,13 @@
 	   	      		});
 			  	}
 	        });	
+		}
+		
+		function loadICheck(){
+			 $('.i-checks').iCheck({
+			       checkboxClass: 'icheckbox_square-green',
+			       radioClass: 'iradio_square-green',                
+			     });
 		}
 
     </script>
