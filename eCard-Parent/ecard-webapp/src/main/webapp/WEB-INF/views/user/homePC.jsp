@@ -280,7 +280,15 @@
 
   <!-- Start Container -->
   <div id="container" class="container" style= "padding-top: 20px !important;" >
-  	<h4>名刺一覧 <span id="count-search"></span></h4>
+  	<div class="row" style="margin-bottom:20px">
+  		<div class="col-md-4">
+  			<h4>名刺一覧 <span id="count-search"></span></h4>
+  		</div>
+  		<div class="col-md-8">
+  			<span style="color:red;">本Webアプリは、他のグループ会社への共有が出来ない情報も含まれております。情報を取り扱う際には、詳細画面より共有可能な名刺かどうかをご確認ください。</span>
+  		</div>
+  	</div>
+
   	<div class="row " style="margin-bottom: 10px">
           <div class="col-md-2 m-b-xs setDisplayTerm" style="width:180px;padding-right: 0 !important;">
             <select id="selectSortBox" class="input-sm form-control input-s-sm inline">
