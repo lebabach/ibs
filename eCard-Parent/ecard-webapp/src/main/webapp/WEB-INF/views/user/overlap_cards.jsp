@@ -538,6 +538,7 @@ $(document).ready(function() {
 	$("#btnSearch").click(function(){
 		var dataTableSearch = $('#tbl-cards').dataTable();
 		dataTableSearch.fnFilter();
+		$("#tbl-connect-cards >tbody").remove();
 	})
 	
 });

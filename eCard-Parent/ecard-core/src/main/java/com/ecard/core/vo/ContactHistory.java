@@ -3,7 +3,7 @@ package com.ecard.core.vo;
 import java.util.Date;
 
 public class ContactHistory {
-	private int contact_history_id;
+	private int contactHistoryId;
 	private int cardId;
     private int userId;
     private Date contactDate;
@@ -11,8 +11,8 @@ public class ContactHistory {
     
     public ContactHistory(){}
     
-    public ContactHistory(int contact_history_id, int cardId, int userId, Date contactDate, String contactMemo){
-    	this.contact_history_id = contact_history_id;
+    public ContactHistory(int contactHistoryId, int cardId, int userId, Date contactDate, String contactMemo){
+    	this.setContactHistoryId(contactHistoryId);
     	this.cardId = cardId;
     	this.userId = userId;
     	this.contactDate = contactDate;
@@ -44,11 +44,11 @@ public class ContactHistory {
 		this.contactMemo = contactMemo;
 	}
 
-	public int getContact_history_id() {
-		return contact_history_id;
+	public int getContactHistoryId() {
+		return contactHistoryId;
 	}
 
-	public void setContact_history_id(int contact_history_id) {
-		this.contact_history_id = contact_history_id;
+	public void setContactHistoryId(int contactHistoryId) {
+		this.contactHistoryId = contactHistoryId;
 	}
 }
