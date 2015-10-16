@@ -573,16 +573,16 @@
     				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
     				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
     				    					+	'</div> </div> </div> </div>';				    		 
-    							 isLoading++;
-    							 reloadICheck();
-    							 getImageFromSCP(v.imageFile);
+
     					 });
     					 
     				});
     				self.append(listGroupItem);
+    				getImageSCP();	
     			}).fail(function(xhr, status, err) {
     				
     			});
+              	
         }
         
      });
@@ -727,7 +727,7 @@
 								+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 								+   '<input class="hidden" name="fileImageName" value="'+v.imageFile+'">'
 								+	'</div> </div> </div> </div>');
-			 					getImageFromSCP(v.imageFile);
+			 					//getImageFromSCP(v.imageFile);
 					});
 					
 				}).fail(function(xhr, status, err) {
@@ -814,13 +814,10 @@
 					    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
 					    					+	'</div> </div> </div> </div>';				    		 
 		    			    
-					    		/* listGroup.append(listGroupItem);			  */
-								 isLoading++;
-								 reloadICheck();
-								 getImageFromSCP(v.imageFile);
 						 });
 						 
-						 $('.business_card_book').find("#"+value.nameSort.replace("/","").trim()).append(listGroupItem); 
+						 $('.business_card_book').find("#"+value.nameSort.replace("/","").trim()).append(listGroupItem);
+						 getImageSCP();
 					 } else {
 						 if(value.nameSort.replace("/","").trim()==""){
 								value.nameSort="NULL";
@@ -1094,6 +1091,9 @@
     	        url: 'getImageFile',
     	        data: 'fileImage='+fileImageName,    	        
     	    }).done(function(resp, status, xhr){
+    	    	if(target == []){
+    	    		target = $('img[name="'+fileImageName+'"]');
+    	    	}
     	    	if(resp == ""){
     	    		target.attr('src','');    	  
         	        target.attr('src','/ecard-webapp/assets/img/card_08.png');
@@ -1106,8 +1106,6 @@
     	        //alert('Error');
     	    });						
 		}
-		
-		
 		function createTableHasGroup(lastDate, v){
 			$('.business_card_book #'+lastDate).append(
     	    		'<div class="list-group-item pointer">'
@@ -1952,9 +1950,34 @@
 		
 		function loadICheck(){
 			 $('.i-checks').iCheck({
-			       checkboxClass: 'icheckbox_square-green',
-			       radioClass: 'iradio_square-green',                
-			     });
+		       checkboxClass: 'icheckbox_square-green',
+		       radioClass: 'iradio_square-green',                
+		     });
+		}
+		
+		function getImageSCP() {
+			$(".business_card_book .list-group .active").parent().find('.img-responsive').each(function () {
+			  	isLoading=isLoading+1;
+				var target = $(this);
+			    var fileImageName =$(this).parent().find('input[name=fileImageName]').val();
+
+			    $.ajax({
+			        type: 'POST',
+			        url: "<c:url value='/user/getImageFile' />",
+			        data: 'fileImage='+fileImageName
+			    }).done(function(resp, status, xhr){
+			    	if(resp == ""){
+			    		target.attr('src','');    	  
+				        target.attr("src", "<c:url value='/assets/img/card_08.png' />");
+			    	} else {
+			    		target.attr('src','');    	  
+				        target.attr('src','data:image/png;base64,'+resp);	
+			    	}
+			    	
+			    }).fail(function(resp, status, xhr){
+			        //alert('Error');
+			    });
+			});
 		}
 
     </script>
