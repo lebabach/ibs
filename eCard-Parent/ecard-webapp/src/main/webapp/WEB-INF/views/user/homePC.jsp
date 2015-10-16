@@ -491,9 +491,12 @@
         if($(this).find('.list-group-item').length <= 0){
         	var self = $(this);
             var strDate = $(this).attr("id");
-        	var typeSort = 5;
+            var typeSort = $("#sort-card-cnd option:selected").val();
            	var typeSearch = $("#selectSortBox option:selected").val();
-           	strDate = strDate.slice(0,2)+"/"+strDate.slice(2,strDate.length+1);
+           	if(typeSort == 5){
+           		strDate = strDate.slice(0,2)+"/"+strDate.slice(2,strDate.length+1);	
+           	}
+           	
               $.ajax({
     			type: 'POST',
     			url: 'search',
@@ -526,9 +529,9 @@
     							 reloadICheck();
     							 getImageFromSCP(v.imageFile);
     					 });
-    					 self.append(listGroupItem);
+    					 
     				});
-    				
+    				self.append(listGroupItem);
     			}).fail(function(xhr, status, err) {
     				
     			});
@@ -716,7 +719,8 @@
 						 $.each( value.lstCardInfo, function (k,v) {
 							 listGroupItem += '<div class="list-group-item pointer show-content">'
 					    					+'<div class="row row-new">'
-					    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green"><input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
+					    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
+					    					+'<input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
 					    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
 					    					+		'</div></div>'
 					    					+	'<div class="col-md-5">'
