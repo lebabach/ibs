@@ -369,13 +369,13 @@ function searchCompanyTree(){
     		//console.log(JSON.stringify(response));
     		var respHTML = "<ul class='ul-1'>";
        		$.each(response, function(index, value){
-       			if(value["companyName"] != "" || value["companyName"] != null){
+       			if(value["companyName"] != ""){
 	       			respHTML += "<li class='li-1' id='"+ value["cardId"] +"'>"+ value["companyName"] +" ("+ value["count"] +")"
 	                    	+ "<input type='hidden' value='"+ value["companyName"] +"' name='companyName_"+ value["cardId"] +"' />"
 	                    	+ "</li><div id='div_"+ value["cardId"] +"'></div>";
        			}
        			else{
-       				respHTML += "<li class='li-1' id='"+ value["cardId"] +"' style='color:red;'>"+ <fmt:message key="company.blank" /> +"("+ value["count"] +")</li><div id='div_"+ value["cardId"] +"'></div>"
+       				respHTML += "<li class='li-1' id='"+ value["cardId"] +"' style='color:red;'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_"+ value["cardId"] +"'></div>"
        			}
        		});
        		respHTML += "</ul>";
@@ -412,6 +412,9 @@ function searchDepartmentTree(companyName, id){
        						+ "<input type='hidden' value='"+ compName +"' name='comp_"+ value["cardId"] +"' />"
        						+ "</li><div id='div_dep_"+ value["cardId"] +"'></div>";
        			}
+       			else{
+       				respHTML += "<li class='li-11' id='dep_"+ value["cardId"] +"' style='color:red;'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_dep_"+ value["cardId"] +"'></div>"
+       			}
        		}); 
        		respHTML += "</ul>";
        		
@@ -440,11 +443,16 @@ function searchCardInfo(deptName, compName, id){
        		console.log(JSON.stringify(response));
        		var respHTML = "<ul style='display: inline-block;' class='ul-3'>";
        		$.each(response, function(index, value){
-       			respHTML += "<li class='li-3'><a href='#' id='"+ value["cardId"] +"'>"
-       						+ value["companyName"] +"("+ value["count"] +")</a>"
-       						+"<input value='"+ deptName +"' name='c_dep_"+ value["cardId"] +"' type='hidden'>"
-       						+ "<input value='"+ compName +"' name='c_comp_"+ value["cardId"] +"' type='hidden'>"
-       						+ "</li>";
+       			if(value["companyName"] != ""){
+	       			respHTML += "<li class='li-3'><a href='#' id='"+ value["cardId"] +"'>"
+	       						+ value["companyName"] +"("+ value["count"] +")</a>"
+	       						+"<input value='"+ deptName +"' name='c_dep_"+ value["cardId"] +"' type='hidden'>"
+	       						+ "<input value='"+ compName +"' name='c_comp_"+ value["cardId"] +"' type='hidden'>"
+	       						+ "</li>";
+       			}
+       			else{
+       				respHTML += "<li class='li-3' style='color:red;'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_"+ value["cardId"] +"'></div>"
+       			}
        		}); 
        		respHTML += "</ul>";
        		
