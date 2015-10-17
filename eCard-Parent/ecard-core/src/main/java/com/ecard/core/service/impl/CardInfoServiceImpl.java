@@ -433,11 +433,13 @@ public class CardInfoServiceImpl implements CardInfoService {
 			
 			int ownerUserId=card2.getCardOwnerId();
 			String ownerName=card2.getCardOwnerName();
+			int  ownerGroupCompanyId=card2.getGroupCompanyId();
 			card1.setOldCardFlg(1);
 			this.updateCardInfoAdmin(card1);
 			if(ownerUserId!=currentUserId){
 				card2.setCardOwnerId(currentUserId);
 				card2.setCardOwnerName(name);
+				card2.setGroupCompanyId(card1.getGroupCompanyId());
 				CardInfo newCard= this.registerCardImageManualPCOfAdmin(setCardInfo(card2));
 				OldCard oldcard=new OldCard();
 				oldcard.setCardInfo(newCard);
@@ -446,19 +448,25 @@ public class CardInfoServiceImpl implements CardInfoService {
 				oldCardId.setCardId(newCard.getCardId());
 				oldCardId.setCardOwnerId(currentUserId);
 				oldCardId.setSeq(0);
-				oldCardId.setOldCardId(card2.getCardId());
+				oldCardId.setOldCardId(card1.getCardId());
 				oldcard.setId(oldCardId);
-			
+				
 				oldCardDAO.saveOrUpdate(oldcard);
+				
+				//update cardid in old_card
+				oldCardDAO.updateCardIdWithOldCard(newCard.getCardId(),cardid1);
 				card2.setCardOwnerId(ownerUserId);
 				card2.setCardOwnerName(ownerName);
+				card2.setGroupCompanyId(ownerGroupCompanyId);
 				this.updateCardInfoNotCreateIndex(card2);
 				CopyImage copy=new CopyImage(card2.getImageFile(),newCard.getImageFile());
 				copy.start();
 			}else{
 				OldCard oldcard=new OldCard();
+				
 				CardInfo cardInfor=new CardInfo();
 				cardInfor.setCardId(card2.getCardId());
+				
 				OldCardId oldCardId=new OldCardId();
 				oldCardId.setCardId(card2.getCardId());
 				oldCardId.setCardOwnerId(currentUserId);
@@ -468,6 +476,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 				
 				oldcard.setId(oldCardId);
 				oldCardDAO.persist(oldcard);
+				oldCardDAO.updateCardIdWithOldCard(oldcard.getCardInfo().getCardId(),cardid1);
 				userCardMemoDAO.updateUserCardMemo(cardid1, currentUserId, cardid2);
 				contactHistoryDAO.updateContactHistory(cardid1, currentUserId, cardid2);
 				

@@ -372,15 +372,15 @@ public class CardController {
 		}
 		if (uploadModel.isStatus()) {
             
-			if(!"".equals(cardInfo.getLastName()) || !"".equals(cardInfo.getFirstName())){
+			if(!"".equals(cardInfo.getLastName().trim()) || !"".equals(cardInfo.getFirstName().trim())){
 			     cardInfo.setName(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastName(), cardInfo.getFirstName(), " "));
 			}
-			if(!"".equals(cardInfo.getLastNameKana())|| !"".equals(cardInfo.getFirstNameKana())){
+			if(!"".equals(cardInfo.getLastNameKana().trim())|| !"".equals(cardInfo.getFirstNameKana().trim())){
 		      	cardInfo.setNameKana(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastNameKana(), cardInfo.getFirstNameKana(), " "));
 			}
 			
 			// bach.le https://livepass.backlog.jp/view/MEISHI-575
-			if(!"".equals(cardInfo.getAddressFull())){
+			if(!"".equals(cardInfo.getAddressFull().trim())){
 				List<String> listAddress = new ArrayList<String>(Arrays.asList(cardInfo.getAddressFull().trim().split(" ")));
 				cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
 				cardInfo.setAddress2(listAddress.get(1) != null ? listAddress.get(1) : "");
