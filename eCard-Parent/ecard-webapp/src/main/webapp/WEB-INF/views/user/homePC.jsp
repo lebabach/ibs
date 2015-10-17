@@ -282,7 +282,7 @@
   <div id="container" class="container" style= "padding-top: 20px !important;" >
   	<div class="row" style="margin-bottom:20px">
   		<div class="col-md-4">
-  			<h4>名刺一覧 <span id="count-search"></span></h4>
+  			<h4><span id="title-search-loadmore">名刺一覧 </span> <span id="count-search"></span></h4>
   		</div>
   		<div class="col-md-8">
   			<span style="color:red;">本Webアプリは、他のグループ会社への共有が出来ない情報も含まれております。情報を取り扱う際には、詳細画面より共有可能な名刺かどうかをご確認ください。</span>
@@ -1605,8 +1605,10 @@
 	   	}
 	   	
 	   	function setListSearch(cardId,firstName,lastName,companyName,departmentName,positionName,telNumberCompany,imageFile,email){
-	   		debugger;
+	   		
 	   		$("#titleSearch").text($('#parameterFlg').find(":selected").text());
+	   		$("#title-search-loadmore").text($('#parameterFlg').find(":selected").text());
+	   		
 	   		var checkBox="";
 	   		if($("#titleSearch").text()!="自分の名刺"){	
 	   			checkBox='<div class="icheckbox_square-green" style="display:none">';	

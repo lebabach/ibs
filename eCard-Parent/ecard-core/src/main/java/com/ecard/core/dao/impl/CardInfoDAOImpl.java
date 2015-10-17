@@ -26,6 +26,7 @@ import com.ecard.core.dao.CardInfoDAO;
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.CardTagId;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.PrusalHistory;
 import com.ecard.core.model.UserTag;
 import com.ecard.core.model.enums.PermissionType;
 import com.ecard.core.model.enums.SearchConditions;
@@ -1536,5 +1537,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		query.setParameter("companyName", companyName);
 		query.setParameter("departmentName", departmentName);
 		return (List<CardInfo>)query.getResultList();
+	}
+	
+	public void savePrusalHistory(PrusalHistory prusalHistory){
+		getEntityManager().persist(prusalHistory);
+		getEntityManager().flush();
 	}
 }

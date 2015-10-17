@@ -5,6 +5,7 @@ package com.ecard.core.service;
 
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.PrusalHistory;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
@@ -157,4 +158,6 @@ public interface CardInfoService {
    public BigInteger countListCardAllocationUser(int userId,int tagId);
    public List<TagUser> getAllTagUser(int userId);
    public Integer updateUserCard(List<Integer> listCardUser,Integer userLeave,Integer userAssign,String nameAssign);
+   
+   public void savePrusalHistory(PrusalHistory prusalHistory);
 }
