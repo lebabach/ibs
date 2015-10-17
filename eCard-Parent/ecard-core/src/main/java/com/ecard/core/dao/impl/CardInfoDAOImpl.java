@@ -931,9 +931,9 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		String sqlStr = "";
 		 
 		if (sortType == SearchConditions.CONTACT.getValue()) {
-			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
-					+ "AND date_format(date(c.contactDate),'%m/%Y') = :valueSearch";
+					+ "AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch";
 			
 		} else if (sortType == SearchConditions.NAME.getValue()) {
 			sqlStr = "SELECT c.nameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
@@ -951,9 +951,9 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+" AND (ut.tagName is not null AND ut.tagName <> '') "
 					+" AND ut.tagName = :valueSearch";
 		} else {
-			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
-					+ " AND date_format(date(c.contactDate),'%m/%Y') = :valueSearch";
+					+ " AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch";
 		}
 		
 		Query query = getEntityManager().createQuery(sqlStr);
@@ -1202,10 +1202,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		String sqlStr = "";
 		 
 		if (sortType == SearchConditions.CONTACT.getValue()) {
-			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate FROM CardInfo c "
+			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate FROM CardInfo c "
 					+ " WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
-					+ " GROUP BY DATE_FORMAT(c.contactDate,'%m/%Y') ORDER BY c.contactDate DESC ";
+					+ " GROUP BY DATE_FORMAT(c.contactDate,'%Y/%m') ORDER BY c.contactDate DESC ";
 			
 		} else if (sortType == SearchConditions.NAME.getValue()) {
 			sqlStr = "SELECT c.nameKana  AS groupDate FROM CardInfo c "
@@ -1227,10 +1227,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					
 			
 		} else {
-			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate FROM CardInfo c "
+			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate FROM CardInfo c "
 					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
-					+ "GROUP BY DATE_FORMAT(c.contactDate,'%m/%Y') ORDER BY c.contactDate DESC ";
+					+ "GROUP BY DATE_FORMAT(c.contactDate,'%Y/%m') ORDER BY c.contactDate DESC ";
 		}
 		
 		Query query = getEntityManager().createQuery(sqlStr);
@@ -1542,5 +1542,13 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	public void savePrusalHistory(PrusalHistory prusalHistory){
 		getEntityManager().persist(prusalHistory);
 		getEntityManager().flush();
+	}
+	
+	public List<CardInfo> getListCardHistoryByCardId(Integer cardId){
+		Query query = getEntityManager().createQuery("SELECT c FROM OldCard oc INNER JOIN oc.cardInfo c "
+				+ "WHERE c.oldCardFlg = 1 AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND oc.id.cardId = :cardId "
+				+ "ORDER BY c.contactDate DESC");
+		query.setParameter("cardId", cardId);
+		return (List<CardInfo>)query.getResultList();
 	}
 }

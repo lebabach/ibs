@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -328,6 +329,27 @@ public class UserController {
 		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
 
 		List<DownloadCsv> downloadCSVHistory = userInfoService.getHistoryCSVDownload(ecardUser.getUserId());
+		Calendar c1 = Calendar.getInstance();
+		Calendar c2 = Calendar.getInstance();
+		c2.setTime(new Date());
+		for(DownloadCsv download : downloadCSVHistory){
+			if(download.getCsvType() != CsvConstant.MY_CARDS){				
+				c1.setTime(download.getRequestDate());
+				int day = c2.get(Calendar.DATE) - c1.get(Calendar.DATE);
+				if(day >= 7){
+					try {
+						deleteFileCSV(download.getCsvUrl());
+						cardInfoService.updateDownloadHistory(download.getCsvId());
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
+					
+				}
+			}
+			
+			
+		}
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("download");
 		modelAndView.addObject("roleAdminId", userInfo.getRoleAdminId());
@@ -603,8 +625,8 @@ public class UserController {
 			cardInfoService.savePrusalHistory(prusalHistory);
 			
 			// Get old cards
-			// List<CardInfo> listOldCard = cardInfoService.getOldCardInfor();
-			// modelAndView.addObject("listOldCard", listOldCard);
+			List<CardInfo> listOldCard = cardInfoService.getListCardHistoryByCardId(cardInfo.getCardId());
+			modelAndView.addObject("listOldCard", listOldCard);
 
 			// set search detail session
 			if (session.getAttribute("searchDetail") != null) {

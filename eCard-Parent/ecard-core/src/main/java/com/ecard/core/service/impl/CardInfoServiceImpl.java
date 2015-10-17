@@ -584,4 +584,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 			}
 		}
 	}
+public List<CardInfo> getListCardHistoryByCardId(Integer cardId){
+		return cardInfoDAO.getListCardHistoryByCardId(cardId);
+	}
 }

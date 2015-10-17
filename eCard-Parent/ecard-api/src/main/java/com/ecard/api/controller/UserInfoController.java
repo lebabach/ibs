@@ -204,59 +204,61 @@ public class UserInfoController extends RestExceptionHandler{
             
             boolean authenticated = tokenUtil.checkToken(request, response);
             
-            if(!authenticated) {
+        	if(!authenticated) {
                 //Check user stop flag
                 UserInfo userInfor = userInfoService.checkUserStopFlg(userInfo.getEmail());
-                if(userInfor != null && userInfor.getUseStopFlg() != 0){
-                	statusInfo = new StatusInfo(Constants.ERROR, Constants.UNAUTHORIZED, this.msgAccountLocked, "");                    
-                    userProfileResponse.setStatusInfo(statusInfo);                    
-                    return userProfileResponse;
-                }
+            	if(userInfor != null){
+            		if(userInfor.getUseStopFlg() != 0 || userInfor.getLeaveFlg() == 1){
+	                	statusInfo = new StatusInfo(Constants.ERROR, Constants.UNAUTHORIZED, this.msgAccountLocked, "");                    
+	                    userProfileResponse.setStatusInfo(statusInfo);                    
+	                    return userProfileResponse;
+            		}
+            	}
+            }
+            
+            //Check password is expried
+            userProfileResponse = checkPasswordExpried(userInfo);
+            Integer resetPasswordFlg = 0;
+            if(userProfileResponse.getStatusInfo().getStatus() == 1){
+                resetPasswordFlg = 1;
+            } else {
+                resetPasswordFlg = 0;
+            }
+            
+            statusInfo = checkLogin(userInfo, request, response);
+            if(statusInfo.getCode().equals("200") && statusInfo.getStatus().equals(0)){       
                 
-                //Check password is expried
-                userProfileResponse = checkPasswordExpried(userInfo);
-                Integer resetPasswordFlg = 0;
-                if(userProfileResponse.getStatusInfo().getStatus() == 1){
-                    resetPasswordFlg = 1;
-                } else {
-                    resetPasswordFlg = 0;
-                }
+                AutoLogin token = userInfoService.findByToken(statusInfo.getToken());
+                Integer userId = token.getUserInfo().getUserId();
                 
-                statusInfo = checkLogin(userInfo, request, response);
-                if(statusInfo.getCode().equals("200") && statusInfo.getStatus().equals(0)){       
-                    
-                    AutoLogin token = userInfoService.findByToken(statusInfo.getToken());
-                    Integer userId = token.getUserInfo().getUserId();
-                    
-                    //Save history
-                    ActionLogId actionLogId = new ActionLogId();
-                    actionLogId.setActionDate(new Date());
-                    actionLogId.setActionMessage(this.msgLog);
-                    actionLogId.setActionType(ActionLogType.LOGIN.getValue());
-                    actionLogId.setUserId(userId);
-                    
-                    ActionLog actionLog = new ActionLog();
-                    actionLog.setId(actionLogId);
-                    userInfoService.saveActionLog(actionLog);
-                    
-                    userProfileResponse = userInfoService.getMailSettingInfo(userId);                    
-                    CardInfoName myCard = homeService.getMyCardInfo(userId);
-                    userProfileResponse.setCardInfoName(myCard);
-                    userProfileResponse.setUserId(userId);
-                    userProfileResponse.setResetPassword(resetPasswordFlg);
-                    
-                    UserInfo user = userInfoService.getUserInfoByUserId(userId);
+                //Save history
+                ActionLogId actionLogId = new ActionLogId();
+                actionLogId.setActionDate(new Date());
+                actionLogId.setActionMessage(this.msgLog);
+                actionLogId.setActionType(ActionLogType.LOGIN.getValue());
+                actionLogId.setUserId(userId);
+                
+                ActionLog actionLog = new ActionLog();
+                actionLog.setId(actionLogId);
+                userInfoService.saveActionLog(actionLog);
+                
+                userProfileResponse = userInfoService.getMailSettingInfo(userId);                    
+                CardInfoName myCard = homeService.getMyCardInfo(userId);
+                userProfileResponse.setCardInfoName(myCard);
+                userProfileResponse.setUserId(userId);
+                userProfileResponse.setResetPassword(resetPasswordFlg);
+                
+                UserInfo user = userInfoService.getUserInfoByUserId(userId);
+                userProfileResponse.setFirstLoginF(user.getFirstLoginF());
+                /*
+                UserInfo user = userInfoService.getUserInfoByUserId(userId);
+                if(user.getFirstLoginF() == 0){
                     userProfileResponse.setFirstLoginF(user.getFirstLoginF());
-                    /*
-                    UserInfo user = userInfoService.getUserInfoByUserId(userId);
-                    if(user.getFirstLoginF() == 0){
-                        userProfileResponse.setFirstLoginF(user.getFirstLoginF());
-                        userInfoService.updateFisrtLogin(userId, 1);
-                    }
-                    else{
-                        userProfileResponse.setFirstLoginF(user.getFirstLoginF());
-                    }*/
+                    userInfoService.updateFisrtLogin(userId, 1);
                 }
+                else{
+                    userProfileResponse.setFirstLoginF(user.getFirstLoginF());
+                }*/
             }
         }
         catch(Exception ex){

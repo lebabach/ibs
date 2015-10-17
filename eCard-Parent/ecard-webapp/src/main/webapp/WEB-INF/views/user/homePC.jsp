@@ -1,5 +1,6 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
@@ -376,7 +377,12 @@
 		     <c:forEach var="nameSort" items="${lstNameSort}" varStatus="loopCount">
 		   		<div class="list-group" style="margin-bottom: 0px !important" id="<c:out value='${nameSort}'/>">
 		   			<c:if test="${loopCount.count == 1}">
-			        	<div class="ul-left-li active list-group-item-title "><c:out value="${nameSort}" /></div>       		
+			        	<div class="ul-left-li active list-group-item-title ">
+			        		<c:set var="string1" value="${nameSort}"/>
+							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" />
+																								    
+			        		<c:out value="${string2}月" />
+			        	</div>
 	       				<c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">  						        
 					        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
 						        <div class="list-group-item pointer show-content">
@@ -409,7 +415,10 @@
 				     	</c:forEach>	       			
 			        </c:if>
 			        <c:if test="${loopCount.count != 1}">
-			       		<div class="ul-left-li list-group-item-title "><c:out value="${nameSort}" />		       			
+			       		<div class="ul-left-li list-group-item-title ">
+			       			<c:set var="string1" value="${nameSort}"/>
+							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" />																	    
+			        		<c:out value="${string2}月" />		       			
 			       		</div>
 		       		</c:if>
 		       	</div>       	
@@ -529,14 +538,21 @@
     	});
 
  $(document).ready(function(){
-	 $(document).on('click', '.list-group', function(event)  {
+	 $(document).on('click', '.list-group-item-title', function(event)  {
 		 $.xhrPool.abortAll();
 		// Hidden others and change icon
-        $(".list-group" ).not($(this)).find('.list-group-item-title').removeClass('active');
+        /* $(".list-group" ).not($(this)).find('.list-group-item-title').removeClass('active');
         $(".list-group" ).not($(this)).find('.list-group-item ').removeClass('show-content');
-        $(".list-group" ).not($(this)).find('.list-group-item ').addClass('no-show-content');
+        $(".list-group" ).not($(this)).find('.list-group-item ').addClass('no-show-content'); */
+        
+        /*PHUONGNV CUSTOME  */
+        $('.list-group-item-title').not($(this)).removeClass('active');
+        $('.list-group-item-title').not($(this)).parent().find('.list-group-item').removeClass('show-content');
+        $('.list-group-item-title').not($(this)).parent().find('.list-group-item').addClass('no-show-content');
+        /*END PHUONGNV CUSTOME  */
+        
         // Show data end change icon
-        if($(this).find('.list-group-item-title').hasClass('active')){
+       /*  if($(this).find('.list-group-item-title').hasClass('active')){
         	$(this).find('.list-group-item-title').removeClass('active');
             $(this).find('.list-group-item ').removeClass('show-content');
             $(this).find('.list-group-item ').addClass('no-show-content');
@@ -544,14 +560,27 @@
         	$(this).find('.list-group-item-title').addClass('active');
             $(this).find('.list-group-item ').removeClass('no-show-content');
             $(this).find('.list-group-item ').addClass('show-content');	
+        } */
+        
+        /*PHUONGNV CUSTOME  */
+        if($(this).hasClass('active')){
+        	$(this).removeClass('active');
+            $(this).parent().find('.list-group-item ').removeClass('show-content');
+            $(this).parent().find('.list-group-item ').addClass('no-show-content');
+        } else {
+        	$(this).addClass('active');
+            $(this).parent().find('.list-group-item ').removeClass('no-show-content');
+            $(this).parent().find('.list-group-item ').addClass('show-content');	
         }
-        if($(this).find('.list-group-item').length <= 0){
-        	var self = $(this);
-            var strDate = $(this).attr("id");
+        /*END PHUONGNV CUSTOME  */
+        
+        if($(this).parent().find('.list-group-item').length <= 0){
+        	var self = $(this).parent();
+            var strDate = $(this).parent().attr("id");
             var typeSort = $("#sort-card-cnd option:selected").val();
            	var typeSearch = $("#selectSortBox option:selected").val();
            	if(typeSort == 5){
-           		strDate = strDate.slice(0,2)+"/"+strDate.slice(2,strDate.length+1);	
+           		strDate = strDate.slice(0,4)+"/"+strDate.slice(4,strDate.length+1);	
            	}
            	
               $.ajax({
@@ -561,8 +590,6 @@
     		  }).done(function(resp, status, xhr) {
     			   var listGroupItem = "";
     				$.each( resp.data, function( key, value ) {
-    					 
-	    						 
     					 $.each( value.lstCardInfo, function (k,v) {
     						 listGroupItem += '<div class="list-group-item pointer show-content">'
     				    					+'<div class="row row-new">'
@@ -793,11 +820,15 @@
 				 var listGroupItem = "";
 				 $('.business_card_book').html("");
 				 $.each( resp.data, function( key, value ) {
-					 if(key == 0){
-
+					 if(typeSort == 5){
+						 nameShow = value.nameSort.replace("/","年")+"月";
+					 } else {
+						 nameShow = value.nameSort;
+					 }
+					 if(key == 0){	
 						listGroup = $('.business_card_book').append(
 								'<div class="list-group" style="margin-bottom: 0px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
-						        +'<div class="ul-left-li active list-group-item-title">'+value.nameSort+'</div></div>');
+						        +'<div class="ul-left-li active list-group-item-title">'+nameShow+'</div></div>');
 				 
 					 $.each( value.lstCardInfo, function (k,v) {
 						 listGroupItem += '<div class="list-group-item pointer show-content">'
@@ -835,7 +866,7 @@
 						 } else {
 								listGroup = $('.business_card_book').append(
 										'<div class="list-group" style="margin-bottom: 0px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
-								        +'<div class="ul-left-li list-group-item-title">'+value.nameSort+'</div></div>');
+								        +'<div class="ul-left-li list-group-item-title">'+nameShow+'</div></div>');
 						 }
 					 }
 				 });
@@ -1987,6 +2018,16 @@
 			        //alert('Error');
 			    });
 			});
+		}
+		
+		function formatDate(date) {
+		    var d = new Date(date),
+		        month = '' + (d.getMonth() + 1),		        
+		        year = d.getFullYear();
+
+		    if (month.length < 2) month = '0' + month;
+
+		    return year + "年" + month + "月";
 		}
 
     </script>
