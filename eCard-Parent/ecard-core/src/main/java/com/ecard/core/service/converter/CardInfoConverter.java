@@ -317,7 +317,7 @@ public final class CardInfoConverter {
 		CardInfoCSV cardInfoCSV;
 		for(com.ecard.core.model.CardInfo cardInfo : cardInfoList){
 			cardInfoCSV = new CardInfoCSV();
-			cardInfoCSV.setCardId(cardInfo.getCardId());						
+			cardInfoCSV.setCardIndexNo(cardInfo.getCardIndexNo());						
 			cardInfoCSV.setCompanyName(cardInfo.getCompanyName());
 			cardInfoCSV.setCompanyNameKana(cardInfo.getCompanyNameKana());
 			cardInfoCSV.setDepartmentName(cardInfo.getDepartmentName());
@@ -346,11 +346,10 @@ public final class CardInfoConverter {
 			cardInfoCSV.setSubTelNumberCompany(cardInfo.getSubTelNumberCompany());
 			cardInfoCSV.setSubTelNumberDepartment(cardInfo.getSubTelNumberDepartment());
 			cardInfoCSV.setSubTelNumberDirect(cardInfo.getSubTelNumberDirect());
-			cardInfoCSV.setSubFaxNumber(cardInfo.getSubFaxNumber());
-			cardInfoCSV.setMemo1(cardInfo.getMemo1());
-			cardInfoCSV.setMemo2(cardInfo.getMemo2());			
+			cardInfoCSV.setSubFaxNumber(cardInfo.getSubFaxNumber());			
 			cardInfoCSV.setCreateDate(cardInfo.getCreateDate());
-			cardInfoCSV.setUpdateDate(cardInfo.getUpdateDate());			
+			cardInfoCSV.setUpdateDate(cardInfo.getUpdateDate());
+			cardInfoCSV.setContactDate(cardInfo.getContactDate());
 			listCardInfoCSV.add(cardInfoCSV);			
 		}
 			

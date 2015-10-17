@@ -129,6 +129,12 @@ import com.google.gson.Gson;
 @RequestMapping("/user/*")
 public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	private String[] header = { "cardIndexNo", "companyName", "companyNameKana", "departmentName", "positionName", "lastName",
+			"firstName", "lastNameKana", "firstNameKana", "email", "zipCode", "addressFull", "address1", "address2",
+			"address3", "telNumberCompany", "telNumberDepartment", "telNumberDirect", "faxNumber", "mobileNumber",
+			"companyUrl", "subAddressFull", "subZipCode", "subAddress1", "subAddress2", "subAddress3",
+			"subTelNumberCompany", "subTelNumberDepartment", "subTelNumberDirect", "subFaxNumber",
+			"createDate", "updateDate", "contactDate" };
 	@Autowired
 	UserInfoService userInfoService;
 
@@ -368,12 +374,12 @@ public class UserController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/downloadCSV/{id:[\\d]+}", method = RequestMethod.GET)
-	@ResponseBody
+	@RequestMapping(value = "/downloadCSV/{id:[\\d]+}", method = RequestMethod.GET)	
 	public void downloadCSV(HttpServletResponse response, @PathVariable("id") int id) throws IOException {
 		try {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			UserInfo userInfo = userInfoService.findUserByEmail(authentication.getName());
+			EcardUser  ecardUser =(EcardUser) authentication.getPrincipal();
+			UserInfo userInfo = userInfoService.findUserByEmail(ecardUser.getUsername());
 
 			DownloadCsv downloadCsvId = new DownloadCsv();
 			downloadCsvId.setUserInfo(userInfo);
@@ -394,18 +400,33 @@ public class UserController {
 				}
 				fileName = "CompanyCard_" + current + userInfo.getUserId() + ".csv";
 				downloadCsvId.setCsvType(CsvConstant.COMPANY_CARDS);
-				downloadCsvId.setCsvUrl(fileName);
+				downloadCsvId.setCsvUrl(fileName);				
 				createCSVFile(response, fileName, listUserInfoCSV, CsvConstant.DOWNLOAD_NOT_DIRECT);
 				cardInfoService.saveDownloadHistory(downloadCsvId);
 			} else {
 				List<CardInfo> listCardInfo = cardInfoService.getListMyCard(userInfo.getUserId());
 				listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
 				fileName = "MyCard_" + current + userInfo.getUserId() + ".csv";
+				
 				downloadCsvId.setCsvApprovalStatus(CsvConstant.IS_DOWNLOADED);
 				downloadCsvId.setCsvType(CsvConstant.MY_CARDS);
-				createCSVFile(response, fileName, listUserInfoCSV, CsvConstant.DOWNLOAD_DIRECT);
+				response.setContentType("application/force-download");
+				String headerKey = "Content-Disposition";
+				String headerValue = String.format("attachment; filename=\"%s\"", fileName);
+				response.setCharacterEncoding("UTF-8");
+				response.setHeader(headerKey, headerValue);
+				ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+				csvWriter.writeHeader(header);
+
+				for (CardInfoCSV aCard : listUserInfoCSV) {
+					csvWriter.write(aCard, header);
+				}
+				csvWriter.close();
+				
 				cardInfoService.saveDownloadHistory(downloadCsvId);
+				
 			}
+			
 			// Save history download
 			ActionLogId actionLogId = new ActionLogId();
 			actionLogId.setActionDate(new Date());
@@ -508,15 +529,8 @@ public class UserController {
 		String absoluteFilePath = "";
 		absoluteFilePath = workingDirectory + File.separator + csvFileName;
 
-		String[] header = { "cardId", "companyName", "companyNameKana", "departmentName", "positionName", "lastName",
-				"firstName", "lastNameKana", "firstNameKana", "email", "zipCode", "addressFull", "address1", "address2",
-				"address3", "telNumberCompany", "telNumberDepartment", "telNumberDirect", "faxNumber", "mobileNumber",
-				"companyUrl", "subAddressFull", "subZipCode", "subAddress1", "subAddress2", "subAddress3",
-				"subTelNumberCompany", "subTelNumberDepartment", "subTelNumberDirect", "subFaxNumber", "memo1", "memo2",
-				"createDate", "updateDate" };
-
 		if (typeCSV == CsvConstant.DOWNLOAD_DIRECT) {
-			response.setContentType("text/csv");
+			response.setContentType("application/force-download");
 			String headerKey = "Content-Disposition";
 			String headerValue = String.format("attachment; filename=\"%s\"", csvFileName);
 			response.setHeader(headerKey, headerValue);
@@ -710,7 +724,7 @@ public class UserController {
 	public String loginSaleForce(@RequestBody CardInfoSaleforce cardInfo) {
 		logger.debug("loginSaleForce", UserController.class);
 
-		final String URI = "https://bc-ribbon.temp-holdings.co.jp/api/";
+		final String URI = "http://52.68.0.143/api/";
 
 		RestTemplate restTemplate = new RestTemplate();
 		String result = "";
@@ -762,6 +776,8 @@ public class UserController {
 				departmentName = departmentName.substring(0, 255);
 			}
 
+			String password = cardInfo.getLogin_pass() + CommonConstants.tokenAuthen;
+			
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 			map.add("lastname", lastName);
 			map.add("firstname", firstName);
@@ -779,7 +795,7 @@ public class UserController {
 			map.add("departmentName", departmentName);
 			map.add("zipCode", cardInfo.getZipCode());
 			map.add("login_id", cardInfo.getLogin_id());
-			map.add("login_pass", cardInfo.getLogin_pass());
+			map.add("login_pass", password);
 
 			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
 			result = restTemplate.postForObject(URI, map, String.class);
