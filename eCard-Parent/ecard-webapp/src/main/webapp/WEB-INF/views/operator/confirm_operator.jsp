@@ -8,11 +8,12 @@
 </script>
 <style>
 .btn-allocation {
-    background-color: #e3157a;
+   /*  background-color: #e3157a; */
     border-radius: 5px;
-    border: 1px solid #e3157a;
+   /*  border: 1px solid #e3157a; */
     padding: 10px 15px 10px 15px;
     margin: 8px 5px 8px 0px;
+    color: #FFFFFF;
 }
 </style>
 <div class="container-fluid padding-top20 bg-container height100per">
@@ -24,7 +25,7 @@
 				<div class="float-left col-sm-6">
 					<h4 class="h4-header">ユーザー詳細</h4>
 				</div>
-				<div class="float-right">
+				<div class="float-right float-right-manage">
 				   	<c:if test="${operatorConfirm.leaveFlg ==1}">
 				      <a href="<c:url value='/operators/changeowner/${operatorConfirm.userId}'/>" id="add"><i class="fa btn-allocation" >所有者変更</i></a> 
 				    </c:if>
