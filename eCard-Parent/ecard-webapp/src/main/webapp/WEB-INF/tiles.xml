@@ -38,9 +38,13 @@
     <definition name="operatorregister" extends="base.definition">  
         <put-attribute name="body" value="/WEB-INF/views/operator/register_operator.jsp" />  
     </definition>
-        <definition name="operatorconfirm" extends="base.definition">  
+     <definition name="operatorconfirm" extends="base.definition">  
         <put-attribute name="body" value="/WEB-INF/views/operator/confirm_operator.jsp" />  
     </definition>
+    <definition name="changeowner" extends="base.definition">  
+        <put-attribute name="body" value="/WEB-INF/views/operator/change_owners.jsp" />  
+    </definition>
+    
     <!-- team administration -->
     <definition name="teamlist" extends="base.definition">  
         <put-attribute name="body" value="/WEB-INF/views/team/teamlist.jsp" />  
@@ -133,41 +137,70 @@
     </definition>
     
     <definition name="homePC" extends="base.pc.definition">   	
-        <put-attribute name="title" value="IBS" />
+        <put-attribute name="title" value="TOP | トップ" />
         <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
         <put-attribute name="body" value="/WEB-INF/views/user/homePC.jsp" />  
     </definition>
     
+    <definition name="companyTree" extends="base.pc.definition">   	
+        <put-attribute name="title" value="顧客組織一覧" />
+        <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/user/companyTree.jsp" />  
+    </definition>
+    
+    <definition name="listCardByName" extends="base.pc.definition">   	
+        <put-attribute name="title" value="顧客組織一覧" />
+        <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/user/listCardByName.jsp" />  
+    </definition>
+    
     <definition name="detailPC" extends="base.pc.definition">   	
-        <put-attribute name="title" value="IBS" />
+        <put-attribute name="title" value="ログイン" />
         <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
         <put-attribute name="body" value="/WEB-INF/views/user/detailPC.jsp" />  
     </definition>
     
+    <definition name="cardConnectDetail" extends="base.pc.definition">   	
+        <put-attribute name="title" value="IBS" />
+        <put-attribute name="menu" value="/WEB-INF/views/common/menuPC.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/user/cardConnectDetail.jsp" />  
+    </definition>
+    
     <definition name="download" extends="base.pc.definition">   	
-        <put-attribute name="title" value="IBS PC" />  
+        <put-attribute name="title" value="名刺のダウンロード" />  
         <put-attribute name="body" value="/WEB-INF/views/user/download.jsp" />  
     </definition>
     
     <definition name="profile" extends="base.pc.definition">   	
-        <put-attribute name="title" value="IBS PC" />  
+        <put-attribute name="title" value="プロフィール" />  
         <put-attribute name="body" value="/WEB-INF/views/user/profile.jsp" />  
     </definition>
     
     <definition name="changepass" extends="base.pc.definition">   	
-        <put-attribute name="title" value="IBS PC" />  
+        <put-attribute name="title" value="パスワード設定" />  
         <put-attribute name="body" value="/WEB-INF/views/user/changepass.jsp" />  
     </definition>
     
     <definition name="faq" extends="base.pc.definition">   	
-        <put-attribute name="title" value="IBS PC" />  
+        <put-attribute name="title" value="FAQ" />  
         <put-attribute name="body" value="/WEB-INF/views/user/faq.jsp" />  
     </definition>
     
     <definition name="mailbox" extends="base.pc.definition">   	
-        <put-attribute name="title" value="IBS PC" />  
+        <put-attribute name="title" value="ご意見・不具合の連絡" />  
         <put-attribute name="body" value="/WEB-INF/views/user/mailbox.jsp" />  
     </definition>
+    
+    <definition name="add-business-card" extends="base.pc.definition">   	
+        <put-attribute name="title" value="名刺データ作成" />  
+        <put-attribute name="body" value="/WEB-INF/views/user/add_business_card.jsp" />  
+    </definition>
+    
+    <definition name="overlapcards" extends="base.pc.definition">   	
+        <put-attribute name="title" value="名刺の最新化（名寄せ）" />  
+        <put-attribute name="body" value="/WEB-INF/views/user/overlap_cards.jsp" />  
+    </definition>
+    
     <!-- backup --> 
     <definition name="backup" extends="base.definition"> 
         <put-attribute name="body" value="/WEB-INF/views/backup/backupdata.jsp" />  

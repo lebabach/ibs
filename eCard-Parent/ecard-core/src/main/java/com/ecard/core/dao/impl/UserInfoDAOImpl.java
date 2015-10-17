@@ -304,7 +304,7 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
 					+ " OR u.tel_number_company REGEXP :criteriaSearch "
 					+ " OR u.address_full REGEXP :criteriaSearch "
 					+ " OR u.position_name REGEXP :criteriaSearch) AND ";
-		sqlQuery += "u.delete_flg = 0 AND u.leave_flg = 0 ORDER BY u.create_date DESC";
+		sqlQuery += "u.delete_flg = 0 and u.leave_flg = 0  ORDER BY u.create_date DESC";
 		Query query = null;
 		if (limit > -1 && offet > -1)
 			query = getEntityManager(). createNativeQuery(sqlQuery).setFirstResult(offet).setMaxResults(limit);
@@ -343,7 +343,7 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
 					+ " OR u.tel_number_company REGEXP :criteriaSearch "
 					+ " OR u.address_full REGEXP :criteriaSearch "
 					+ "OR u.position_name REGEXP :criteriaSearch) AND ";
-		sqlQuery += "u.delete_flg = 0 AND u.leave_flg = 0 ORDER BY u.create_date DESC";
+		sqlQuery += "u.delete_flg = 0 and u.leave_flg = 0  ORDER BY u.create_date DESC";
 		Query query = getEntityManager().createNativeQuery(sqlQuery);
 		if(!criteriaSearch.isEmpty())
 			query.setParameter("criteriaSearch", criteriaSearch);
@@ -491,7 +491,8 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
     
     
     public List<DownloadCsv> getHistoryCSVDownload(Integer userId){
-    	Query query = getEntityManager().createNativeQuery("SELECT * FROM download_csv AS dc WHERE dc.user_id = :userId AND dc.csv_approval_status = 1  ORDER BY  dc.approval_date DESC");
+//    	Query query = getEntityManager().createNativeQuery("SELECT * FROM download_csv AS dc WHERE dc.user_id = :userId AND dc.csv_approval_status = 1  ORDER BY  dc.approval_date DESC");
+    	Query query = getEntityManager().createNativeQuery("SELECT * FROM download_csv AS dc WHERE dc.user_id = :userId ORDER BY  dc.approval_date DESC");
     	query.setParameter("userId", userId);
         
         List<Object[]> rows = query.getResultList();
@@ -514,7 +515,7 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
         List<UserInfoVo> result = new ArrayList<>(rows.size());
 
         for (Object[] row : rows) {
-            result.add(new UserInfoVo((Integer)row[0],(String) row[16],(String) row[17], (String)row[22],(String) row[24],(String) row[25]));
+            result.add(new UserInfoVo((Integer)row[0],(String) row[15],(String) row[16],(String) row[17], (String)row[22],(String) row[24],(String) row[25],(String) row[4]));
         }
         return result;		
 	}
@@ -673,7 +674,7 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
 					+ " OR u.tel_number_company REGEXP :criteriaSearch "
 					+ " OR u.address_full REGEXP :criteriaSearch "
 					+ " OR u.position_name REGEXP :criteriaSearch) AND ";
-		sqlQuery += "u.delete_flg = 0 AND u.leave_flg = 0 AND u.group_company_id = :group_company_id  ORDER BY u.create_date DESC";
+		sqlQuery += "u.delete_flg = 0 AND u.leave_flg = 0  AND u.group_company_id = :group_company_id  ORDER BY u.create_date DESC";
 		Query query = null;
 		if (limit > -1 && offet > -1)
 			query = getEntityManager(). createNativeQuery(sqlQuery).setFirstResult(offet).setMaxResults(limit);
@@ -715,7 +716,7 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
 					+ " OR u.tel_number_company REGEXP :criteriaSearch "
 					+ " OR u.address_full REGEXP :criteriaSearch "
 					+ "OR u.position_name REGEXP :criteriaSearch) AND ";
-		sqlQuery += "u.delete_flg = 0 AND u.leave_flg = 0 AND u.group_company_id = :group_company_id ORDER BY u.create_date DESC";
+		sqlQuery += "u.delete_flg = 0 AND u.leave_flg = 0  AND u.group_company_id = :group_company_id ORDER BY u.create_date DESC";
 		Query query = getEntityManager().createNativeQuery(sqlQuery);
 		if(!criteriaSearch.isEmpty())
 			query.setParameter("criteriaSearch", criteriaSearch);
@@ -813,4 +814,156 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
     	else
     		return false;
     }
+    
+    @SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfoVo> searchUserForList(String criteriaSearch, int limit, int offet) {
+		String sqlQuery = "SELECT * FROM user_info u WHERE ";
+		if(!criteriaSearch.isEmpty())
+			sqlQuery += "(u.name REGEXP  :criteriaSearch "
+					+ " OR u.last_name_kana REGEXP :criteriaSearch "
+					+ " OR u.first_name REGEXP :criteriaSearch "
+					+ " OR u.last_name REGEXP :criteriaSearch "
+					+ " OR u.first_name_kana REGEXP :criteriaSearch "
+					+ " OR u.company_name REGEXP :criteriaSearch "
+					+ " OR u.company_name_kana REGEXP :criteriaSearch "
+					+ " OR u.department_name REGEXP :criteriaSearch "
+					+ " OR u.email REGEXP :criteriaSearch "
+					+ " OR u.mobile_number REGEXP :criteriaSearch "
+					+ " OR u.tel_number_company REGEXP :criteriaSearch "
+					+ " OR u.address_full REGEXP :criteriaSearch "
+					+ " OR u.position_name REGEXP :criteriaSearch) AND ";
+		sqlQuery += "u.delete_flg = 0  ORDER BY u.create_date DESC";
+		Query query = null;
+		if (limit > -1 && offet > -1)
+			query = getEntityManager(). createNativeQuery(sqlQuery).setFirstResult(offet).setMaxResults(limit);
+		else
+			query = getEntityManager().createNativeQuery(sqlQuery);
+		if(!criteriaSearch.isEmpty())
+			query.setParameter("criteriaSearch",criteriaSearch);
+		
+		 List<Object[]> rows = query.getResultList();
+	     List<UserInfoVo> result = new ArrayList<>(rows.size());
+	        
+	        for (Object[] row : rows) {
+	            result.add(new UserInfoVo((Integer)row[0], (Integer)row[1],(Integer) row[2],(String) row[4], (String)row[15],(String) row[16],(String) row[17],
+	            		(String)row[19],(String) row[20],(String) row[22], (String)row[23],(String) row[24],(String) row[25],(String) row[26],(String) row[27],
+	            		(String) row[28],(String) row[29],(String) row[30],(String) row[32],(String) row[33],(String) row[34], 
+	            		(String)row[35],(String) row[36], (Integer)row[42],(Date) row[48],(Date) row[49], (Date)row[51],(Integer)row[52],(String)row[56],(Integer)row[43]));
+	        }
+		
+		return result;
+	}
+	
+	@Override
+	public BigInteger countUserForList(String criteriaSearch) {
+		String sqlQuery = "SELECT COUNT(*) FROM user_info u WHERE ";
+		if(!criteriaSearch.isEmpty())
+			sqlQuery += "(u.name REGEXP  :criteriaSearch "
+					+ "OR u.last_name_kana REGEXP :criteriaSearch "
+					+ "OR u.first_name REGEXP :criteriaSearch "
+					+ "OR u.last_name REGEXP :criteriaSearch "
+					+ "OR u.first_name_kana REGEXP :criteriaSearch "
+					+ "OR u.company_name REGEXP :criteriaSearch "
+					+ "OR u.company_name_kana REGEXP :criteriaSearch "
+					+ "OR u.department_name REGEXP :criteriaSearch "
+					+ " OR u.email REGEXP :criteriaSearch "
+					+ " OR u.mobile_number REGEXP :criteriaSearch "
+					+ " OR u.tel_number_company REGEXP :criteriaSearch "
+					+ " OR u.address_full REGEXP :criteriaSearch "
+					+ "OR u.position_name REGEXP :criteriaSearch) AND ";
+		sqlQuery += "u.delete_flg = 0 ORDER BY u.create_date DESC";
+		Query query = getEntityManager().createNativeQuery(sqlQuery);
+		if(!criteriaSearch.isEmpty())
+			query.setParameter("criteriaSearch", criteriaSearch);
+		return (BigInteger) query.getSingleResult();
+	}
+	@Override
+	public List<UserInfoVo> searchUserOfMyCompanyForList(String criteriaSearch, int limit, int offet, int groupCompanyInfoId) {
+		// TODO Auto-generated method stub
+		String sqlQuery = "SELECT * FROM user_info u WHERE ";
+		if(!criteriaSearch.isEmpty())
+			sqlQuery += "(u.name REGEXP  :criteriaSearch "
+					+ " OR u.last_name_kana REGEXP :criteriaSearch "
+					+ " OR u.first_name REGEXP :criteriaSearch "
+					+ " OR u.last_name REGEXP :criteriaSearch "
+					+ " OR u.first_name_kana REGEXP :criteriaSearch "
+					+ " OR u.company_name REGEXP :criteriaSearch "
+					+ " OR u.company_name_kana REGEXP :criteriaSearch "
+					+ " OR u.department_name REGEXP :criteriaSearch "
+					+ " OR u.email REGEXP :criteriaSearch "
+					+ " OR u.mobile_number REGEXP :criteriaSearch "
+					+ " OR u.tel_number_company REGEXP :criteriaSearch "
+					+ " OR u.address_full REGEXP :criteriaSearch "
+					+ " OR u.position_name REGEXP :criteriaSearch) AND ";
+		sqlQuery += "u.delete_flg = 0  AND u.group_company_id = :group_company_id  ORDER BY u.create_date DESC";
+		Query query = null;
+		if (limit > -1 && offet > -1)
+			query = getEntityManager(). createNativeQuery(sqlQuery).setFirstResult(offet).setMaxResults(limit);
+		else
+			query = getEntityManager().createNativeQuery(sqlQuery);
+		if(!criteriaSearch.isEmpty())
+			query.setParameter("criteriaSearch",criteriaSearch);
+		
+		
+		query.setParameter("group_company_id",groupCompanyInfoId);
+		 List<Object[]> rows = query.getResultList();
+	     List<UserInfoVo> result = new ArrayList<>(rows.size());
+	        
+	        for (Object[] row : rows) {
+	            result.add(new UserInfoVo((Integer)row[0], (Integer)row[1],(Integer) row[2],(String) row[4], (String)row[15],(String) row[16],(String) row[17],
+	            		(String)row[19],(String) row[20],(String) row[22], (String)row[23],(String) row[24],(String) row[25],(String) row[26],(String) row[27],
+	            		(String) row[28],(String) row[29],(String) row[30],(String) row[32],(String) row[33],(String) row[34], 
+	            		(String)row[35],(String) row[36], (Integer)row[42],(Date) row[48],(Date) row[49], (Date)row[51],(Integer)row[52],(String)row[56],(Integer)row[43]));
+	        }
+		
+		return result;
+	}
+
+	@Override
+	public BigInteger countUserForList(String criteriaSearch, int groupCompanyInfoId) {
+		// TODO Auto-generated method stub
+		String sqlQuery = "SELECT COUNT(*) FROM user_info u WHERE ";
+		if(!criteriaSearch.isEmpty())
+			sqlQuery += "(u.name REGEXP  :criteriaSearch "
+					+ "OR u.last_name_kana REGEXP :criteriaSearch "
+					+ "OR u.first_name REGEXP :criteriaSearch "
+					+ "OR u.last_name REGEXP :criteriaSearch "
+					+ "OR u.first_name_kana REGEXP :criteriaSearch "
+					+ "OR u.company_name REGEXP :criteriaSearch "
+					+ "OR u.company_name_kana REGEXP :criteriaSearch "
+					+ "OR u.department_name REGEXP :criteriaSearch "
+					+ " OR u.email REGEXP :criteriaSearch "
+					+ " OR u.mobile_number REGEXP :criteriaSearch "
+					+ " OR u.tel_number_company REGEXP :criteriaSearch "
+					+ " OR u.address_full REGEXP :criteriaSearch "
+					+ "OR u.position_name REGEXP :criteriaSearch) AND ";
+		sqlQuery += "u.delete_flg = 0  AND u.group_company_id = :group_company_id ORDER BY u.create_date DESC";
+		Query query = getEntityManager().createNativeQuery(sqlQuery);
+		if(!criteriaSearch.isEmpty())
+			query.setParameter("criteriaSearch", criteriaSearch);
+		
+		query.setParameter("group_company_id", groupCompanyInfoId);
+		return (BigInteger) query.getSingleResult();
+	}
+	
+	public List<UserInfo> getAllListUser(){
+		Query query = getEntityManager().createQuery("SELECT u FROM UserInfo u");
+		
+		return (List<UserInfo>)query.getResultList();
+	}
+
+	@Override
+	public List<UserInfoVo> getAllUserOfCompany(int groupCompanyInfoId) {
+		Query query = getEntityManager().createNativeQuery("SELECT * FROM user_info u WHERE u.delete_flg = 0  AND u.leave_flg = 0 AND u.group_company_id = :group_company_id "
+				                                       + " AND (DATE_FORMAT(NOW(),'%Y-%m-%d') BETWEEN DATE_FORMAT(u.use_date,'%Y-%m-%d') AND DATE_FORMAT(u.end_date,'%Y-%m-%d')) ORDER BY u.create_date DESC");
+		query.setParameter("group_company_id", groupCompanyInfoId);
+		List<Object[]> rows = query.getResultList();
+        List<UserInfoVo> result = new ArrayList<>(rows.size());
+
+        for (Object[] row : rows) {
+            result.add(new UserInfoVo((Integer)row[0],(String) row[15],(String) row[16],(String) row[17], (String)row[22],(String) row[24],(String) row[25],(String) row[4]));
+        }
+        return result;	
+	}
 }

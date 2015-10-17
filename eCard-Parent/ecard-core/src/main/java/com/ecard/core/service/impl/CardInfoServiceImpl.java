@@ -3,24 +3,48 @@
  */
 package com.ecard.core.service.impl;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ecard.core.batch.util.UploadFileUtil;
 import com.ecard.core.dao.CardInfoDAO;
+import com.ecard.core.dao.ContactHistoryDAO;
 import com.ecard.core.dao.DataIndexDAO;
+import com.ecard.core.dao.OldCardDAO;
+import com.ecard.core.dao.UserCardMemoDAO;
+import com.ecard.core.dao.UserInfoDAO;
+import com.ecard.core.model.AdminPossessionCard;
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.CompanyInfo;
+import com.ecard.core.model.ContactHistory;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.OldCard;
+import com.ecard.core.model.OldCardId;
+import com.ecard.core.model.PossessionCard;
+import com.ecard.core.model.PrusalHistory;
+import com.ecard.core.model.UserCardMemo;
+import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.enums.ActionTypeEnum;
 import com.ecard.core.model.enums.IndexTypeEnum;
 import com.ecard.core.model.enums.PropertyCodeEnum;
 import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.service.CardInfoService;
+import com.ecard.core.service.ContactHistoryService;
 import com.ecard.core.util.DataIndexUtil;
+import com.ecard.core.util.StringUtilsHelper;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
@@ -28,6 +52,8 @@ import com.ecard.core.vo.CardInfoNotifyChange;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
+import com.ecard.core.vo.TagUser;
+import com.ecard.core.webservice.Status;
 
 /**
  *
@@ -36,12 +62,36 @@ import com.ecard.core.vo.CompanyCardModel;
 @Service("cardInfoService")
 @Transactional
 public class CardInfoServiceImpl implements CardInfoService {
-    
+
+	@Autowired
+    OldCardDAO oldCardDAO;
+	
     @Autowired
     CardInfoDAO cardInfoDAO;
         
     @Autowired
     DataIndexDAO dataIndexDAO;
+    
+    @Autowired
+    UserInfoDAO userInfoDAO;
+    
+    @Autowired
+    UserCardMemoDAO userCardMemoDAO;
+    
+    @Autowired
+    ContactHistoryDAO contactHistoryDAO;
+    
+    @Value("${scp.hostname}")
+	private String scpHostName;
+	    
+	@Value("${scp.user}")
+    private String scpUser;
+	    
+	@Value("${scp.password}")
+	private String scpPassword;
+	    
+	@Value("${scp.port}")
+	private String scpPort;
 
     public List<CardInfo> listAllCardInfo(){
     	return cardInfoDAO.listAllCardInfo();
@@ -143,6 +193,16 @@ public class CardInfoServiceImpl implements CardInfoService {
         return cardInfoDAO.registerCardImage(cardInfo);
     }
     
+    public CardInfo registerCardImageManualPCOfAdmin(CardInfo cardInfo) {
+    	//String indexId=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Scanner);
+    	String indexId=dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.ManualPC,cardInfo.getCardIndexNo());
+    	cardInfo.setCardIndexNo(indexId);
+    	if(!StringUtils.isEmpty(indexId)){
+			cardInfo.setImageFile(DataIndexUtil.getIndexNoOfImageBy(TableTypeEnum.ImageInfor, indexId)+".jpg");
+		}
+        return cardInfoDAO.registerCardImage(cardInfo);
+    }
+    
     public int deleteCardInfo(Integer cardId){
         return cardInfoDAO.deleteCardInfo(cardId);
     }
@@ -221,11 +281,15 @@ public class CardInfoServiceImpl implements CardInfoService {
 //	}
 
 	@Override
-	public List<CardInfoUserVo> getListPossesionCard(Integer userId, int pageNumber) {
-		return cardInfoDAO.getListPossesionCard(userId, pageNumber);
+	public List<CardInfoUserVo> getListPossesionCard(Integer userId,Integer typeSort, String valueSearch) {
+		return cardInfoDAO.getListPossesionCard(userId, typeSort, valueSearch);
 	}
 	public void updateOldCardInfo (CardInfo cardInfo){
 		cardInfoDAO.updateOldCardInfo(cardInfo);
+	}
+	
+	public void updateCardInfoNotCreateIndex (CardInfo cardInfo){
+		cardInfoDAO.saveOrUpdate(cardInfo);
 	}
     
     public CardInfo importCardInfoFromCsv(CardInfo cardInfo){
@@ -279,8 +343,8 @@ public class CardInfoServiceImpl implements CardInfoService {
     }
 
 	@Override
-	public List<String> getListSortType(Integer userId) {
-		return cardInfoDAO.getListSortType(userId);
+	public List<String> getListSortType(Integer userId, Integer sortType) {
+		return cardInfoDAO.getListSortType(userId, sortType);
 	}
 	
 	public int updateContactDate(CardInfo cardInfo){
@@ -295,6 +359,250 @@ public class CardInfoServiceImpl implements CardInfoService {
     	return cardInfoDAO.getNewestCardInfo(cardInfo);
     }
 	
+	public List<CardInfo> getOldCardInfor(){
+		return cardInfoDAO.getOldCardInfor();
+	}
+
+	public int deleteListCard(List<Integer> listCard){
+		return cardInfoDAO.deleteListCard(listCard);
+	}
+	
+	public List<CardInfo> getListPossessionCardByTag(Integer userId, Integer tagId, String sort, int pageNumber){
+		return cardInfoDAO.getListPossessionCardByTag(userId, tagId, sort, pageNumber);
+	}
+	
+	public List<CardInfoUserVo> getListPossessionCardByTag(Integer userId, Integer tagId, int pageNumber){
+		return cardInfoDAO.getListPossessionCardByTag(userId, tagId, pageNumber);
+	}
+	
+	public List<String> getListSortTypeByTag(Integer userId, Integer tagId){
+		return cardInfoDAO.getListSortTypeByTag(userId, tagId);
+	}
+	
+	public void updateDownloadHistory(Integer downloadCsvId) {
+		cardInfoDAO.updateDownloadHistory(downloadCsvId);
+	}
+	
+	public DownloadCsv getDownloadCSV(Integer csvId) {
+		return cardInfoDAO.getDownloadCSV(csvId);
+	}
+	
+	public List<com.ecard.core.vo.CardInfo> searchCompanyTree(String companyName){
+		return cardInfoDAO.searchCompanyTree(companyName);
+	}
+	
+	public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName){
+		return cardInfoDAO.searchDepartment(companyName);
+	}
+	
+	public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName){
+		return cardInfoDAO.searchCardInfo(companyName, departmentName);
+	}
+	
+	public List<CardInfo> searchCardInfoByName(String companyName, String departmentName){
+		return cardInfoDAO.searchCardInfoByName(companyName, departmentName);
+	}
+
+	@Override
+	public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId,int tagId,int limit,int offset) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.getListCardAllocationUser(userId,tagId,limit,offset);
+	}
+
+	@Override
+	public BigInteger countListCardAllocationUser(int userId, int tagId) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.countListCardAllocationUser(userId,tagId);
+	}
+
+	@Override
+	public List<TagUser> getAllTagUser(int userId) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.getAllTagUser(userId);
+	}
+	
+	public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card){
+		return cardInfoDAO.getListConnectCards(card);
+	}
+	
+	@Transactional
+	public boolean handleConnectCards(int cardid1,int cardid2, int currentUserId, String name){
+		try{
+			CardInfo card1=this.getCardInfoDetail(cardid1);
+			CardInfo card2=this.getCardInfoDetail(cardid2);
+			//detach object
+			
+			int ownerUserId=card2.getCardOwnerId();
+			String ownerName=card2.getCardOwnerName();
+			int  ownerGroupCompanyId=card2.getGroupCompanyId();
+			card1.setOldCardFlg(1);
+			this.updateCardInfoAdmin(card1);
+			if(ownerUserId!=currentUserId){
+				card2.setCardOwnerId(currentUserId);
+				card2.setCardOwnerName(name);
+				card2.setGroupCompanyId(card1.getGroupCompanyId());
+				CardInfo newCard= this.registerCardImageManualPCOfAdmin(setCardInfo(card2));
+				OldCard oldcard=new OldCard();
+				oldcard.setCardInfo(newCard);
+				
+				OldCardId oldCardId=new OldCardId();
+				oldCardId.setCardId(newCard.getCardId());
+				oldCardId.setCardOwnerId(currentUserId);
+				oldCardId.setSeq(0);
+				oldCardId.setOldCardId(card1.getCardId());
+				oldcard.setId(oldCardId);
+				
+				oldCardDAO.saveOrUpdate(oldcard);
+				
+				//update cardid in old_card
+				oldCardDAO.updateCardIdWithOldCard(newCard.getCardId(),cardid1);
+				card2.setCardOwnerId(ownerUserId);
+				card2.setCardOwnerName(ownerName);
+				card2.setGroupCompanyId(ownerGroupCompanyId);
+				this.updateCardInfoNotCreateIndex(card2);
+				CopyImage copy=new CopyImage(card2.getImageFile(),newCard.getImageFile());
+				copy.start();
+			}else{
+				OldCard oldcard=new OldCard();
+				
+				CardInfo cardInfor=new CardInfo();
+				cardInfor.setCardId(card2.getCardId());
+				
+				OldCardId oldCardId=new OldCardId();
+				oldCardId.setCardId(card2.getCardId());
+				oldCardId.setCardOwnerId(currentUserId);
+				oldCardId.setSeq(0);
+				oldCardId.setOldCardId(cardid1);
+				oldcard.setCardInfo(cardInfor);
+				
+				oldcard.setId(oldCardId);
+				oldCardDAO.persist(oldcard);
+				oldCardDAO.updateCardIdWithOldCard(oldcard.getCardInfo().getCardId(),cardid1);
+				userCardMemoDAO.updateUserCardMemo(cardid1, currentUserId, cardid2);
+				contactHistoryDAO.updateContactHistory(cardid1, currentUserId, cardid2);
+				
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	private CardInfo setCardInfo(CardInfo card){
+		CardInfo newcard=new CardInfo();
+		newcard.setCompanyInfo(card.getCompanyInfo());
+		newcard.setCardType(card.getCardType());
+	     newcard.setImageFile(card.getImageFile());
+	     newcard.setCardBackImgFile(card.getCardBackImgFile());
+	     newcard.setCompanyName(card.getCompanyName());
+	     newcard.setCompanyNameKana(card.getCompanyNameKana());
+	     newcard.setDepartmentName(card.getDepartmentName());
+	     newcard.setPositionName(card.getPositionName());
+	     newcard.setName(card.getName());
+	     newcard.setLastName(card.getLastName());
+	     newcard.setFirstName(card.getFirstName());
+	     newcard.setNameKana(card.getNameKana());
+	     newcard.setLastNameKana(card.getLastNameKana());
+	     newcard.setFirstNameKana(card.getFirstNameKana());
+	     newcard.setEmail(card.getEmail());
+	     newcard.setZipCode(card.getZipCode());
+	     newcard.setAddressFull(card.getAddressFull());
+	     newcard.setAddress1(card.getAddress1());
+	     newcard.setAddress2(card.getAddress2());
+	     newcard.setAddress3(card.getAddress3());
+	     newcard.setAddress4(card.getAddress4());
+	     newcard.setTelNumberCompany(card.getTelNumberCompany());
+	     newcard.setTelNumberDepartment(card.getTelNumberDepartment());
+	     
+	     
+	     newcard.setTelNumberDirect(card.getTelNumberDirect());
+	     newcard.setFaxNumber(card.getFaxNumber());
+	     newcard.setMobileNumber(card.getMobileNumber());
+	     newcard.setCompanyUrl(card.getCompanyUrl());
+	     newcard.setSubAddressFull(card.getSubAddressFull());
+	     newcard.setSubZipCode(card.getSubZipCode());
+	     newcard.setSubAddress1(card.getSubAddress1());
+	     newcard.setSubAddress2(card.getSubAddress2());
+	     newcard.setSubAddress3(card.getSubAddress3());
+	     newcard.setSubAddress4(card.getSubAddress4());
+	     
+	     newcard.setSubTelNumberCompany(card.getSubTelNumberCompany());
+	     newcard.setSubTelNumberDepartment(card.getSubTelNumberDepartment());
+	     newcard.setSubTelNumberDirect(card.getSubTelNumberDirect());
+	     newcard.setSubFaxNumber(card.getSubFaxNumber());
+	     newcard.setFileOutputFlg(card.getFileOutputFlg());
+	     newcard.setHandMemo(card.getHandMemo());
+	     newcard.setAutoMemo(card.getAutoMemo());
+	     newcard.setMemo1(card.getMemo1());
+	     newcard.setMemo2(card.getMemo2());
+	     newcard.setMemo1(card.getMemo1());
+	     
+	     
+	     newcard.setCardOwnerId(card.getCardOwnerId());
+	     newcard.setPublishStatus(card.getPublishStatus());
+	     newcard.setApprovalStatus(card.getApprovalStatus());
+	     newcard.setOldCardFlg(card.getOldCardFlg());
+	     newcard.setCreateDate(card.getCreateDate());
+	     newcard.setUpdateDate(card.getUpdateDate());
+	     newcard.setOperaterId(card.getOperaterId());
+	     newcard.setDeletDate(card.getDeletDate());
+	     newcard.setDeleteFlg(card.getDeleteFlg());
+	     newcard.setCardOwnerName(card.getCardOwnerName());
+	     newcard.setGroupCompanyId(card.getGroupCompanyId());
+	     newcard.setNewestCardFlg(card.getNewestCardFlg());
+	     newcard.setContactDate(card.getContactDate());
+	     newcard.setCardIndexNo(card.getCardIndexNo());
+	     
+	     newcard.setSubMobileNumber(card.getSubMobileNumber());
+	     newcard.setSubEmail(card.getSubEmail());
+	     newcard.setSubCompanyUrl(card.getSubCompanyUrl());
+	     newcard.setImportanceLevel(card.getImportanceLevel());
+	     newcard.setIsEditting(card.getIsEditting());
+	     newcard.setDateEditting(card.getDateEditting());
+	     return newcard;
+	}
+
+	@Override
+	public Integer updateUserCard(List<Integer> listCardUser, Integer userLeave, Integer userAssign,
+			String nameAssign) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.updateUserCard(listCardUser,userLeave,userAssign,nameAssign);
+	}
+
+	public void savePrusalHistory(PrusalHistory prusalHistory){
+		cardInfoDAO.savePrusalHistory(prusalHistory);
+	}
+	
+	class CopyImage extends Thread {
+		private String oldImage;
+		private String newImage;
+
+		public CopyImage(String oldImage,String newImage) {
+			this.oldImage=oldImage;
+			this.newImage=newImage;
+		}
+
+		public void run() {
+			String oldImageData=UploadFileUtil.getImageFileFromSCP(oldImage, scpHostName, scpUser, scpPassword,Integer.parseInt(scpPort));
+			try {
+				UploadFileUtil.writeImage(oldImageData, newImage, scpHostName, scpUser, scpPassword);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("=====================================can not upload image connect card===================================");
+			}
+		}
+	}
+	
+	public List<CardInfo> getListCardHistoryByCardId(Integer cardId){
+		return cardInfoDAO.getListCardHistoryByCardId(cardId);
+	}
+	
+	public List<com.ecard.core.vo.CardInfo> searchCompanyTrees(String searchText){
+		return cardInfoDAO.searchCompanyTrees(searchText);
+	}
+
 	public Long countSameCardInfoByOwner(CardInfo cardInfo){
 		return cardInfoDAO.countSameCardInfoByOwner(cardInfo);
 	}

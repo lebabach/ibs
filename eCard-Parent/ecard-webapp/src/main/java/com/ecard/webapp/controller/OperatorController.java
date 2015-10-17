@@ -11,12 +11,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -25,6 +28,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,24 +40,35 @@ import com.ecard.core.model.GroupCompanyInfo;
 import com.ecard.core.model.Roles;
 import com.ecard.core.model.TeamInfo;
 import com.ecard.core.model.UserInfo;
+import com.ecard.core.service.AdminPossessionCardService;
+import com.ecard.core.service.CardInfoService;
+import com.ecard.core.service.CardTagService;
 import com.ecard.core.service.EmailService;
 import com.ecard.core.service.GroupCompanyInfoService;
 import com.ecard.core.service.MasterService;
 import com.ecard.core.service.TeamInfoService;
 import com.ecard.core.service.UserInfoService;
+import com.ecard.core.vo.CardInfo;
 import com.ecard.core.vo.GroupDepartmentVO;
+import com.ecard.core.vo.TagForCard;
+import com.ecard.core.vo.TagGroup;
+import com.ecard.core.vo.TagUser;
 import com.ecard.core.vo.UserInfoVo;
 import com.ecard.webapp.constant.CommonConstants;
 import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.security.RoleType;
 import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.vo.DataPagingJsonVO;
+import com.ecard.webapp.vo.ObjectCardNumber;
+import com.ecard.webapp.vo.ObjectTeamVO;
 import com.ecard.webapp.vo.OperatorEditVO;
+import com.ecard.webapp.vo.UpdateCardUser;
 import com.ecard.webapp.vo.UserInfoResultVO;
 
 @Controller
 @RequestMapping("/operators/*")
 public class OperatorController {
+	private static final Logger logger = LoggerFactory.getLogger(OperatorController.class);
 	@Autowired
 	UserInfoService userInfoService;
 	
@@ -68,6 +83,12 @@ public class OperatorController {
 	
 	@Autowired
     EmailService emailService;
+	
+	@Autowired
+	CardInfoService cardInfoService;
+	
+	@Autowired
+    CardTagService cardTagService;
 	
 	@Value("${mail.server.from}")
 	private String fromUser;
@@ -92,16 +113,16 @@ public class OperatorController {
 		List<UserInfoVo> userInfos = null ;
 		BigInteger count = null ;
 		if(roles.contains(RoleType.ROLE_ADMIN.name())){
-			 userInfos = userInfoService.searchUser(textSearch, limit, offset);
-			 count = userInfoService.countUser(textSearch);
+			 userInfos = userInfoService.searchUserForList(textSearch, limit, offset);
+			 count = userInfoService.countUserForList(textSearch);
 		}else{
-			 userInfos = userInfoService.searchUserOfMyCompany(criteriaSearch, limit, offset, ecardUser.getGroupCompanyId());
-			 count = userInfoService.countUser(criteriaSearch, ecardUser.getGroupCompanyId());
+			 userInfos = userInfoService.searchUserOfMyCompanyForList(criteriaSearch, limit, offset, ecardUser.getGroupCompanyId());
+			 count = userInfoService.countUserForList(criteriaSearch, ecardUser.getGroupCompanyId());
 		}
 		
 		long totalRecord = count.longValue();
 		for (UserInfoVo info : userInfos) {
-			UserInfoResultVO userInfoResultVO = new UserInfoResultVO(info.getUserId(), info.getName(), info.getCompanyName(), info.getPositionName(), info.getEmail(), info.getMobileNumber(), info.getCreateDate().toString() ,info.getFirstName(),info.getLastName(),info.getFirstNameKana(),info.getLastNameKana(),info.getDepartmentName(),info.getUserIndexNo());
+			UserInfoResultVO userInfoResultVO = new UserInfoResultVO(info.getUserId(), info.getName(), info.getCompanyName(), info.getPositionName(), info.getEmail(), info.getMobileNumber(), info.getCreateDate().toString() ,info.getFirstName(),info.getLastName(),info.getFirstNameKana(),info.getLastNameKana(),info.getDepartmentName(),info.getUserIndexNo(),info.getLeaveFlg(),info.getUseStopFlg());
 			userInfoResultVOs.add(userInfoResultVO);
 		}
 		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));
@@ -327,4 +348,170 @@ public class OperatorController {
 		}
 	  return 0;
     }
+    @RequestMapping(value = "changeowner/{id:[\\d]+}", method = RequestMethod.GET)
+	public ModelAndView changeowner(@PathVariable("id") int id) {
+    	ModelAndView modelAndView = new ModelAndView();
+    	UserInfo userLeave = userInfoService.getUserInfoByUserId(id);
+    	List<UserInfoVo> lstUserInfo = userInfoService.getAllUserOfCompany(userLeave.getGroupCompanyId());
+    	List<TagGroup> listTagGroup = null;
+		try{
+	
+			//List tag
+			List<TagForCard> listCardTag = getAllTagForCard(id);
+			List<TagForCard> listUserTag = cardTagService.listUserTagByUserId(id);
+            if(listCardTag.size() == 0){
+            	listTagGroup = convertCardTagIdList(listUserTag);
+            }
+            else{
+            	listTagGroup = convertCardTagIdList(listCardTag);
+            }
+		}
+		catch(Exception ex){
+			logger.debug("Exception : ", ex.getMessage());
+		}
+
+		modelAndView.setViewName("changeowner");
+		modelAndView.addObject("userLeave", userLeave);
+		modelAndView.addObject("lstUserInfo", lstUserInfo);
+		modelAndView.addObject("listTagGroup", listTagGroup);
+		return modelAndView;
+		
+	}
+    
+    @RequestMapping(value = "searchList", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public DataPagingJsonVO<UserInfoResultVO> searchList(HttpServletRequest request) {
+		DataPagingJsonVO<UserInfoResultVO> dataTableResponse = new DataPagingJsonVO<UserInfoResultVO>();
+		List<UserInfoResultVO> userInfoResultVOs = new ArrayList<UserInfoResultVO>();
+		String criteriaSearch = request.getParameter("criteriaSearch");
+		String textSearch = criteriaSearch.trim().replaceAll(" +", "|");
+		
+		List<UserInfoVo> userInfos =userInfoService.searchUser(textSearch,-1,-1); 
+		BigInteger count = userInfoService.countUser(textSearch);
+		long totalRecord = count.longValue();
+		for (UserInfoVo info : userInfos) {
+			UserInfoResultVO userInfoResultVO = new UserInfoResultVO(info.getUserId(), info.getName(), info.getCompanyName(), info.getPositionName(), info.getEmail(), info.getMobileNumber(), info.getCreateDate().toString() ,info.getFirstName(),info.getLastName(),info.getFirstNameKana(),info.getLastNameKana(),info.getDepartmentName(),info.getUserIndexNo());
+			userInfoResultVOs.add(userInfoResultVO);
+		}
+		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));
+		dataTableResponse.setRecordsTotal(totalRecord);
+		dataTableResponse.setRecordsFiltered(totalRecord);
+		dataTableResponse.setData(userInfoResultVOs);
+	
+		return dataTableResponse;
+	}
+    
+    @RequestMapping(value="updateCardUser", method=RequestMethod.POST)
+	@ResponseBody
+	public int updateCardUser(@RequestBody final  UpdateCardUser updateCardUser) { 
+    	List<Integer> listCardId = new ArrayList<>();
+    	if(updateCardUser.isCheckAll()){
+    		List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(Integer.parseInt(updateCardUser.getUserLeave()),updateCardUser.getTagId(),-1,-1);
+    		
+    		for(CardInfo cardId : listCardInfo){
+    			listCardId.add(cardId.getCardId());
+    		}
+            if(updateCardUser.getListUncheckAll().size() > 0){
+    			for(Integer cardIdUnckeck : updateCardUser.getListUncheckAll()){
+    				for(Integer cardId:listCardId){
+    					if(cardIdUnckeck.intValue() == cardId.intValue()){
+    						listCardId.remove(cardId);
+    						break;
+    					}
+    				}
+    			}
+    		}
+    	}else{
+    		listCardId.addAll(updateCardUser.getListCardId());
+    	}
+    	
+    	if(listCardId.size() > 0){
+    		cardInfoService.updateUserCard(listCardId,Integer.parseInt(updateCardUser.getUserLeave()) , Integer.parseInt(updateCardUser.getUserAssign()), updateCardUser.getNameAssign());
+    	}
+    	return Integer.parseInt( updateCardUser.getUserLeave());
+    }
+    
+    @RequestMapping(value = "searchCardTag", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public DataPagingJsonVO<CardInfo> searchCardTag(HttpServletRequest request) {
+		DataPagingJsonVO<CardInfo> dataTableResponse = new DataPagingJsonVO<CardInfo>();
+		int tagId = parseIntParameter(request.getParameter("tagId"), 0);
+		int userLeave = parseIntParameter(request.getParameter("id"), 0);
+		int limit = parseIntParameter(request.getParameter("length"), 0);
+		int offset = parseIntParameter(request.getParameter("start"), 0);
+		List<CardInfo> listCardInfo = cardInfoService.getListCardAllocationUser(userLeave,tagId,limit,offset);
+		BigInteger count = cardInfoService.countListCardAllocationUser(userLeave, tagId);
+		List<Integer> lstCardId = new ArrayList<>();
+		List<TagUser> lstTagUser = cardInfoService.getAllTagUser(userLeave);
+		List<TagUser> lstTagUserApp = new ArrayList<>();
+		for(TagUser tagUser : lstTagUser){
+			lstCardId.add(tagUser.getCardId());
+		}
+		lstCardId = lstCardId.stream().distinct().collect(Collectors.toList());
+		for(Integer cardId : lstCardId ){
+			String tagName = "";
+			for(TagUser tagUser : lstTagUser){
+				 if(cardId.intValue()== tagUser.getCardId().intValue()){
+					 tagName = tagName +"," +tagUser.getTagName();
+				 }
+			}
+			if(tagName.length() > 0){
+				tagName = tagName.substring(1, tagName.length());
+			}
+			TagUser tag = new TagUser(cardId, tagName);
+			lstTagUserApp.add(tag);
+		}
+		
+		for(CardInfo cardInfo :listCardInfo){
+			for(TagUser tagUser : lstTagUserApp){
+				if(cardInfo.getCardId().intValue()==tagUser.getCardId().intValue()){
+					cardInfo.setTagName(tagUser.getTagName());
+				}
+			}
+		}
+		long totalRecord = count.longValue();
+		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));
+		dataTableResponse.setRecordsTotal(totalRecord);
+		dataTableResponse.setRecordsFiltered(totalRecord);
+		dataTableResponse.setData(listCardInfo);
+	
+		return dataTableResponse;
+	}
+    
+    private List<TagGroup> convertCardTagIdList(List<TagForCard> cardTagModelList){
+		List<TagGroup> tagGroups = new ArrayList<TagGroup>();
+        TagForCard cardTagId;
+        
+        if (cardTagModelList.size() != 0){            
+            tagGroups= cardTagModelList.stream().collect(Collectors.groupingBy(g->g.getTagId())).entrySet().stream().map(t->{
+               TagGroup tg = new TagGroup();
+               List<Integer> cardIds = new ArrayList<Integer>();
+               
+               tg.setTagId(t.getKey());
+               tg.setUserId(t.getValue().stream().map(x->x.getUserId()).findFirst().get());
+               if(t.getValue().get(0).getCardId() != null){
+                   tg.setListCardIds(t.getValue().stream().map(x->x.getCardId()).collect(Collectors.toList()));
+               } 
+               else{
+                   tg.setListCardIds(cardIds);
+               }
+               tg.setTagName(t.getValue().stream().map(x->x.getTagName()).findFirst().get());               
+            return tg;  
+           }).collect(Collectors.toList());           
+        }
+        
+        return tagGroups;
+	}
+    
+    private List<TagForCard> getAllTagForCard(Integer userId){
+		List<TagForCard> listCardTag = null;
+		try{
+			listCardTag = cardTagService.listCardTagByCardId(userId);
+		}
+		catch(Exception ex){
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		return listCardTag;
+	}
+	
 }

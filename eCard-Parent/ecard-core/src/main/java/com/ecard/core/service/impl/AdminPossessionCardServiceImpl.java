@@ -36,4 +36,10 @@ public class AdminPossessionCardServiceImpl implements AdminPossessionCardServic
 	public Integer resetAllocationTeam(Integer teamId){
 		return adminPossessionCardDAO.resetAllocationTeam(teamId);
 	}
+
+	@Override
+	public Integer updateUserCard(List<Integer> listCardUser, Integer userLeave, Integer userAssign) {
+		// TODO Auto-generated method stub
+		return adminPossessionCardDAO.updateUserCard(listCardUser,userLeave,userAssign);
+	}
 }

@@ -28,7 +28,7 @@ public class MyCardDAOImpl extends GenericDao implements MyCardDAO {
     public List<com.ecard.core.vo.CardInfo> listCardRecent(Integer userId) {
 
         String sqlStr = "SELECT DISTINCT(p.card_id), c.name, c.last_name, c.first_name, c.name_kana, c.last_name_kana, c.first_name_kana, \n" +
-                        "c.company_name, c.department_name, c.position_name, c.image_file, c.approval_status, c.create_date \n" +
+                        "c.company_name, c.department_name, c.position_name, c.image_file, c.approval_status, c.create_date,c.email,c.tel_number_company \n" +
                         "FROM prusal_history p INNER JOIN card_info c ON p.card_id = c.card_id \n" +
                         "WHERE p.user_id = :userId AND p.prusal_date >= (NOW() - INTERVAL 1 WEEK) \n" +
                         "AND c.approval_status = 1 \n" +
@@ -41,7 +41,7 @@ public class MyCardDAOImpl extends GenericDao implements MyCardDAO {
         for (Object[] row : rows) {
             result.add(new com.ecard.core.vo.CardInfo((int)row[0], (String)row[1], 
                     (String)row[2], (String)row[3], (String)row[4], (String)row[5], 
-                    (String)row[6], (String)row[7], (String)row[8], (String)row[9], (String)row[10], (Integer)row[11],(Date)row[12]));
+                    (String)row[6], (String)row[7], (String)row[8], (String)row[9], (String)row[10], (Integer)row[11],(Date)row[12],(String)row[13],(String)row[14]));
         }
         return result;
     }

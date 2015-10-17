@@ -8,7 +8,8 @@ package com.ecard.core.model.enums;
  * @author vinhla
  */
 public enum ActionLogType {
-    LOGIN(1);
+    LOGIN(1),
+    DOWNLOAD(2);
     
     private int value;
 

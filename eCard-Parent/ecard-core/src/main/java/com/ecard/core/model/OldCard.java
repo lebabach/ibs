@@ -1,13 +1,13 @@
 package com.ecard.core.model;
-// Generated Aug 4, 2015 10:15:08 AM by Hibernate Tools 3.2.4.GA
+// Generated Oct 14, 2015 5:55:51 PM by Hibernate Tools 3.2.4.GA
 
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import static javax.persistence.GenerationType.IDENTITY;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,60 +21,41 @@ import javax.persistence.Table;
 public class OldCard  implements java.io.Serializable {
 
 
-     private Integer oldCardId;
+     private OldCardId id;
      private CardInfo cardInfo;
-     private int cardOwnerId;
-     private int seq;
 
     public OldCard() {
     }
 
-    public OldCard(CardInfo cardInfo, int cardOwnerId, int seq) {
+    public OldCard(OldCardId id, CardInfo cardInfo) {
+       this.id = id;
        this.cardInfo = cardInfo;
-       this.cardOwnerId = cardOwnerId;
-       this.seq = seq;
     }
    
-     @Id @GeneratedValue(strategy=IDENTITY)
+     @EmbeddedId
 
     
-    @Column(name="old_card_id", unique=true, nullable=false)
-    public Integer getOldCardId() {
-        return this.oldCardId;
+    @AttributeOverrides( {
+        @AttributeOverride(name="cardId", column=@Column(name="card_id", nullable=false) ), 
+        @AttributeOverride(name="oldCardId", column=@Column(name="old_card_id", nullable=false) ), 
+        @AttributeOverride(name="cardOwnerId", column=@Column(name="card_owner_id", nullable=false) ), 
+        @AttributeOverride(name="seq", column=@Column(name="seq", nullable=false) ) } )
+    public OldCardId getId() {
+        return this.id;
     }
     
-    public void setOldCardId(Integer oldCardId) {
-        this.oldCardId = oldCardId;
+    public void setId(OldCardId id) {
+        this.id = id;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="card_id", nullable=false)
+    @JoinColumn(name="card_id", nullable=false, insertable=false, updatable=false)
     public CardInfo getCardInfo() {
         return this.cardInfo;
     }
     
     public void setCardInfo(CardInfo cardInfo) {
         this.cardInfo = cardInfo;
-    }
-
-    
-    @Column(name="card_owner_id", nullable=false)
-    public int getCardOwnerId() {
-        return this.cardOwnerId;
-    }
-    
-    public void setCardOwnerId(int cardOwnerId) {
-        this.cardOwnerId = cardOwnerId;
-    }
-
-    
-    @Column(name="seq", nullable=false)
-    public int getSeq() {
-        return this.seq;
-    }
-    
-    public void setSeq(int seq) {
-        this.seq = seq;
     }
 
 

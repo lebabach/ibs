@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="java.lang.Integer"%>
 <%@ page import="java.util.List"%>
+<%@ page import="com.ecard.webapp.security.EcardUser"%>
 <div class="row border-bottom">
 
 	<nav class="navbar navbar-static-top bg-white box-shadow"
@@ -13,7 +14,10 @@
 				<i class="fa fa-bars" href="<c:url value='/manager/home'/>"></i>
 			</a>
 			<div class="user_login"
-				style="display: inline-block; margin: 20px 10px 10px 60px;">${pageContext.request.remoteUser}</div>
+				style="display: inline-block; margin: 20px 10px 10px 60px;"><%-- ${pageContext.request.remoteUser} --%>
+				<% EcardUser ecardUser = (EcardUser)org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal(); %>
+				<%= ecardUser.getFullName() %>
+				</div>
 			<!-- <form role="search" class="navbar-form-custom" action="search_results.html">
                         <div class="form-group">
                             <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">

@@ -3,7 +3,12 @@
  */
 package com.ecard.core.vo;
 
+import java.math.BigInteger;
 import java.util.Date;
+
+import org.apache.commons.lang.StringUtils;
+
+import com.ecard.core.util.StringUtilsHelper;
 
 /**
  *
@@ -64,9 +69,10 @@ public class CardInfo {
     private Integer groupCompanyId;
     private int is_editting;
     private Date contactDate;
-    
-    
-    
+    private BigInteger count;   
+    private String tagName;
+private String fullName;
+    private String contactDateString;
     public int getIs_editting() {
 		return is_editting;
 	}
@@ -84,8 +90,8 @@ public class CardInfo {
 	}
 
 	public CardInfo(){}
-    
-    public CardInfo(Integer cardId, String name, String lastName, String firstName, String nameKana, String lastNameKana, String firstNameKana,
+	
+	public CardInfo(Integer cardId, String name, String lastName, String firstName, String nameKana, String lastNameKana, String firstNameKana,
             String companyName, String departmentName, String positionName, String imageFile, Integer approvalStatus ,Date createDate){
         this.cardId = cardId;
         this.name = name;
@@ -100,6 +106,43 @@ public class CardInfo {
         this.imageFile = imageFile;
         this.approvalStatus = approvalStatus;
         this.createDate = createDate;
+    }
+	
+	public CardInfo(String companyName, BigInteger count, Integer cardId){
+		this.companyName = companyName;
+		this.count = count;
+		this.cardId = cardId;
+	}
+	
+	public CardInfo(Integer cardId, String name){
+		this.cardId = cardId;
+		this.name = name;
+	}
+    
+    public CardInfo(Integer cardId, String companyName, String departmentName, String name, BigInteger count){
+        this.cardId = cardId;
+        this.companyName = companyName;
+        this.departmentName = departmentName;
+        this.name = name;
+        this.count = count;
+    }
+    public CardInfo(Integer cardId, String name, String lastName, String firstName, String nameKana, String lastNameKana, String firstNameKana,
+            String companyName, String departmentName, String positionName, String imageFile, Integer approvalStatus ,Date createDate,String email,String telNumberCompany ){
+        this.cardId = cardId;
+        this.name = name;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.nameKana = nameKana;
+        this.lastNameKana = lastNameKana;
+        this.firstNameKana = firstNameKana;
+        this.companyName = companyName;
+        this.departmentName = departmentName;
+        this.positionName = positionName;    
+        this.imageFile = imageFile;
+        this.approvalStatus = approvalStatus;
+        this.createDate = createDate;
+        this.email = email;
+        this.telNumberCompany = telNumberCompany;
     }
     
     public CardInfo(Integer cardId, String name, String firstName, String lastName, String nameKana, String firstNameKana, String lastNameKana, 
@@ -143,6 +186,28 @@ public class CardInfo {
         this.createDate = createDate;
         this.telNumberCompany = telNumberCompany;
         this.email = email;
+    
+    }
+    public CardInfo(Integer cardId, String name, String firstName, String lastName, String nameKana, String firstNameKana, String lastNameKana, 
+            String companyName, String companyNameKana, String departmentName, String imageFile, String positionName, Date createDate, Integer approvalStatus, 
+            String telNumberCompany, String email,String tagName){
+        this.cardId = cardId;
+        this.name = name;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.nameKana = nameKana;
+        this.lastNameKana = lastNameKana;
+        this.firstNameKana = firstNameKana;
+        this.companyName = companyName;
+        this.companyNameKana = companyNameKana;
+        this.departmentName = departmentName;
+        this.positionName = positionName;    
+        this.imageFile = imageFile;
+        this.approvalStatus = approvalStatus;
+        this.createDate = createDate;
+        this.telNumberCompany = telNumberCompany;
+        this.email = email;
+        this.tagName = tagName;
     }
     
     public CardInfo(Integer cardId, String name, String firstName, String lastName, String nameKana, String firstNameKana, String lastNameKana, 
@@ -273,15 +338,62 @@ public class CardInfo {
 	    this.indexId = indexId;
 	    this.is_editting=is_editting;
 	}
+    
+    public CardInfo(Integer cardId, String name, String firstName, String lastName, String nameKana, String firstNameKana, String lastNameKana, 
+            String companyName, String departmentName, String imageFile, String positionName, Date createDate, Integer approvalStatus, String telNumberCompany, String email,
+            Integer companyId, Integer groupCompanyId,String addressFul, Date contactDate, Integer ownerId){
+        this.cardId = cardId;
+        this.name = name;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.nameKana = nameKana;
+        this.lastNameKana = lastNameKana;
+        this.firstNameKana = firstNameKana;
+        this.companyName = companyName;
+        this.departmentName = departmentName;
+        this.positionName = positionName;    
+        this.imageFile = imageFile;
+        this.approvalStatus = approvalStatus;
+        this.createDate = createDate;
+        this.telNumberCompany = telNumberCompany;
+        this.email = email;
+        this.company_id = companyId;
+        this.groupCompanyId = groupCompanyId;
+        this.addressFull = addressFul;
+        this.contactDate=contactDate;
+        this.cardOwnerId=ownerId;
+    }
+    
+    public CardInfo(Integer cardId, String name, String firstName, String lastName, String nameKana, String firstNameKana, String lastNameKana, 
+            String companyName, String departmentName, String imageFile, String positionName, Date createDate, Integer approvalStatus, String telNumberCompany, String email,
+            Integer companyId, Integer groupCompanyId,String addressFul, Date contactDate){
+        this.cardId = cardId;
+        this.name = name;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.nameKana = nameKana;
+        this.lastNameKana = lastNameKana;
+        this.firstNameKana = firstNameKana;
+        this.companyName = companyName;
+        this.departmentName = departmentName;
+        this.positionName = positionName;    
+        this.imageFile = imageFile;
+        this.approvalStatus = approvalStatus;
+        this.createDate = createDate;
+        this.telNumberCompany = telNumberCompany;
+        this.email = email;
+        this.company_id = companyId;
+        this.groupCompanyId = groupCompanyId;
+        this.addressFull = addressFul;
+        this.contactDate=contactDate;
+    }
 
 	/**
      * @return the name
      */
     public String getName() {
-    	String newLastName="";
-    	name=lastName==null?"":lastName;
-    	newLastName=firstName==null?"":firstName;
-    	name=name +" "+ newLastName;
+    	
+    	name = StringUtilsHelper.mergerStringEitherAWord(lastName, firstName, " ");
         return name;
     }
 
@@ -777,7 +889,38 @@ public class CardInfo {
     public void setContactDate(Date contactDate) {
         this.contactDate = contactDate;
     }
-	
+
+	public BigInteger getCount() {
+		return count;
+	}
+
+	public void setCount(BigInteger count) {
+		this.count = count;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = this.fullName;
+	}
+
+	public String getContactDateString() {
+		return contactDateString;
+	}
+
+	public void setContactDateString(String contactDateString) {
+		this.contactDateString = contactDateString;
+	}
+
+	public String getTagName() {
+		return tagName;
+	}
+
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
+	}
     
     
 }

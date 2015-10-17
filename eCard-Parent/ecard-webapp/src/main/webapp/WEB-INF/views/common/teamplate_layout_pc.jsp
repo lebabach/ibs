@@ -16,7 +16,7 @@
 	type="text/css" media="all" />
 <link rel="stylesheet" href="<c:url value='/assets/css/animate.css'/>"
 	type="text/css" media="all" />
-<link rel="stylesheet" href="<c:url value='/assets/css/style.css'/>"
+<link rel="stylesheet" href="<c:url value='/assets/css/style_pc.css'/>"
 	type="text/css" media="all" />
 <link rel="stylesheet"
 	href="<c:url value='/assets/css/plugins/iCheck/custom.css'/>"
@@ -37,8 +37,8 @@
 <link rel="stylesheet"
 	href="<c:url value='/assets/css/clockpicker.css'/>" type="text/css"
 	media="all" />
-<link rel="stylesheet" href="<c:url value='/assets/css/style_ibs.css'/>"
-	type="text/css" media="all" />
+<%-- <link rel="stylesheet" href="<c:url value='/assets/css/style_ibs.css'/>"
+	type="text/css" media="all" /> --%>
 
 <script src="<c:url value='/assets/js/jquery-2.1.1.js'/>"
 	type="text/javascript"></script>
@@ -72,7 +72,9 @@
 <script
 	src="<c:url value='/assets/js/plugins/datapicker/locales/bootstrap-datepicker.ja.js'/>"
 	type="text/javascript"></script>
-
+<script src="<c:url value='/assets/js/jquery.validate.min.js'/>"
+	type="text/javascript"></script>
+	
 <title><tiles:insertAttribute name="title" /></title>
 </head>
 <body class="gray-bg  pace-done">

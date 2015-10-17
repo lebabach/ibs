@@ -44,16 +44,20 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ecard.core.contants.AppIdContants;
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.CardUpdateHistory;
+import com.ecard.core.model.CardUpdateHistoryId;
 import com.ecard.core.model.CompanyInfo;
 import com.ecard.core.model.PossessionCard;
 import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.PushInfoId;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.UserNotification;
+import com.ecard.core.model.enums.CardUpdateHistoryType;
 import com.ecard.core.model.enums.NoticeType;
 import com.ecard.core.model.enums.StatusCard;
 import com.ecard.core.service.AdminPossessionCardService;
 import com.ecard.core.service.CardInfoService;
+import com.ecard.core.service.CardUpdateHistoryService;
 import com.ecard.core.service.OcrCardImageService;
 import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.TeamInfoService;
@@ -72,6 +76,7 @@ import com.ecard.webapp.vo.CardInfoVO;
 import com.ecard.webapp.vo.CardInfoWithRoteVO;
 import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.ListCardInfoVO;
+import com.ecard.core.vo.CardUpdateHisAndUserInfo;
 import com.ecard.core.vo.CardInfoNotifyChange;
 import com.ecard.core.vo.UserInfoVo;
 
@@ -88,6 +93,9 @@ public class CardController {
 	
 	@Autowired
 	AdminPossessionCardService adminProssessionCardService;
+	
+	@Autowired
+    CardUpdateHistoryService cardUpdateHistoryService;
 	
 	@Autowired
 	PossessionCardService possessionCardService;
@@ -243,8 +251,7 @@ public class CardController {
 
 		try {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-
+			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();			
 			if ((CardInfo) session.getAttribute("cardInfo" + id) != null) {
 				cardInfo = (CardInfo) session.getAttribute("cardInfo" + id);
 				String imageFile = cardInfo.getImageFile().substring(cardInfo.getImageFile().indexOf(',') + 1);
@@ -262,13 +269,14 @@ public class CardController {
 					}
 				}
 				
-				
 				cardInfo.setIsEditting(1);
 				cardInfo.setDateEditting(new Date());
 				cardInfoService.editCardInfoNoIndexNo(cardInfo);
+				
 				fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
 				cardInfo.setCardBackImgFile(cardInfo.getImageFile());
 				cardInfo.setImageFile(fileNameFromSCP);
+				
 			}
 			boolean permissionEdit = adminProssessionCardService.checkPermissionEdit(ecardUser.getUserId(), id);
 			modelAndView.addObject("cardInfo", cardInfo);
@@ -343,6 +351,9 @@ public class CardController {
 	
 	@RequestMapping (value = "editDirect", method = RequestMethod.POST)
 	public ModelAndView editSave(CardInfo cardInfo,int rote) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserInfo userOperatorInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
 		//review to wait for submit information
 		//bach.le rote image
 		String imageData = getCardImageFile(cardInfo.getImageFile());
@@ -361,26 +372,32 @@ public class CardController {
 			return new ModelAndView("cardedit", "cardInfo", cardInfo);
 		}
 		if (uploadModel.isStatus()) {
-
-			cardInfo.setName(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastName(), cardInfo.getFirstName(), " "));
-			cardInfo.setNameKana(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastNameKana(), cardInfo.getFirstNameKana(), " "));
+            
+			if(!"".equals(cardInfo.getLastName().trim()) || !"".equals(cardInfo.getFirstName().trim())){
+			     cardInfo.setName(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastName(), cardInfo.getFirstName(), " "));
+			}
+			if(!"".equals(cardInfo.getLastNameKana().trim())|| !"".equals(cardInfo.getFirstNameKana().trim())){
+		      	cardInfo.setNameKana(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastNameKana(), cardInfo.getFirstNameKana(), " "));
+			}
 			
 			// bach.le https://livepass.backlog.jp/view/MEISHI-575
-			List<String> listAddress = new ArrayList<String>(Arrays.asList(cardInfo.getAddressFull().trim().split(" ")));
-			cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
-			cardInfo.setAddress2(listAddress.get(1) != null ? listAddress.get(1) : "");
-			cardInfo.setAddress3(listAddress.get(2) != null ? listAddress.get(2) : "");
-			if (listAddress.get(0) != null) {
-				listAddress.remove(0);
+			if(!"".equals(cardInfo.getAddressFull().trim())){
+				List<String> listAddress = new ArrayList<String>(Arrays.asList(cardInfo.getAddressFull().trim().split(" ")));
+				cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
+				cardInfo.setAddress2(listAddress.get(1) != null ? listAddress.get(1) : "");
+				cardInfo.setAddress3(listAddress.get(2) != null ? listAddress.get(2) : "");
+				if (listAddress.get(0) != null) {
+					listAddress.remove(0);
+				}
+				if (listAddress.get(0) != null) {
+					listAddress.remove(0);
+				}
+				if (listAddress.get(0) != null) {
+					listAddress.remove(0);
+				}
+	
+				cardInfo.setAddress4(listAddress.stream().collect(Collectors.joining(" ")));
 			}
-			if (listAddress.get(0) != null) {
-				listAddress.remove(0);
-			}
-			if (listAddress.get(0) != null) {
-				listAddress.remove(0);
-			}
-
-			cardInfo.setAddress4(listAddress.stream().collect(Collectors.joining(" ")));
 
 			CardInfo nCardInfo = cardInfoService.getCardInfoDetail(cardInfo.getCardId());
 			cardInfo.setCardIndexNo(nCardInfo.getCardIndexNo());
@@ -395,6 +412,20 @@ public class CardController {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				return new ModelAndView("redirect:list");
+			}
+			if(nCardInfo.getApprovalStatus() != cardInfo.getApprovalStatus()){
+				// Update card history			
+				CardUpdateHistory cardUpdateHistory = new CardUpdateHistory();
+				CardUpdateHistoryId cardUpdateHistoryId = new CardUpdateHistoryId();
+				cardUpdateHistoryId.setParamType(cardInfo.getApprovalStatus());
+				cardUpdateHistoryId.setOldData(null);
+				cardUpdateHistoryId.setNewData(null);
+				cardUpdateHistoryId.setCreateDate(new Date());
+				cardUpdateHistoryId.setUpdateDate(new Date());
+				cardUpdateHistoryId.setOperaterId(userOperatorInfo.getUserId());
+				cardUpdateHistoryId.setCardId(cardInfo.getCardId());
+				cardUpdateHistory.setId(cardUpdateHistoryId);
+				cardUpdateHistoryService.registerCardUpdateHistory(cardUpdateHistory);
 			}
 			
 			Long sameCardInfoByOwner = cardInfoService.countSameCardInfoByOwner(cardInfo);
@@ -513,6 +544,10 @@ public class CardController {
 	
 	@RequestMapping (value = "editSuccess", method = RequestMethod.POST)
 	public ModelAndView editSubmit(CardInfo cardInfo,int rote) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserInfo userOperatorInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+		
 		List<String> listAddress = new ArrayList<String>(Arrays.asList(cardInfo.getAddressFull().trim().split(" ")));
 		cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
 		cardInfo.setAddress2(listAddress.get(1) != null ? listAddress.get(1) : "");
@@ -547,6 +582,18 @@ public class CardController {
 		}
 		
 		int result = cardInfoService.updateCardInfoAdmin(cardInfo);
+		// Update card history
+		CardUpdateHistory cardUpdateHistory = new CardUpdateHistory();
+		CardUpdateHistoryId cardUpdateHistoryId = new CardUpdateHistoryId();
+		cardUpdateHistoryId.setParamType(cardInfo.getApprovalStatus());
+		cardUpdateHistoryId.setOldData(null);
+		cardUpdateHistoryId.setNewData(null);
+		cardUpdateHistoryId.setCreateDate(new Date());
+		cardUpdateHistoryId.setUpdateDate(new Date());
+		cardUpdateHistoryId.setOperaterId(userOperatorInfo.getUserId());
+		cardUpdateHistoryId.setCardId(cardInfo.getCardId());
+		cardUpdateHistory.setId(cardUpdateHistoryId);
+		cardUpdateHistoryService.registerCardUpdateHistory(cardUpdateHistory);
 		if (result == 1)
 			return new ModelAndView("redirect:list");
 		return new ModelAndView("cardeditwaitsubmit", "cardInfo", cardInfo);
@@ -573,8 +620,26 @@ public class CardController {
 	@RequestMapping("delete")
 	@ResponseBody
 	public int delete(@RequestParam(value = "cardId") int cardId){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+		
 		try {
 			cardInfoService.deleteCardInfo(cardId);
+			
+			// Update card history
+			CardUpdateHistory cardUpdateHistory = new CardUpdateHistory();
+			CardUpdateHistoryId cardUpdateHistoryId = new CardUpdateHistoryId();
+			cardUpdateHistoryId.setParamType(CardUpdateHistoryType.DELETE.getValue());
+			cardUpdateHistoryId.setOldData(null);
+			cardUpdateHistoryId.setNewData(null);
+			cardUpdateHistoryId.setCreateDate(new Date());
+			cardUpdateHistoryId.setUpdateDate(new Date());
+			cardUpdateHistoryId.setOperaterId(userInfo.getUserId());	
+			cardUpdateHistoryId.setCardId(cardId);
+			cardUpdateHistory.setId(cardUpdateHistoryId);
+			
+			cardUpdateHistoryService.registerCardUpdateHistory(cardUpdateHistory);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return 0;

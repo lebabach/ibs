@@ -37,9 +37,6 @@ h5 {
   margin-top: 5px;
   font-weight: 600;
 }
-.loginscreen h3{
-	 margin-top: 30px;
-} 
 .nav > li > a {
   color: #a7b1c2;
   font-weight: 600;
@@ -575,7 +572,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   min-width: 120px;
 }
 .btn-primary.btn-outline {
-  color: #1ab394;
+  color: #e3157a;
 }
 .btn-success.btn-outline {
   color: #1c84c6;
@@ -601,13 +598,14 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   border-color: #1ab394;
   color: #FFFFFF;
 }
+
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active,
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
-  background-color: #18a689;
-  border-color: #18a689;
+  background-color: #1ab394;
+  border-color: #1ab394;
   color: #FFFFFF;
 }
 .btn-primary:active,
@@ -630,12 +628,12 @@ fieldset[disabled] .btn-primary:hover,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:active,
 fieldset[disabled] .btn-primary.active {
-  background-color: #1dc5a3;
-  border-color: #1dc5a3;
+  background-color: #e3157a;
+  border-color: #e3157a;
 }
 .btn-success {
-  background-color: #1c84c6;
-  border-color: #1c84c6;
+  background-color: #e3157a;
+  border-color: #e3157a;
   color: #FFFFFF;
 }
 .btn-success:hover,
@@ -643,8 +641,8 @@ fieldset[disabled] .btn-primary.active {
 .btn-success:active,
 .btn-success.active,
 .open .dropdown-toggle.btn-success {
-  background-color: #1a7bb9;
-  border-color: #1a7bb9;
+  background-color: #e3157a;
+  border-color: #e3157a;
   color: #FFFFFF;
 }
 .btn-success:active,
@@ -667,12 +665,12 @@ fieldset[disabled] .btn-success:hover,
 fieldset[disabled] .btn-success:focus,
 fieldset[disabled] .btn-success:active,
 fieldset[disabled] .btn-success.active {
-  background-color: #1f90d8;
-  border-color: #1f90d8;
+  background-color: #e3157a;
+  border-color: #e3157a;
 }
 .btn-info {
-  background-color: #23c6c8;
-  border-color: #23c6c8;
+  background-color: #e3157a;
+  border-color: #e3157a;
   color: #FFFFFF;
 }
 .btn-info:hover,
@@ -680,8 +678,8 @@ fieldset[disabled] .btn-success.active {
 .btn-info:active,
 .btn-info.active,
 .open .dropdown-toggle.btn-info {
-  background-color: #21b9bb;
-  border-color: #21b9bb;
+  background-color: #e3157a;
+  border-color: #e3157a;
   color: #FFFFFF;
 }
 .btn-info:active,
@@ -704,12 +702,12 @@ fieldset[disabled] .btn-info:hover,
 fieldset[disabled] .btn-info:focus,
 fieldset[disabled] .btn-info:active,
 fieldset[disabled] .btn-info.active {
-  background-color: #26d7d9;
-  border-color: #26d7d9;
+  background-color: #e3157a;
+  border-color: #e3157a;
 }
 .btn-default {
-  background-color: #c2c2c2;
-  border-color: #c2c2c2;
+  background-color: #e3157a;
+  border-color: #e3157a;
   color: #FFFFFF;
 }
 .btn-default:hover,
@@ -717,8 +715,8 @@ fieldset[disabled] .btn-info.active {
 .btn-default:active,
 .btn-default.active,
 .open .dropdown-toggle.btn-default {
-  background-color: #bababa;
-  border-color: #bababa;
+  background-color: #e3157a;
+  border-color: #e3157a;
   color: #FFFFFF;
 }
 .btn-default:active,
@@ -3241,6 +3239,7 @@ video {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   outline: 0 none;
   position: relative;
+  margin-top: 180px;
 }
 .modal-dialog {
   z-index: 2200;
@@ -3878,7 +3877,7 @@ a.close-canvas-menu:hover {
   z-index: 2040 !important;
 }
 .modal {
-  z-index: 2050 !important;
+  z-index: 999999 !important;
 }
 .spiner-example {
   height: 200px;
@@ -4196,15 +4195,11 @@ body.modal-open {
   padding: 100px 20px 20px 20px;
 }
 .logo-name {
- background-image:url(../img/login_logo.png);
- background-repeat:no-repeat;
- height: 348px;
- width: 452px;
-/*   color: #e6e6e6;
+  color: #e6e6e6;
   font-size: 180px;
   font-weight: 800;
   letter-spacing: -10px;
-  margin-bottom: 0px; */
+  margin-bottom: 0px;
 }
 .middle-box h1 {
   font-size: 170px;
@@ -6583,8 +6578,8 @@ body.landing-page {
   color: #fff;
 }
 .landing-page .btn-primary {
-  background-color: #1ab394;
-  border-color: #1ab394;
+  background-color: #e3157a;
+  border-color: #e3157a;
   color: #FFFFFF;
   font-size: 14px;
   padding: 10px 20px;
@@ -7479,27 +7474,11 @@ body.skin-3 {
     text-align: left;
     display: inline-block;
   }
+  
 }
 /* Only demo */
 @media (max-width: 1000px) {
   .welcome-message {
     display: none;
   }
-}
-
-.error-color{
-	color:red;
-}
-
-.wrap_menutop{
-    overflow: hidden;
-        text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.buildVersion{
-    padding: 10px 0 10px 0;
-    text-align: right;
-    font-size: 12pt;
-    color: #000;
 }

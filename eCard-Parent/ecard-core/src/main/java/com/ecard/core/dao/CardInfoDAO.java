@@ -5,6 +5,7 @@ package com.ecard.core.dao;
 
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.PrusalHistory;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
@@ -12,6 +13,7 @@ import com.ecard.core.vo.CardInfoNotifyChange;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
+import com.ecard.core.vo.TagUser;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.List;
  *
  * @author vinhla
  */
-public interface CardInfoDAO {
+public interface CardInfoDAO extends IGenericDao{
 	public List<CardInfo> listAllCardInfo();
 	
     public List<CardInfo> listCardRecent();
@@ -89,7 +91,7 @@ public interface CardInfoDAO {
 //    
 //    public BigInteger getTotalCardSearchAllByMroonga(Integer groupCompanyId, List<Integer> listUserId, String searchText,String name, String position,String department,String company, int pageNumber); 
     
-    public List<CardInfoUserVo> getListPossesionCard(Integer userId, int pageNumber);
+    public List<CardInfoUserVo> getListPossesionCard(Integer userId, Integer sortType, String valueSearch);
     
     public void updateOldCardInfo(CardInfo cardInfo);
     
@@ -117,15 +119,49 @@ public interface CardInfoDAO {
     
     public List<CardInfo> listCardInfoByCardType(Integer cardType);
     
-    public List<String> getListSortType(Integer userId);
+    public List<String> getListSortType(Integer userId, Integer sortType);
     
     public int updateContactDate(CardInfo cardInfo);
 
     public Long countPossessionCard(Integer userId);
 
     public CardInfo getNewestCardInfo(CardInfo cardInfo);
+
+    public List<CardInfo> getOldCardInfor();
+
+    public int deleteListCard(List<Integer> listCard);
     
+    public List<CardInfo> getListPossessionCardByTag(Integer userId, Integer tagId, String sort, int pageNumber);
+    
+    public List<CardInfoUserVo> getListPossessionCardByTag(Integer userId, Integer tagId, int pageNumber);
+    
+    public List<String> getListSortTypeByTag(Integer userId, Integer tagId);
+    
+    public void updateDownloadHistory(Integer downloadCsvId);
+    
+    public DownloadCsv getDownloadCSV(Integer csvId);
+    public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId,int tagId,int limit,int offset);
+
+    public List<com.ecard.core.vo.CardInfo> searchCompanyTree(String companyName);
+    
+    public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName);
+    
+    public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName);
+    
+    public List<CardInfo> searchCardInfoByName(String companyName, String departmentName);
+    
+    public BigInteger countListCardAllocationUser(int userId, int tagId);
+    public List<TagUser> getAllTagUser(int userId);
+    public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card);
+    public Integer updateUserCard(List<Integer> listCardUser, Integer userLeave, Integer userAssign,String nameAssign);
+
+    public void savePrusalHistory(PrusalHistory prusalHistory);
+    
+    public List<CardInfo> getListCardHistoryByCardId(Integer cardId);
+    
+    public List<com.ecard.core.vo.CardInfo> searchCompanyTrees(String searchText);
+
     public Long countSameCardInfoByOwner(CardInfo cardInfo);
     
-    public List<CardInfoNotifyChange> getListCardInfoNotifyChange(CardInfo cardInfo);
+    public List<CardInfoNotifyChange> getListCardInfoNotifyChange(CardInfo cardInfo);	
 }

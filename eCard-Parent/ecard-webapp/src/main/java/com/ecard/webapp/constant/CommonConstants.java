@@ -12,6 +12,7 @@ public class CommonConstants {
 //    public static final String USER_FROM_MAIL = "bc-ribbon_kanri@inte.co.jp";
     public static final String USER_FROM_MAIL = "admin@test.test";
     public static final String TITLE_MAIL = "BC-RIBBONからの回答";
+    public static final String TITLE_DOWNLOAD_MAIL = "会社名刺がダウンロードされました。";
     public static final String TITLE_RECOVERPASS_MAIL="BC-RIBBON ID／パスワード通知";
     public static final int CO_LTD_FRONTIER_CHALLENGE = 4;
     

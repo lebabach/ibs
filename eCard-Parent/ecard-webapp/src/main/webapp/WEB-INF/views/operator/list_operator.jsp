@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="true"%>
 <script type="text/javascript">
 var dataTables;
 	$(document).ready(function() {
@@ -50,6 +50,26 @@ var dataTables;
 				{ "data": "positionName"},
 				{ "data": "email"},
 				{ "data": "mobileNumber"},
+				{ "data": "useStopFlg",
+					"createdCell": function (td, cellData, rowData, row, col) {
+						if(rowData.useStopFlg == 1){
+					       $(td).html("停止");
+						}else{
+							 $(td).html("");
+						}
+						
+					}	
+				},
+				{ "data": "leaveFlg",
+					"createdCell": function (td, cellData, rowData, row, col) {
+						if(rowData.leaveFlg == 1){
+					       $(td).html("停止");
+						}else{
+							 $(td).html("");
+						}
+						
+					}		
+				},
 				{ "data": "createDate"},
 				{ "data": "userId",
 					"className": "ch-color-link",
@@ -114,6 +134,26 @@ var dataTables;
 					{ "data": "positionName"},
 					{ "data": "email"},
 					{ "data": "mobileNumber"},
+					{ "data": "useStopFlg",
+						"createdCell": function (td, cellData, rowData, row, col) {
+							if(rowData.useStopFlg == 1){
+						       $(td).html("停止");
+							}else{
+								 $(td).html("");
+							}
+							
+						}	
+					},
+					{ "data": "leaveFlg",
+						"createdCell": function (td, cellData, rowData, row, col) {
+							if(rowData.leaveFlg == 1){
+						       $(td).html("停止");
+							}else{
+								 $(td).html("");
+							}
+							
+						}		
+					},
 					{ "data": "createDate"},
 					{ "data": "userId",
 						"className": "ch-color-link",
@@ -216,6 +256,8 @@ var dataTables;
 									<th><fmt:message key="operator.list.position" /></th>
 									<th><fmt:message key="operator.list.email" /></th>
 									<th><fmt:message key="operator.list.phone" /></th>
+									<th><fmt:message key="operator.list.stop" /></th>
+									<th><fmt:message key="operator.list.leave" /></th>
 									<th><fmt:message key="operator.list.createDate" /></th>
 									<th><fmt:message key="operator.list.action" /></th>
 								</tr>

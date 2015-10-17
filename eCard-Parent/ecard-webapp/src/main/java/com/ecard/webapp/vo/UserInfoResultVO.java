@@ -21,6 +21,8 @@ public class UserInfoResultVO {
 	private String lastNameKana;
 	private String departmentName;
 	private String userIndexNo;
+	private int leaveFlg;
+    private int useStopFlg;
 	public String getUserIndexNo() {
 		return userIndexNo;
 	}
@@ -52,6 +54,26 @@ public class UserInfoResultVO {
 		this.lastNameKana = lastNameKana;
 		this.departmentName = departmentName;
 		this.userIndexNo=userIndexNo;
+	}
+	
+	public UserInfoResultVO(int userId, String name, String companyName, String positionName, String email,
+			String mobileNumber, String createDate,String firstName ,String lastName,String firstNameKana,String lastNameKana ,String departmentName,String userIndexNo,int leaveFlg,int useStopFlg  ) {
+		super();
+		this.userId = userId;
+		this.name = name;
+		this.companyName = companyName;
+		this.positionName = positionName;
+		this.email = email;
+		this.mobileNumber = mobileNumber;
+		this.createDate = createDate;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.firstNameKana = firstNameKana;
+		this.lastNameKana = lastNameKana;
+		this.departmentName = departmentName;
+		this.userIndexNo=userIndexNo;
+		this.leaveFlg = leaveFlg;
+		this.useStopFlg = useStopFlg;
 	}
 	/**
 	 * @return the userId
@@ -166,6 +188,18 @@ public class UserInfoResultVO {
 	}
 	public void setDepartmentName(String departmentName) {
 		this.departmentName = departmentName;
+	}
+	public int getLeaveFlg() {
+		return leaveFlg;
+	}
+	public void setLeaveFlg(int leaveFlg) {
+		this.leaveFlg = leaveFlg;
+	}
+	public int getUseStopFlg() {
+		return useStopFlg;
+	}
+	public void setUseStopFlg(int useStopFlg) {
+		this.useStopFlg = useStopFlg;
 	}
 	
 	

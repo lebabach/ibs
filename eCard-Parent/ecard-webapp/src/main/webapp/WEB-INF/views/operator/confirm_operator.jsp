@@ -6,6 +6,16 @@
 		$('input').prop("disabled", true);
 	});
 </script>
+<style>
+.btn-allocation {
+   /*  background-color: #e3157a; */
+    border-radius: 5px;
+   /*  border: 1px solid #e3157a; */
+    padding: 10px 15px 10px 15px;
+    margin: 8px 5px 8px 0px;
+    color: #FFFFFF;
+}
+</style>
 <div class="container-fluid padding-top20 bg-container height100per">
 	<!-- CENTER SIDE -->
 	<div id="center-side" class="col-sm-12">
@@ -15,8 +25,9 @@
 				<div class="float-left col-sm-6">
 					<h4 class="h4-header">ユーザー詳細</h4>
 				</div>
-				<div class="float-right">
-					<a href="/ecard-webapp/operators/list" id="add"><i class="fa icon-rounded">戻る</i></a> 
+				<div class="float-right float-right-manage">
+				      <a href="<c:url value='/operators/changeowner/${operatorConfirm.userId}'/>" id="add"><i class="fa btn-allocation" >所有者変更</i></a> 
+					<a href="/ecard-webapp/operators/list" id="add"><i class="fa btn-allocation">戻る</i></a> 
 				</div>
 			</div>
 		</div>

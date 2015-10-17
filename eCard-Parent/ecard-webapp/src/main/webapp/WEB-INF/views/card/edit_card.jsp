@@ -240,10 +240,10 @@
 								.on(
 										'click',
 										function() {
-											resetValidationForm();
+											/* resetValidationForm();
 											if (!checkValidationForm()) {
 												return false;
-											}
+											} */
 
 											if (($('.input-group.date')
 													.datepicker('getDate')

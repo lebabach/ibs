@@ -311,4 +311,26 @@ public class UserInfoServiceImpl implements UserInfoService {
     public boolean checkUseDateEndDate(String email){
     	return userInfoDAO.checkUseDateEndDate(email);
     }
+    public List<UserInfoVo> searchUserForList(String criteriaSearch, int limit, int offet){
+    	return userInfoDAO.searchUserForList(criteriaSearch, limit, offet);
+    }
+    public BigInteger countUserForList(String criteriaSearch){
+    	return userInfoDAO.countUserForList(criteriaSearch);
+    }
+    public List<UserInfoVo> searchUserOfMyCompanyForList(String criteriaSearch, int limit, int offet, int groupCompanyInfoId){
+    	return userInfoDAO.searchUserOfMyCompanyForList(criteriaSearch, limit, offet, groupCompanyInfoId);
+    }
+    public BigInteger countUserForList(String criteriaSearch, int groupCompanyInfoId){
+    	return userInfoDAO.countUserForList(criteriaSearch, groupCompanyInfoId);
+    }
+    
+    public List<UserInfo> getAllListUser(){
+    	return userInfoDAO.getAllListUser();
+    }
+
+	@Override
+	public List<UserInfoVo> getAllUserOfCompany(int groupCompanyInfoId) {
+		// TODO Auto-generated method stub
+		return userInfoDAO.getAllUserOfCompany(groupCompanyInfoId);
+	}
 }
