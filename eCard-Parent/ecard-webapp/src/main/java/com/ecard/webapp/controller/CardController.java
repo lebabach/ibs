@@ -451,22 +451,22 @@ public class CardController {
 					String strPush = cardInfo.getName()+"さん";
 					int isPush = 0;
 					//  {name} さんの住所が{address_full}に、電話番号が{tel_number_company}に、 部署が{department_name}に、役職が{position_name}に変わりました。
-					if(cardSameInfo.getAddressFull().toLowerCase().trim() != cardInfo.getAddressFull().toLowerCase().trim()){
-						strPush += "の住所が"+cardSameInfo.getAddressFull() + "に、";
+					if(!cardSameInfo.getAddressFull().toLowerCase().trim().equals(cardInfo.getAddressFull().toLowerCase().trim())) {
+						strPush += "の住所が"+cardInfo.getAddressFull() + "に、";
 						isPush = 1;
 					} 
-					if(cardSameInfo.getTelNumberCompany().toLowerCase().trim() != cardInfo.getTelNumberCompany().toLowerCase().trim()){
-						strPush += "電話番号が "+cardSameInfo.getTelNumberCompany() + "に、";						
+					if(!cardSameInfo.getTelNumberCompany().toLowerCase().trim().equals(cardInfo.getTelNumberCompany().toLowerCase().trim())) {
+						strPush += "電話番号が "+cardInfo.getTelNumberCompany() + "に、";						
 						isPush = 2;
 					}
 					
-					if(cardSameInfo.getDepartmentName().toLowerCase().trim() != cardInfo.getDepartmentName().toLowerCase().trim()){
-						strPush += " 部署が"+cardSameInfo.getDepartmentName() + "に、";
+					if(!cardSameInfo.getDepartmentName().toLowerCase().trim().equals(cardInfo.getDepartmentName().toLowerCase().trim())) {
+						strPush += " 部署が"+cardInfo.getDepartmentName() + "に、";
 						isPush = 3;
 					}
 					
-					if(cardSameInfo.getPositionName().toLowerCase().trim() != cardInfo.getPositionName().toLowerCase().trim()){
-						strPush += "役職が "+cardSameInfo.getPositionName() + "に、";
+					if(!cardSameInfo.getPositionName().toLowerCase().trim().equals(cardInfo.getPositionName().toLowerCase().trim())) {
+						strPush += "役職が "+cardInfo.getPositionName() + "に、";
 						isPush = 4;
 					}
 					
