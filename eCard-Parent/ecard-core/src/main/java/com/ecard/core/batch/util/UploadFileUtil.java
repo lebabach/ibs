@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -66,7 +68,7 @@ public class UploadFileUtil {
         return image;
     }
     
-    private static boolean writeImage(String data, String fileName, String scpHostName, String scpUser, String scpPassword) throws IOException{
+    public static boolean writeImage(String data, String fileName, String scpHostName, String scpUser, String scpPassword) throws IOException{
         try {
             conn = new Connection(scpHostName);
             conn.connect();
@@ -108,6 +110,45 @@ public class UploadFileUtil {
         fileUpload.setFileName(fileName);
         
         return fileUpload;
+    }
+    
+    public static String getImageFileFromSCP(String file, String scpHostName, String scpUser, String scpPassword, Integer scpPort) {
+		return processingCard(file, scpHostName, scpUser, scpPassword, scpPort);
+	}
+    private static String processingCard(String file, String scpHostName, String scpUser, String scpPassword, Integer scpPort){
+    	try{
+			conn = new Connection(scpHostName);
+			try {
+				conn.connect();
+				boolean result = conn.authenticateWithPassword(scpUser, scpPassword);
+
+				
+				if (result) {
+					SCPClient scpClient = conn.createSCPClient();
+					
+	                	try {
+	                		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+							scpClient.get(saveFileUploaded + "/" + file, outputStream);
+							InputStream inputStream  = new ByteArrayInputStream(outputStream.toByteArray());
+			                
+			                BufferedImage img = ImageIO.read(inputStream);
+			                String fileNameBase64 = encodeToString(img, "jpg");
+			                return fileNameBase64;
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				}
+			} catch (Exception e) {
+				LOG.debug("getImageFileFromSCP : " + e.getMessage());
+			} finally {
+				conn.close();
+			}
+		       
+    	} catch (Exception ex){
+			LOG.error("Error processing card image: " + ex.getMessage());
+		}
+    	 return StringUtils.EMPTY;
     }
     
 }

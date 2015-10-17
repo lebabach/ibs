@@ -615,7 +615,7 @@ a {
 	                                  <div class="modal-body">
 	                                    <div class="form-group">
 	                                        <label for="contactDate">コンタクト日付</label>
-	                                        <input class="form-control" id="contactDate" name="contactDate" placeholder="" value="">
+	                                        <input class="form-control" id="contactDate" name="contactDate" id="contactDate" placeholder="" value="">
 	                                    </div>
 	                                    <div class="form-group">
 	                                      <label for="contactMemo">内容</label>
@@ -632,10 +632,10 @@ a {
                          </div>
                     </div>                
 					
-					<c:if test="${fn:length(contactHistoryList) gt 5}">
+					<c:if test="${fn:length(contactHistoryList) gt 3}">
 						<style type="text/css">
 							#contact-hist-body {
-								height: 500px;
+								height: 340px;
 								overflow-y: auto;
 								overflow-x: hidden;
 							}
@@ -877,6 +877,15 @@ label.error {
                     			}
                             });
                             
+                            var validSaveContactFrm = $("#saveContactFrm").validate({
+                            	rules: {
+                            		contactDate: "required"
+                    			},
+                    			messages: {
+                    				contactDate: '<fmt:message key="valid.contactDate" />'
+                    			}
+                            });
+                            
                             $(".input-submit").click(function(){
                             	
                           		if($("#editForm").valid()){
@@ -1079,6 +1088,16 @@ label.error {
 				</div>
 
 			</div>
+			
+			<c:if test="${ fn:length(listCardConnect) gt 5 }">
+				<style type="text/css">
+					.listCardConnect{
+						height : 500px;
+						overflow-y: auto;
+						overflow-x: hidden; 
+					}
+				</style>
+			</c:if>
 			<c:if test="${ not empty listCardConnect }">
 			<!-- List card connected -->
 			<div class="panel panel-default">
@@ -1088,7 +1107,7 @@ label.error {
 					</div>
 				</div>
 				
-				<div class="panel-body" style="padding: 10px 0; overflow: auto; height: 500px;">
+				<div class="panel-body listCardConnect" style="padding: 10px 0;">
 				<style type="text/css">
                   .div-new{
                            padding: 0 10px 5px 10px !important;
@@ -1175,7 +1194,9 @@ label.error {
        	 });
                            
          $("#saveContactHistory").click(function(){
-       		saveContactHistory(); 
+       		if($("#saveContactFrm").valid()){
+        	 	saveContactHistory(); 
+       		}
          });
          
          $(document).on("click",".delContactHist",function(e){

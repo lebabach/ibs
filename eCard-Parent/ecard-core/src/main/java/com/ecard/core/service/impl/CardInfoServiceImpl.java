@@ -3,6 +3,7 @@
  */
 package com.ecard.core.service.impl;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,10 +14,12 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ecard.core.batch.util.UploadFileUtil;
 import com.ecard.core.dao.CardInfoDAO;
 import com.ecard.core.dao.ContactHistoryDAO;
 import com.ecard.core.dao.DataIndexDAO;
@@ -49,6 +52,7 @@ import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
 import com.ecard.core.vo.TagUser;
+import com.ecard.core.webservice.Status;
 
 /**
  *
@@ -75,6 +79,18 @@ public class CardInfoServiceImpl implements CardInfoService {
     
     @Autowired
     ContactHistoryDAO contactHistoryDAO;
+    
+    @Value("${scp.hostname}")
+	private String scpHostName;
+	    
+	@Value("${scp.user}")
+    private String scpUser;
+	    
+	@Value("${scp.password}")
+	private String scpPassword;
+	    
+	@Value("${scp.port}")
+	private String scpPort;
 
     public List<CardInfo> listAllCardInfo(){
     	return cardInfoDAO.listAllCardInfo();
@@ -408,6 +424,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 		return cardInfoDAO.getListConnectCards(card);
 	}
 	
+	@Transactional
 	public boolean handleConnectCards(int cardid1,int cardid2, int currentUserId, String name){
 		try{
 			CardInfo card1=this.getCardInfoDetail(cardid1);
@@ -436,7 +453,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 				card2.setCardOwnerId(ownerUserId);
 				card2.setCardOwnerName(ownerName);
 				this.updateCardInfoNotCreateIndex(card2);
-				
+				CopyImage copy=new CopyImage(card2.getImageFile(),newCard.getImageFile());
+				copy.start();
 			}else{
 				OldCard oldcard=new OldCard();
 				CardInfo cardInfor=new CardInfo();
@@ -546,7 +564,32 @@ public class CardInfoServiceImpl implements CardInfoService {
 		cardInfoDAO.savePrusalHistory(prusalHistory);
 	}
 	
+	class CopyImage extends Thread {
+		private String oldImage;
+		private String newImage;
+
+		public CopyImage(String oldImage,String newImage) {
+			this.oldImage=oldImage;
+			this.newImage=newImage;
+		}
+
+		public void run() {
+			String oldImageData=UploadFileUtil.getImageFileFromSCP(oldImage, scpHostName, scpUser, scpPassword,Integer.parseInt(scpPort));
+			try {
+				UploadFileUtil.writeImage(oldImageData, newImage, scpHostName, scpUser, scpPassword);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("=====================================can not upload image connect card===================================");
+			}
+		}
+	}
+	
 	public List<CardInfo> getListCardHistoryByCardId(Integer cardId){
 		return cardInfoDAO.getListCardHistoryByCardId(cardId);
+	}
+	
+	public List<com.ecard.core.vo.CardInfo> searchCompanyTrees(String searchText){
+		return cardInfoDAO.searchCompanyTrees(searchText);
 	}
 }

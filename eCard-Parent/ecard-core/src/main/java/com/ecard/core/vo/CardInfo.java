@@ -91,18 +91,7 @@ private String fullName;
 
 	public CardInfo(){}
 	
-	public CardInfo(String companyName, BigInteger count, Integer cardId){
-		this.companyName = companyName;
-		this.count = count;
-		this.cardId = cardId;
-	}
-	
-	public CardInfo(Integer cardId, String name){
-		this.cardId = cardId;
-		this.name = name;
-	}
-    
-    public CardInfo(Integer cardId, String name, String lastName, String firstName, String nameKana, String lastNameKana, String firstNameKana,
+	public CardInfo(Integer cardId, String name, String lastName, String firstName, String nameKana, String lastNameKana, String firstNameKana,
             String companyName, String departmentName, String positionName, String imageFile, Integer approvalStatus ,Date createDate){
         this.cardId = cardId;
         this.name = name;
@@ -117,6 +106,25 @@ private String fullName;
         this.imageFile = imageFile;
         this.approvalStatus = approvalStatus;
         this.createDate = createDate;
+    }
+	
+	public CardInfo(String companyName, BigInteger count, Integer cardId){
+		this.companyName = companyName;
+		this.count = count;
+		this.cardId = cardId;
+	}
+	
+	public CardInfo(Integer cardId, String name){
+		this.cardId = cardId;
+		this.name = name;
+	}
+    
+    public CardInfo(Integer cardId, String companyName, String departmentName, String name, BigInteger count){
+        this.cardId = cardId;
+        this.companyName = companyName;
+        this.departmentName = departmentName;
+        this.name = name;
+        this.count = count;
     }
     public CardInfo(Integer cardId, String name, String lastName, String firstName, String nameKana, String lastNameKana, String firstNameKana,
             String companyName, String departmentName, String positionName, String imageFile, Integer approvalStatus ,Date createDate,String email,String telNumberCompany ){

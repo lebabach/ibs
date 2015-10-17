@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -1745,6 +1744,9 @@ public class UserController {
 		List<com.ecard.core.vo.CardInfo> cardList = null;
 		String jsonObj = "";
 		try {
+			if(cardInfo.getDepartmentName() == null){
+				cardInfo.setDepartmentName("");
+			}
 			cardList = cardInfoService.searchCardInfo(cardInfo.getCompanyName(), cardInfo.getDepartmentName());
 			if (cardList.size() > 0) {
 				jsonObj = new Gson().toJson(cardList);
