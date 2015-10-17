@@ -76,7 +76,7 @@ $(document).ready(function(){
 	});
 	
 	$("#btnDelete").click(function(){
-		if (confirm('<fmt:message key="operator.list.confirmDelete"/>')) {
+		if (confirm('<fmt:message key="operator.list.confirmDeleteCard"/>')) {
 			$("#result").find(".i-checks.i-checks-chk_all").each(function( index ) {
 				  if($(this).is(":checked")){
 					 $(this).parent().parent().parent().remove();
