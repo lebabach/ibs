@@ -399,7 +399,7 @@ public class UserController {
 					listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
 				}
 				fileName = "CompanyCard_" + current + userInfo.getUserId() + ".csv";
-				downloadCsvId.setCsvType(CsvConstant.COMPANY_CARDS);
+				downloadCsvId.setCsvType(listUserInfoCSV.size());
 				downloadCsvId.setCsvUrl(fileName);				
 				createCSVFile(response, fileName, listUserInfoCSV, CsvConstant.DOWNLOAD_NOT_DIRECT);
 				cardInfoService.saveDownloadHistory(downloadCsvId);
@@ -408,8 +408,6 @@ public class UserController {
 				listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
 				fileName = "MyCard_" + current + userInfo.getUserId() + ".csv";
 				
-				downloadCsvId.setCsvApprovalStatus(CsvConstant.IS_DOWNLOADED);
-				downloadCsvId.setCsvType(CsvConstant.MY_CARDS);
 				response.setContentType("application/force-download");
 				String headerKey = "Content-Disposition";
 				String headerValue = String.format("attachment; filename=\"%s\"", fileName);
@@ -423,7 +421,6 @@ public class UserController {
 				}
 				csvWriter.close();
 				
-				cardInfoService.saveDownloadHistory(downloadCsvId);
 				
 			}
 			
