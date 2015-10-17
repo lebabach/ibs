@@ -567,7 +567,7 @@ public class UserController {
 					if((cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 || cardInfo.getGroupCompanyId() == 3 
 							|| cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5) 
 							|| ( (cardInfo.getGroupCompanyId() != 1 || cardInfo.getGroupCompanyId() != 2 || cardInfo.getGroupCompanyId() != 3 
-									|| cardInfo.getGroupCompanyId() != 4 || cardInfo.getGroupCompanyId() != 5)  && cardInfo.getContactDate().before(dateCompliance) )){
+									|| cardInfo.getGroupCompanyId() != 4 || cardInfo.getGroupCompanyId() != 5)  && cardInfo.getContactDate().after(dateCompliance) )){
 						//Nothing
 					}
 					else{
@@ -575,7 +575,7 @@ public class UserController {
 					}
 				}else{
 					if(cardInfo.getGroupCompanyId() == userInfo.getGroupCompanyId() 
-							|| (cardInfo.getGroupCompanyId() != userInfo.getGroupCompanyId() && cardInfo.getContactDate().before(dateCompliance))){
+							|| (cardInfo.getGroupCompanyId() != userInfo.getGroupCompanyId() && cardInfo.getContactDate().after(dateCompliance))){
 						//Nothing
 					}
 					else{
@@ -602,6 +602,7 @@ public class UserController {
 			if (contactHistoryList.size() > 0) {
 				modelAndView.addObject("contactHistoryList", contactHistoryList);
 			}
+			
 		} catch (Exception ex) {
 			logger.debug("Exception : ", ex.getMessage());
 		}
