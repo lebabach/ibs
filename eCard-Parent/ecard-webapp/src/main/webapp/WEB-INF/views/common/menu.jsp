@@ -77,7 +77,7 @@
 
 						<!-- panel 7 -->
 
-						<div class="panel panel-success">
+						<%-- <div class="panel panel-success">
 							<div class="panel-heading">
 								<h4 class="panel-title">
 									<a class="accordion-toggle"
@@ -86,7 +86,7 @@
 									</a>
 								</h4>
 							</div>
-						</div>
+						</div> --%>
 						<!-- end panel 7 -->
 
 
@@ -162,7 +162,7 @@
 						test="${pageContext.request.isUserInRole('ROLE_OPERATOR_MANAGER') }">
 						<!-- panel 7 -->
 
-						<div class="panel panel-success">
+						<%-- <div class="panel panel-success">
 							<div class="panel-heading">
 								<h4 class="panel-title">
 									<a class="accordion-toggle"
@@ -171,7 +171,7 @@
 									</a>
 								</h4>
 							</div>
-						</div>
+						</div> --%>
 						<!-- end panel 7 -->
 
 						<!-- panel 8 -->
@@ -375,7 +375,7 @@
 
 						<!-- panel 7 -->
 
-						<div class="panel panel-success">
+						<%-- <div class="panel panel-success">
 							<div class="panel-heading">
 								<h4 class="panel-title">
 									<a class="accordion-toggle"
@@ -384,7 +384,7 @@
 									</a>
 								</h4>
 							</div>
-						</div>
+						</div> --%>
 						<!-- end panel 7 -->
 
 
@@ -461,7 +461,7 @@
 
 						<!-- panel 7 -->
 
-						<div class="panel panel-success">
+						<%-- <div class="panel panel-success">
 							<div class="panel-heading">
 								<h4 class="panel-title">
 									<a class="accordion-toggle"
@@ -470,7 +470,7 @@
 									</a>
 								</h4>
 							</div>
-						</div>
+						</div> --%>
 						<!-- end panel 7 -->
 
 
@@ -635,7 +635,7 @@
 
 						<!-- panel 7 -->
 
-						<div class="panel panel-success">
+						<%-- <div class="panel panel-success">
 							<div class="panel-heading">
 								<h4 class="panel-title">
 									<a class="accordion-toggle"
@@ -644,7 +644,7 @@
 									</a>
 								</h4>
 							</div>
-						</div>
+						</div> --%>
 						<!-- end panel 7 -->
 
 
@@ -721,7 +721,7 @@
 
 						<!-- panel 7 -->
 
-						<div class="panel panel-success">
+						<%-- <div class="panel panel-success">
 							<div class="panel-heading">
 								<h4 class="panel-title">
 									<a class="accordion-toggle"
@@ -730,7 +730,7 @@
 									</a>
 								</h4>
 							</div>
-						</div>
+						</div> --%>
 						<!-- end panel 7 -->
 
 
