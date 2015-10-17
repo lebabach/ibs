@@ -372,8 +372,13 @@ a {
 </style>
 					<script type="text/javascript">
 						function goBack(){
-							window.history.back();
-							return false;
+							if(document.referrer.indexOf("user/home") >= 0){
+								window.location = "/ecard-webapp/user/home";
+							}else{
+								window.history.back();
+								return false;	
+							}
+							
 						}
 						
                           $(document).ready(function(){
