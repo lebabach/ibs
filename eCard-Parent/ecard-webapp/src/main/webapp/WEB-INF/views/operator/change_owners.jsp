@@ -266,6 +266,7 @@ $(document).ready(function() {
 	  var userAssign = $("input[name=userAssign]").val();
 	  var nameAssign = $("input[name=nameAssign]").val();
 	  var tagId =    $("input[name=tagId]").val();
+	  var count = 0;
 	  if(!checkAll && listCardId.length == 0){
 		  BootstrapDialog.show({
 	             title: '警告',
@@ -280,7 +281,17 @@ $(document).ready(function() {
 	        });
 		  return false;
 	  }
-	  if (confirm('<c:out value="${userLeave.firstName}"/> <c:out value="${userLeave.lastName}"/> 学 さんの名刺○件を、'+nameAssign +' さんの所有とします。よろしいですか？')) {
+	  if(checkAll){
+		  var total = $('#table-1_info').text();
+		  var totalUncheck = 0;
+		  if(listUncheckAll.length > 0){
+			  totalUncheck=listUncheckAll.length;
+		  }
+		  count = parseInt(total)-totalUncheck;
+	  }else{
+		  count = listCardId.length;
+	  }
+	  if (confirm('<c:out value="${userLeave.lastName}"/> <c:out value="${userLeave.firstName}"/> 学 さんの名刺'+count+'件を、'+nameAssign +' さんの所有とします。よろしいですか？')) {
 		  $.ajax({
 				type: 'POST',
 				url: '<c:url value="/operators/updateCardUser"/>',
@@ -355,7 +366,7 @@ $(document).ready(function() {
                             <table id="table-1" class="table container paging" style="margin-top: -54px; padding: 0; position: relative; z-index:9">
                                 <thead>
                                     <tr role="row">
-                                        <td colspan="5" style="background-color: #fff; padding-left: 0;" rowspan="1">所有者（変更元） <c:out value="${userLeave.lastName}" /> <c:out value="${userLeave.firstName}" /></td>
+                                        <td colspan="5" style="background-color: #fff; padding-left: 0;" rowspan="1">所有者（変更元） <c:out value="${userLeave.lastName}" />  <c:out value="${userLeave.firstName}" /></td>
                                         <td colspan="1" style="background-color: #fff; padding-left: 0;" rowspan="1">
                                           <div class="form-group">
 													 <form>
