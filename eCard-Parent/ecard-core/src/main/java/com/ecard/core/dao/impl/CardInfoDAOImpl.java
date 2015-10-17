@@ -685,7 +685,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 
 	public List<CardInfo> getListMyCard(Integer userId) {
 		Query query = getEntityManager().createQuery(
-				"SELECT p.cardInfo FROM PossessionCard p LEFT JOIN p.cardInfo c WHERE p.id.userId = :userId "
+				"SELECT c FROM CardInfo c WHERE c.cardOwnerId = :userId "
 						+ " AND c.approvalStatus = 1 AND c.deleteFlg = 0");
 		query.setParameter("userId", userId);
 		return query.getResultList();

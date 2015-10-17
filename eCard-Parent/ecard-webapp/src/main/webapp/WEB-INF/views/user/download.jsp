@@ -435,9 +435,9 @@ body{
 				</p>
                   
                 <div class="box-3">
-                    <a href="downloadCSV/1" class="export">自分の名刺をダウンロード</a>
+                    <a id="1"  class="export">自分の名刺をダウンロード</a>
                     <c:if test="${roleAdminId == 7}">
-                    	<a href="downloadCSV/2" class="export">自社の名刺をダウンロード</a>
+                    	<a id="2" class="export">自社の名刺をダウンロード</a>
                     </c:if>
                 </div>
                 <p class="p-line"></p>
@@ -475,22 +475,31 @@ body{
 
 
 <script type="text/javascript">
-	$(document).ready(function(){
-		$('a.export').click(function(e){			
-		    $('a.export').removeClass('active');
-		    $('button.export').removeClass('active');
-		    $(this).addClass('active');
-		    var  id = $(this).attr('href');
-		    
-		    $.ajax({
+   $(document).on('click', 'a.export', function(){		
+	    $('a.export').removeClass('active');
+	    $('button.export').removeClass('active');
+	    $(this).addClass('active');
+	    var id = $(this).attr('id');
+		if(id == 1){
+			document.location.href="downloadCSV/"+id;
+			setTimeout(function(){ 				
+				document.location.href='/ecard-webapp/user/download';
+			}, 3000);
+		} else {
+			$.ajax({
 				type: 'GET',
-				url: '/ecard-webapp/user/'+id
+				url: '/ecard-webapp/user/downloadCSV/'+id
 			}).done(function(resp, status, xhr) {
-				document.location.href='/ecard-webapp/user/download';				
+				setTimeout(function(){ 				
+					document.location.href='/ecard-webapp/user/download';
+				}, 3000);
+								
 			}).fail(function(xhr, status, err) {
 				document.location.href='/ecard-webapp/user/download';
-			});
-		});
+			});	
+		}
+	});
+	$(document).ready(function(){
 		
 		$('.span-td').click(function(e){
 			var csvID = parseInt($(this).parents('tr').attr("id"));
