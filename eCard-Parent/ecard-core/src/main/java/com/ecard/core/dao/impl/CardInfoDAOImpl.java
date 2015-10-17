@@ -1556,9 +1556,8 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	
 	public List<CardInfo> getListCardHistoryByCardId(Integer cardId){
 		Query query = getEntityManager().createQuery("SELECT c FROM OldCard oc INNER JOIN oc.cardInfo c "
-				+ "WHERE c.oldCardFlg = 1 AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND oc.id.cardId = :cardId "
+				+ "WHERE c.approvalStatus = 1 AND c.deleteFlg = 0 AND oc.id.cardId = "+cardId.intValue()+" "
 				+ "ORDER BY c.contactDate DESC");
-		query.setParameter("cardId", cardId);
 		return (List<CardInfo>)query.getResultList();
 	}
 	
