@@ -479,8 +479,10 @@ background-color: blue;
 								 <form>
 				                        <select id ="roleAdminId" class="form-control role-admin" >
 				                        <option value = '1'> 未選択  </option>
-				                          <option value = '7'>推進管理者</option> 
-					                      <option value = '3'>保守担当者</option>
+				                        <c:if test="${not pageContext.request.isUserInRole('ROLE_AUTHORITY_USER') }">
+				                           <option value = '7'>推進管理者</option> 
+					                       <option value = '3'>保守担当者</option>
+					                      </c:if>
 					                     <option value = '2'>社内管理者</option>
 					                   
 				                        </select>
