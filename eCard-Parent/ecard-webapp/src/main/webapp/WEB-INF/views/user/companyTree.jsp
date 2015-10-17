@@ -125,7 +125,7 @@
     text-align: left;
     color: #666;
     font-weight: bold;
-    font-family: "メイリオ",Meiryo,"ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","ＭＳ Ｐゴシック","MS PGothic",sans-serif !important;
+    font-family: "ãƒ¡ã‚¤ãƒªã‚ª",Meiryo,"ãƒ’ãƒ©ã‚®ãƒŽè§’ã‚´ Pro W3","Hiragino Kaku Gothic Pro","ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯","MS PGothic",sans-serif !important;
 }
 .content-box-1 {
     background-color: #fff;
@@ -277,15 +277,15 @@ margin: 20px auto 30px auto;
 
 <div class="div-list">  
    	<div class="box-1">
-    	<div class="title-box-1">顧客組織一覧</div>
+    	<div class="title-box-1">é¡§å®¢çµ„ç¹”ä¸€è¦§</div>
     	<div class="content-box-1">  
            <form class="form-cm" name="searchForm" id="searchForm" method="post">
                <div class="form-group col-md-11">
-          			<label class="label-c">企業名</label>
+          			<label class="label-c">ä¼æ¥­å</label>
                		<input class="input-c" value="" name="companyName" />
                </div>
                <div class="col-md-1" style="margin-left: -65px;">
-               	<input type="button" value="検索" class="submit" id="searchCompany" />
+               	<input type="button" value="æ¤œç´¢" class="submit" id="searchCompany" />
                </div>
            </form>
            
@@ -322,8 +322,13 @@ $(document).ready(function(){
     	$(this).removeClass("li-11");
     	$(this).addClass("li-11 click active");
     	
+        var id = this.id;
+    	var cardId = id.split('_');
     	var deptName = $("#"+this.id).find("input[name="+this.id+"]").val();
-    	var compName = $('#'+this.id).parent().parent().parent().find('.li-1').find('input').val();
+        if(deptName == 'undefined'){
+	   deptName = "";
+        }
+    	var compName = $("#"+this.id).parent().find('.click').find('input[name=comp_'+cardId[1]+']').val();
     	searchCardInfo(deptName, compName, this.id);
     });
 	
@@ -416,7 +421,8 @@ function searchDepartmentTree(companyName, id){
        						+ "</li><div id='div_dep_"+ value["cardId"] +"'></div>";
        			}
        			else{
-       				respHTML += "<li class='li-11' id='dep_"+ value["cardId"] +"'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_dep_"+ value["cardId"] +"'></div>"
+       				respHTML += "<li class='li-11' id='dep_"+ value["cardId"] +"'><fmt:message key='company.blank' /> ("+ value["count"] +")"
+                                         + "<input type='hidden' value='"+ companyName +"' name='comp_"+ value["cardId"] +"' /></li><div id='div_dep_"+ value["cardId"] +"'></div>"
        			}
        		}); 
        		respHTML += "</ul>";

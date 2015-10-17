@@ -724,7 +724,7 @@ public class UserController {
 	public String loginSaleForce(@RequestBody CardInfoSaleforce cardInfo) {
 		logger.debug("loginSaleForce", UserController.class);
 
-		final String URI = "https://bc-ribbon.temp-holdings.co.jp/api/";
+		final String URI = "http://52.68.0.143/api/";
 
 		RestTemplate restTemplate = new RestTemplate();
 		String result = "";
@@ -776,6 +776,8 @@ public class UserController {
 				departmentName = departmentName.substring(0, 255);
 			}
 
+			String password = cardInfo.getLogin_pass() + CommonConstants.tokenAuthen;
+			
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 			map.add("lastname", lastName);
 			map.add("firstname", firstName);
@@ -793,7 +795,7 @@ public class UserController {
 			map.add("departmentName", departmentName);
 			map.add("zipCode", cardInfo.getZipCode());
 			map.add("login_id", cardInfo.getLogin_id());
-			map.add("login_pass", cardInfo.getLogin_pass());
+			map.add("login_pass", password);
 
 			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
 			result = restTemplate.postForObject(URI, map, String.class);

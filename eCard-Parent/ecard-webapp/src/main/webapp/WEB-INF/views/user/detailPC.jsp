@@ -1972,7 +1972,25 @@ label.error {
         	},
         	success: function(response) {
 	       		if(response.faultcode == "INVALID_LOGIN"){
-	       			$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'>Invalid username or password.</label>")
+	       			$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'>セールスフォース連携に失敗しました</label>");
+	       		}
+	       		else{
+	       			var isChecked = false;
+	       			if(response[0].success == true){
+	       				isChecked = true;
+	       				$('#modal-login-saleforce').find('.close').click();
+	       				BootstrapDialog.show({
+            				title: '<fmt:message key="popup.title.info" />',
+           	             	message: 'セールスフォースに名刺データを連携しました'
+            	      	});
+	       				
+	       				if(isChecked)
+	       					return false;
+	       			}
+	       			
+	       			if(response[0].errors[0].statusCode == "INVALID_EMAIL_ADDRESS"){
+	       				$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'>"+ response[0].errors[0].message +"</label>")
+	       			}
 	       		}
         	},
         	error: function(xhr, status, error){
