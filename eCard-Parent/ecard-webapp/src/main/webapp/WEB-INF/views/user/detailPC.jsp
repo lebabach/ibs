@@ -545,6 +545,11 @@ a {
 </style>
 					<script type="text/javascript">
                           $(document).ready(function(){
+                        	  //Show scrollbar
+                              if($('.ul-memo li').length > 5){
+                             	 $(".panel-memo").attr("style", "height:367px; overflow-x:hidden; overflow-y:auto;")
+                              }
+                        	
                               $('.click-memo').click(function(){
                                      var memo = $('#textarea-memo').val();
                                      
@@ -557,7 +562,7 @@ a {
                                      }
                                      //Show scrollbar
                                      if($('.ul-memo li').length > 5){
-                                    	 $(".panel-memo").attr("style", "height:500px; overflow-x:hidden; overflow-y:auto;")
+                                    	 $(".panel-memo").attr("style", "height:367px; overflow-x:hidden; overflow-y:auto;")
                                      }
                               });    
                              
@@ -573,7 +578,7 @@ a {
 					<ul class="ul-memo">
 					<c:forEach var="cardMemo" items="${listCardMemo}" varStatus="loop">
 						<li>
-							<p style="font-size:1.4em;"><c:out value="${ cardMemo.memo }"></c:out> </p>
+							<p style="font-size:10pt;"><c:out value="${ cardMemo.memo }"></c:out> </p>
 							<p class="p-date-n"><fmt:formatDate value='${ cardMemo.create_date }' pattern="yyyy年MM月dd日"/></p><span class="delMemo" id="${ cardMemo.seq }" class='span-close'>x</span>
 						</li>
 					</c:forEach>
@@ -645,7 +650,8 @@ a {
 							text-align: center;
 							cursor: pointer;
                       }
-					  #modal-example2 .datepicker.dropdown-menu{z-index:100000 !important;}
+					  #modal-example2 .dropdown-menu{z-index:100000 !important;}
+					  .datepicker{z-index:10000000 !important;}
                     </style>
                     <div class="panel-body" id="contact-hist-body">
                         <c:if test="${ not empty contactHistoryList }">
@@ -1163,13 +1169,11 @@ label.error {
        		saveContactHistory(); 
          });
          
-         $('.delContactHist').on({
-           'click':function(){
-        	   //console.log(this.id);
-        	     var json = {"cardInfo" : {"cardId" : $("input[name=cardId]").val()}, "contactHistoryId" : this.id};  
-        	   	 delContactHistory(json);
-              }
-          });
+         $(document).on("click",".delContactHist",function(e){
+ 			//console.log(this.id);    		 
+        	 var json = {"cardInfo" : {"cardId" : $("input[name=cardId]").val()}, "contactHistoryId" : this.id};  
+    	   	 delContactHistory(json);
+     	 });
          
          $("#loginSaleForce").click(function(){
        		if(validLoginSaleForce()){
@@ -1719,7 +1723,7 @@ label.error {
         		var resp = "";
         		$.each(response, function(index, value){
         			//console.log(value);
-        			resp += "<li><p style='font-size:1.4em;'>"+ value["memo"] +"</p><p class='p-date-n'>"+formatDate(value["create_date"])+"</p><span class='delMemo' id='"+value["seq"]+"' class='span-close'>x</span></li>"; 
+        			resp += "<li><p style='font-size:10pt;'>"+ value["memo"] +"</p><p class='p-date-n'>"+formatDate(value["create_date"])+"</p><span class='delMemo' id='"+value["seq"]+"' class='span-close'>x</span></li>"; 
         		});
         		
         		$(".ul-memo").html(resp);
@@ -1749,7 +1753,7 @@ label.error {
         	success: function(response) {
 	       		var resp = "";
         		$.each(response, function(index, value){
-        			resp += "<li><p style='font-size:1.4em;'>"+ value["memo"] +"</p><p class='p-date-n'>"+formatDate(value["create_date"])+"</p><span class='delMemo' id='"+value["seq"]+"' class='span-close'>x</span></li>"; 
+        			resp += "<li><p style='font-size:10pt;'>"+ value["memo"] +"</p><p class='p-date-n'>"+formatDate(value["create_date"])+"</p><span class='delMemo' id='"+value["seq"]+"' class='span-close'>x</span></li>"; 
         		});
         		
         		$(".ul-memo").html(resp);
@@ -1855,16 +1859,7 @@ label.error {
         		xhr.setRequestHeader("Content-Type", "application/json");
         	},
         	success: function(response) {
-        		//var respHTML = "";
-        		$.each(response, function(index, value){
-        			if(value != null){
-        				window.location.reload(true);
-        			}
-        		});
-        		
-        		//$(".ul-memo").html(resp);
-        		$('.ul-memo').show();
-                $('.panel-body').addClass('panel-body-memo');
+        		window.location.reload(true);
         	},
         	error: function(){
 			  BootstrapDialog.show({

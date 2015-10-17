@@ -3,6 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+<%@ page import="com.ecard.webapp.security.EcardUser"%>
 <style>
 .btn-lg {
 	padding: 2px 16px !important;
@@ -109,7 +110,10 @@
 		      padding: 4px 5px;
 		  }
           </style>
-           <p class="abc-ex">${pageContext.request.remoteUser}</p>
+           <p class="abc-ex"><%-- ${pageContext.request.remoteUser} --%>
+            <% EcardUser ecardUser = (EcardUser)org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal(); %>
+				<%= ecardUser.getFullName() %>
+           </p>
 		   <c:if test="${pageContext.request.isUserInRole('ROLE_LEADER') or pageContext.request.isUserInRole('ROLE_OPERATOR') or pageContext.request.isUserInRole('ROLE_SUPERVISOR') or pageContext.request.isUserInRole('ROLE_ADMIN') or pageContext.request.isUserInRole('ROLE_AUTHORITY_USER') or pageContext.request.isUserInRole('ROLE_OPERATOR_MANAGER') }">				
 				 <p style=" position: absolute;right: 100px;top: 50px; width:141px"><button class="btn btn-primary btn-goto-admin" onclick="location.href='<c:url value='/manager/home'/>';">管理画面へ戻る</button></p>
 		   </c:if>	

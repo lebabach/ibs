@@ -27,7 +27,7 @@ public class ContactHistoryDAOImpl extends GenericDao implements ContactHistoryD
 	}
 	
 	public List<com.ecard.core.vo.ContactHistory> getListContactHistoryById(Integer cardId){
-		Query query = getEntityManager().createNativeQuery("SELECT ct.contact_history_id, ct.card_id, ct.user_id, ct.contact_date, ct.contact_memo "
+		Query query = getEntityManager().createNativeQuery("SELECT ct.contact_history_id, ct.card_id, ct.user_id, ct.contact_date, ct.contact_memo, ct.place, ct.title "
 				+ "FROM contact_history ct WHERE ct.card_id = :cardId ORDER BY ct.contact_date DESC");
 		query.setParameter("cardId", cardId);
 		

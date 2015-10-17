@@ -5,6 +5,7 @@ package com.ecard.core.dao;
 
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.PrusalHistory;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
@@ -153,4 +154,5 @@ public interface CardInfoDAO extends IGenericDao{
     public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card);
     public Integer updateUserCard(List<Integer> listCardUser, Integer userLeave, Integer userAssign,String nameAssign);
 
+    public void savePrusalHistory(PrusalHistory prusalHistory);
 }

@@ -443,7 +443,7 @@ function searchCardInfo(deptName, compName, id){
        		console.log(JSON.stringify(response));
        		var respHTML = "<ul style='display: inline-block;' class='ul-3'>";
        		$.each(response, function(index, value){
-       			if(value["companyName"] != ""){
+       			if(value["companyName"] != "" && value["count"] != 0){
 	       			respHTML += "<li class='li-3'><a href='#' id='"+ value["cardId"] +"'>"
 	       						+ value["companyName"] +"("+ value["count"] +")</a>"
 	       						+"<input value='"+ deptName +"' name='c_dep_"+ value["cardId"] +"' type='hidden'>"

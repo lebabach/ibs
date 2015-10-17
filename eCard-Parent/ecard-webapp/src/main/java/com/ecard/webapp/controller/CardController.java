@@ -371,26 +371,32 @@ public class CardController {
 			return new ModelAndView("cardedit", "cardInfo", cardInfo);
 		}
 		if (uploadModel.isStatus()) {
-
-			cardInfo.setName(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastName(), cardInfo.getFirstName(), " "));
-			cardInfo.setNameKana(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastNameKana(), cardInfo.getFirstNameKana(), " "));
+            
+			if(!"".equals(cardInfo.getLastName()) || !"".equals(cardInfo.getFirstName())){
+			     cardInfo.setName(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastName(), cardInfo.getFirstName(), " "));
+			}
+			if(!"".equals(cardInfo.getLastNameKana())|| !"".equals(cardInfo.getFirstNameKana())){
+		      	cardInfo.setNameKana(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastNameKana(), cardInfo.getFirstNameKana(), " "));
+			}
 			
 			// bach.le https://livepass.backlog.jp/view/MEISHI-575
-			List<String> listAddress = new ArrayList<String>(Arrays.asList(cardInfo.getAddressFull().trim().split(" ")));
-			cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
-			cardInfo.setAddress2(listAddress.get(1) != null ? listAddress.get(1) : "");
-			cardInfo.setAddress3(listAddress.get(2) != null ? listAddress.get(2) : "");
-			if (listAddress.get(0) != null) {
-				listAddress.remove(0);
+			if(!"".equals(cardInfo.getAddressFull())){
+				List<String> listAddress = new ArrayList<String>(Arrays.asList(cardInfo.getAddressFull().trim().split(" ")));
+				cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
+				cardInfo.setAddress2(listAddress.get(1) != null ? listAddress.get(1) : "");
+				cardInfo.setAddress3(listAddress.get(2) != null ? listAddress.get(2) : "");
+				if (listAddress.get(0) != null) {
+					listAddress.remove(0);
+				}
+				if (listAddress.get(0) != null) {
+					listAddress.remove(0);
+				}
+				if (listAddress.get(0) != null) {
+					listAddress.remove(0);
+				}
+	
+				cardInfo.setAddress4(listAddress.stream().collect(Collectors.joining(" ")));
 			}
-			if (listAddress.get(0) != null) {
-				listAddress.remove(0);
-			}
-			if (listAddress.get(0) != null) {
-				listAddress.remove(0);
-			}
-
-			cardInfo.setAddress4(listAddress.stream().collect(Collectors.joining(" ")));
 
 			CardInfo nCardInfo = cardInfoService.getCardInfoDetail(cardInfo.getCardId());
 			cardInfo.setCardIndexNo(nCardInfo.getCardIndexNo());
