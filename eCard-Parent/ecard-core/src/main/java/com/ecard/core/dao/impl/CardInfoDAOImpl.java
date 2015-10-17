@@ -1555,12 +1555,21 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		getEntityManager().flush();
 	}
 	
-	public List<CardInfo> getListCardHistoryByCardId(Integer cardId){
-		Query query = getEntityManager().createQuery("SELECT c FROM OldCard oc INNER JOIN oc.cardInfo c "
-				+ "WHERE c.oldCardFlg = 1 AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND oc.id.cardId = :cardId "
-				+ "ORDER BY c.contactDate DESC");
-		query.setParameter("cardId", cardId);
-		return (List<CardInfo>)query.getResultList();
+	public List<com.ecard.core.vo.CardInfo> getListCardHistoryByCardId(Integer cardId){
+		String sqlStr = "SELECT C.contact_date, C.company_name, C.department_name FROM card_info AS C "
+				+ "INNER JOIN old_card AS O "
+				+ "ON O.old_card_id = C.card_id AND O.card_id = " + cardId
+				+ " WHERE approval_status = 1 AND delete_flg = 0 ORDER BY contact_date DESC";
+		
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		List<Object[]> listObj = query.getResultList();
+		List<com.ecard.core.vo.CardInfo> cardInfoList = new ArrayList<>();
+		for (Object[] object : listObj) {
+			com.ecard.core.vo.CardInfo cardInfoVo = new com.ecard.core.vo.CardInfo((Date)object[0], (String) object[1], (String) object[2]);
+			cardInfoList.add(cardInfoVo);
+		}
+
+		return cardInfoList;
 	}
 	
 	public List<com.ecard.core.vo.CardInfo> searchCompanyTrees(String searchText){

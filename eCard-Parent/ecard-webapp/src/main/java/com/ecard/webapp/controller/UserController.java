@@ -650,7 +650,7 @@ public class UserController {
 			cardInfoService.savePrusalHistory(prusalHistory);
 			
 			// Get old cards
-			List<CardInfo> listOldCard = cardInfoService.getListCardHistoryByCardId(cardInfo.getCardId());
+			List<com.ecard.core.vo.CardInfo> listOldCard = cardInfoService.getListCardHistoryByCardId(cardInfo.getCardId());
 			modelAndView.addObject("listOldCard", listOldCard);
 
 			// set search detail session

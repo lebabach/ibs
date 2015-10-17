@@ -91,6 +91,12 @@ private String fullName;
 
 	public CardInfo(){}
 	
+	public CardInfo(Date contactDate, String companyName, String departmentName){
+		this.contactDate = contactDate;
+		this.companyName = companyName;
+        this.departmentName = departmentName;
+    }
+	
 	public CardInfo(Integer cardId, String name, String lastName, String firstName, String nameKana, String lastNameKana, String firstNameKana,
             String companyName, String departmentName, String positionName, String imageFile, Integer approvalStatus ,Date createDate){
         this.cardId = cardId;
