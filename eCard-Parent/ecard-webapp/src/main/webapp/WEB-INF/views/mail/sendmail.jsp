@@ -340,7 +340,9 @@ $(document).ready(function() {
 					data:{"sendType":sendType,"userSendTo":user_send_to,"titleMail":tileMail,"contentMail":contentMail}
 				}).done(function(resp, status, xhr) {
 				    if(resp ==0){
-				    	 document.location.href="<c:url value='/mails/displayMail'/>";
+				    	 //document.location.href="<c:url value='/mails/displayMail'/>";
+				    	$(".titleMail").val(" ");
+				    	$('.contentMail').val(" ");
 				    }else{
 				    	
 				    }
