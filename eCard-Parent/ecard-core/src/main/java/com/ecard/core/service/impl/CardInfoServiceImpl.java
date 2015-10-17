@@ -450,7 +450,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 				
 				oldcard.setId(oldCardId);
 				oldCardDAO.persist(oldcard);
-				
+				userCardMemoDAO.updateUserCardMemo(cardid1, currentUserId, cardid2);
+				contactHistoryDAO.updateContactHistory(cardid1, currentUserId, cardid2);
 				
 			}
 		}catch(Exception e){
@@ -541,60 +542,4 @@ public class CardInfoServiceImpl implements CardInfoService {
 		return cardInfoDAO.updateUserCard(listCardUser,userLeave,userAssign,nameAssign);
 	}
 	
-	
-	
-	class UploadCardThread extends Thread {
-		int card1;
-		int card2;
-		int userId;
-
-		UploadCardThread(int cardId1,int userId,int cardId2) {
-			
-		}
-		
-		public boolean changeUserCardMemmo(int cardId1,int userId,int cardId2){
-			List<UserCardMemo> memos=userCardMemoDAO.findAll(UserCardMemo.class).stream().filter(x->x.getCardInfo().getCardId().intValue()==cardId1 && x.getUserInfo().getUserId()==userId).collect(Collectors.toList());
-			memos.forEach(m->{
-				CardInfo card2=new CardInfo();
-				card2.setCardId(cardId2);
-				m.setCardInfo(card2);
-				userCardMemoDAO.saveOrUpdate(m);
-			});
-			
-			return true;
-		}
-		
-		public boolean changeContactHistory(int cardId1,int userId,int cardId2){
-			List<com.ecard.core.vo.ContactHistory> histories=contactHistoryDAO.getListContactHistoryById(cardId1).stream().filter(h->h.getUserId()==userId).collect(Collectors.toList());
-			List<ContactHistory> historyEntities=new ArrayList<ContactHistory>();
-			
-			histories.forEach(h->{
-				ContactHistory history=new ContactHistory();
-				CardInfo card2=new CardInfo();
-				card2.setCardId(cardId2);
-				
-				
-				history.setCardInfo(card2);
-				history.setContactDate(h.getContactDate());
-				history.setContactHistoryId(h.getContactHistoryId());
-				history.setContactMemo(h.getContactMemo());
-				history.setPlace(h.getPlace());
-				history.setTitle(h.getTitle());
-				history.setUserId(h.getUserId());
-				historyEntities.add(history);
-			});
-			historyEntities.forEach(h->{
-				contactHistoryDAO.saveContactHistory(h);
-			});
-			
-			return true;
-		}
-
-		public void run() {
-			try {
-				
-			} catch (Exception ex) {
-			}
-		}
-	}
 }

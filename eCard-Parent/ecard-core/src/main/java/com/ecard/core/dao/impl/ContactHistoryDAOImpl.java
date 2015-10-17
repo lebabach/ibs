@@ -1,5 +1,6 @@
 package com.ecard.core.dao.impl;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +44,30 @@ public class ContactHistoryDAOImpl extends GenericDao implements ContactHistoryD
 		query.setParameter("contactHistoryId", contactHistoryId);
 		
 		return query.executeUpdate();
+	}
+
+	@Override
+	public boolean updateContactHistory(int cardId1, int userId, int cardId2) {
+		// TODO Auto-generated method stub
+		String sql = "UPDATE contact_history t SET t.card_id = :card_id2 WHERE t.card_id = :card_id1 AND t.user_id =:user_id";
+		Query query = getEntityManager().createNativeQuery(sql);
+		query.setParameter("card_id2", cardId2);
+		query.setParameter("user_id", userId);
+		query.setParameter("card_id1", cardId1);
+		try{
+			int result = query.executeUpdate();	
+			if (result == 0) {
+				return false;
+			} else {
+				return true;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println("==================== Can not update ContactHistory");
+			return false;
+		}
+		
+		
 	}
 	
 	

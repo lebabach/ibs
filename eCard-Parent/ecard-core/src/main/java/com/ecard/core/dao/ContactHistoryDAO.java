@@ -14,4 +14,6 @@ public interface ContactHistoryDAO {
 	public List<com.ecard.core.vo.ContactHistory> getListContactHistoryById(Integer cardId);
 	
 	public int deleteContactHistory(Integer contactHistoryId);
+	
+	public boolean updateContactHistory(int cardId1,int userId,int cardId2);
 }
