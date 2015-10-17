@@ -529,14 +529,21 @@
     	});
 
  $(document).ready(function(){
-	 $(document).on('click', '.list-group', function(event)  {
+	 $(document).on('click', '.list-group-item-title', function(event)  {
 		 $.xhrPool.abortAll();
 		// Hidden others and change icon
-        $(".list-group" ).not($(this)).find('.list-group-item-title').removeClass('active');
+        /* $(".list-group" ).not($(this)).find('.list-group-item-title').removeClass('active');
         $(".list-group" ).not($(this)).find('.list-group-item ').removeClass('show-content');
-        $(".list-group" ).not($(this)).find('.list-group-item ').addClass('no-show-content');
+        $(".list-group" ).not($(this)).find('.list-group-item ').addClass('no-show-content'); */
+        
+        /*PHUONGNV CUSTOME  */
+        $('.list-group-item-title').not($(this)).removeClass('active');
+        $('.list-group-item-title').not($(this)).parent().find('.list-group-item').removeClass('show-content');
+        $('.list-group-item-title').not($(this)).parent().find('.list-group-item').addClass('no-show-content');
+        /*END PHUONGNV CUSTOME  */
+        
         // Show data end change icon
-        if($(this).find('.list-group-item-title').hasClass('active')){
+       /*  if($(this).find('.list-group-item-title').hasClass('active')){
         	$(this).find('.list-group-item-title').removeClass('active');
             $(this).find('.list-group-item ').removeClass('show-content');
             $(this).find('.list-group-item ').addClass('no-show-content');
@@ -544,10 +551,23 @@
         	$(this).find('.list-group-item-title').addClass('active');
             $(this).find('.list-group-item ').removeClass('no-show-content');
             $(this).find('.list-group-item ').addClass('show-content');	
+        } */
+        
+        /*PHUONGNV CUSTOME  */
+        if($(this).hasClass('active')){
+        	$(this).removeClass('active');
+            $(this).parent().find('.list-group-item ').removeClass('show-content');
+            $(this).parent().find('.list-group-item ').addClass('no-show-content');
+        } else {
+        	$(this).addClass('active');
+            $(this).parent().find('.list-group-item ').removeClass('no-show-content');
+            $(this).parent().find('.list-group-item ').addClass('show-content');	
         }
-        if($(this).find('.list-group-item').length <= 0){
-        	var self = $(this);
-            var strDate = $(this).attr("id");
+        /*END PHUONGNV CUSTOME  */
+        
+        if($(this).parent().find('.list-group-item').length <= 0){
+        	var self = $(this).parent();
+            var strDate = $(this).parent().attr("id");
             var typeSort = $("#sort-card-cnd option:selected").val();
            	var typeSearch = $("#selectSortBox option:selected").val();
            	if(typeSort == 5){
