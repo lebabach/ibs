@@ -68,6 +68,8 @@ import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.InquiryInfo;
 import com.ecard.core.model.PossessionCard;
 import com.ecard.core.model.PossessionCardId;
+import com.ecard.core.model.PrusalHistory;
+import com.ecard.core.model.PrusalHistoryId;
 import com.ecard.core.model.UserCardMemoId;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.UserNotification;
@@ -560,6 +562,16 @@ public class UserController {
 			} else {
 				modelAndView.addObject("sfManualLinkFlg", false);
 			}
+
+			PrusalHistory prusalHistory = new PrusalHistory();
+			prusalHistory.setCardInfo(cardInfo);
+			
+			PrusalHistoryId prusalHistoryId = new PrusalHistoryId();
+			prusalHistoryId.setCardId(cardInfo.getCardId());
+			prusalHistoryId.setUserId(userId);
+			prusalHistoryId.setPrusalDate(new Date());
+			
+			prusalHistory.setId(prusalHistoryId);
 			
 			if(!cardInfo.getCardOwnerId().equals(userId)){
 				if((userInfo.getGroupCompanyId() == 1 || userInfo.getGroupCompanyId() == 2 || userInfo.getGroupCompanyId() == 3 
@@ -568,7 +580,8 @@ public class UserController {
 							|| cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5) 
 							|| ( (cardInfo.getGroupCompanyId() != 1 || cardInfo.getGroupCompanyId() != 2 || cardInfo.getGroupCompanyId() != 3 
 									|| cardInfo.getGroupCompanyId() != 4 || cardInfo.getGroupCompanyId() != 5)  && cardInfo.getContactDate().after(dateCompliance) )){
-						//Nothing
+						//Save history
+						cardInfoService.savePrusalHistory(prusalHistory);
 					}
 					else{
 						return new ModelAndView("redirect:/user/home");
@@ -576,7 +589,8 @@ public class UserController {
 				}else{
 					if(cardInfo.getGroupCompanyId() == userInfo.getGroupCompanyId() 
 							|| (cardInfo.getGroupCompanyId() != userInfo.getGroupCompanyId() && cardInfo.getContactDate().after(dateCompliance))){
-						//Nothing
+						//Save history
+						cardInfoService.savePrusalHistory(prusalHistory);
 					}
 					else{
 						return new ModelAndView("redirect:/user/home");
@@ -584,6 +598,8 @@ public class UserController {
 				}
 			}
 
+			//Save history
+			cardInfoService.savePrusalHistory(prusalHistory);
 			
 			// Get old cards
 			// List<CardInfo> listOldCard = cardInfoService.getOldCardInfor();

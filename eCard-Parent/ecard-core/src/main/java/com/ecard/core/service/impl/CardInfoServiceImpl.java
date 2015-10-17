@@ -541,5 +541,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 		// TODO Auto-generated method stub
 		return cardInfoDAO.updateUserCard(listCardUser,userLeave,userAssign,nameAssign);
 	}
-	
+
+	public void savePrusalHistory(PrusalHistory prusalHistory){
+		cardInfoDAO.savePrusalHistory(prusalHistory);
+	}
 }
