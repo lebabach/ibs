@@ -453,7 +453,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 				card2.setCardOwnerId(ownerUserId);
 				card2.setCardOwnerName(ownerName);
 				this.updateCardInfoNotCreateIndex(card2);
-				CopyImage copy=new CopyImage(card1.getImageFile(),newCard.getImageFile());
+				CopyImage copy=new CopyImage(card2.getImageFile(),newCard.getImageFile());
 				copy.start();
 			}else{
 				OldCard oldcard=new OldCard();
@@ -584,7 +584,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 			}
 		}
 	}
-public List<CardInfo> getListCardHistoryByCardId(Integer cardId){
+	
+	public List<CardInfo> getListCardHistoryByCardId(Integer cardId){
 		return cardInfoDAO.getListCardHistoryByCardId(cardId);
 	}
 }

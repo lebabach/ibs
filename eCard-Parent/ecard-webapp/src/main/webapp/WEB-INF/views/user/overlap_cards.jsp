@@ -418,6 +418,7 @@ $(document).ready(function() {
 		if(!($('#tbl-cards input[name=bla]:checked').val()==undefined || $('#tbl-connect-cards input[name=bla1]:checked').val()==undefined)){
 			var cardid1=$('#tbl-cards input[name=bla]:checked').val();
 			var cardid2=$('#tbl-connect-cards input[name=bla1]:checked').val();
+			$("#loading-copy").show();
 			$.ajax({
 			    type: 'POST',
 			    url: 'handleConnectCards',
@@ -427,6 +428,7 @@ $(document).ready(function() {
 			    },
 			    success: function(cards){
 			    	location.reload();
+			    	$("#loading-copy").hide();
 			    }
 		});
 		}
@@ -629,6 +631,11 @@ $(document).ready(function() {
 				<div>
 					<button type="submit" class="btn btn-primary"
 						style="width: 345px !important">自分の名刺を選択した名刺の情報で最新化する</button>
+						<div id="loading-copy" style="display: none; z-index: 1000; position: fixed; top: 288px; margin: 0 auto; left: 796px">
+											<p>
+												<img src="../assets/img/loader.gif" height="200" width="235" style="border-radius: 238px; opacity: 0.5;">
+											</p>
+										</div>
 				</div>
 			</div>
 		</div>
