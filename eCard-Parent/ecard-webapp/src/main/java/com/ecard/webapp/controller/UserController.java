@@ -208,26 +208,27 @@ public class UserController {
 			
 			listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId());
 			listTagGroup = getCardTag();
-			
-				List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.CONTACT.getValue() ,lstNameSort.get(0));
-				List<CardInfo> cardInfoDisp = new ArrayList<>();
-				for (CardInfoUserVo cardInfo : lstCardInfo) {
-					if (lstNameSort.get(0).trim().equals(cardInfo.getSortType().trim())) {
-						cardInfoDisp.add(cardInfo.getCardInfo());
+			if(lstNameSort.size() > 0) {
+					List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.CONTACT.getValue() ,lstNameSort.get(0));
+					List<CardInfo> cardInfoDisp = new ArrayList<>();
+					for (CardInfoUserVo cardInfo : lstCardInfo) {
+						if (lstNameSort.get(0).trim().equals(cardInfo.getSortType().trim())) {
+							cardInfoDisp.add(cardInfo.getCardInfo());
+						}
 					}
-				}
-				CardInfoPCVo cardInfoPCVo;
-				try {
-					if (cardInfoDisp.size() > 0) {
-						cardInfoPCVo = new CardInfoPCVo(lstNameSort.get(0), CardInfoConverter.convertCardInforList(cardInfoDisp));
-						lstCardInfoPCVo.add(cardInfoPCVo);
+				 
+					CardInfoPCVo cardInfoPCVo;
+					try {
+						if (cardInfoDisp.size() > 0) {
+							cardInfoPCVo = new CardInfoPCVo(lstNameSort.get(0), CardInfoConverter.convertCardInforList(cardInfoDisp));
+							lstCardInfoPCVo.add(cardInfoPCVo);
+						}
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
 					}
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
-			
+			}
 		}
 		appendCardId(listTagGroup);
 
