@@ -18,4 +18,7 @@ public class CommonConstants {
     
     //URL
     public static final String REDIRECT_CARD_DETAIL = "/user/card/details/";
+    
+    //Sale force token
+    public static final String tokenAuthen = "XHKObFIY3KdkO0otXETNl7AxC";
 }
