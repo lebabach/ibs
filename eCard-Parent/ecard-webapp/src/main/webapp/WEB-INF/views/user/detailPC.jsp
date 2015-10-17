@@ -615,7 +615,7 @@ a {
 	                                  <div class="modal-body">
 	                                    <div class="form-group">
 	                                        <label for="contactDate">コンタクト日付</label>
-	                                        <input class="form-control" id="contactDate" name="contactDate" placeholder="" value="">
+	                                        <input class="form-control" id="contactDate" name="contactDate" id="contactDate" placeholder="" value="">
 	                                    </div>
 	                                    <div class="form-group">
 	                                      <label for="contactMemo">内容</label>
@@ -874,6 +874,15 @@ label.error {
                     				telNumberDepartment: "<fmt:message key="valid.phoneNumber" />",
                     				telNumberCompany: "<fmt:message key="valid.phoneNumber" />",
                     				mobileNumber: "<fmt:message key="valid.phoneNumber" />"
+                    			}
+                            });
+                            
+                            var validSaveContactFrm = $("#saveContactFrm").validate({
+                            	rules: {
+                            		contactDate: "required"
+                    			},
+                    			messages: {
+                    				contactDate: '<fmt:message key="valid.contactDate" />'
                     			}
                             });
                             
@@ -1185,7 +1194,9 @@ label.error {
        	 });
                            
          $("#saveContactHistory").click(function(){
-       		saveContactHistory(); 
+       		if($("#saveContactFrm").valid()){
+        	 	saveContactHistory(); 
+       		}
          });
          
          $(document).on("click",".delContactHist",function(e){

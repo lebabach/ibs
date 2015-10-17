@@ -610,10 +610,8 @@
     				    					+	'<div class="col-xs-7">'								
     				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
     				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-    				    					+	'</div> </div> </div> </div>';				    		 
-
+    				    					+	'</div> </div> </div> </div>';
     					 });
-    					 
     				});
     				self.append(listGroupItem);
     				getImageSCP();	
@@ -820,41 +818,44 @@
 				 var listGroupItem = "";
 				 $('.business_card_book').html("");
 				 $.each( resp.data, function( key, value ) {
-					 if(typeSort == 5){
+					 if(typeSort == 5) {
 						 nameShow = value.nameSort.replace("/","年")+"月";
 					 } else {
 						 nameShow = value.nameSort;
+					 }
+					 if(typeSort == 6 && value.nameSort=="cardNoTag") {
+						 nameShow = "（タグ設定なし)";
 					 }
 					 if(key == 0){	
 						listGroup = $('.business_card_book').append(
 								'<div class="list-group" style="margin-bottom: 0px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
 						        +'<div class="ul-left-li active list-group-item-title">'+nameShow+'</div></div>');
 				 
-					 $.each( value.lstCardInfo, function (k,v) {
-						 listGroupItem += '<div class="list-group-item pointer show-content">'
-				    					+'<div class="row row-new">'
-				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
-				    					+'<input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
-				    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
-				    					+		'</div></div>'
-				    					+	'<div class="col-md-5">'
-				    					+		'<div class="col-xs-11 mg-top">'
-				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
-				    					+			'<p class="livepass">'+v.companyName+'</p>'
-				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
-				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
-				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
-				    					+ '</div></div>'
-				    					+	'<div class="col-md-6">'
-				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
-				    					+	'<div class="col-xs-7">'								
-				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
-				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-				    					+	'</div> </div> </div> </div>';				    		 
-	    			    
-					 });
-					 $('.business_card_book').find("#"+value.nameSort.replace("/","").trim()).append(listGroupItem);
-					 getImageSCP();
+						 $.each( value.lstCardInfo, function (k,v) {
+							 listGroupItem += '<div class="list-group-item pointer show-content">'
+					    					+'<div class="row row-new">'
+					    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
+					    					+'<input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
+					    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
+					    					+		'</div></div>'
+					    					+	'<div class="col-md-5">'
+					    					+		'<div class="col-xs-11 mg-top">'
+					    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+					    					+			'<p class="livepass">'+v.companyName+'</p>'
+					    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+					    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+					    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+					    					+ '</div></div>'
+					    					+	'<div class="col-md-6">'
+					    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+					    					+	'<div class="col-xs-7">'								
+					    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+					    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+					    					+	'</div> </div> </div> </div>';				    		 
+		    			    
+						 });
+						 $('.business_card_book').find("#"+value.nameSort.replace("/","").trim()).append(listGroupItem);
+						 getImageSCP();
 						 
 						 
 					 } else {
@@ -868,8 +869,10 @@
 										'<div class="list-group" style="margin-bottom: 0px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
 								        +'<div class="ul-left-li list-group-item-title">'+nameShow+'</div></div>');
 						 }
+						 
 					 }
 				 });
+				 
 			}).fail(function(xhr, status, err) {
 				
 			});

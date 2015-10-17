@@ -162,4 +162,6 @@ public interface CardInfoService {
    public void savePrusalHistory(PrusalHistory prusalHistory);
    
    public List<CardInfo> getListCardHistoryByCardId(Integer cardId);
+   
+   public List<com.ecard.core.vo.CardInfo> searchCompanyTrees(String searchText);
 }

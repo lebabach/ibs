@@ -263,16 +263,25 @@ public class UserController {
 		// 
 		if(searchType == 0) {
 			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), typeSort);
-			if(valueSearch == "" || valueSearch == null){				
-				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).trim());
-			} else {
-				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, valueSearch);
-			}
-			
-			
-			if (typeSort == SearchConditions.NAME.getValue()) {
-				lstNameSort = lstNameSort.stream().map(str-> str!= "" ? str.substring(0, 1).toUpperCase() : str).collect(Collectors.toList());
+			if(lstNameSort.size() > 0) {
+				if(valueSearch == "" || valueSearch == null){				
+					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).trim());
+				} else {
+					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, valueSearch);
+				}
 				
+				
+				if (typeSort == SearchConditions.NAME.getValue()) {
+					lstNameSort = lstNameSort.stream().map(str-> str!= "" ? str.substring(0, 1).toUpperCase() : str).collect(Collectors.toList());
+				}
+			}
+			 
+			if (typeSort == SearchConditions.TAG.getValue()) {
+				if(lstNameSort.size() <= 0) {
+					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, "cardNoTag");
+				}
+				lstNameSort.add("cardNoTag");
+								
 			}
 			
 		}
@@ -337,8 +346,10 @@ public class UserController {
 				c1.setTime(download.getRequestDate());
 				int day = c2.get(Calendar.DATE) - c1.get(Calendar.DATE);
 				if(day >= 7){
+										
 					try {
 						deleteFileCSV(download.getCsvUrl());
+						download.setCsvApprovalStatus(CsvConstant.IS_DOWNLOADED);
 						cardInfoService.updateDownloadHistory(download.getCsvId());
 					} catch (IOException e) {
 						
@@ -1741,6 +1752,9 @@ public class UserController {
 		List<com.ecard.core.vo.CardInfo> cardList = null;
 		String jsonObj = "";
 		try {
+			if(cardInfo.getDepartmentName() == null){
+				cardInfo.setDepartmentName("");
+			}
 			cardList = cardInfoService.searchCardInfo(cardInfo.getCompanyName(), cardInfo.getDepartmentName());
 			if (cardList.size() > 0) {
 				jsonObj = new Gson().toJson(cardList);

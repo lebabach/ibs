@@ -593,4 +593,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public List<CardInfo> getListCardHistoryByCardId(Integer cardId){
 		return cardInfoDAO.getListCardHistoryByCardId(cardId);
 	}
+	
+	public List<com.ecard.core.vo.CardInfo> searchCompanyTrees(String searchText){
+		return cardInfoDAO.searchCompanyTrees(searchText);
+	}
 }
