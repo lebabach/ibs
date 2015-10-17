@@ -122,7 +122,7 @@ public class OperatorController {
 		
 		long totalRecord = count.longValue();
 		for (UserInfoVo info : userInfos) {
-			UserInfoResultVO userInfoResultVO = new UserInfoResultVO(info.getUserId(), info.getName(), info.getCompanyName(), info.getPositionName(), info.getEmail(), info.getMobileNumber(), info.getCreateDate().toString() ,info.getFirstName(),info.getLastName(),info.getFirstNameKana(),info.getLastNameKana(),info.getDepartmentName(),info.getUserIndexNo());
+			UserInfoResultVO userInfoResultVO = new UserInfoResultVO(info.getUserId(), info.getName(), info.getCompanyName(), info.getPositionName(), info.getEmail(), info.getMobileNumber(), info.getCreateDate().toString() ,info.getFirstName(),info.getLastName(),info.getFirstNameKana(),info.getLastNameKana(),info.getDepartmentName(),info.getUserIndexNo(),info.getLeaveFlg(),info.getUseStopFlg());
 			userInfoResultVOs.add(userInfoResultVO);
 		}
 		dataTableResponse.setDraw(parseIntParameter(request.getParameter("draw"), 0));

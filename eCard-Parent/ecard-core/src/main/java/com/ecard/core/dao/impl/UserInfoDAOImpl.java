@@ -849,7 +849,7 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
 	            result.add(new UserInfoVo((Integer)row[0], (Integer)row[1],(Integer) row[2],(String) row[4], (String)row[15],(String) row[16],(String) row[17],
 	            		(String)row[19],(String) row[20],(String) row[22], (String)row[23],(String) row[24],(String) row[25],(String) row[26],(String) row[27],
 	            		(String) row[28],(String) row[29],(String) row[30],(String) row[32],(String) row[33],(String) row[34], 
-	            		(String)row[35],(String) row[36], (Integer)row[42],(Date) row[48],(Date) row[49], (Date)row[51],(Integer)row[52],(String)row[56]));
+	            		(String)row[35],(String) row[36], (Integer)row[42],(Date) row[48],(Date) row[49], (Date)row[51],(Integer)row[52],(String)row[56],(Integer)row[43]));
 	        }
 		
 		return result;
@@ -914,7 +914,7 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
 	            result.add(new UserInfoVo((Integer)row[0], (Integer)row[1],(Integer) row[2],(String) row[4], (String)row[15],(String) row[16],(String) row[17],
 	            		(String)row[19],(String) row[20],(String) row[22], (String)row[23],(String) row[24],(String) row[25],(String) row[26],(String) row[27],
 	            		(String) row[28],(String) row[29],(String) row[30],(String) row[32],(String) row[33],(String) row[34], 
-	            		(String)row[35],(String) row[36], (Integer)row[42],(Date) row[48],(Date) row[49], (Date)row[51],(Integer)row[52],(String)row[56]));
+	            		(String)row[35],(String) row[36], (Integer)row[42],(Date) row[48],(Date) row[49], (Date)row[51],(Integer)row[52],(String)row[56],(Integer)row[43]));
 	        }
 		
 		return result;

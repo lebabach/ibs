@@ -37,7 +37,7 @@ public class EcardUserDetailServiceImpl implements UserDetailsService {
         	isValidDate = true;
         }
         
-		if (userInfo == null || userInfo.getDeleteFlg() == 1 || userInfo.getUseStopFlg() == 1) {
+		if (userInfo == null || userInfo.getDeleteFlg() == 1 || userInfo.getUseStopFlg() == 1 || userInfo.getLeaveFlg() == 1) {
 			throw new UsernameNotFoundException("User " + username + " not found");
 		}
 		

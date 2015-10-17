@@ -43,6 +43,7 @@ public class UserInfoVo {
     private String memo1;
     private String memo2;
     private Integer leaveFlg;
+    private Integer useStopFlg;
     private Date lastLoginDate;
     private Date logoutDate;
     private Date createDate;
@@ -134,6 +135,45 @@ public class UserInfoVo {
 		this.deleteDate = deleteDate;
 		this.deleteFlg = deleteFlg;
 		this.userIndexNo=userIndexNo;
+		
+	}
+	public UserInfoVo(Integer userId, Integer roleId, Integer teamId, String email, String name, String lastName,
+			String firstName, String lastNameKana, String firstNameKana, String companyName, String companyNameKana,
+			String departmentName, String positionName, String zipCode, String addressFull, String address1,
+			String address2, String address3, String telNumberCompany, String telNumberDepartment,
+			String telNumberDirect, String faxNumber, String mobileNumber, Integer leaveFlg, Date createDate,
+			Date updateDate, Date deleteDate, Integer deleteFlg,String userIndexNo,Integer useStopFlg ) {
+		super();
+		this.userId = userId;
+		this.roleId = roleId;
+		this.teamId = teamId;
+		this.email = email;
+		this.name = name;
+		this.lastName = lastName;
+		this.firstName = firstName;
+		this.lastNameKana = lastNameKana;
+		this.firstNameKana = firstNameKana;
+		this.companyName = companyName;
+		this.companyNameKana = companyNameKana;
+		this.departmentName = departmentName;
+		this.positionName = positionName;
+		this.zipCode = zipCode;
+		this.addressFull = addressFull;
+		this.address1 = address1;
+		this.address2 = address2;
+		this.address3 = address3;
+		this.telNumberCompany = telNumberCompany;
+		this.telNumberDepartment = telNumberDepartment;
+		this.telNumberDirect = telNumberDirect;
+		this.faxNumber = faxNumber;
+		this.mobileNumber = mobileNumber;
+		this.leaveFlg = leaveFlg;
+		this.createDate = createDate;
+		this.updateDate = updateDate;
+		this.deleteDate = deleteDate;
+		this.deleteFlg = deleteFlg;
+		this.userIndexNo=userIndexNo;
+		this.useStopFlg = useStopFlg;
 		
 	}
 	public UserInfoVo(Integer userId, Integer roleId, Integer teamId, String email, String name, String lastName,
@@ -349,6 +389,12 @@ public class UserInfoVo {
 	}
 	public void setDeleteFlg(Integer deleteFlg) {
 		this.deleteFlg = deleteFlg;
+	}
+	public Integer getUseStopFlg() {
+		return useStopFlg;
+	}
+	public void setUseStopFlg(Integer useStopFlg) {
+		this.useStopFlg = useStopFlg;
 	}
     
     
