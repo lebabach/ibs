@@ -946,6 +946,18 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ "AND c.companyNameKana = :valueSearch";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
+			if(valueSearch.equals("cardNoTag")){
+				/*select c.card_id from card_info c
+				where c.card_id not in (select ct.card_id 
+				from card_tag ct 
+				inner join user_tag ut on ct.tag_id =ut.tag_id 
+				where ut.user_id = 1
+				group by ct.card_id) and c.approval_status = 1 and c.delete_flg =0*/
+				sqlStr = "SELECT 'cardNoTag' AS groupDate, c FROM CardInfo c"
+						+" WHERE c.cardId NOT IN ( SELECT ct.id.cardId FROM CardTag ct INNER JOIN ct.userTag ut"
+						+ " 						WHERE ut.userInfo.userId = :userId GROUP BY ct.id.cardId)  "
+						+ "AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0";
+			} else 
 			sqlStr = "SELECT ut.tagName AS groupDate, c FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
 					+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0"
 					+" AND (ut.tagName is not null AND ut.tagName <> '') "
@@ -965,7 +977,9 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			else 
 				query.setParameter("valueSearch", valueSearch + "%");
 		} else {
-			query.setParameter("valueSearch", valueSearch);
+			if(!valueSearch.equals("cardNoTag")){
+			  query.setParameter("valueSearch", valueSearch);
+			}
 		}
 		
 		
@@ -1220,9 +1234,9 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ "GROUP BY c.companyNameKana ORDER BY c.companyNameKana ASC ";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
-			sqlStr = "SELECT ut.tagName AS groupDate FROM CardTag ct INNER JOIN ct.userTag ut"
-					+" WHERE ut.userInfo.userId = :userId "
-					+ " AND (ut.tagName is not null AND ut.tagName <> '') "
+			sqlStr = "SELECT ut.tagName AS groupDate FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
+					+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId  AND c.deleteFlg = 0 AND c.approvalStatus = 1"
+					+" AND (ut.tagName is not null AND ut.tagName <> '') "
 					+" GROUP BY ut.tagName ORDER BY ut.tagName ASC" ;
 					
 			
