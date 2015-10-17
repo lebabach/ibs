@@ -946,22 +946,18 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ "AND c.companyNameKana = :valueSearch";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
-			if(valueSearch.equals("cardNoTag")){
-				/*select c.card_id from card_info c
-				where c.card_id not in (select ct.card_id 
-				from card_tag ct 
-				inner join user_tag ut on ct.tag_id =ut.tag_id 
-				where ut.user_id = 1
-				group by ct.card_id) and c.approval_status = 1 and c.delete_flg =0*/
+			if (valueSearch.equals("cardNoTag")) {
 				sqlStr = "SELECT 'cardNoTag' AS groupDate, c FROM CardInfo c"
 						+" WHERE c.cardId NOT IN ( SELECT ct.id.cardId FROM CardTag ct INNER JOIN ct.userTag ut"
 						+ " 						WHERE ut.userInfo.userId = :userId GROUP BY ct.id.cardId)  "
 						+ "AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0";
-			} else 
-			sqlStr = "SELECT ut.tagName AS groupDate, c FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
-					+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0"
-					+" AND (ut.tagName is not null AND ut.tagName <> '') "
-					+" AND ut.tagName = :valueSearch";
+			} else {
+				sqlStr = "SELECT ut.tagName AS groupDate, c FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
+						+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0"
+						+" AND (ut.tagName is not null AND ut.tagName <> '') "
+						+" AND ut.tagName = :valueSearch";
+			}
+			
 		} else {
 			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "

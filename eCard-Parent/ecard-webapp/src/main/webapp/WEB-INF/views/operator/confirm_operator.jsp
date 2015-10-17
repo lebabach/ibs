@@ -26,9 +26,7 @@
 					<h4 class="h4-header">ユーザー詳細</h4>
 				</div>
 				<div class="float-right float-right-manage">
-				   	<c:if test="${operatorConfirm.leaveFlg ==1}">
 				      <a href="<c:url value='/operators/changeowner/${operatorConfirm.userId}'/>" id="add"><i class="fa btn-allocation" >所有者変更</i></a> 
-				    </c:if>
 					<a href="/ecard-webapp/operators/list" id="add"><i class="fa btn-allocation">戻る</i></a> 
 				</div>
 			</div>
