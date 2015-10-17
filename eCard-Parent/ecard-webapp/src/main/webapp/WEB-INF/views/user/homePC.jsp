@@ -64,10 +64,10 @@
   }
   
   .ul-left-li.active{
-      background: url(/ecard-webapp/assets/img/faq1.png) no-repeat left 15px;
+      background: url(/ecard-webapp/assets/img/faq1.png) no-repeat left 15px top 17px;
    }
    .ul-left-li{
-      background: url(/ecard-webapp/assets/img/faq2.png) no-repeat left 15px;
+      background: url(/ecard-webapp/assets/img/faq2.png) no-repeat left 15px top 15px;
       
 
    }
@@ -280,7 +280,15 @@
 
   <!-- Start Container -->
   <div id="container" class="container" style= "padding-top: 20px !important;" >
-  	<h4>名刺一覧 <span id="count-search"></span></h4>
+  	<div class="row" style="margin-bottom:20px">
+  		<div class="col-md-4">
+  			<h4>名刺一覧 <span id="count-search"></span></h4>
+  		</div>
+  		<div class="col-md-8">
+  			<span style="color:red;">本Webアプリは、他のグループ会社への共有が出来ない情報も含まれております。情報を取り扱う際には、詳細画面より共有可能な名刺かどうかをご確認ください。</span>
+  		</div>
+  	</div>
+
   	<div class="row " style="margin-bottom: 10px">
           <div class="col-md-2 m-b-xs setDisplayTerm" style="width:180px;padding-right: 0 !important;">
             <select id="selectSortBox" class="input-sm form-control input-s-sm inline">
@@ -553,6 +561,8 @@
     		  }).done(function(resp, status, xhr) {
     			   var listGroupItem = "";
     				$.each( resp.data, function( key, value ) {
+    					 
+	    						 
     					 $.each( value.lstCardInfo, function (k,v) {
     						 listGroupItem += '<div class="list-group-item pointer show-content">'
     				    					+'<div class="row row-new">'
@@ -684,7 +694,7 @@
  								+	 '</div></div>'
  								+	'<div class="col-md-5">'
  								+		'<div class="col-xs-11 mg-top">'
- 								+ 			'<p class="name">'+v.firstName +' '+ v.lastName+'</p>'
+ 								+ 			'<p class="name">'+v.lastName +' '+ v.firstName+'</p>'
  								+			'<p class="livepass">'+v.companyName+'</p>'
  								+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
  								+			'<p class="num">'+v.telNumberCompany+'</p>'
@@ -717,7 +727,7 @@
 								+	'<div class="col-md-1 col-xs-1"><input type="hidden" name="cardId" value = "'+v.cardId+'"></div>'
 								+	'<div class="col-md-5">'
 								+		'<div class="col-xs-11 mg-top">'
-								+ 			'<p class="name">'+v.firstName +' '+ v.lastName+'</p>'
+								+ 			'<p class="name">'+v.lastName +' '+ v.firstName+'</p>'
 								+			'<p class="livepass">'+v.companyName+'</p>'
 								+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
 								+			'<p class="num">'+v.telNumberCompany+'</p>'
@@ -729,7 +739,7 @@
 								+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
 								+   '<input class="hidden" name="fileImageName" value="'+v.imageFile+'">'
 								+	'</div> </div> </div> </div>');
-			 					//getImageFromSCP(v.imageFile);
+			 					getImageFromSCP(v.imageFile);
 					});
 					
 				}).fail(function(xhr, status, err) {
@@ -784,42 +794,38 @@
 				 $('.business_card_book').html("");
 				 $.each( resp.data, function( key, value ) {
 					 if(key == 0){
-						 if(value.nameSort.replace("/","").trim()==""){
-								value.nameSort="NULL";
-								listGroup = $('.business_card_book').append(
-										'<div class="list-group" style="margin-bottom: 0px !important;" id="NULL">'
-								        +'<div class="ul-left-li active list-group-item-title">'+"#"+'</div></div>');
-						 } else {
-								listGroup = $('.business_card_book').append(
-										'<div class="list-group" style="margin-bottom: 0px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
-								        +'<div class="ul-left-li active list-group-item-title">'+value.nameSort+'</div></div>');
-						 }
-						 $.each( value.lstCardInfo, function (k,v) {
-							 listGroupItem += '<div class="list-group-item pointer show-content">'
-					    					+'<div class="row row-new">'
-					    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
-					    					+'<input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
-					    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
-					    					+		'</div></div>'
-					    					+	'<div class="col-md-5">'
-					    					+		'<div class="col-xs-11 mg-top">'
-					    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
-					    					+			'<p class="livepass">'+v.companyName+'</p>'
-					    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
-					    					+			'<p class="num">'+v.telNumberCompany+'</p>'
-					    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
-					    					+ '</div></div>'
-					    					+	'<div class="col-md-6">'
-					    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
-					    					+	'<div class="col-xs-7">'								
-					    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
-					    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-					    					+	'</div> </div> </div> </div>';				    		 
-		    			    
-						 });
+
+						listGroup = $('.business_card_book').append(
+								'<div class="list-group" style="margin-bottom: 0px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
+						        +'<div class="ul-left-li active list-group-item-title">'+value.nameSort+'</div></div>');
+				 
+					 $.each( value.lstCardInfo, function (k,v) {
+						 listGroupItem += '<div class="list-group-item pointer show-content">'
+				    					+'<div class="row row-new">'
+				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
+				    					+'<input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
+				    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
+				    					+		'</div></div>'
+				    					+	'<div class="col-md-5">'
+				    					+		'<div class="col-xs-11 mg-top">'
+				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+				    					+			'<p class="livepass">'+v.companyName+'</p>'
+				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+				    					+ '</div></div>'
+				    					+	'<div class="col-md-6">'
+				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+				    					+	'<div class="col-xs-7">'								
+				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+				    					+	'</div> </div> </div> </div>';				    		 
+	    			    
+					 });
+					 $('.business_card_book').find("#"+value.nameSort.replace("/","").trim()).append(listGroupItem);
+					 getImageSCP();
 						 
-						 $('.business_card_book').find("#"+value.nameSort.replace("/","").trim()).append(listGroupItem);
-						 getImageSCP();
+						 
 					 } else {
 						 if(value.nameSort.replace("/","").trim()==""){
 								value.nameSort="NULL";
