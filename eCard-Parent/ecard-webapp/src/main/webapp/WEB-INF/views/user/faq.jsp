@@ -290,7 +290,7 @@
       padding-left: 15px;
    }
    .ul-left .ul-left-li.active{
-      background: url(img/faq1.png) no-repeat left 5px;
+      background: url(/ecard-webapp/assets/img/faq1.png) no-repeat left 5px;
    }
    .ul-left .ul-left-li ul{
       margin:  0 0 0 10px;
