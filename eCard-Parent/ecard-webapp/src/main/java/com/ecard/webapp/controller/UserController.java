@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -262,18 +263,25 @@ public class UserController {
 		// 
 		if(searchType == 0) {
 			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), typeSort);
-			if(valueSearch == "" || valueSearch == null){				
-				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).trim());
-			} else {
-				lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, valueSearch);
+			if(lstNameSort.size() > 0) {
+				if(valueSearch == "" || valueSearch == null){				
+					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).trim());
+				} else {
+					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, valueSearch);
+				}
+				
+				
+				if (typeSort == SearchConditions.NAME.getValue()) {
+					lstNameSort = lstNameSort.stream().map(str-> str!= "" ? str.substring(0, 1).toUpperCase() : str).collect(Collectors.toList());
+				}
 			}
-			
-			
-			if (typeSort == SearchConditions.NAME.getValue()) {
-				lstNameSort = lstNameSort.stream().map(str-> str!= "" ? str.substring(0, 1).toUpperCase() : str).collect(Collectors.toList());
-			} 
+			 
 			if (typeSort == SearchConditions.TAG.getValue()) {
+				if(lstNameSort.size() <= 0) {
+					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, "cardNoTag");
+				}
 				lstNameSort.add("cardNoTag");
+								
 			}
 			
 		}
