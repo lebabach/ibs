@@ -51,9 +51,12 @@ public class EcardUserDetailServiceImpl implements UserDetailsService {
 			String roleName = RoleType.getEnumNameForValue(permissionType.intValue());
 			roleNames.add(roleName);
 		}
-		
+		if(userInfo.getName()== null){
+			String userName = userInfo.getLastName() + " " + userInfo.getFirstName();
+			userInfo.setName(userName);
+		}
         
-        UserDetails user = new EcardUser(userInfo.getEmail(), userInfo.getPassword(), roleNames, userInfo.getUserId(), userInfo.getGroupCompanyId(), null);       
+        UserDetails user = new EcardUser(userInfo.getEmail(), userInfo.getPassword(), roleNames, userInfo.getUserId(), userInfo.getGroupCompanyId(), userInfo.getName());       
 
 		return user;
 	}
