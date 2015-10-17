@@ -372,8 +372,13 @@ a {
 </style>
 					<script type="text/javascript">
 						function goBack(){
-							window.history.back();
-							return false;
+							if(document.referrer.indexOf("user/home") >= 0){
+								window.location = "/ecard-webapp/user/home";
+							}else{
+								window.history.back();
+								return false;	
+							}
+							
 						}
 						
                           $(document).ready(function(){
@@ -675,16 +680,25 @@ a {
 				<!-- End contact history -->
 				
 				<!-- User connected -->
-				<%-- <div class="panel panel-default">
+				<c:if test="${fn:length(listOldCard) gt 5}">
+					<style type="text/css">
+						#old_card_body {
+							height: 340px;
+							overflow-y: auto;
+							overflow-x: hidden;
+						}
+					</style>
+				</c:if>
+				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h5>刺交換日</h5>
+						<h5>名刺履歴</h5>
 					</div>
-					<div class="panel-body">
+					<div class="panel-body" id="old_card_body">
 						<c:if test="${ not empty listOldCard }">
 							<c:forEach var="oldCardList" items="${listOldCard}" varStatus="loop">
 							<div class="career_section selected">
 								<div class="career_date " style="font-weight: bold !important;">
-									<fmt:formatDate value='${ oldCardList.contactDate }' pattern="yyyy/MM/dd"/>
+									<fmt:formatDate value='${ oldCardList.contactDate }' pattern="yyyy年MM月dd日"/>
 								</div>
 								<div>
 									<table class="table">
@@ -704,7 +718,7 @@ a {
 							</c:forEach>
 						</c:if>						
 					</div>
-				</div> --%>
+				</div>
 				<!-- End User connected -->
 			</div>
 			<c:if test="${ isMyCard == true }">
@@ -1766,7 +1780,8 @@ label.error {
 		
 		//Hide scrollbar
         if($('.ul-memo li').length <= 5){
-       	 	$(".panel-memo").attr("style", "height:auto; overflow-x:hidden; overflow-y:hidden;")
+       	 	$(".panel-memo").attr("style", "height:auto; overflow-x:hidden; overflow-y:hidden;");
+       	 	$(".panel-heading").attr("style", "width:100%;");
         }
 	}
 	
@@ -1899,7 +1914,7 @@ label.error {
 		  	}
         });	 
 		//Hide scrollbar
-       	//$("#contact-hist-body").attr("style", "height:auto; overflow-x:hidden; overflow-y:hidden;")
+       	$("#contact-hist-body").attr("style", "height:auto; overflow-x:hidden; overflow-y:hidden;")
 	}
 	
 	function loginSaleForce(){
