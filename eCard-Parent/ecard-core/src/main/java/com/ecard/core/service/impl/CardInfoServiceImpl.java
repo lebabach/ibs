@@ -450,6 +450,9 @@ public class CardInfoServiceImpl implements CardInfoService {
 				oldcard.setId(oldCardId);
 			
 				oldCardDAO.saveOrUpdate(oldcard);
+				
+				//update cardid in old_card
+				oldCardDAO.updateCardIdWithOldCard(newCard.getCardId(),cardid2);
 				card2.setCardOwnerId(ownerUserId);
 				card2.setCardOwnerName(ownerName);
 				this.updateCardInfoNotCreateIndex(card2);
@@ -457,8 +460,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 				copy.start();
 			}else{
 				OldCard oldcard=new OldCard();
+				
 				CardInfo cardInfor=new CardInfo();
 				cardInfor.setCardId(card2.getCardId());
+				
 				OldCardId oldCardId=new OldCardId();
 				oldCardId.setCardId(card2.getCardId());
 				oldCardId.setCardOwnerId(currentUserId);
