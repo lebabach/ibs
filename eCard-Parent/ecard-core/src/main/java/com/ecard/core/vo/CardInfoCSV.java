@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class CardInfoCSV {
 	
-	private Integer cardId;	
+	private String cardIndexNo;	
 	private String companyName;
 	private String companyNameKana;	
 	private String departmentName;
@@ -33,23 +33,21 @@ public class CardInfoCSV {
     private String subTelNumberCompany;
     private String subTelNumberDepartment;
     private String subTelNumberDirect;
-    private String subFaxNumber;        
-    private String memo1;
-    private String memo2;    
+    private String subFaxNumber;    
     private Date createDate;
     private Date updateDate;
-    
+    private Date contactDate;
     
     public CardInfoCSV(){}
     
-    public CardInfoCSV(Integer cardId, String companyName, String companyNameKana, String departmentName, String positionName, String lastName, String firstName, 
+    public CardInfoCSV(String cardIndexNo, String companyName, String companyNameKana, String departmentName, String positionName, String lastName, String firstName, 
     		String lastNameKana, String firstNameKana, String email, String zipCode, String addressFull,
 			String address1, String address2, String address3, String telNumberCompany, String telNumberDepartment,
 			String telNumberDirect, String faxNumber, String mobileNumber, String companyUrl, String subAddressFull,
 			String subZipCode, String subAddress1, String subAddress2, String subAddress3, String subTelNumberCompany,
-			String subTelNumberDepartment, String subTelNumberDirect, String subFaxNumber, String memo1, String memo2, Date createDate, Date updateDate) {
+			String subTelNumberDepartment, String subTelNumberDirect, String subFaxNumber, String memo1, String memo2, Date createDate, Date updateDate, Date contactDate) {
 		
-		this.cardId = cardId;
+		this.cardIndexNo = cardIndexNo;
 		this.companyName = companyName;
 		this.companyNameKana = companyNameKana;
 		this.departmentName = departmentName;
@@ -79,18 +77,22 @@ public class CardInfoCSV {
 		this.subTelNumberDepartment = subTelNumberDepartment;
 		this.subTelNumberDirect = subTelNumberDirect;
 		this.subFaxNumber = subFaxNumber;		
-		this.memo1 = memo1;
-		this.memo2 = memo2;		
 		this.createDate = createDate;
-		this.updateDate = updateDate;		
+		this.updateDate = updateDate;
+		this.contactDate = contactDate;
+		
 	}
   
-	public Integer getCardId() {
-		return cardId;
+    
+    
+	public String getCardIndexNo() {
+		return cardIndexNo;
 	}
-	public void setCardId(Integer cardId) {
-		this.cardId = cardId;
+
+	public void setCardIndexNo(String cardIndexNo) {
+		this.cardIndexNo = cardIndexNo;
 	}
+
 	public String getCompanyName() {
 		return companyName;
 	}
@@ -265,18 +267,7 @@ public class CardInfoCSV {
 	public void setSubFaxNumber(String subFaxNumber) {
 		this.subFaxNumber = subFaxNumber;
 	}
-	public String getMemo1() {
-		return memo1;
-	}
-	public void setMemo1(String memo1) {
-		this.memo1 = memo1;
-	}
-	public String getMemo2() {
-		return memo2;
-	}
-	public void setMemo2(String memo2) {
-		this.memo2 = memo2;
-	}
+	
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -288,5 +279,13 @@ public class CardInfoCSV {
 	}
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	public Date getContactDate() {
+		return contactDate;
+	}
+
+	public void setContactDate(Date contactDate) {
+		this.contactDate = contactDate;
 	}	
 }

@@ -366,8 +366,7 @@
 							<form>
 								<select id="roleAdminId" class="form-control" name="">
 									<option value="1">未選択</option>
-									<c:if
-										test="${not pageContext.request.isUserInRole('ROLE_AUTHORITY_USER') }">
+									<c:if test="${not pageContext.request.isUserInRole('ROLE_AUTHORITY_USER') }">
 										<option value='7'>推進管理者</option>
 										<option value='3'>保守担当者</option>
 									</c:if>
