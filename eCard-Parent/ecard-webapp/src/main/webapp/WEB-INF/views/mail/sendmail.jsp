@@ -80,6 +80,7 @@ $(document).ready(function() {
 	}); 
 	
 	$(document).on('click', '.btn-search', function() {
+		listUserId = [];
 		dataTables.api().destroy();
 		dataTables = $('#listUser').dataTable( {
 			"dom" : '<<t>ip>',
@@ -218,7 +219,7 @@ $(document).ready(function() {
 				                                      $('<td class="table-column">').append(
 				                                    		  $('<div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="'+value.userId+'" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></label></div>')
 				                                    		  ),
-				                                      $('<td>').text(value.name),
+				                                      $('<td>').text(value.lastName + '' + value.firstName),
 				                                      $('<td>').text(value.companyName),
 				                                      $('<td>').text(value.departmentName),
 				                                      $('<td>').text(value.positionName)
