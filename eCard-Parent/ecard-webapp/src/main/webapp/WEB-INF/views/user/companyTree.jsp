@@ -323,7 +323,7 @@ $(document).ready(function(){
     	$(this).addClass("li-11 click active");
     	
     	var deptName = $("#"+this.id).find("input[name="+this.id+"]").val();
-    	var compName = $("#"+this.id).find("input[name^=comp_]").val();
+    	var compName = $('#'+this.id).parent().parent().parent().find('.li-1').find('input').val();
     	searchCardInfo(deptName, compName, this.id);
     });
 	
@@ -336,6 +336,9 @@ $(document).ready(function(){
 	
 	$(document).on('click','li.li-3 > a', function () {
 		var deptName = $(".li-3").find("input[name=c_dep_"+this.id+"]").val();
+		if(deptName == "undefined"){
+			deptName = "";
+		}
 		var compName = $(".li-3").find("input[name=c_comp_"+this.id+"]").val();
 		//console.log("deptName :"+deptName+" compName : "+compName);
     	window.location.href = "<c:url value='/user/companyTree/list' />?compName="+compName+"&deptName="+deptName;
@@ -375,7 +378,7 @@ function searchCompanyTree(){
 	                    	+ "</li><div id='div_"+ value["cardId"] +"'></div>";
        			}
        			else{
-       				respHTML += "<li class='li-1' id='"+ value["cardId"] +"' style='color:red;'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_"+ value["cardId"] +"'></div>"
+       				respHTML += "<li class='li-1' id='"+ value["cardId"] +"'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_"+ value["cardId"] +"'></div>"
        			}
        		});
        		respHTML += "</ul>";
@@ -409,11 +412,11 @@ function searchDepartmentTree(companyName, id){
        			if(value["companyName"] != ""){
        				respHTML += "<li id='dep_"+ value["cardId"] +"' class='li-11'>"+ value["companyName"] +"("+ value["count"] +")"
        						+ "<input type='hidden' value='"+ value["companyName"] +"' name='dep_"+ value["cardId"] +"' />"
-       						+ "<input type='hidden' value='"+ compName +"' name='comp_"+ value["cardId"] +"' />"
+       						+ "<input type='hidden' value='"+ companyName +"' name='comp_"+ value["cardId"] +"' />"
        						+ "</li><div id='div_dep_"+ value["cardId"] +"'></div>";
        			}
        			else{
-       				respHTML += "<li class='li-11' id='dep_"+ value["cardId"] +"' style='color:red;'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_dep_"+ value["cardId"] +"'></div>"
+       				respHTML += "<li class='li-11' id='dep_"+ value["cardId"] +"'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_dep_"+ value["cardId"] +"'></div>"
        			}
        		}); 
        		respHTML += "</ul>";
@@ -451,7 +454,7 @@ function searchCardInfo(deptName, compName, id){
 	       						+ "</li>";
        			}
        			else{
-       				respHTML += "<li class='li-3' style='color:red;'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_"+ value["cardId"] +"'></div>"
+       				respHTML += "<li class='li-3'><fmt:message key='company.blank' /> ("+ value["count"] +")</li><div id='div_"+ value["cardId"] +"'></div>"
        			}
        		}); 
        		respHTML += "</ul>";

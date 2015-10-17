@@ -1551,4 +1551,25 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		query.setParameter("cardId", cardId);
 		return (List<CardInfo>)query.getResultList();
 	}
+	
+	public List<com.ecard.core.vo.CardInfo> searchCompanyTrees(String searchText){
+		String sqlStr = "SELECT card_id, company_name, department_name, name, count(*) FROM card_info "
+				+ "WHERE MATCH(company_name, company_name_kana, name, name_kana, department_name, position_name, email, "
+				+ "zip_code, address_full, tel_number_company, tel_number_department, fax_number, mobile_number, card_owner_name) "
+				+ "AGAINST (%s %s %s IN BOOLEAN MODE)";
+		
+		String params[] = { "'*W1:1,2:1,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", "\""+searchText.toLowerCase()+"\"", "'"};
+		sqlStr = String.format(sqlStr, params);
+		
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		List<Object[]> listObj = query.getResultList();
+		List<com.ecard.core.vo.CardInfo> cardInfoList = new ArrayList<>();
+		for (Object[] object : listObj) {
+			com.ecard.core.vo.CardInfo cardInfoVo = new com.ecard.core.vo.CardInfo((Integer)object[0], (String) object[1], (String) object[2], 
+					(String) object[3], (BigInteger) object[4]);
+			cardInfoList.add(cardInfoVo);
+		}
+
+		return cardInfoList;
+	}
 }
