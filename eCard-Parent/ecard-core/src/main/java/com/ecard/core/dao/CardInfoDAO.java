@@ -155,4 +155,6 @@ public interface CardInfoDAO extends IGenericDao{
     public Integer updateUserCard(List<Integer> listCardUser, Integer userLeave, Integer userAssign,String nameAssign);
 
     public void savePrusalHistory(PrusalHistory prusalHistory);
+    
+    public List<CardInfo> getListCardHistoryByCardId(Integer cardId);
 }

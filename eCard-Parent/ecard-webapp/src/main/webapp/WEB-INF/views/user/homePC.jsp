@@ -450,7 +450,7 @@
 	   		var freeText = $("#hid-freeText").val();
 	   		var owner = $("#hid-owner").val();
 	   		var company = $("#hid-company").val();
-	   		var department = $("hid-#department").val();
+	   		var department = $("#hid-department").val();
 	   		var position = $("#hid-position").val();
 	   		var name = $("#hid-name").val();
 	   		var parameterFlg = $("#hid-parameterFlg").val();
@@ -1065,7 +1065,7 @@
  			    }),
  			    success: function(data){
  			    	
- 			    	$("#count-search").text(": "+data.count);
+ 			    	$("#count-search").text(": "+data.count+" 件");
  			    	setDataSearch(data.cardInfo);
  			    	disableBtnSort();
  			    	loadICheck();
@@ -1625,7 +1625,6 @@
 	   	}
 	   	
 	   	function setListSearch(cardId,firstName,lastName,companyName,departmentName,positionName,telNumberCompany,imageFile,email){
-	   		
 	   		$("#titleSearch").text($('#parameterFlg').find(":selected").text());
 	   		$("#title-search-loadmore").text($('#parameterFlg').find(":selected").text());
 	   		

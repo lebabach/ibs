@@ -545,4 +545,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public void savePrusalHistory(PrusalHistory prusalHistory){
 		cardInfoDAO.savePrusalHistory(prusalHistory);
 	}
+	
+	public List<CardInfo> getListCardHistoryByCardId(Integer cardId){
+		return cardInfoDAO.getListCardHistoryByCardId(cardId);
+	}
 }
