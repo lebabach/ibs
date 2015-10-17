@@ -446,13 +446,13 @@ public class CardInfoServiceImpl implements CardInfoService {
 				oldCardId.setCardId(newCard.getCardId());
 				oldCardId.setCardOwnerId(currentUserId);
 				oldCardId.setSeq(0);
-				oldCardId.setOldCardId(card2.getCardId());
+				oldCardId.setOldCardId(card1.getCardId());
 				oldcard.setId(oldCardId);
 			
 				oldCardDAO.saveOrUpdate(oldcard);
 				
 				//update cardid in old_card
-				oldCardDAO.updateCardIdWithOldCard(newCard.getCardId(),cardid2);
+				oldCardDAO.updateCardIdWithOldCard(newCard.getCardId(),cardid1);
 				card2.setCardOwnerId(ownerUserId);
 				card2.setCardOwnerName(ownerName);
 				this.updateCardInfoNotCreateIndex(card2);
@@ -473,6 +473,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 				
 				oldcard.setId(oldCardId);
 				oldCardDAO.persist(oldcard);
+				oldCardDAO.updateCardIdWithOldCard(oldcard.getCardInfo().getCardId(),cardid1);
 				userCardMemoDAO.updateUserCardMemo(cardid1, currentUserId, cardid2);
 				contactHistoryDAO.updateContactHistory(cardid1, currentUserId, cardid2);
 				
