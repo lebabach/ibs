@@ -291,7 +291,7 @@ $(document).ready(function() {
 	  }else{
 		  count = listCardId.length;
 	  }
-	  if (confirm('<c:out value="${userLeave.lastName}"/> <c:out value="${userLeave.firstName}"/> 学 さんの名刺'+count+'件を、'+nameAssign +' さんの所有とします。よろしいですか？')) {
+	  if (confirm('<c:out value="${userLeave.lastName}"/> <c:out value="${userLeave.firstName}"/> さんの名刺'+count+'件を、'+nameAssign +' さんの所有とします。よろしいですか？')) {
 		  $.ajax({
 				type: 'POST',
 				url: '<c:url value="/operators/updateCardUser"/>',
