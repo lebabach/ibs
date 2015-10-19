@@ -36,12 +36,18 @@ public class LogController {
 	public ModelAndView searchUser(@RequestParam(value = "criteriaSearch", required = false) String criteriaSearch) {
 		
 		List<LogEventVo> listLogEventVo = null;
+		logEventService.deleteLog();
+		logEventService.deleteLogCardUpdateHistory();
 		if (criteriaSearch == null || criteriaSearch.isEmpty()){
 			listLogEventVo = logEventService.getAllLogEvent();
 		}else{
 			listLogEventVo = logEventService.searchLog(criteriaSearch);
-		}				
-	  return new  ModelAndView("listlog","listLogEventVo",listLogEventVo);
+		}		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("criteriaSearch",criteriaSearch);
+		modelAndView.addObject("listLogEventVo", listLogEventVo);
+		modelAndView.setViewName("listlog");
+	  return modelAndView;
 		
     }
 	
