@@ -47,6 +47,9 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
     @Value("${record.maxResult}")
     private Integer maxResult;
     
+    @Value("${record.maxResult30}")
+    private Integer maxResult30;
+    
 	public List<CardInfo> listAllCardInfo() {
 		Query query = getEntityManager().createQuery("SELECT c FROM CardInfo c WHERE c.deleteFlg = 0");
         return query.getResultList();
@@ -445,7 +448,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         
         query.setParameter("userId", userId);
         query.setFirstResult(0);
-        query.setMaxResults(this.maxResult);
+        query.setMaxResults(this.maxResult30);
         
         List<Object[]> rows = query.getResultList();
         List<com.ecard.core.vo.CardInfo> result = new ArrayList<>(rows.size());

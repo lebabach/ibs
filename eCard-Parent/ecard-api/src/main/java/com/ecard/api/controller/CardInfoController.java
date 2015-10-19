@@ -17,6 +17,7 @@ import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.CardUpdateHistoryService;
+import com.ecard.core.service.HomeService;
 import com.ecard.core.service.MyCardService;
 import com.ecard.core.service.OcrCardImageService;
 import com.ecard.core.service.PossessionCardService;
@@ -97,6 +98,9 @@ public class CardInfoController extends RestExceptionHandler {
     
     @Autowired
     UserNotifyService userNotifyService;
+    
+    @Autowired
+    private HomeService homeService;
     
     @Value("${msg.list.card.success}")
     private String msgListCardSuccess;
@@ -696,6 +700,7 @@ public class CardInfoController extends RestExceptionHandler {
         try{
             List<com.ecard.core.vo.CardInfo> cardInfo = cardInfoService.getListPossesionCardRecent(userId);
             cardInfoResponse.setListCardInfo(CardInfoConverter.convertCardRecentList(cardInfo));
+            cardInfoResponse.setTotalRecord(homeService.countRecentPossessionCard(userId).longValue());
             statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgListCardSuccess, token);            
         }
         catch(Exception ex){
