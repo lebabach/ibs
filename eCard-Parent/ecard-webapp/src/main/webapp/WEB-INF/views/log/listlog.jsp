@@ -58,7 +58,7 @@ $(document).ready(function() {
 				<div class="row clearfix">
 					<div class="col-md-6 col-md-offset-3 column">
 						<div class="form-group search-log-input-textarea"
-							style="height: 500px; overflow: overlay;">
+							style="height: 500px; overflow-y:auto;">
 							<table class="table">
 								<thead>
 									<tr style="background: #c3c3c3;">

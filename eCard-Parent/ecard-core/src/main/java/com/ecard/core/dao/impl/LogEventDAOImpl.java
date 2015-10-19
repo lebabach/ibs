@@ -36,11 +36,10 @@ public class LogEventDAOImpl extends GenericDao implements LogEventDAO {
 		// TODO Auto-generated method stub
 		Query query = getEntityManager().createNativeQuery(" select user_id,action_type,action_message,action_date  "
 				+ " FROM action_log "
-				+ " WHERE user_id=:criteriaSearch"
-				+ " OR action_type LIKE :criteriaSearch"
-				+ " OR action_message LIKE :criteriaSearch "
-				+ " OR action_date LIKE :criteriaSearch");
-		 query.setParameter("criteriaSearch", "%" + criteriaSearch.trim() + "%");
+				+ " WHERE action_type REGEXP :criteriaSearch"
+				+ " OR action_message REGEXP :criteriaSearch "
+				+ " OR action_date REGEXP :criteriaSearch");
+		 query.setParameter("criteriaSearch",criteriaSearch.trim());
 		 List<Object[]> rows = query.getResultList();
 	     List<LogEventVo> result = new ArrayList<>(rows.size());
 	     for (Object[] row : rows) {
