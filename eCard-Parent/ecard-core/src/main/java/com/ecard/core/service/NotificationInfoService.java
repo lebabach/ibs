@@ -15,7 +15,9 @@ import java.util.List;
  * @author HienTu
  */
 public interface NotificationInfoService {
-    public List<NotificationList> listAllNofiticationUser(Integer userId, Integer page);
+    public List<NotificationList> listAllNofiticationUser(Integer userId);
+    
+    public List<NotificationList> listAllNofiticationUserPaging(Integer userId, Integer page);
     
     public void updateListAllNotificationUser(Integer userId);
     

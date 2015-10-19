@@ -102,7 +102,7 @@ public class NotifyInfoController extends RestExceptionHandler {
         	if(page == null){
             	page = 0;
             }
-            listUpdate = notificationInfoService.listAllNofiticationUser(userId, page);
+            listUpdate = notificationInfoService.listAllNofiticationUserPaging(userId, page);
             if(listUpdate.size() != 0){
             	statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgGetUserSuccess, token);                
                 //notificationInfoService.updateListAllNotificationUser(userId);
