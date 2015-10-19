@@ -11,8 +11,10 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#criteriaSearch").keyup(function (e) {
+		var search = $("#criteriaSearch").val();
 		  if (e.which == 13) {
 			  $('.btn_search').trigger('click');
+			  $("#criteriaSearch").val(search);
 		  }
 	});
 });
@@ -44,7 +46,7 @@ $(document).ready(function() {
 							<div class="input-group search-log-input-text">
 								<input type="text" class="form-control search_log"
 									id="criteriaSearch" name="criteriaSearch"
-									placeholder="Enter content search......"> <span
+									placeholder="Enter content search......" value="<c:out value='${criteriaSearch}' />"> <span
 									class="input-group-btn">
 									<button type="submit" class="btn btn-primary btn_search">
 										<fmt:message key="operator.list.search" />
