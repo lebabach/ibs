@@ -567,8 +567,8 @@ $(document).ready(function() {
 										<td colspan="9"
 											style="background-color: #fff; padding-left: 0; text-align: right;">
 										
-											<input value="" id="criteriaSearch" style="width: 300px; height: 30px;">
-											<input value="検索" id="btnSearch"
+											<input id="criteriaSearch" value="${fullname}" style="width: 300px; height: 30px;" type="text">
+											<input value="検索" id="btnSearch" 
 												style="padding-left: 10px; padding-right: 10px; height: 30px;"
 												type="button" class="btn-primary">
 										</td>

@@ -1856,4 +1856,21 @@ public class UserController {
 	  return lstcardInfoAndPosCardVO;
 	}
 
+	@RequestMapping(value = "overlapcardsbyname")
+	public ModelAndView overlapcardsbyname() {
+		String name=StringUtils.EMPTY;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		UserInfo user=userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+		if(user!=null){
+			if(StringUtils.isEmpty(user.getName())){
+				name=StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " ");
+			}else{
+				name=user.getName();
+			}
+			return new ModelAndView("overlapcards","fullname",name);
+		}
+		
+		return new ModelAndView("overlapcards","fullname",name);
+	}
 }

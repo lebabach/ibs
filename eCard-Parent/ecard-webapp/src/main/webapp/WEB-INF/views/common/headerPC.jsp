@@ -210,7 +210,7 @@
 									</td> --%>
 									<c:choose>
 									  <c:when test="${notification.image!=''}">
-									   <td style="vertical-align: middle"  width="10%"><a href="notificationDetail/${notification.id}" class=""><i
+									   <td style="vertical-align: middle"  width="10%"><a href="notificationDetail/${notification.id}" class="${notification.noticeType}"><i
 											class="fa fa-angle-right"></i></a></td>
 									  </c:when>
 									  <c:otherwise>
@@ -279,7 +279,14 @@ $(document).ready(function() {
     $('#notification tr').click(function() {
         var href = $(this).find("a").attr("href");
         if(href) {
-            window.location = href;
+        	var notifyType=$(this).find("a").attr("class");
+        	if(notifyType==4){
+        		window.location = "/ecard-webapp/user/overlapcardsbyname";
+        		
+        	}else{
+        		window.location ="/ecard-webapp/user/"+ href;	
+        	}
+            
         }else{
         	$.ajax({
         	    type: 'POST',
