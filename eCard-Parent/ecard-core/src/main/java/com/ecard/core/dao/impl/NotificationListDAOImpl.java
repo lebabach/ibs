@@ -26,7 +26,7 @@ public class NotificationListDAOImpl extends GenericDao implements NotificationL
     @Value("${record.maxResult}")
     private Integer maxResult;
     
-    public List<NotificationList> getListNotification(Integer userId){
+    public List<NotificationList> getListNotification(Integer userId, Integer page){
         // Get user update info
 //        Query query = getEntityManager().createQuery("SELECT NEW com.ecard.core.vo.NotificationList(un.noticeId, un.noticeType, un.cardId, un.changeParamType, un.readFlg, un.noticeDate) "       
 //                + " FROM UserNotification AS un"
@@ -36,7 +36,7 @@ public class NotificationListDAOImpl extends GenericDao implements NotificationL
                     + " WHERE un.user_id = :userId "
                     + " ORDER BY un.notice_date DESC");
         query.setParameter("userId", userId);
-        query.setFirstResult(0);
+        query.setFirstResult(page* this.maxResult);
         query.setMaxResults(this.maxResult);
         List<Object[]> rows = query.getResultList();
         List<NotificationList> result = new ArrayList<>(rows.size());

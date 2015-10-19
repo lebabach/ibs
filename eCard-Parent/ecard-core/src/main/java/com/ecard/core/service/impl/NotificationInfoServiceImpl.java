@@ -28,8 +28,8 @@ public class NotificationInfoServiceImpl implements NotificationInfoService {
     
 //    @Autowired
 //    NotifactionListManagerDAO notifactionListManagerDAO;
-    public List<NotificationList> listAllNofiticationUser(Integer userId){
-        return notificationListDAO.getListNotification(userId);
+    public List<NotificationList> listAllNofiticationUser(Integer userId, Integer page){
+        return notificationListDAO.getListNotification(userId, page);
     }
     
     public void updateListAllNotificationUser(Integer userId){

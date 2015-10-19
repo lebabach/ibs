@@ -21,11 +21,11 @@ import com.ecard.core.vo.NotificationListResponse;
 import com.ecard.core.vo.PushNotification;
 import com.ecard.core.vo.StatusInfo;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.PathParam;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -36,7 +36,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -83,7 +82,7 @@ public class NotifyInfoController extends RestExceptionHandler {
     private String msgUpdateFlgSuccess;
     
     @RequestMapping(value="/getUserUpdateInfo", method = RequestMethod.GET)
-    public NotificationListResponse getUserUpdateInfo(HttpServletRequest request) throws IOException {
+    public NotificationListResponse getUserUpdateInfo(HttpServletRequest request, @RequestParam(required = false) Integer page) throws IOException {
         NotificationListResponse userNotification = new NotificationListResponse();
         
         SchemaContextHolder.setSchemaType(SchemaType.USER);
@@ -98,14 +97,18 @@ public class NotifyInfoController extends RestExceptionHandler {
         
         AutoLogin autoLogin = userInfoService.findByToken(token);
         Integer userId = autoLogin.getUserInfo().getUserId();
-        
+        List<NotificationList> listUpdate = new ArrayList<>();
         try {
-            List<NotificationList> listUpdate = notificationInfoService.listAllNofiticationUser(userId);
+        	if(page == null){
+            	page = 0;
+            }
+            listUpdate = notificationInfoService.listAllNofiticationUser(userId, page);
             if(listUpdate.size() != 0){
             	statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgGetUserSuccess, token);                
                 //notificationInfoService.updateListAllNotificationUser(userId);
                 userNotification.setUpdateInfoList(listUpdate);
             } else {                    
+            	userNotification.setUpdateInfoList(listUpdate);
             	statusInfo = new StatusInfo(Constants.SUCCESS, Constants.NO_CONTENT, this.msgNoContent, token);                
             }            
         } catch (Exception ex) {
@@ -186,7 +189,6 @@ public class NotifyInfoController extends RestExceptionHandler {
             try {
                             json = (JSONObject) parser.parse(jsonStr);		
                     } catch (ParseException e) {
-                            // TODO Auto-generated catch block
                             e.printStackTrace();
                     }
 
