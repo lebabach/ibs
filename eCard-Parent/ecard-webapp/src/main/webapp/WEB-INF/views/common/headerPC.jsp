@@ -109,6 +109,11 @@
           .btn-goto-admin{
 		      padding: 4px 5px;
 		  }
+		  .scrollbarVerital{
+   			  height: 191px;
+   			  overflow-y: scroll;
+   			  overflow-x:hidden;
+		  }
           </style>
            <p class="abc-ex"><%-- ${pageContext.request.remoteUser} --%>
             <% EcardUser ecardUser = (EcardUser)org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal(); %>
@@ -139,7 +144,9 @@
                                 <button class="btn btn-primary" style="margin-top:2px;margin-bottom:2px; margin-left: 137px; padding-top: 2px;padding-bottom: 2px" onclick="deleteAllNotify()">一括既読化</button>
                             </div>
                         </li>
-                        <li>                  
+                        <li>   
+                        <div class="scrollbarVerital">
+                                      
                             <table class="table table-hover" id="notification">
 
 							<tbody>
@@ -153,10 +160,10 @@
 										<td style="vertical-align: middle"  width="60%" >
 										     <c:choose>
 											  <c:when test="${notification.read_flg==0}">
-											   	<div class="content_notice" style="font-weight: bold">${notification.contents}</div>
+											   	<div class="content_notice" style="font-weight: bold" title="${notification.contents}">${notification.contents}</div>
 											  </c:when>
 											  <c:otherwise>
-											   	<div class="content_notice">${notification.contents}</div>
+											   	<div class="content_notice" title="${notification.contents}">${notification.contents}</div>
 											  </c:otherwise>
 											</c:choose>
 											
@@ -169,10 +176,10 @@
 										<td style="vertical-align: middle"  width="60%" colspan="2" >
 										     <c:choose>
 											  <c:when test="${notification.read_flg==0}">
-											   	<div class="content_notice" style="font-weight: bold">${notification.contents}</div>
+											   	<div class="content_notice" style="font-weight: bold" title="${notification.contents}">${notification.contents}</div>
 											  </c:when>
 											  <c:otherwise>
-											   	<div class="content_notice">${notification.contents}</div>
+											   	<div class="content_notice" title="${notification.contents}">${notification.contents}</div>
 											  </c:otherwise>
 											</c:choose>
 											
@@ -216,6 +223,7 @@
 							</tbody>
 						</table> <!-- </div> -->
                         <!-- </div> -->
+                        </div> 
                       </li>
                     </ul>
                 </li>
