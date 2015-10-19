@@ -12,6 +12,8 @@ import com.ecard.core.model.Roles;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.UserMigration;
 import com.ecard.core.model.UserNotification;
+import com.ecard.core.vo.ActionLogDownloadVo;
+import com.ecard.core.vo.CardUpdateHistoryDownloadVo;
 import com.ecard.core.vo.UserDownloadPermission;
 import com.ecard.core.vo.UserInfoVo;
 import com.ecard.core.vo.UserListContact;
@@ -129,4 +131,8 @@ public interface UserInfoService {
     public List<UserInfoVo> getListUserAllTeam();
     
     public boolean checkUseDateEndDate(String email);
+    
+    public List<ActionLogDownloadVo> getListActionLog();
+    
+    public List<CardUpdateHistoryDownloadVo> getListCardUpdateHistory();
 }

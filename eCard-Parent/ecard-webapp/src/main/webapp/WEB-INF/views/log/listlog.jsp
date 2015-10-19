@@ -9,13 +9,34 @@
 }
 </style>
 <script type="text/javascript">
-$(document).ready(function() {
-	$("#criteriaSearch").keyup(function (e) {
-		  if (e.which == 13) {
-			  $('.btn_search').trigger('click');
-		  }
+	$(document).ready(function() {
+		$("#criteriaSearch").keyup(function(e) {
+			if (e.which == 13) {
+				$('.btn_search').trigger('click');
+			}
+		});
+		
+		$("#actionLogDownload").click(function(e) {
+			document.location.href = "<c:url value='/logs/actionlogdownload'/>";
+
+		});
+		
+		$("#updateHistoryDownload").click(function(e) {
+			document.location.href = "<c:url value='/logs/updatecarddownload'/>";
+		});
+		
+	})
+	
+	/* $(document).on('click', "#actionLogDownload", function() {
+		document.location.href = "<c:url value='/logs/actionlogdownload'/>";
 	});
-});
+	
+	$(document).on('click', "#updateHistoryDownload", function() {
+		document.location.href ="<c:url value='/logs/updatecarddownload'/>";
+	}); */
+	
+
+	
 </script>
 <!-- BODY -->
 
@@ -37,8 +58,22 @@ $(document).ready(function() {
 	<div class="row bg-white  box-marginTop5 padding-top-bottom">
 		<div class="container container-left confirm-log">
 			<div class="wrapper-log">
+				<div class="row clearfix" style="margin-bottom: 20px">
+						<div class="col-md-2 col-md-offset-3">
+							<button id="actionLogDownload" class="btn btn-primary btn_search">
+								<fmt:message key="operator.list.actionlog.download" />
+							</button>
+						</div>
+						<div class="col-md-2 col-md-offset-2">
+							<button id="updateHistoryDownload"
+								class="btn btn-primary btn_search">
+								<fmt:message key="operator.list.updatehistory.download" />
+							</button>
+						</div>
+					</div>
 				<!-- BEGIN SEARCH -->
 				<form action="listlog" method="post" id="formSearchLog">
+					
 					<div class="row clearfix search-log header-content">
 						<div class="col-md-6 col-md-offset-3">
 							<div class="input-group search-log-input-text">
