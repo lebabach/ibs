@@ -22,6 +22,8 @@ public class LogController {
 	public ModelAndView searchUser(@RequestParam(value = "criteriaSearch", required = false) String criteriaSearch) {
 		
 		List<LogEventVo> listLogEventVo = null;
+		logEventService.deleteLog();
+		logEventService.deleteLogCardUpdateHistory();
 		if (criteriaSearch == null || criteriaSearch.isEmpty()){
 			listLogEventVo = logEventService.getAllLogEvent();
 		}else{

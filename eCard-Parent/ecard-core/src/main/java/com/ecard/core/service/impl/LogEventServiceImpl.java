@@ -27,4 +27,14 @@ public class LogEventServiceImpl implements LogEventService {
 		return logEventDAO.searchLog(criteriaSearch);
 	}
 
+	@Override
+   public boolean deleteLog() {
+		return logEventDAO.deleteLog();
+	}
+
+	@Override
+	public boolean deleteLogCardUpdateHistory() {
+		return logEventDAO.deleteLogCardUpdateHistory();
+	}
+
 }
