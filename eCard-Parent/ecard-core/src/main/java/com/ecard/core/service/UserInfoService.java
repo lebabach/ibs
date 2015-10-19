@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.ecard.core.model.AutoLogin;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.MailDomainList;
 import com.ecard.core.model.PushInfoId;
 import com.ecard.core.model.Roles;
 import com.ecard.core.model.UserInfo;
@@ -138,5 +139,6 @@ public interface UserInfoService {
     public List<UserInfo> getAllListUser();
 
     public List<UserInfoVo> getAllUserOfCompany(int groupCompanyInfoId);
+    public MailDomainList getDomainUser(String domain);
 
 }

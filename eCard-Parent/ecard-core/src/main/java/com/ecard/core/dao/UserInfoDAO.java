@@ -2,6 +2,7 @@ package com.ecard.core.dao;
 
 import com.ecard.core.model.ActionLog;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.MailDomainList;
 import com.ecard.core.model.PushInfoId;
 import com.ecard.core.model.Roles;
 import java.util.List;
@@ -123,4 +124,5 @@ public interface UserInfoDAO extends IGenericDao{
     public List<UserInfo> getAllListUser();
 
     public List<UserInfoVo> getAllUserOfCompany(int groupCompanyInfoId);
+    public MailDomainList getDomainUser(String domain);
  }

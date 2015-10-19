@@ -15,6 +15,7 @@ import com.ecard.core.dao.UserInfoDAO;
 import com.ecard.core.model.ActionLog;
 import com.ecard.core.model.AutoLogin;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.MailDomainList;
 import com.ecard.core.model.PushInfoId;
 import com.ecard.core.model.Roles;
 import com.ecard.core.model.UserInfo;
@@ -332,5 +333,11 @@ public class UserInfoServiceImpl implements UserInfoService {
 	public List<UserInfoVo> getAllUserOfCompany(int groupCompanyInfoId) {
 		// TODO Auto-generated method stub
 		return userInfoDAO.getAllUserOfCompany(groupCompanyInfoId);
+	}
+
+	@Override
+	public MailDomainList getDomainUser(String domain) {
+		// TODO Auto-generated method stub
+		return userInfoDAO.getDomainUser(domain);
 	}
 }

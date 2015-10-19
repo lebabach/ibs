@@ -37,10 +37,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.context.Context;
 
 import com.ecard.core.model.GroupCompanyInfo;
+import com.ecard.core.model.MailDomainList;
 import com.ecard.core.model.Roles;
 import com.ecard.core.model.TeamInfo;
 import com.ecard.core.model.UserInfo;
-import com.ecard.core.service.AdminPossessionCardService;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.CardTagService;
 import com.ecard.core.service.EmailService;
@@ -59,8 +59,6 @@ import com.ecard.webapp.security.EcardUser;
 import com.ecard.webapp.security.RoleType;
 import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.vo.DataPagingJsonVO;
-import com.ecard.webapp.vo.ObjectCardNumber;
-import com.ecard.webapp.vo.ObjectTeamVO;
 import com.ecard.webapp.vo.OperatorEditVO;
 import com.ecard.webapp.vo.UpdateCardUser;
 import com.ecard.webapp.vo.UserInfoResultVO;
@@ -348,6 +346,8 @@ public class OperatorController {
 		}
 	  return 0;
     }
+    
+ 
     @RequestMapping(value = "changeowner/{id:[\\d]+}", method = RequestMethod.GET)
 	public ModelAndView changeowner(@PathVariable("id") int id) {
     	ModelAndView modelAndView = new ModelAndView();
@@ -477,6 +477,16 @@ public class OperatorController {
 	
 		return dataTableResponse;
 	}
+    
+    @RequestMapping("checkexistdomain")
+    @ResponseBody
+    public int checkExistDomain(@RequestParam(value = "domain", required = false) String domain) {  
+    	MailDomainList mailDomainList = userInfoService.getDomainUser(domain);
+		if(mailDomainList.getMailDomain() != null){
+			return 0;
+		}
+	  return 1;
+    }
     
     private List<TagGroup> convertCardTagIdList(List<TagForCard> cardTagModelList){
 		List<TagGroup> tagGroups = new ArrayList<TagGroup>();
