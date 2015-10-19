@@ -10,4 +10,6 @@ import com.ecard.core.vo.LogEventVo;
 public interface LogEventDAO {
 	public List<LogEventVo> getAllLogEvent();
 	public List<LogEventVo> searchLog(String criteriaSearch);
+	public boolean deleteLog();
+	public boolean deleteLogCardUpdateHistory();
 }

@@ -49,4 +49,20 @@ public class LogEventDAOImpl extends GenericDao implements LogEventDAO {
 		return result;
 	}
 
+	@Override
+	public boolean deleteLog() {
+		Query q2 = getEntityManager().createNativeQuery(" DELETE FROM action_log WHERE action_date <  (NOW() - INTERVAL 1 YEAR)");
+		if(q2.executeUpdate()>0)
+			return true;
+		return false;
+	}
+
+	@Override
+	public boolean deleteLogCardUpdateHistory() {
+		Query q2 = getEntityManager().createNativeQuery(" DELETE FROM card_update_history  WHERE create_date <  (NOW() - INTERVAL 1 YEAR)");
+		if(q2.executeUpdate()>0)
+			return true;
+		return false;
+	}
+
 }
