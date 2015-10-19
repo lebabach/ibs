@@ -298,7 +298,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
             sqlStr = String.format(sqlStr, params);
         }
         if(name  != null) {
-        	String params[] = { "'*W1:1,2:1,3:1,4:1,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", name.toLowerCase(), "*'"};
+        	String params[] = { "'*W1:0,2:0,3:1,4:1,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", name.toLowerCase(), "*'"};
         	
             sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
             		+"c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
@@ -794,7 +794,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
             sqlStr = String.format(sqlStr, params);
         }
         if(name  != null) {
-        	String params[] = { "'*W1:1,2:1,3:1,4:1,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", name.toLowerCase(), "*'"};
+        	String params[] = { "'*W1:0,2:0,3:1,4:1,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0 ", name.toLowerCase(), "*'"};
         	
             sqlStr += "AND MATCH(c.company_name,c.company_name_kana,c.name,c.name_kana,c.department_name,c.position_name,c.email,c.zip_code,c.address_full,"
             		+"c.tel_number_company,c.tel_number_department,c.fax_number,c.mobile_number,c.card_owner_name) "
