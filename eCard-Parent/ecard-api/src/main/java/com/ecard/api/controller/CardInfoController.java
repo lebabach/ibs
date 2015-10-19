@@ -399,7 +399,9 @@ public class CardInfoController extends RestExceptionHandler {
             
             if(cardInfo.getCardOwnerId() != null && cardInfo.getCardOwnerId() != 0){
                 userInfo = userInfoService.getUserInfoByUserId(cardInfo.getCardOwnerId());
-                cardInfoDetailResponse.setOwnerInfoDetail(UserInfoConverter.convertUserInforDetailList(userInfo));
+                if(userInfo != null){
+                	cardInfoDetailResponse.setOwnerInfoDetail(UserInfoConverter.convertUserInforDetailList(userInfo));
+                }
             } else {
                 Integer userOwnerId = possessionCardService.getUserIdByCardId(cardId);                                
                 if(userOwnerId == 0){                    
@@ -411,8 +413,13 @@ public class CardInfoController extends RestExceptionHandler {
             }
             
             //Check user same group company
-            if(cardInfo.getGroupCompanyId() == userInfo.getGroupCompanyId()){
-                cardInfoDetailResponse.setCardInfoDetail(CardInfoDetailConverter.convertCardInforDetail(cardInfo, Boolean.TRUE));
+            if(userInfo != null){
+	            if(cardInfo.getGroupCompanyId() == userInfo.getGroupCompanyId()){
+	                cardInfoDetailResponse.setCardInfoDetail(CardInfoDetailConverter.convertCardInforDetail(cardInfo, Boolean.TRUE));
+	            }
+	            else{
+	                cardInfoDetailResponse.setCardInfoDetail(CardInfoDetailConverter.convertCardInforDetail(cardInfo, Boolean.FALSE));
+	            }
             }
             else{
                 cardInfoDetailResponse.setCardInfoDetail(CardInfoDetailConverter.convertCardInforDetail(cardInfo, Boolean.FALSE));
