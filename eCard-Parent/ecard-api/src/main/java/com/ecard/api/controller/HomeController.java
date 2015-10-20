@@ -95,8 +95,8 @@ public class HomeController extends RestExceptionHandler{
             BigInteger recentCardCnt = homeService.countRecentCard(userId);
             Long possessionCardCnt = homeService.countPossessionCard(userId);
             Long inputWaitCnt = homeService.countInputWaitCard(userId);
-           /* BigInteger connectCnt = homeService.countConnectCard(userId, userInfo.getGroupCompanyId());
-            BigInteger recentConnectCnt = homeService.countRecentConnectCard(userId, userInfo.getGroupCompanyId());*/
+            BigInteger connectCnt = homeService.countConnectCard(userId);
+            BigInteger recentConnectCnt = homeService.countRecentConnectCard(userId);
             BigInteger noticeCnt = homeService.countNotificationCard(userId);
             BigInteger recentPossessionCardCnt = homeService.countRecentPossessionCard(userId);
 //            response.setName(myCard[0].toString());
@@ -111,9 +111,9 @@ public class HomeController extends RestExceptionHandler{
             response.setPossessionCardCnt(possessionCardCnt);
             response.setRecentCardCnt(recentCardCnt);
             response.setNoticeCnt(noticeCnt);
-            response.setConnectCnt(new BigInteger("0"));
-            response.setRecentConnectCnt(new BigInteger("0"));
             response.setRecentPossessionCardCnt(recentPossessionCardCnt);
+            response.setConnectCnt(connectCnt);
+            response.setRecentConnectCnt(recentConnectCnt);
 
             statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgListDataSuccess, token);            
         }
@@ -149,7 +149,7 @@ public class HomeController extends RestExceptionHandler{
     	Context ctx = new Context();		
 		ctx.setVariable("password", password);
 		ctx.setVariable("recipientEmail", recipientEmail);
-		emailService.sendMail("BCRIBBON", recipientEmail, "BC-RIBBON ID／パスワード通知", ctx, "recoverpass");
+		emailService.sendMail("BCRIBBON", recipientEmail, "BC-RIBBON IDï¼�ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰é€šçŸ¥", ctx, "recoverpass");
 		return "Success";
 
     }

@@ -37,12 +37,12 @@ public class HomeServiceImpl implements HomeService{
         return homeDAO.countInputWaitCard(userId);
     }
     
-    public BigInteger countConnectCard(Integer userId, Integer groupCompanyId) {
-        return homeDAO.countConnectCard(userId, groupCompanyId);
+    public BigInteger countConnectCard(Integer userId) {
+        return homeDAO.countConnectCard(userId);
     }
     
-    public BigInteger countRecentConnectCard(Integer userId, Integer groupCompanyId) {
-        return homeDAO.countRecentConnectCard(userId, groupCompanyId);
+    public BigInteger countRecentConnectCard(Integer userId) {
+        return homeDAO.countRecentConnectCard(userId);
     }
     
     public BigInteger countNotificationCard(Integer userId){

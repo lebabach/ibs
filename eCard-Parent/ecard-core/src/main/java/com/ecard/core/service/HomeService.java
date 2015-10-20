@@ -19,9 +19,9 @@ public interface HomeService {
     
     public Long countInputWaitCard(Integer userId);
     
-    public BigInteger countConnectCard(Integer userId, Integer groupCompanyId);
+    public BigInteger countConnectCard(Integer userId);
     
-    public BigInteger countRecentConnectCard(Integer userId, Integer groupCompanyId);
+    public BigInteger countRecentConnectCard(Integer userId);
     
     public BigInteger countNotificationCard(Integer userId);
     

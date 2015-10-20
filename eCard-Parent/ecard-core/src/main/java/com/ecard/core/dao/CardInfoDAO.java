@@ -28,7 +28,7 @@ public interface CardInfoDAO extends IGenericDao{
     
     public List<CardInfo> listAllCardHistory();
     
-    public List<CardInfoConnectUser> listConnectUser(Integer userId, Integer groupCompanyId, Integer recentFlg, Integer pageNumber);
+    public List<CardInfoConnectUser> listConnectUser(Integer userId, Integer recentFlg, Integer pageNumber);
     
     public List<CompanyCardListCount> listCompany(String permissionType, Integer userId);
     

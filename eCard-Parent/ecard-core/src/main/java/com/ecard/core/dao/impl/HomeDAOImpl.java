@@ -73,135 +73,23 @@ public class HomeDAOImpl extends GenericDao implements HomeDAO{
         return (Long)getOrNull(query);
     }
     
-    public BigInteger countConnectCard(Integer userId, Integer groupCompanyId) {
+    public BigInteger countConnectCard(Integer userId) {
         
-        String sqlStr = "SELECT  " +
-                        "    COUNT(*) " +
-                        "  FROM " +
-                        "    ( " +
-                        "     SELECT  " +
-                        "          MC.card_id " +
-                        "     FROM " +
-                        "         ( " +
-                        "          SELECT  " +
-                        "               card_id " +
-                        "              ,email " +
-                        "              ,name " +
-                        "              ,company_name, create_date " +                        
-                        "            FROM  " +
-                        "              card_info CI " +
-                        "           WHERE  " +
-                        "              CI.card_owner_id = :cardOwnerId " +
-                        "          AND old_card_flg = 0  " +
-                        "          AND approval_status = 1  " +
-                        "          AND delete_flg = 0 " +
-                        "     ) MC " +
-                        "     INNER JOIN( " +
-                        "         SELECT  " +
-                        "              card_id " +
-                        "             ,email " +
-                        "             ,name " +
-                        "             ,company_name, create_date " +                        
-                        "           FROM " +
-                        "             card_info CI " +
-                        "          WHERE  " +
-                        "             NOT CI.card_owner_id = :cardOwnerId " +
-                        "         AND old_card_flg = 0  " +
-                        "         AND approval_status = 1  " +
-                        "         AND delete_flg = 0 ";
-        if(groupCompanyId ==1 || groupCompanyId == 2 || groupCompanyId == 3 || groupCompanyId == 4 || groupCompanyId == 5){        
-            sqlStr +=   "         AND ( " 
-                       +"               group_company_id IN(1,2,3,4,5) " 
-                       +"           OR (group_company_id NOT IN(1,2,3,4,5) AND contact_date >= '"+ this.complianceDate +"') " 
-                       +"         ) ";
-        }else{        
-            sqlStr +=   "         AND ( " 
-                       +"               group_company_id = :groupCompanyId "  
-                       +"           OR (group_company_id <> :groupCompanyId AND contact_date >= '"+ this.complianceDate +"') " 
-                       +"         ) ";
-        }
-            sqlStr +=   " ) CI " +
-                        "     WHERE  " +
-                        "         ( " +
-                        "             (MC.email = CI.email AND MC.email <> '') " +
-                        "          OR (MC.name = CI.name AND MC.company_name = CI.company_name) " +
-                        "     ) " +                        
-                        "     GROUP BY MC.card_id, MC.company_name, MC.name " +
-                        "     HAVING count(*) >= 1 " +
-                        ") TC";
+        String sqlStr = "SELECT count(*) FROM link_card WHERE card_owner_id = :userId";
         
         Query query = getEntityManager().createNativeQuery(sqlStr);
-        query.setParameter("cardOwnerId", userId);
-        if(groupCompanyId !=1 && groupCompanyId != 2 && groupCompanyId != 3 && groupCompanyId != 4 && groupCompanyId != 5){
-            query.setParameter("groupCompanyId", groupCompanyId);
-        }
+        query.setParameter("userId", userId);
                 
         return (BigInteger)getOrNull(query);
     }
     
-    public BigInteger countRecentConnectCard(Integer userId, Integer groupCompanyId) {
-    	String sqlStr = "SELECT  " +
-                        "    COUNT(*) " +
-                        "  FROM " +
-                        "    ( " +
-                        "     SELECT  " +
-                        "          MC.card_id " +
-                        "     FROM " +
-                        "         ( " +
-                        "          SELECT  " +
-                        "               card_id " +
-                        "              ,email " +
-                        "              ,name " +
-                        "              ,company_name, create_date " +                        
-                        "            FROM  " +
-                        "              card_info CI " +
-                        "           WHERE  " +
-                        "              CI.card_owner_id = :cardOwnerId " +
-                        "          AND old_card_flg = 0  " +
-                        "          AND approval_status = 1  " +
-                        "          AND delete_flg = 0 " +
-                        "     ) MC " +
-                        "     INNER JOIN( " +
-                        "         SELECT  " +
-                        "              card_id " +
-                        "             ,email " +
-                        "             ,name " +
-                        "             ,company_name, create_date " +                        
-                        "           FROM " +
-                        "             card_info CI " +
-                        "          WHERE  " +
-                        "             NOT CI.card_owner_id = :cardOwnerId " +
-                        "         AND old_card_flg = 0  " +
-                        "         AND approval_status = 1  " +
-                        "         AND delete_flg = 0 ";
-        if(groupCompanyId ==1 || groupCompanyId == 2 || groupCompanyId == 3 || groupCompanyId == 4 || groupCompanyId == 5){        
-            sqlStr +=   "         AND ( " 
-                       +"               group_company_id IN(1,2,3,4,5) " 
-                       +"           OR (group_company_id NOT IN(1,2,3,4,5) AND contact_date >= '"+ this.complianceDate +"') " 
-                       +"         ) ";
-        }else{        
-            sqlStr +=   "         AND ( " 
-                       +"               group_company_id = :groupCompanyId "  
-                       +"           OR (group_company_id <> :groupCompanyId AND contact_date >= '"+ this.complianceDate +"') " 
-                       +"         ) ";
-        }
-            sqlStr +=   " ) CI " +
-                        "     WHERE  " +
-                        "         ( " +
-                        "             (MC.email = CI.email AND MC.email <> '') " +
-                        "          OR (MC.name = CI.name AND MC.company_name = CI.company_name) " +
-                        "     ) " +                        
-                        "     AND (MC.create_date >=  (NOW() - INTERVAL 1 WEEK) OR CI.create_date >=  (NOW() - INTERVAL 1 WEEK)) "+
-                        "     GROUP BY MC.card_id, MC.company_name, MC.name " +
-                        "     HAVING count(*) >= 1 " +
-                        ") TC";
+    public BigInteger countRecentConnectCard(Integer userId) {
+    	String sqlStr = "SELECT count(*) FROM link_card WHERE card_owner_id = :userId "
+    			+ "AND (create_date_1 >=  (NOW() - INTERVAL 1 WEEK) OR create_date_2 >=  (NOW() - INTERVAL 1 WEEK))";
     	
         Query query = getEntityManager().createNativeQuery(sqlStr);
-        query.setParameter("cardOwnerId", userId);
-        if(groupCompanyId !=1 && groupCompanyId != 2 && groupCompanyId != 3 && groupCompanyId != 4 && groupCompanyId != 5){
-            query.setParameter("groupCompanyId", groupCompanyId);
-        }
-                
+        query.setParameter("userId", userId);
+          
         return (BigInteger)getOrNull(query);
     }
     
