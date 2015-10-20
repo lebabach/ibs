@@ -129,4 +129,6 @@ public interface CardInfoDAO {
     public Long countSameCardInfoByOwner(CardInfo cardInfo);
     
     public List<CardInfoNotifyChange> getListCardInfoNotifyChange(CardInfo cardInfo);
+    
+    public void updateListCardInfors(List<CardInfo> cards);
 }

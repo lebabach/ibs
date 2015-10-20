@@ -275,6 +275,9 @@ public class CardInfoServiceImpl implements CardInfoService {
         return cardInfoDAO.updateCardType();
     }
     
+    public void updateCardInfoNoIndex(List<CardInfo> cardInfoList){
+    	cardInfoDAO.updateListCardInfors(cardInfoList);
+    }
     public List<CardInfo> listCardInfoByCardType(Integer cardType){
         return cardInfoDAO.listCardInfoByCardType(cardType);
     }
