@@ -21,6 +21,7 @@ import com.ecard.core.model.enums.PropertyCodeEnum;
 import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.util.DataIndexUtil;
+import com.ecard.core.util.PairUtil;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
@@ -246,7 +247,7 @@ public class CardInfoServiceImpl implements CardInfoService {
         return cardInfoDAO.getListCardInfoByUserId(userId);
     }
     
-    public List<Integer> getListUserPushToByCard(CardInfo cardInfo){
+    public List<PairUtil<Integer,Integer>> getListUserPushToByCard(CardInfo cardInfo){
     	return cardInfoDAO.getListUserPushToByCard(cardInfo);    
     }
     

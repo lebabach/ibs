@@ -27,6 +27,7 @@ import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.enums.PermissionType;
 import com.ecard.core.model.enums.SearchConditions;
+import com.ecard.core.util.PairUtil;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
@@ -984,10 +985,28 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         return query.getResultList();
     }
     
-    public List<Integer> getListUserPushToByCard(CardInfo cardInfo){
-    	String sqlStr="SELECT DISTINCT ci.card_owner_id"
+    public List<PairUtil<Integer,Integer>> getListUserPushToByCard(CardInfo cardInfo){
+/*    	select card_id,contact_date,card_owner_id
+    	from card_info c 
+    	WHERE contact_date in (
+    	    SELECT MAX(ci.contact_date)
+    	  FROM card_info ci
+    		where  ((ci.email = 'hientuminh@gmail.com' AND ci.email <> ''))
+    		AND ci.old_card_flg = 0 AND ci.approval_status = 1 AND ci.delete_flg = 0 AND ci.card_owner_id <> 13
+    		group by ci.card_owner_id
+    	)  and ((c.email = 'hientuminh@gmail.com' AND c.email <> ''))
+    	AND c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id <> 13
+*/
+
+    	String sqlStr="SELECT ci.card_owner_id, ci.card_id"
 				+ " FROM card_info ci "
-				+ "	WHERE ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName))" 
+				+ "	WHERE ci.contact_date IN ("
+				+ " 	SELECT MAX(c.contact_date) FROM card_info c "
+				+ "		WHERE  ((c.email = :email AND c.email <> '') OR (c.name = :name AND c.company_name = :companyName))"
+				+ "		AND c.old_card_flg = 0  AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id <> :cardOwnerId"
+				+ "		GROUP BY c.card_owner_id"
+				+ " ) "
+				+ " AND ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName))" 
 				+ " AND ci.old_card_flg = 0  AND ci.approval_status = 1 AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date comDate=new Date();
@@ -1005,13 +1024,20 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	    	}			
 		}
 		
-		Query query = getEntityManager().createNativeQuery(sqlStr);
+		Query query = getEntityManager().createNativeQuery(sqlStr);		
 		query.setParameter("name", cardInfo.getName());
 		query.setParameter("email", cardInfo.getEmail());
 		query.setParameter("companyName", cardInfo.getCompanyName());
 		query.setParameter("cardOwnerId", cardInfo.getCardOwnerId());
+		 List<Object[]> rows = query.getResultList();
+		 List<PairUtil<Integer,Integer>> result =  new ArrayList<PairUtil<Integer,Integer>>(rows.size());
+	        
+	        for (Object[] row : rows) {
+	        	PairUtil<Integer,Integer> pair = new PairUtil<Integer,Integer>((Integer) row[0], (Integer) row[1]);
+	            result.add(pair);
+	        }
 		
-	    return query.getResultList();
+		return result;
     }
     
     public List<Integer> getListUserPushFromByCard(CardInfo cardInfo){

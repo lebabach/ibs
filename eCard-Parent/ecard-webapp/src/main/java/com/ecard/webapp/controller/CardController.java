@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,6 +60,7 @@ import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.TeamInfoService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.UserNotifyService;
+import com.ecard.core.util.PairUtil;
 import com.ecard.core.webservice.Status;
 import com.ecard.webapp.constant.CommonConstants;
 import com.ecard.webapp.security.EcardUser;
@@ -403,20 +405,22 @@ public class CardController {
 			
 			Long sameCardInfoByOwner = cardInfoService.countSameCardInfoByOwner(cardInfo);
 			if(sameCardInfoByOwner <= 0){
-				// Push to other users
-				List<Integer> listOwnerId = cardInfoService.getListUserPushToByCard(cardInfo);
+				// Push to other users				
+				List<PairUtil<Integer,Integer>> pairListOwner = cardInfoService.getListUserPushToByCard(cardInfo);
+//				List<PairUtil<Integer,Integer>> pairList = new ArrayList<PairUtil<Integer,Integer>>();
+//				List<Integer> listOwnerId = cardInfoService.getListUserPushToByCard(cardInfo);
 				UserInfo noticeUser = new UserInfo();
-				for (Integer listOwner : listOwnerId) {
-					if(listUserInfo.stream().filter(u-> u.getUserId() == listOwner).collect(Collectors.toList()).size()<=0){
+				for (PairUtil<Integer,Integer> listOwner : pairListOwner) {
+					if(listUserInfo.stream().filter(u-> u.getUserId() == listOwner.getL()).collect(Collectors.toList()).size()<=0){
 						continue;
 					}				
 					System.out.println("UserId = "+listOwner + " ======================= PUSH NOTIFICATION TO OTHER USERS ============== :"+userInfo.getName());				
 					String strPushFROM = cardInfo.getName() + " さんの名刺を通して、" + userInfo.getName() + " さんと繋がりました。";
-					pushNoticeConnectUser(listOwner, cardInfo.getCardId(),strPushFROM, 2);
+					pushNoticeConnectUser(listOwner.getL(), listOwner.getR(),strPushFROM, 2);
 					UserNotification userNotification = new UserNotification();
-					noticeUser.setUserId(listOwner);
+					noticeUser.setUserId(listOwner.getL());
 					userNotification.setUserInfo(noticeUser);
-					userNotification.setCardId(cardInfo.getCardId());
+					userNotification.setCardId(listOwner.getR());
 					userNotification.setNoticeDate(new Date());
 					userNotification.setReadFlg(0);				
 	            	userNotification.setChangeParamType(1);            	
@@ -426,7 +430,7 @@ public class CardController {
 				}
 				
 				//	Push to me
-				listOwnerId = cardInfoService.getListUserPushFromByCard(cardInfo);
+				List<Integer> listOwnerId = cardInfoService.getListUserPushFromByCard(cardInfo);
 				noticeUser = new UserInfo();
 				for (Integer listOwner : listOwnerId) {
 					if(listUserInfo.stream().filter(u-> u.getUserId() == listOwner).collect(Collectors.toList()).size()<=0){
@@ -750,7 +754,7 @@ public class CardController {
 			}
 		}
 	}
-
+	
 	/**
 	 * New thread class to process card image via OCR web service.
 	 * 
