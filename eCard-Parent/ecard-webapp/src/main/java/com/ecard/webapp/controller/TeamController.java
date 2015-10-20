@@ -349,11 +349,8 @@ public class TeamController {
 						adminPossessionCardId.setCardId(cardId.intValue());
 						adminPossessionCardId.setUserId(Integer.parseInt(objectMembers.getUserId()));
 						adminPossessionCardId.setCreateDate(new Date());
-
 						com.ecard.core.model.CardInfo cardInfo = new com.ecard.core.model.CardInfo();
-
 						cardInfo.setCardId(cardId);
-
 						AdminPossessionCard adminPossessionCard = new AdminPossessionCard();
 						adminPossessionCard.setId(adminPossessionCardId);
 						adminPossessionCard.setCardInfo(cardInfo);

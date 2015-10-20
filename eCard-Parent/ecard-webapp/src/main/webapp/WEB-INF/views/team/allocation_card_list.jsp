@@ -259,24 +259,24 @@ $(function() {
 	
 	$("#listTeam").on('change', function() {
 		var teamId  = $(this).val();
-		listAllication(teamId);
-		var totalCurrent = $('input[name=total-card]').val();
-		// resetTeamAllocation
-		if (teamId != 0 ) {
-			$.ajax({
-				type: 'POST',
-				url: 'resetAllocationTeam',
-	     		data: 'teamId='+teamId
-			}).done(function(resp, status, xhr) {
-				var totalUpdate = resp + parseInt(totalCurrent);
-				$('.card_number').text(totalUpdate + '枚');
-				$('input[name=total-card]').val(totalUpdate);
-				resetValidationForm();
-				listAllication(teamId);
-				
-			}).fail(function(xhr, status, err) {
-				alert('Error');
-			});
+		if (parseInt(teamId) != 0 ) {
+			listAllication(teamId);
+			var totalCurrent = $('input[name=total-card]').val();
+			// resetTeamAllocation
+				$.ajax({
+					type: 'POST',
+					url: 'resetAllocationTeam',
+		     		data: 'teamId='+teamId
+				}).done(function(resp, status, xhr) {
+					var totalUpdate = resp + parseInt(totalCurrent);
+					$('.card_number').text(totalUpdate + '枚');
+					$('input[name=total-card]').val(totalUpdate);
+					resetValidationForm();
+					listAllication(teamId);
+					
+				}).fail(function(xhr, status, err) {
+					alert('Error');
+				});
 		} else {
 			$('.content-user').html("");
 			$('.target_count1').val(0)
