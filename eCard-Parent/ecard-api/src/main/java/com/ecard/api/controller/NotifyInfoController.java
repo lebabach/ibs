@@ -176,14 +176,13 @@ public class NotifyInfoController extends RestExceptionHandler {
     	try {
             
             String jsonStr = " {"+
-  	      "\"title\":\""+pushNotification.getTitle()+"\","+
-  	      "\"type\":\"simple\","+
-  		  "\"alert\":\""+ pushNotification.getAlert()+"\","+
-  		  "\"audience\":{\"app\": [\""+pushNotification.getAppId()+"\"], \"uuid\": [\""+pushNotification.getDeviceToken()+"\"]},"+
-  		  "\"throttle\":0,"+
-  		  "\"draft\": false,"+
-  	  	  "\"extra\": {\"user\": {\"sdk_notify_pattern\": -1}},"+
-  	  	  "\"extra\": {\"option\":{\"notification_type\": \"simple\"}, \"aps\": {\"badge\":"+pushNotification.getBadge()+", \"content-available\": 1}}}";    	
+		  	      "\"title\":\""+pushNotification.getTitle()+"\","+
+		  	      "\"type\":\"simple\","+
+		  		  "\"alert\":\""+ pushNotification.getAlert()+"\","+
+		  		  "\"audience\":{\"app\": [\""+pushNotification.getAppId()+"\"], \"uuid\": [\""+pushNotification.getDeviceToken()+"\"]},"+
+		  		  "\"throttle\":0,"+
+		  		  "\"draft\": false,"+
+		  	  	  "\"extra\": {\"user\": {\"sdk_notify_pattern\": -1} ,\"option\":{\"notification_type\": \"simple\"}, \"aps\": {\"badge\":"+pushNotification.getBadge()+", \"content-available\": 1}}}";    	
             JSONParser parser = new JSONParser();
             JSONObject json = null;
             try {
