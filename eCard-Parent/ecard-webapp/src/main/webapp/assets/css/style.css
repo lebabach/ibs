@@ -534,12 +534,18 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .top-navigation .navbar-nav .open .dropdown-menu .dropdown-header {
   padding: 10px 15px 10px 20px;
 }
+
 @media (max-width: 768px) {
   .top-navigation .navbar-header {
     display: block;
     float: none;
   }
 }
+
+@media print {
+	body { display: none }
+}
+
 .menu-visible-lg,
 .menu-visible-md {
   display: none !important;

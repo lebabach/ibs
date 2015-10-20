@@ -8,6 +8,8 @@ public class NotificationOfUserVO {
 	private int id;
 	private String image;
 	private Integer read_flg;
+	private int userId;
+	private int noticeType;
 	public Integer getRead_flg() {
 		return read_flg;
 	}
@@ -37,6 +39,18 @@ public class NotificationOfUserVO {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	public int getNoticeType() {
+		return noticeType;
+	}
+	public void setNoticeType(int noticeType) {
+		this.noticeType = noticeType;
 	}
 	
 }

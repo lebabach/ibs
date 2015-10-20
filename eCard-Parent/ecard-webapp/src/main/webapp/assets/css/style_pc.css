@@ -540,6 +540,11 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     float: none;
   }
 }
+
+@media print {
+	body { display: none }
+}
+	
 .menu-visible-lg,
 .menu-visible-md {
   display: none !important;

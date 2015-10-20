@@ -143,19 +143,33 @@
 	$(function() {
 		$('#btnSaveUserProfile').on('click', function() {
 			var email = $("#email").val();
+			var domain = email.substr(email.indexOf("@")+1,email.length);
 			resetValidationForm();
 			if(!checkValidationForm()){				
 				return false;
 			}
 			$.ajax({
 				type : 'POST',
-				url : 'checkexistemail',
-				data : 'email=' + email
+				url : 'checkexistdomain',
+				data : 'domain=' + domain
 			}).done(function(resp, status, xhr) {
 				if (resp == 0) {
-					$('#registerUserProfileForm').submit();
+					$.ajax({
+						type : 'POST',
+						url : 'checkexistemail',
+						data : 'email=' + email
+					}).done(function(resp, status, xhr) {
+						if (resp == 0) {
+							$('#registerUserProfileForm').submit();
+						} else {
+							$(".sp-email-format").text("<fmt:message key='operator.check.email.exist'/>");
+							
+						}
+					}).fail(function(xhr, status, err) {
+						checkExist = false;
+					});
 				} else {
-					$(".sp-email-format").text("<fmt:message key='operator.check.email.exist'/>");
+					$(".sp-email-format").text("<fmt:message key='operator.check.domain.exist'/>");
 				}
 			}).fail(function(xhr, status, err) {
 				checkExist = false;

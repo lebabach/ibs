@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ecard.core.dao.UserInfoDAO;
 import com.ecard.core.model.ActionLog;
 import com.ecard.core.model.DownloadCsv;
+import com.ecard.core.model.MailDomainList;
 import com.ecard.core.model.PushInfoId;
 import com.ecard.core.model.Roles;
 import com.ecard.core.model.UserInfo;
@@ -965,5 +966,17 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
             result.add(new UserInfoVo((Integer)row[0],(String) row[15],(String) row[16],(String) row[17], (String)row[22],(String) row[24],(String) row[25],(String) row[4]));
         }
         return result;	
+	}
+
+	@Override
+	public MailDomainList getDomainUser(String domain) {
+		Query q = getEntityManager().createQuery("SELECT m FROM MailDomainList AS m WHERE m.mailDomain LIKE :domain");
+        q.setParameter("domain", "%" + domain.toLowerCase());
+        if(q.getResultList().size() == 0){
+        	MailDomainList mailDomainList = new MailDomainList();
+        	mailDomainList.setMailDomain(null);
+            return mailDomainList;
+        }
+        return (MailDomainList)q.getResultList().get(0);
 	}
 }

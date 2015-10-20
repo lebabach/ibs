@@ -74,49 +74,24 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		return query.getResultList();
 	}
 
-	public List<CardInfoConnectUser> listConnectUser(Integer userId, Integer groupCompanyId, Integer recentFlg,
-			Integer pageNumber) {
+	public List<CardInfoConnectUser> listConnectUser(Integer userId, Integer recentFlg, Integer pageNumber) {
 
-		String sqlStr = "SELECT  "
-				+ " MC.card_id, MC.name, MC.last_name, MC.first_name, MC.name_kana, MC.last_name_kana, "
-				+ "MC.first_name_kana, MC.company_name, MC.department_name, MC.position_name, MC.image_file, MC.email, MC.create_date "
-				+ "FROM " + "    ( " + "     SELECT  "
-				+ "          card_id, name, last_name, first_name, name_kana, last_name_kana, first_name_kana, "
-				+ "          company_name, department_name, position_name, image_file, email, create_date "
-				+ "       FROM  " + "         card_info CI " + "      WHERE  " + "         CI.card_owner_id = :userId "
-				+ "     AND old_card_flg = 0  " + "     AND approval_status = 1  " + "     AND delete_flg = 0 "
-				+ ") MC " + "INNER JOIN( " + "    SELECT  " + "         card_id " + "        ,image_file "
-				+ "        ,email " + "        ,name " + "        ,company_name "
-				+ "        ,department_name, create_date " + "      FROM " + "        card_info CI " + "     WHERE  "
-				+ "        NOT CI.card_owner_id = :userId " + "    AND old_card_flg = 0  "
-				+ "    AND approval_status = 1  " + "    AND delete_flg = 0 ";
-		if (groupCompanyId == 1 || groupCompanyId == 2 || groupCompanyId == 3 || groupCompanyId == 4
-				|| groupCompanyId == 5) {
-			sqlStr += "         AND ( " + "               group_company_id IN(1,2,3,4,5) "
-					+ "           OR (group_company_id NOT IN(1,2,3,4,5) AND contact_date >= '" + this.complianceDate
-					+ "') " + "         ) ";
-		} else {
-			sqlStr += "         AND ( " + "               group_company_id = :groupCompanyId "
-					+ "           OR (group_company_id <> :groupCompanyId AND contact_date >= '" + this.complianceDate
-					+ "') " + "         ) ";
+		String sqlStr = "SELECT lc.card_id, lc.name, c.last_name, c.first_name, c.name_kana, c.first_name_kana, c.last_name_kana, "
+					+ "lc.company_name, lc.department_name, c.position_name, lc.image_file " 
+					+ "FROM link_card lc INNER JOIN card_info c ON lc.card_id = c.card_id ";
+		if(recentFlg == 0){
+			sqlStr += "WHERE lc.card_owner_id = :userId";
 		}
-		sqlStr += ") CI " + "WHERE  " + "    ( " + "        (MC.email = CI.email AND MC.email <> '') "
-				+ "     OR (MC.name = CI.name AND MC.company_name = CI.company_name) " + ") ";
-		if (recentFlg != 0) {
-			sqlStr += "AND (MC.create_date >=  (NOW() - INTERVAL 1 WEEK) OR CI.create_date >=  (NOW() - INTERVAL 1 WEEK)) ";
+		else{
+			sqlStr += "WHERE lc.card_owner_id = :userId AND (lc.create_date_1 >=  (NOW() - INTERVAL 1 WEEK) OR lc.create_date_2 >=  (NOW() - INTERVAL 1 WEEK))";
 		}
-		sqlStr += "GROUP BY MC.card_id, MC.image_file, MC.company_name, MC.department_name, MC.name "
-				+ "HAVING count(*) >= 1";
 
 		Query query = getEntityManager().createNativeQuery(sqlStr);
 		query.setFirstResult(pageNumber * this.maxResult);
 		query.setMaxResults(this.maxResult);
 
 		query.setParameter("userId", userId);
-		if (groupCompanyId != 1 && groupCompanyId != 2 && groupCompanyId != 3 && groupCompanyId != 4
-				&& groupCompanyId != 5) {
-			query.setParameter("groupCompanyId", groupCompanyId);
-		}
+		
 		List<Object[]> rows = query.getResultList();
 		List<CardInfoConnectUser> result = new ArrayList<>(rows.size());
 		for (Object[] row : rows) {

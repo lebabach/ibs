@@ -89,8 +89,8 @@ public class CardInfoServiceImpl implements CardInfoService {
         return cardInfoDAO.listAllCardHistory();
     }
     
-    public List<CardInfoConnectUser> listConnectUser(Integer userId, Integer groupCompanyId, Integer recentFlg, Integer pageNumber) {
-        return cardInfoDAO.listConnectUser(userId, groupCompanyId, recentFlg, pageNumber);
+    public List<CardInfoConnectUser> listConnectUser(Integer userId, Integer recentFlg, Integer pageNumber) {
+        return cardInfoDAO.listConnectUser(userId, recentFlg, pageNumber);
     }
     
     public List<CompanyCardListCount> listCompany(String permissionType, Integer userId) {

@@ -5,9 +5,6 @@
  */
 package com.ecard.core.batch.util;
 
-import com.ecard.core.batch.contants.BatchConstants;
-import com.ecard.core.model.CardInfo;
-import com.ecard.core.service.CardInfoService;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -16,12 +13,17 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
+import com.ecard.core.batch.contants.BatchConstants;
+import com.ecard.core.model.CardInfo;
+import com.ecard.core.service.CardInfoService;
 
 /**
  *
@@ -58,26 +60,23 @@ public class WriteCardImage {
             Font font = Font.createFont(Font.TRUETYPE_FONT, file);
 
             for (CardInfo cardInfo : cardInfoList) {
-                Thread.sleep(1000);
-                BufferedImage image = UploadFileUtil.decodeToImage(BatchConstants.IMAGE_BASE64);
-                Graphics g = image.getGraphics();
-                Graphics2D g2 = (Graphics2D)g;
-                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                RenderingHints.VALUE_ANTIALIAS_ON);
-                font = font.deriveFont(Font.BOLD, 20f);
-                //Font font = new Font(Font.SANS_SERIF, Font.BOLD, 20);
-                g2.setFont(font);
-                g2.setColor(Color.BLACK);
-                g2.drawString(cardInfo.getCompanyName()!= null ? StringUtilsHelper.convertToUTF8(cardInfo.getCompanyName()) : StringUtils.EMPTY, BatchConstants.xCooder, BatchConstants.yCooder);
-                g2.drawString(cardInfo.getDepartmentName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getDepartmentName()): StringUtils.EMPTY, BatchConstants.xCooder, BatchConstants.yCooder+ 30);
-                g2.drawString(cardInfo.getPositionName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getPositionName()) : StringUtils.EMPTY, BatchConstants.xCooder, BatchConstants.yCooder+ 60);
-
-                g2.drawString(cardInfo.getName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getName()) : StringUtils.EMPTY,BatchConstants.xCooder + 30, BatchConstants.yCooder + 150);
-                g2.dispose();
-                UploadFileUtil.overrideImage(UploadFileUtil.encodeToString(image, "jpg"), BatchConstants.scpHostName, BatchConstants.scpUserName, BatchConstants.scpPassword, cardInfo.getImageFile());
-                
-                //Update card_type
-                //cardInfoService.updateCardTypeById(cardInfo.getCardId(), 0);
+            	Thread.sleep(1000);
+				BufferedImage image = UploadFileUtil.decodeToImage(defaultImage64);
+				Graphics g = image.getGraphics();
+				Graphics2D g2 = (Graphics2D)g;
+				 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					        RenderingHints.VALUE_ANTIALIAS_ON);
+				font = font.deriveFont(Font.BOLD, 20f);
+				//Font font = new Font(Font.SANS_SERIF, Font.BOLD, 20);
+				g2.setFont(font);
+				g2.setColor(Color.BLACK);
+				g2.drawString(cardInfo.getCompanyName()!= null ? StringUtilsHelper.convertToUTF8(cardInfo.getCompanyName()) : StringUtils.EMPTY, BatchConstants.xCooder, BatchConstants.yCooder);
+				g2.drawString(cardInfo.getDepartmentName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getDepartmentName()): StringUtils.EMPTY, BatchConstants.xCooder, BatchConstants.yCooder+ 30);
+				g2.drawString(cardInfo.getPositionName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getPositionName()) : StringUtils.EMPTY, BatchConstants.xCooder, BatchConstants.yCooder+ 60);
+				
+				g2.drawString(cardInfo.getName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getName()) : StringUtils.EMPTY,BatchConstants.xCooder + 30, BatchConstants.yCooder + 150);
+				g2.dispose();
+				UploadFileUtil.overrideImage(UploadFileUtil.encodeToString(image, "jpg"), scpHostName, scpUser, scpPassword, cardInfo.getImageFile());
             }
         } catch (Exception ex) {
             logger.error("Error upload default card image: " + ex.getMessage());
