@@ -1175,6 +1175,15 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
     	this.getEntityManager().clear();
     }
     
+    @Transactional
+    public void updateListCardInfors(List<CardInfo> cards){
+    	cards.forEach(c->{
+    		this.saveOrUpdate(c);
+    	});
+    	this.getEntityManager().flush();
+    	this.getEntityManager().clear();
+    }
+    
     public int updateCardType(){
         Query query = getEntityManager().createQuery("UPDATE CardInfo c SET c.cardType = 0 WHERE c.cardType = 1");
         return (int)query.executeUpdate();
