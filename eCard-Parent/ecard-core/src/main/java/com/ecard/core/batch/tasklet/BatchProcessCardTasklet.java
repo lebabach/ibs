@@ -17,7 +17,7 @@ import com.ecard.core.model.CardInfo;
 import com.ecard.core.service.CardInfoService;
 
 public class BatchProcessCardTasklet implements Tasklet{
-	private static final Logger logger = LoggerFactory.getLogger(BatchLinkCardTasklet.class);
+	private static final Logger logger = LoggerFactory.getLogger(BatchProcessCardTasklet.class);
     
     private DataSource dataSource;
     
