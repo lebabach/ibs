@@ -493,8 +493,9 @@ public class DataProcessController {
 					
 					if (StringUtils.isNotBlank(cardInfo.getContact_date())){
 						try {
-//							cardModel.setContactDate(new SimpleDateFormat("yyyy/MM/dd HH:mm").parse(cardInfo.getContact_date()));
-							cardModel.setContactDate(new SimpleDateFormat("yyyy/MM/dd").parse(CommonConstants.COMPLIANCE_DATE));
+//							MEISHI-826
+							cardModel.setContactDate(new SimpleDateFormat("yyyy/MM/dd HH:mm").parse(cardInfo.getContact_date()));
+//							cardModel.setContactDate(new SimpleDateFormat("yyyy/MM/dd").parse(CommonConstants.COMPLIANCE_DATE));
 						} catch (ParseException ex) {
 							ex.printStackTrace();
 							recordError++;
