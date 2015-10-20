@@ -7,6 +7,7 @@ package com.ecard.core.batch.util;
 
 import com.ecard.core.batch.contants.BatchConstants;
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.util.DataIndexUtil;
 
@@ -61,7 +62,7 @@ public class WriteCardImage {
 			
 			for (CardInfo cardInfo : cardInfoList) {
 				if(cardInfo.equals("card_04.jpg")){
-					cardInfo.setImageFile(DataIndexUtil.setPropertyCodeFrom(cardInfo.getCardIndexNo(), "00M")+".jpg");
+					cardInfo.setImageFile(DataIndexUtil.setPropertyCodeFrom(cardInfo.getCardIndexNo(), "00M",TableTypeEnum.ImageInfor)+".jpg");
 					Thread.sleep(1000);
 					BufferedImage image = UploadFileUtil.decodeToImage(defaultImage64);
 					Graphics g = image.getGraphics();
