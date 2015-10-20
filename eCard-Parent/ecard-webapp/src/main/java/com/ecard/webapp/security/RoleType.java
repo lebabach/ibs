@@ -46,7 +46,8 @@ public enum RoleType {
 		int permissionType = roleType.getValue();
 		switch (permissionType) {
 		case 1:
-			url = "/user/home";
+			//comment not login with permission user
+			//url = "/user/home";
 			break;
 		case 2:
 			url = "/manager/home";
