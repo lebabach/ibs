@@ -598,8 +598,8 @@ public class DataProcessController {
                         recordError += cardModelList.size() - recordSuccess;
 
                         // Start new thread to upload default card for list of success importing card
-                        UploadDefaultCardThread uploadThread = new UploadDefaultCardThread();
-                        uploadThread.start();
+                        //UploadDefaultCardThread uploadThread = new UploadDefaultCardThread();
+                        //uploadThread.start();
 				}
                                     
 				modelAndView.addObject("recordSuccess", recordSuccess);
