@@ -3,6 +3,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <script type="text/javascript">
+history.pushState(null, null, null);
+
+window.addEventListener("popstate", function() {
+history.pushState(null, null, null);
+});
+</script>
+
+<script type="text/javascript">
 $(document).ready(function(){
 	$('#btn_back').on('click', function(){
 		document.location.href='/ecard-webapp/cards/edit/${cardInfoWithRoteVO.cardInfo.cardId}';

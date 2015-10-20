@@ -17,6 +17,7 @@ import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.CardUpdateHistoryService;
+import com.ecard.core.service.HomeService;
 import com.ecard.core.service.MyCardService;
 import com.ecard.core.service.OcrCardImageService;
 import com.ecard.core.service.PossessionCardService;
@@ -97,6 +98,9 @@ public class CardInfoController extends RestExceptionHandler {
     
     @Autowired
     UserNotifyService userNotifyService;
+    
+    @Autowired
+    private HomeService homeService;
     
     @Value("${msg.list.card.success}")
     private String msgListCardSuccess;
@@ -395,7 +399,9 @@ public class CardInfoController extends RestExceptionHandler {
             
             if(cardInfo.getCardOwnerId() != null && cardInfo.getCardOwnerId() != 0){
                 userInfo = userInfoService.getUserInfoByUserId(cardInfo.getCardOwnerId());
-                cardInfoDetailResponse.setOwnerInfoDetail(UserInfoConverter.convertUserInforDetailList(userInfo));
+                if(userInfo != null){
+                	cardInfoDetailResponse.setOwnerInfoDetail(UserInfoConverter.convertUserInforDetailList(userInfo));
+                }
             } else {
                 Integer userOwnerId = possessionCardService.getUserIdByCardId(cardId);                                
                 if(userOwnerId == 0){                    
@@ -407,8 +413,13 @@ public class CardInfoController extends RestExceptionHandler {
             }
             
             //Check user same group company
-            if(cardInfo.getGroupCompanyId() == userInfo.getGroupCompanyId()){
-                cardInfoDetailResponse.setCardInfoDetail(CardInfoDetailConverter.convertCardInforDetail(cardInfo, Boolean.TRUE));
+            if(userInfo != null){
+	            if(cardInfo.getGroupCompanyId() == userInfo.getGroupCompanyId()){
+	                cardInfoDetailResponse.setCardInfoDetail(CardInfoDetailConverter.convertCardInforDetail(cardInfo, Boolean.TRUE));
+	            }
+	            else{
+	                cardInfoDetailResponse.setCardInfoDetail(CardInfoDetailConverter.convertCardInforDetail(cardInfo, Boolean.FALSE));
+	            }
             }
             else{
                 cardInfoDetailResponse.setCardInfoDetail(CardInfoDetailConverter.convertCardInforDetail(cardInfo, Boolean.FALSE));
@@ -696,6 +707,7 @@ public class CardInfoController extends RestExceptionHandler {
         try{
             List<com.ecard.core.vo.CardInfo> cardInfo = cardInfoService.getListPossesionCardRecent(userId);
             cardInfoResponse.setListCardInfo(CardInfoConverter.convertCardRecentList(cardInfo));
+            cardInfoResponse.setTotalRecord(homeService.countRecentPossessionCard(userId).longValue());
             statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgListCardSuccess, token);            
         }
         catch(Exception ex){

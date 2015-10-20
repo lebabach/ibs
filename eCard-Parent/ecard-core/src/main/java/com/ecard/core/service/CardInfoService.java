@@ -6,6 +6,7 @@ package com.ecard.core.service;
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.PrusalHistory;
+import com.ecard.core.util.PairUtil;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
@@ -104,7 +105,7 @@ public interface CardInfoService {
    
    public List<CardInfo> getListCardInfoByUserId(Integer userId);
    
-   public List<Integer> getListUserPushToByCard(CardInfo cardInfo);
+   public List<PairUtil<Integer,Integer>> getListUserPushToByCard(CardInfo cardInfo);
    
    public List<Integer> getListUserPushFromByCard(CardInfo cardInfo);
    
@@ -168,4 +169,6 @@ public interface CardInfoService {
    public Long countSameCardInfoByOwner(CardInfo cardInfo);
    
    public List<CardInfoNotifyChange> getListCardInfoNotifyChange(CardInfo cardInfo);
+   
+   public void updateCardInfoNoIndex(List<CardInfo> cardInfoList);
 }

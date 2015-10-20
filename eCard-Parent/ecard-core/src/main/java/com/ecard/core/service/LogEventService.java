@@ -7,5 +7,7 @@ public interface LogEventService  {
 	
 	public List<LogEventVo> getAllLogEvent();
 	public List<LogEventVo> searchLog(String criteriaSearch);
+	public boolean deleteLog();
+	public boolean deleteLogCardUpdateHistory();
 
 }

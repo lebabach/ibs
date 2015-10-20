@@ -8,6 +8,15 @@
 }
 </style>
 <script type="text/javascript">
+history.pushState(null, null, null);
+
+window.addEventListener("popstate", function() {
+history.pushState(null, null, null);
+});
+</script>
+
+
+<script type="text/javascript">
 function loadDataIsEditting(){
 	$('#listCard').find("tr").each(function(){
 		if ($(this).attr("class") != undefined && ($(this).attr("class") == "odd" || $(this).attr("class") == "even")) {

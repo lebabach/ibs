@@ -4,6 +4,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page import="java.lang.Integer"%>
 <%@ page import="java.util.List"%>
+<script type="text/javascript">
+history.pushState(null, null, null);
+
+window.addEventListener("popstate", function() {
+history.pushState(null, null, null);
+});
+</script>
 
 <script type="text/javascript">
 	var base64 = "";

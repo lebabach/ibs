@@ -26,6 +26,8 @@ import com.ecard.core.model.enums.IndexTypeEnum;
 import com.ecard.core.model.enums.PropertyCodeEnum;
 import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.service.UserInfoService;
+import com.ecard.core.vo.ActionLogDownloadVo;
+import com.ecard.core.vo.CardUpdateHistoryDownloadVo;
 import com.ecard.core.vo.UserDownloadPermission;
 import com.ecard.core.vo.UserInfoVo;
 import com.ecard.core.vo.UserListContact;
@@ -340,4 +342,12 @@ public class UserInfoServiceImpl implements UserInfoService {
 		// TODO Auto-generated method stub
 		return userInfoDAO.getDomainUser(domain);
 	}
+public List<ActionLogDownloadVo> getListActionLog(){
+    	return userInfoDAO.getListActionLog();
+    }
+    
+    public List<CardUpdateHistoryDownloadVo> getListCardUpdateHistory(){
+    	return userInfoDAO.getListCardUpdateHistory();
+    }
+
 }

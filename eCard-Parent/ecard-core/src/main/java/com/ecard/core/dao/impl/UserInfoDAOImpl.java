@@ -21,6 +21,8 @@ import com.ecard.core.model.Roles;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.UserMigration;
 import com.ecard.core.model.UserNotification;
+import com.ecard.core.vo.ActionLogDownloadVo;
+import com.ecard.core.vo.CardUpdateHistoryDownloadVo;
 import com.ecard.core.vo.UserDownloadPermission;
 import com.ecard.core.vo.UserInfoVo;
 import com.ecard.core.vo.UserListContact;
@@ -979,4 +981,26 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
         }
         return (MailDomainList)q.getResultList().get(0);
 	}
+
+public List<ActionLogDownloadVo> getListActionLog() {
+    	Query query = getEntityManager().createNativeQuery("SELECT * FROM action_log");        
+        List<Object[]> rows = query.getResultList();
+        List<ActionLogDownloadVo> result = new ArrayList<>(rows.size());
+
+        for (Object[] row : rows) {
+            result.add(new ActionLogDownloadVo((Integer)row[0],(Integer)row[1] ,(String) row[2],(Date) row[3]));
+        }
+        return result;	
+    }
+
+    public List<CardUpdateHistoryDownloadVo> getListCardUpdateHistory() {
+    	Query query = getEntityManager().createNativeQuery("SELECT * FROM card_update_history");        
+        List<Object[]> rows = query.getResultList();
+        List<CardUpdateHistoryDownloadVo> result = new ArrayList<>(rows.size());
+
+        for (Object[] row : rows) {
+            result.add(new CardUpdateHistoryDownloadVo((Integer)row[0],(Integer)row[1] ,(String) row[2],(String)row[3],(Date) row[4],(Date)row[5], (Integer)row[6]));
+        }
+        return result;	
+    }
 }

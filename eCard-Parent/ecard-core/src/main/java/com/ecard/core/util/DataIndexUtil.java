@@ -165,4 +165,10 @@ public class DataIndexUtil {
 		}
 		return new Date();
 	}
+	
+	public static String setPropertyCodeFrom(String index_no_table,String newPropertyCode,TableTypeEnum tableType) {
+		int indexFirst = getCurrentDate().toString().length() + 1;
+		String idNoProperty=index_no_table.substring(0,indexFirst + 8);
+		return tableType.getStatusCode() + (idNoProperty+newPropertyCode).substring(1);
+	}
 }

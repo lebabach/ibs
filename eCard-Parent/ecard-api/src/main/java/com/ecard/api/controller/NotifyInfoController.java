@@ -21,11 +21,11 @@ import com.ecard.core.vo.NotificationListResponse;
 import com.ecard.core.vo.PushNotification;
 import com.ecard.core.vo.StatusInfo;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.PathParam;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -36,7 +36,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -83,7 +82,7 @@ public class NotifyInfoController extends RestExceptionHandler {
     private String msgUpdateFlgSuccess;
     
     @RequestMapping(value="/getUserUpdateInfo", method = RequestMethod.GET)
-    public NotificationListResponse getUserUpdateInfo(HttpServletRequest request) throws IOException {
+    public NotificationListResponse getUserUpdateInfo(HttpServletRequest request, @RequestParam(required = false) Integer page) throws IOException {
         NotificationListResponse userNotification = new NotificationListResponse();
         
         SchemaContextHolder.setSchemaType(SchemaType.USER);
@@ -98,14 +97,18 @@ public class NotifyInfoController extends RestExceptionHandler {
         
         AutoLogin autoLogin = userInfoService.findByToken(token);
         Integer userId = autoLogin.getUserInfo().getUserId();
-        
+        List<NotificationList> listUpdate = new ArrayList<>();
         try {
-            List<NotificationList> listUpdate = notificationInfoService.listAllNofiticationUser(userId);
+        	if(page == null){
+            	page = 0;
+            }
+            listUpdate = notificationInfoService.listAllNofiticationUserPaging(userId, page);
             if(listUpdate.size() != 0){
             	statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgGetUserSuccess, token);                
                 //notificationInfoService.updateListAllNotificationUser(userId);
                 userNotification.setUpdateInfoList(listUpdate);
             } else {                    
+            	userNotification.setUpdateInfoList(listUpdate);
             	statusInfo = new StatusInfo(Constants.SUCCESS, Constants.NO_CONTENT, this.msgNoContent, token);                
             }            
         } catch (Exception ex) {
@@ -173,20 +176,18 @@ public class NotifyInfoController extends RestExceptionHandler {
     	try {
             
             String jsonStr = " {"+
-  	      "\"title\":\""+pushNotification.getTitle()+"\","+
-  	      "\"type\":\"simple\","+
-  		  "\"alert\":\""+ pushNotification.getAlert()+"\","+
-  		  "\"audience\":{\"app\": [\""+pushNotification.getAppId()+"\"], \"uuid\": [\""+pushNotification.getDeviceToken()+"\"]},"+
-  		  "\"throttle\":0,"+
-  		  "\"draft\": false,"+
-  	  	  "\"extra\": {\"user\": {\"sdk_notify_pattern\": -1}},"+
-  	  	  "\"extra\": {\"option\":{\"notification_type\": \"simple\"}, \"aps\": {\"badge\":"+pushNotification.getBadge()+", \"content-available\": 1}}}";    	
+		  	      "\"title\":\""+pushNotification.getTitle()+"\","+
+		  	      "\"type\":\"simple\","+
+		  		  "\"alert\":\""+ pushNotification.getAlert()+"\","+
+		  		  "\"audience\":{\"app\": [\""+pushNotification.getAppId()+"\"], \"uuid\": [\""+pushNotification.getDeviceToken()+"\"]},"+
+		  		  "\"throttle\":0,"+
+		  		  "\"draft\": false,"+
+		  	  	  "\"extra\": {\"user\": {\"sdk_notify_pattern\": -1} ,\"option\":{\"notification_type\": \"simple\"}, \"aps\": {\"badge\":"+pushNotification.getBadge()+", \"content-available\": 1}}}";    	
             JSONParser parser = new JSONParser();
             JSONObject json = null;
             try {
                             json = (JSONObject) parser.parse(jsonStr);		
                     } catch (ParseException e) {
-                            // TODO Auto-generated catch block
                             e.printStackTrace();
                     }
 
@@ -196,6 +197,8 @@ public class NotifyInfoController extends RestExceptionHandler {
             headers.set("Authorization", "authkey 8hxoez1oas4l25wst7mw4x46lhx0hr1fb226sd22cqdpa50k; context=363b5a7b-2a66-431b-b269-ddea3037d657");  	     	    		 
             HttpEntity entity = new HttpEntity(json, headers);
             result = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
+            System.out.println("JSON = "+json);
+			System.out.println("RESULT API = "+ result);
         } catch (Exception ex){
         	statusInfo = new StatusInfo(Constants.ERROR, Constants.SERVER_ERROR, ex.getMessage(), token);            
         }

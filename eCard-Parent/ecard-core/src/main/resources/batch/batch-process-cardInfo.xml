@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:batch="http://www.springframework.org/schema/batch" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:file="http://www.springframework.org/schema/integration/file"
+	xmlns:integration="http://www.springframework.org/schema/integration"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"	
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans	
+	http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/integration
+	http://www.springframework.org/schema/integration/spring-integration.xsd
+	http://www.springframework.org/schema/integration/file 
+	http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/batch 
+        http://www.springframework.org/schema/batch/spring-batch.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/util 
+	http://www.springframework.org/schema/util/spring-util.xsd
+	http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd">
+    
+    <import resource="context.xml"/>
+    
+    <job id="batchProcessCard" xmlns="http://www.springframework.org/schema/batch" restartable="true">
+        <step id="step1" allow-start-if-complete="true">
+            <tasklet ref="batchProcessCardTasklet"></tasklet>
+        </step>
+    </job>
+        
+    <bean id="batchProcessCardTasklet" class="com.ecard.core.batch.tasklet.BatchProcessCardTasklet">
+    	<property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    <!-- run every 10 seconds -->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+                <property name="jobDetail" ref="jobDetail" />
+                <!--Fire at 11:00pm and at 11:45pm every Sunday -->
+                <!-- <property name="cronExpression" value=" 0 00,45 23 ? * SUN " /> -->
+                <!--Fire at 3pm and every day -->
+                <property name="cronExpression" value=" 0 0 4 * * ? " />
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="jobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.ecard.core.batch.tasklet.scheduler.BatchProcessCardTaskScheduler"></property>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobName" value="batchProcessCard"></entry>
+                <entry key="jobLauncher" value-ref="jobLauncher"></entry>
+                <entry key="jobLocator" value-ref="jobRegistry"></entry>
+            </map>
+        </property>
+        <property name="durability" value="true" />
+    </bean>
+    
+    <bean class="org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor">
+        <property name="jobRegistry" ref="jobRegistry" />
+    </bean>
+ 
+    <bean id="jobRegistry" class="org.springframework.batch.core.configuration.support.MapJobRegistry" />
+	    
+ </beans>

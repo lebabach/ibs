@@ -5,6 +5,12 @@
  */
 package com.ecard.core.batch.util;
 
+import com.ecard.core.batch.contants.BatchConstants;
+import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.enums.TableTypeEnum;
+import com.ecard.core.service.CardInfoService;
+import com.ecard.core.util.DataIndexUtil;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -32,54 +38,58 @@ import com.ecard.core.service.CardInfoService;
 public class WriteCardImage {
     private static final Logger logger = LoggerFactory.getLogger(WriteCardImage.class);
     
-    @Value("${card.default.base64}")
     private String defaultImage64;
     
-    @Value("${scp.hostname}")
     private String scpHostName;
     
-    @Value("${scp.user}")
     private String scpUser;
     
-    @Value("${scp.password}")
     private String scpPassword;
     
-    @Autowired
-    CardInfoService cardInfoService;
+    public WriteCardImage(){}
+    
+    public WriteCardImage(String defaultImage64, String scpHostName, String scpUser, String scpPassword){
+    	this.defaultImage64 = defaultImage64;
+    	this.scpHostName = scpHostName;
+    	this.scpUser = scpUser;
+    	this.scpPassword = scpPassword;
+    }
     
     public void writeCardImage(List<CardInfo> cardInfoList){
-        if (CollectionUtils.isEmpty(cardInfoList) || StringUtils.isEmpty(BatchConstants.IMAGE_BASE64)) {
-            return;
-        }
-        logger.info("Batch start uploading card");
-        
-        try {
-
-            ClassLoader classLoader = WriteCardImage.class.getClassLoader();
-            File file = new File(classLoader.getResource("MSMINCHO.TTF").getFile());
-            Font font = Font.createFont(Font.TRUETYPE_FONT, file);
-
-            for (CardInfo cardInfo : cardInfoList) {
-            	Thread.sleep(1000);
-				BufferedImage image = UploadFileUtil.decodeToImage(defaultImage64);
-				Graphics g = image.getGraphics();
-				Graphics2D g2 = (Graphics2D)g;
-				 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					        RenderingHints.VALUE_ANTIALIAS_ON);
-				font = font.deriveFont(Font.BOLD, 20f);
-				//Font font = new Font(Font.SANS_SERIF, Font.BOLD, 20);
-				g2.setFont(font);
-				g2.setColor(Color.BLACK);
-				g2.drawString(cardInfo.getCompanyName()!= null ? StringUtilsHelper.convertToUTF8(cardInfo.getCompanyName()) : StringUtils.EMPTY, BatchConstants.xCooder, BatchConstants.yCooder);
-				g2.drawString(cardInfo.getDepartmentName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getDepartmentName()): StringUtils.EMPTY, BatchConstants.xCooder, BatchConstants.yCooder+ 30);
-				g2.drawString(cardInfo.getPositionName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getPositionName()) : StringUtils.EMPTY, BatchConstants.xCooder, BatchConstants.yCooder+ 60);
-				
-				g2.drawString(cardInfo.getName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getName()) : StringUtils.EMPTY,BatchConstants.xCooder + 30, BatchConstants.yCooder + 150);
-				g2.dispose();
-				UploadFileUtil.overrideImage(UploadFileUtil.encodeToString(image, "jpg"), scpHostName, scpUser, scpPassword, cardInfo.getImageFile());
-            }
-        } catch (Exception ex) {
-            logger.error("Error upload default card image: " + ex.getMessage());
-        }
+		 
+		if (CollectionUtils.isEmpty(cardInfoList) || StringUtils.isEmpty(defaultImage64)) {
+			return;
+		}
+		logger.info("Thread start uploading card");
+		try {
+			
+		    ClassLoader classLoader = WriteCardImage.class.getClassLoader();
+			File file = new File(classLoader.getResource("MSMINCHO.TTF").getFile());
+			Font font = Font.createFont(Font.TRUETYPE_FONT, file);
+			
+			for (CardInfo cardInfo : cardInfoList) {
+				if(cardInfo.getImageFile().equals("card_04.jpg")){
+					cardInfo.setImageFile(DataIndexUtil.setPropertyCodeFrom(cardInfo.getCardIndexNo(), "00M",TableTypeEnum.ImageInfor)+".jpg");
+					BufferedImage image = UploadFileUtil.decodeToImage(defaultImage64);
+					Graphics g = image.getGraphics();
+					Graphics2D g2 = (Graphics2D)g;
+					 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+						        RenderingHints.VALUE_ANTIALIAS_ON);
+					font = font.deriveFont(Font.BOLD, 20f);
+					//Font font = new Font(Font.SANS_SERIF, Font.BOLD, 20);
+					g2.setFont(font);
+					g2.setColor(Color.BLACK);
+					g2.drawString(cardInfo.getCompanyName()!= null ? StringUtilsHelper.convertToUTF8(cardInfo.getCompanyName()) : StringUtils.EMPTY, BatchConstants.xCooder, BatchConstants.yCooder);
+					g2.drawString(cardInfo.getDepartmentName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getDepartmentName()): StringUtils.EMPTY, BatchConstants.xCooder, BatchConstants.yCooder+ 30);
+					g2.drawString(cardInfo.getPositionName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getPositionName()) : StringUtils.EMPTY, BatchConstants.xCooder, BatchConstants.yCooder+ 60);
+					
+					g2.drawString(cardInfo.getName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getName()) : StringUtils.EMPTY,BatchConstants.xCooder + 30, BatchConstants.yCooder + 150);
+					g2.dispose();
+					UploadFileUtil.overrideImage(UploadFileUtil.encodeToString(image, "jpg"), scpHostName, scpUser, scpPassword, cardInfo.getImageFile());
+				}
+			}
+		} catch (Exception ex) {
+			logger.error("Error upload default card image: " + ex.getMessage());
+		}
     }
 }

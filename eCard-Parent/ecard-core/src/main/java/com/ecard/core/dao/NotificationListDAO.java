@@ -17,6 +17,8 @@ import java.util.List;
 public interface NotificationListDAO {
     public List<NotificationList> getListNotification(Integer userId);
     
+    public List<NotificationList> getListNotificationPaging(Integer userId, Integer page);
+    
     public void updateListNotification(Integer userId);
     
     public List<NotificationListManager> listAllNofiticationManager();

@@ -35,8 +35,26 @@ public class NotificationListDAOImpl extends GenericDao implements NotificationL
                     + " FROM user_notification AS un " 
                     + " WHERE un.user_id = :userId "
                     + " ORDER BY un.notice_date DESC");
+        query.setParameter("userId", userId);        
+        List<Object[]> rows = query.getResultList();
+        List<NotificationList> result = new ArrayList<>(rows.size());
+        for (Object[] row : rows) {
+            result.add(new NotificationList((Integer)row[0], (Integer)row[1], (Integer)row[2], (Integer)row[3], (Integer)row[4], (Date)row[5], (String)row[6]));
+        }
+        return result;
+    }
+    
+    public List<NotificationList> getListNotificationPaging(Integer userId, Integer page){
+        // Get user update info
+//        Query query = getEntityManager().createQuery("SELECT NEW com.ecard.core.vo.NotificationList(un.noticeId, un.noticeType, un.cardId, un.changeParamType, un.readFlg, un.noticeDate) "       
+//                + " FROM UserNotification AS un"
+//                + " WHERE un.userInfo.userId= :userId AND un.readFlg = 0");
+        Query query = getEntityManager().createNativeQuery("SELECT un.notice_id, un.notice_type, un.card_id, un.change_param_type, un.read_flg, un.notice_date, un.notify_message " 
+                    + " FROM user_notification AS un " 
+                    + " WHERE un.user_id = :userId "
+                    + " ORDER BY un.notice_date DESC");
         query.setParameter("userId", userId);
-        query.setFirstResult(0);
+        query.setFirstResult(page* this.maxResult);
         query.setMaxResults(this.maxResult);
         List<Object[]> rows = query.getResultList();
         List<NotificationList> result = new ArrayList<>(rows.size());
