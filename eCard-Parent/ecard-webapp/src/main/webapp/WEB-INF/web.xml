@@ -33,7 +33,8 @@
             <param-value>
                 classpath:/applicationContext.xml,
                 /WEB-INF/spring/root-context.xml,
-                /WEB-INF/spring/security.xml
+                /WEB-INF/spring/security.xml,
+                classpath:/batch/batch-process-cardInfo.xml
             </param-value>
     </context-param>
 

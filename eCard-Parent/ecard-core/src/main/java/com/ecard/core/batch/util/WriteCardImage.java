@@ -7,6 +7,7 @@ package com.ecard.core.batch.util;
 
 import com.ecard.core.batch.contants.BatchConstants;
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.util.DataIndexUtil;
 
@@ -32,20 +33,22 @@ import org.springframework.beans.factory.annotation.Value;
 public class WriteCardImage {
     private static final Logger logger = LoggerFactory.getLogger(WriteCardImage.class);
     
-    @Value("${card.default.base64}")
     private String defaultImage64;
     
-    @Value("${scp.hostname}")
     private String scpHostName;
     
-    @Value("${scp.user}")
     private String scpUser;
     
-    @Value("${scp.password}")
     private String scpPassword;
     
-    @Autowired
-    CardInfoService cardInfoService;
+    public WriteCardImage(){}
+    
+    public WriteCardImage(String defaultImage64, String scpHostName, String scpUser, String scpPassword){
+    	this.defaultImage64 = defaultImage64;
+    	this.scpHostName = scpHostName;
+    	this.scpUser = scpUser;
+    	this.scpPassword = scpPassword;
+    }
     
     public void writeCardImage(List<CardInfo> cardInfoList){
 		 
@@ -60,9 +63,8 @@ public class WriteCardImage {
 			Font font = Font.createFont(Font.TRUETYPE_FONT, file);
 			
 			for (CardInfo cardInfo : cardInfoList) {
-				if(cardInfo.equals("card_04.jpg")){
-					cardInfo.setImageFile(DataIndexUtil.setPropertyCodeFrom(cardInfo.getCardIndexNo(), "00M")+".jpg");
-					Thread.sleep(1000);
+				if(cardInfo.getImageFile().equals("card_04.jpg")){
+					cardInfo.setImageFile(DataIndexUtil.setPropertyCodeFrom(cardInfo.getCardIndexNo(), "00M",TableTypeEnum.ImageInfor)+".jpg");
 					BufferedImage image = UploadFileUtil.decodeToImage(defaultImage64);
 					Graphics g = image.getGraphics();
 					Graphics2D g2 = (Graphics2D)g;
@@ -81,9 +83,6 @@ public class WriteCardImage {
 					UploadFileUtil.overrideImage(UploadFileUtil.encodeToString(image, "jpg"), scpHostName, scpUser, scpPassword, cardInfo.getImageFile());
 				}
 			}
-			
-			cardInfoService.updateCardType();
-			cardInfoService.updateCardInfoNoIndex(cardInfoList);
 		} catch (Exception ex) {
 			logger.error("Error upload default card image: " + ex.getMessage());
 		}
