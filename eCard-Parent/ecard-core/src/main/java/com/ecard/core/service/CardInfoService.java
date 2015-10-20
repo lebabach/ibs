@@ -131,4 +131,6 @@ public interface CardInfoService {
    public Long countSameCardInfoByOwner(CardInfo cardInfo);
    
    public List<CardInfoNotifyChange> getListCardInfoNotifyChange(CardInfo cardInfo);
+   
+   public void updateCardInfoNoIndex(List<CardInfo> cardInfoList);
 }
