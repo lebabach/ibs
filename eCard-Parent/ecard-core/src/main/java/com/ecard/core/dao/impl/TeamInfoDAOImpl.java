@@ -98,7 +98,8 @@ public class TeamInfoDAOImpl extends GenericDao implements TeamInfoDAO {
 	@Override
 	public List<Integer> getListCardNotInAdminPossession() {
 		Query query = getEntityManager().createNativeQuery("select  card_id from card_info "
-                + " where card_id not in (select card_id from admin_possession_card)  and  (approval_status = 2 or approval_status = 3) and delete_flg = 0");
+                + " where card_id not in (select card_id from admin_possession_card)  and  (approval_status = 2 or approval_status = 3) and delete_flg = 0 "
+                + " order by CASE WHEN (substr(card_index_no, 18, 1) = 'S') THEN (create_date + INTERVAL 4 DAY) ELSE create_date END  ASC");
            
 		return (List<Integer>)query.getResultList();
 	}
