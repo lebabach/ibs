@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -75,6 +76,7 @@ import com.ecard.webapp.vo.CardInfoWithRoteVO;
 import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.ListCardInfoVO;
 import com.ecard.core.vo.CardInfoNotifyChange;
+import com.ecard.core.vo.PushNotification;
 import com.ecard.core.vo.UserInfoVo;
 
 
@@ -710,26 +712,45 @@ public class CardController {
 		
 		if (pushInfoId.getDeviceToken() != "" && cardOwnerId != null) {
 			try {
-				ResponseEntity<String> result = null;
-				PushInfoId pushNotification = new PushInfoId();
+				
+				//ResponseEntity<String> result = null;
+				PushInfoId pushInfoID = new PushInfoId();
 				UserInfo userInfoPush = new UserInfo();
 				userInfoPush.setUserId(cardOwnerId);
-				pushNotification = userInfoService.getPushNotification(cardOwnerId);
+				pushInfoID = userInfoService.getPushNotification(cardOwnerId);
+				RestTemplate restTemplate = new RestTemplate();
+				
+				
+				
 				String appId = null;
 				Integer badge = 1;
 				String title = "Approval this card";
-				String deviceToken = pushNotification.getDeviceToken();
+				String deviceToken = pushInfoID.getDeviceToken();
 
-				if (pushNotification.getDeviceType().toLowerCase().equals("android")) {
+				if (pushInfoID.getDeviceType().toLowerCase().equals("android")) {
 					appId = AppIdContants.ANDROID_APP_ID;
 				} else {
 					appId = AppIdContants.IOS_APP_ID;
 				}
-				String jsonStr = " {" + "\"title\":\"" + title + "\"," + "\"type\":\"simple\"," + "\"alert\":\"" + msg
-						+ "\"," + "\"audience\":{\"app\": [\"" + appId + "\"], \"uuid\": [\"" + deviceToken + "\"]},"
-						+ "\"throttle\":0," + "\"draft\": false,"
-						+ "\"extra\": {\"user\": {\"sdk_notify_pattern\": -1} ,\"option\":{\"notification_type\": \"simple\"}, \"aps\": {\"badge\":"
-						+ badge + ", \"content-available\": 1}}}";
+				
+				com.ecard.core.vo.PushNotification pushNotification = new PushNotification();
+				pushNotification.setAppId(appId);
+				pushNotification.setBadge(1);
+				pushNotification.setDeviceToken(deviceToken);
+				pushNotification.setTitle(title);
+				pushNotification.setAlert(msg);
+				
+				String result = restTemplate.postForObject("http://52.68.0.143/ecard-api/pushNotification", pushNotification, String.class);
+				System.out.println("CardOwnerID = "+cardOwnerId +",TOKEN = "+pushInfoId.getDeviceToken()+", type = "+pushInfoId.getDeviceType()+ ", userId="+pushInfoId.getUserId()+" ,AppID ="+appId);
+				System.out.println("RESULT = "+ result);
+				/*String jsonStr = " {" 
+						+"\"title\":\"" + title + "\"," 
+						+"\"type\":\"Simple\"," 
+						+"\"alert\":\"" + msg + "\"," 
+						+ "\"audience\":{\"app\": [\"" + appId + "\"], \"uuid\": [\"" + deviceToken + "\"]},"
+						+ "\"throttle\":0," 
+						+ "\"draft\": false,"
+						+ "\"extra\": {\"user\": {\"sdk_notify_pattern\": -1} ,\"option\":{\"notification_type\": \"simple\"}, \"aps\": {\"badge\":"+ badge + ", \"content-available\": 1}}}";
 				JSONParser parser = new JSONParser();
 				JSONObject json = null;
 				try {
@@ -737,16 +758,18 @@ public class CardController {
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
-
+				System.out.println("JSON PUSH NOTIFICATION = "+json);
 				String uri = "http://api.livepasspush.com/api/msgs/";
 				RestTemplate restTemplate = new RestTemplate();
 				HttpHeaders headers = new HttpHeaders();
 				headers.set("Authorization", "authkey 8hxoez1oas4l25wst7mw4x46lhx0hr1fb226sd22cqdpa50k; context=363b5a7b-2a66-431b-b269-ddea3037d657");
+				headers.setContentType(MediaType.APPLICATION_JSON);
 				HttpEntity entity = new HttpEntity(json, headers);
-				result = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
-				if(!result.getStatusCode().is2xxSuccessful()){
+				String result = restTemplate.postForObject(uri, entity, String.class);
+				System.out.println("Result for PUSH = "+ result);*/
+				/*if(!result.getStatusCode().is2xxSuccessful()){
 					System.out.println("Push Notification error :"+ result.toString());
-				}				
+				}*/				
 			} catch (Exception ex) {
 				StringWriter errors = new StringWriter();
 				ex.printStackTrace(new PrintWriter(errors));				

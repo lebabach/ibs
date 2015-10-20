@@ -197,6 +197,8 @@ public class NotifyInfoController extends RestExceptionHandler {
             headers.set("Authorization", "authkey 8hxoez1oas4l25wst7mw4x46lhx0hr1fb226sd22cqdpa50k; context=363b5a7b-2a66-431b-b269-ddea3037d657");  	     	    		 
             HttpEntity entity = new HttpEntity(json, headers);
             result = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
+            System.out.println("JSON = "+json);
+			System.out.println("RESULT API = "+ result);
         } catch (Exception ex){
         	statusInfo = new StatusInfo(Constants.ERROR, Constants.SERVER_ERROR, ex.getMessage(), token);            
         }
