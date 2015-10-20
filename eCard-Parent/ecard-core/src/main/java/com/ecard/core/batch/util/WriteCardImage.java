@@ -61,7 +61,7 @@ public class WriteCardImage {
 			
 			for (CardInfo cardInfo : cardInfoList) {
 				if(cardInfo.equals("card_04.jpg")){
-					cardInfo.setImageFile(DataIndexUtil.setPropertyCodeFrom(cardInfo.getCardIndexNo(), "00M"));
+					cardInfo.setImageFile(DataIndexUtil.setPropertyCodeFrom(cardInfo.getCardIndexNo(), "00M")+".jpg");
 					Thread.sleep(1000);
 					BufferedImage image = UploadFileUtil.decodeToImage(defaultImage64);
 					Graphics g = image.getGraphics();
