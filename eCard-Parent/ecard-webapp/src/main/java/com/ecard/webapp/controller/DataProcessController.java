@@ -375,8 +375,14 @@ public class DataProcessController {
 		int recordError = 0;
 		//int recordCnt = 0;
 		//String errorLineNo = "";
-
-		if (!file.getContentType().equals("application/vnd.ms-excel") && !file.getContentType().equals("text/csv")) {
+		
+		String[] VALUES = new String[] {"application/vnd.ms-excel","application/excel","application/vnd.ms-excel","application/csv", "application/vnd.msexcel" , "application/force-download",
+										"application/octet-stream","application/txt",
+										"text/csv","text/comma-separated-values", "text/csv", "text/plain","text/anytext"};
+		/*if (!file.getContentType().equals("application/vnd.ms-excel") && !file.getContentType().equals("application/excel") && !file.getContentType().equals("application/vnd.ms-excel") 
+				&& !file.getContentType().equals("application/vnd.msexcel") && !file.getContentType().equals("application/force-download")  && !file.getContentType().equals("application/csv") 
+				&& !file.getContentType().equals("text/csv") && !file.getContentType().equals("text/comma-separated-values") && !file.getContentType().equals("text/anytext") ) {*/
+		if(!Arrays.asList(VALUES).contains(file.getContentType())){
 			return new ModelAndView("redirect:importCardCSV", "error", "formatCSV");
 		}
 		if (file.isEmpty()){
