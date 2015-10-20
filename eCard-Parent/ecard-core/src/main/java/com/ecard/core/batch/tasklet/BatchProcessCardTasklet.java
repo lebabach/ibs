@@ -11,6 +11,7 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.ecard.core.batch.util.WriteCardImage;
 import com.ecard.core.model.CardInfo;
@@ -28,6 +29,18 @@ public class BatchProcessCardTasklet implements Tasklet{
         this.dataSource = dataSource;
     }
     
+    @Value("${card.default.base64}")
+    private String defaultImage64;
+    
+    @Value("${scp.hostname}")
+    private String scpHostName;
+    
+    @Value("${scp.user}")
+    private String scpUser;
+    
+    @Value("${scp.password}")
+    private String scpPassword;
+    
     @Autowired
     CardInfoService cardInfoService;
     
@@ -36,11 +49,12 @@ public class BatchProcessCardTasklet implements Tasklet{
     	try{
     		List<CardInfo> cardInfoList = cardInfoService.listCardInfoByCardType(1);
     		
-    		WriteCardImage cardImage = new WriteCardImage();
+    		WriteCardImage cardImage = new WriteCardImage(defaultImage64, scpHostName, scpUser, scpPassword);
             cardImage.writeCardImage(cardInfoList);
             
             //Update card_type = 0
             cardInfoService.updateCardType();
+            cardInfoService.updateCardInfoNoIndex(cardInfoList);
     	}
     	catch(Exception ex){
             logger.debug("Exception : ", ex.getMessage());
