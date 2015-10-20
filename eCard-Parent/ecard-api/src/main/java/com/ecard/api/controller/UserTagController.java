@@ -170,12 +170,10 @@ public class UserTagController extends RestExceptionHandler{
         try {
             SchemaContextHolder.setSchemaType(SchemaType.MANAGER);
             // Delete UserTag, CardTag with TagId
-            if((cardTagService.deleteCardTagByTagId(userTag.getTagId()) == 1) || 
-                    (userTagService.deleteUserTag(userTag.getTagId()))== 1){
-            	statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgDeleteTagSuccess, token);                
-            } else {
-            	statusInfo = new StatusInfo(Constants.ERROR, Constants.BAD_REQUEST, this.msgTagIdNotExist, token);
-            }
+            cardTagService.deleteCardTagByTagId(userTag.getTagId());
+            userTagService.deleteUserTag(userTag.getTagId());
+            statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgDeleteTagSuccess, token);                
+            
         }
         catch(Exception ex) {
         	statusInfo = new StatusInfo(Constants.ERROR, Constants.SERVER_ERROR, ex.getMessage(), token);            
