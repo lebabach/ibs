@@ -688,7 +688,7 @@ public class CardInfoController extends RestExceptionHandler {
     }
     
     @RequestMapping(value = "/getListPossesionCardRecent", method = RequestMethod.GET)
-    public CardInfoResponse getListPossesionCardRecent(HttpServletRequest request) {
+    public CardInfoResponse getListPossesionCardRecent(HttpServletRequest request,  @RequestParam(required = false) Integer page) {
         logger.debug("getListPossesionCardRecent", CardInfoController.class);
         SchemaContextHolder.setSchemaType(SchemaType.USER);
         CardInfoResponse cardInfoResponse = new CardInfoResponse();
@@ -705,7 +705,10 @@ public class CardInfoController extends RestExceptionHandler {
         Integer userId = autoLogin.getUserInfo().getUserId();
         
         try{
-            List<com.ecard.core.vo.CardInfo> cardInfo = cardInfoService.getListPossesionCardRecent(userId);
+        	if(page == null){
+            	page = 0;
+            }
+            List<com.ecard.core.vo.CardInfo> cardInfo = cardInfoService.getListPossesionCardRecent(userId,page);
             cardInfoResponse.setListCardInfo(CardInfoConverter.convertCardRecentList(cardInfo));
             cardInfoResponse.setTotalRecord(homeService.countRecentPossessionCard(userId).longValue());
             statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgListCardSuccess, token);            
