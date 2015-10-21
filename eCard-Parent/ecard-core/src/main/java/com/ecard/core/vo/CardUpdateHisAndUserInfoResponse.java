@@ -10,7 +10,7 @@ import java.util.List;
  * @author vinhla
  */
 public class CardUpdateHisAndUserInfoResponse extends AbstractCommonRes{
-    private List<CardUpdateHisAndUserInfo> cardList;
+    //private List<CardUpdateHisAndUserInfo> cardList;
     
     private List<com.ecard.core.vo.CardInfo> cards;
 
@@ -25,14 +25,14 @@ public class CardUpdateHisAndUserInfoResponse extends AbstractCommonRes{
 	/**
      * @return the cardList
      */
-    public List<CardUpdateHisAndUserInfo> getCardList() {
+    /*public List<CardUpdateHisAndUserInfo> getCardList() {
         return cardList;
     }
 
-    /**
+    *//**
      * @param cardList the cardList to set
-     */
+     *//*
     public void setCardList(List<CardUpdateHisAndUserInfo> cardList) {
         this.cardList = cardList;
-    }
+    }*/
 }
