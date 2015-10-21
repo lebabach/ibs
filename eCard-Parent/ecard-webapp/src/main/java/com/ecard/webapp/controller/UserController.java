@@ -97,6 +97,8 @@ import com.ecard.core.vo.CardAndUserTag;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoCSV;
+import com.ecard.core.vo.CardInfoConnectUser;
+import com.ecard.core.vo.CardInfoConnectUserResponse;
 import com.ecard.core.vo.CardInfoMemo;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.NotificationList;
@@ -1883,5 +1885,24 @@ public class UserController {
 		}
 		
 		return new ModelAndView("overlapcards","fullname",name);
+	}
+	
+	@RequestMapping(value = "listConnectUser", method = RequestMethod.POST)
+	@ResponseBody
+    public CardInfoConnectUserResponse listConnectUser(@RequestParam Integer recentFlg, @RequestParam(required = false) Integer page, HttpServletRequest request) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		CardInfoConnectUserResponse response = new CardInfoConnectUserResponse();
+		List<CardInfoConnectUser> cardInfo = cardInfoService.listConnectUser(ecardUser.getUserId(), recentFlg, page);      
+        try {
+			response.setCardList(CardInfoConverter.convertConnectCardList(cardInfo));
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return response;
 	}
 }
