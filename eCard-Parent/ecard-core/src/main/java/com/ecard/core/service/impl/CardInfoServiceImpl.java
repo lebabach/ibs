@@ -553,4 +553,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public List<com.ecard.core.vo.CardInfo> searchCompanyTrees(String searchText){
 		return cardInfoDAO.searchCompanyTrees(searchText);
 	}
+
+	@Override
+	public BigInteger totalListConnectUser(Integer userId, Integer recentFlg) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.totalListConnectUser(userId, recentFlg);
+	}
 }

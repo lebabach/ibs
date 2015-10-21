@@ -164,4 +164,5 @@ public interface CardInfoService {
    public List<com.ecard.core.vo.CardInfo> getListCardHistoryByCardId(Integer cardId);
    
    public List<com.ecard.core.vo.CardInfo> searchCompanyTrees(String searchText);
+   public BigInteger totalListConnectUser(Integer userId, Integer recentFlg);
 }

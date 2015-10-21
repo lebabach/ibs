@@ -301,7 +301,7 @@
               <option value="5" >最近繋がった名刺</option>
             </select>
           </div>
-          
+          <input type ="hidden" name= "totalCardConnect"  value = "">
           <%-- <div class="col-md-2 m-b-xs setDisplayTerm" style="width:140px;padding-left: 5px !important;">
             <select id="selectTagBox" class="input-sm form-control input-s-sm inline">
               <option value="0" selected>(タグ一覧から)</option>
@@ -536,45 +536,50 @@
 		       			});
 	    	    	}
 	    	    	if(typeLoading == 3 && (parseInt($('#selectSortBox').val()) == 4 || parseInt($('#selectSortBox').val()) == 5 )){
-	    	    		var recentFlg =2;
+	    	    		var recentFlg =0;
+	    	    		var total = 0;
 	    	    		if(parseInt($('#selectSortBox').val()) == 4){
 	    	    			recentFlg = 0;
 	    	    		}else if (parseInt($('#selectSortBox').val()) == 5){
 	    	    			recentFlg = 1;
 	    	    		}
-	    	    		alert("recentFlg :" + recentFlg);
-	    	    		$.ajax({
-	     					type: 'POST',
-	     					url: 'listConnectUser',
-	     					data: 'page=' + (++id_manager) + "&recentFlg=" +recentFlg
-	     				}).done(function(resp, status, xhr) { 					
-	     					$.each( resp.cardList, function( k, v ) {
-	     						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
-	     			 					+'<div class="row row-new">'
-	     								+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
-	     								+    '<input type="checkbox" value="'+v.cardId+'" class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
-	     								+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
-	     								+	 '</div></div>'
-	     								+	'<div class="col-md-5">'
-	     								+		'<div class="col-xs-11 mg-top">'
-	     								+ 			'<p class="name">'+v.lastName +' '+ v.firstName+'</p>'
-	     								+			'<p class="livepass">'+v.companyName+'</p>'
-	     								+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
-	     								+			'<p class="num">'+v.telNumberCompany+'</p>'
-	     								+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
-	     								+ '</div></div>'
-	     								+	'<div class="col-md-6">'
-	     								+	'<div class="col-xs-5" style=" display: table;"></div>'	
-	     								+	'<div class="col-xs-7">'								
-	     								+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
-	     								+   '<input class="hidden" name="fileImageName" value="'+v.imageFile+'">'
-	     								+	'</div> </div> </div> </div>');
-	     			 					getImageFromSCP(v.imageFile);
-	     					});
-	     					
-	     				}).fail(function(xhr, status, err) {
-	     					console.log('BBB='+err);
-	     				});
+                       var total = parseInt($('input[name=totalCardConnect]').val()) ;
+                       
+	    	            if($('.business_card_book .list-group-item').length < total ){
+	    	            	console.log("Total:" + total);
+			    	    		 $.ajax({
+			     					type: 'POST',
+			     					url: 'listConnectUser',
+			     					data: 'page=' + (++id_manager) + "&recentFlg=" +recentFlg
+			     				}).done(function(resp, status, xhr) { 					
+			     					$.each( resp.cardList, function( k, v ) {
+			     						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+			     			 					+'<div class="row row-new">'
+			     								+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
+			     								+    '<input type="checkbox" value="'+v.cardId+'" class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
+			     								+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
+			     								+	 '</div></div>'
+			     								+	'<div class="col-md-5">'
+			     								+		'<div class="col-xs-11 mg-top">'
+			     								+ 			'<p class="name">'+v.lastName +' '+ v.firstName+'</p>'
+			     								+			'<p class="livepass">'+v.companyName+'</p>'
+			     								+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+			     								+			'<p class="num">'+v.telNumberCompany+'</p>'
+			     								+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+			     								+ '</div></div>'
+			     								+	'<div class="col-md-6">'
+			     								+	'<div class="col-xs-5" style=" display: table;"></div>'	
+			     								+	'<div class="col-xs-7">'								
+			     								+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+			     								+   '<input class="hidden" name="fileImageName" value="'+v.imageFile+'">'
+			     								+	'</div> </div> </div> </div>');
+			     			 					getImageFromSCP(v.imageFile);
+			     					});
+			     					
+			     				}).fail(function(xhr, status, err) {
+			     					console.log('BBB='+err);
+			     				}); 
+	    	            }
 	    	    	}
 	    	    } 
     	  }
@@ -739,7 +744,26 @@
      $('#selectSortBox').on('change', function(event) {
     	 $.xhrPool.abortAll();
          var typeSort =  $(this).val();
-         typeLoading = 3
+         typeLoading = 3;
+         var recentFlg = 0;
+         if(parseInt(typeSort) == 4){
+ 			recentFlg = 0;
+ 		}else if (parseInt(typeSort) == 5){
+ 			recentFlg = 1;
+ 		}
+         if(parseInt(typeSort) == 4 || parseInt(typeSort) == 5){
+        	  $.ajax({
+					type: 'POST',
+					url: 'totalConnect',
+					data: 'recentFlg=' + recentFlg
+				}).done(function(resp, status, xhr) { 					
+					$('input[name=totalCardConnect]').val(resp);
+				}).fail(function(xhr, status, err) {
+					$('input[name=totalCardConnect]').val(0);
+				});
+         }
+ 		  
+ 	
          if(parseInt(typeSort) == 0){
         	 typeLoading = 2
         	 $("#sort_cnd").show();
@@ -2152,5 +2176,7 @@
 
 		    return year + "年" + month + "月";
 		}
+		
+		
 
     </script>
