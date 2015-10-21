@@ -68,6 +68,7 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 					notification.setDate(item.getNotice_date());
 					notification.setId(item.getNotice_id());
 					notification.setNoticeType(item.getNotice_type());
+					notification.setCardId(item.getCard_id());
 					try{
 						card=cardInfoService.getCardInfoDetail(item.getCard_id());	
 					}catch (Exception e){
@@ -84,7 +85,7 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 				objectNotification.setNotifications(notifications);
 				objectNotification.setNumberOfNotification(listUpdate.stream().filter(x->x.getRead_flg()==0).collect(Collectors.toList()).size());
 				
-				//remove session if isDetail is false
+				//remove se/ssion if isDetail is false
 				HttpSession session= request.getSession();
 				if (session.getAttribute("searchDetail") != null) {
 					UserSearchVO u=(UserSearchVO)request.getSession().getAttribute("searchDetail");

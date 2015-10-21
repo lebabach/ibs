@@ -10,6 +10,13 @@ public class NotificationOfUserVO {
 	private Integer read_flg;
 	private int userId;
 	private int noticeType;
+	private int cardId;
+	public int getCardId() {
+		return cardId;
+	}
+	public void setCardId(int cardId) {
+		this.cardId = cardId;
+	}
 	public Integer getRead_flg() {
 		return read_flg;
 	}

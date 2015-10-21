@@ -389,7 +389,7 @@ $(document).ready(function() {
 		var groupCompanyId=$(this).closest( "tr" ).find(".groupCompanyId").val(); 
 		$.ajax({
 			    type: 'POST',
-			    url: 'listConnectCards',
+			    url: '/ecard-webapp/user/listConnectCards',
 			    dataType: 'json', 
 				 contentType: 'application/json',
 				 mimeType: 'application/json',
@@ -421,7 +421,7 @@ $(document).ready(function() {
 			$("#loading-copy").show();
 			$.ajax({
 			    type: 'POST',
-			    url: 'handleConnectCards',
+			    url: '/ecard-webapp/user/handleConnectCards',
 			    data: { 
 			        'cardid1':cardid1,
 			        'cardid2':cardid2
@@ -454,7 +454,7 @@ $(document).ready(function() {
 			}
 		},
 		"ajax": {
-			"url": "searchOverLapCards",
+			"url": "/ecard-webapp/user/searchOverLapCards",
 			"type": "POST",
 			"data": function (dataTableRequest) {
 				dataTableRequest.criteriaSearch = $('#criteriaSearch').val();

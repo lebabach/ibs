@@ -286,7 +286,8 @@ function checkValidationForm() {
 	var addressFull = $("#addressFull").val();
 	var zipcode = $('#zipcode').val();
     var email = $("#email").val();
-
+	var firstnamekana = $("#firstnamekana").val();
+	var lastnamekana  = $("#lastnamekana").val();
 	var companyNameKanaId = $('#companyNameKanaId').val();
 	if (firstname == "") {
 		$(".error_firstname").text(
@@ -337,6 +338,21 @@ function checkValidationForm() {
 	if (companyNameKanaId == "") {
 		$(".error_companyNameKana").text(
 				"<fmt:message key='edit.card.validate'/>");
+		checkValidation = false;
+		$(".mesage_error").css("display", "block");
+	}
+	
+	var regex = "^[ァ-ヶ]*$"; //check pattern
+	if (!(regex.test(firstnamekana))) {
+		$(".error_newpass1").text(
+				"<fmt:message key='user.profile.format.pass'/>");
+		checkValidation = false;
+		$(".mesage_error").css("display", "block");
+	}
+	
+	if (!(regex.test(lastnamekana))) {
+		$(".error_newpass1").text(
+				"<fmt:message key='user.profile.format.pass'/>");
 		checkValidation = false;
 		$(".mesage_error").css("display", "block");
 	}
