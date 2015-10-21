@@ -491,14 +491,75 @@
       var page = 1;
       var isLoading = 0;
       $(window).scroll(function() {     	  
-    	  if($('.row-new').length < parseInt(totalCardInfo)){
-    		   var typeSort = $('#sort-card-cnd').val();
-    		   var typeSearch = $("#selectSortBox option:selected").val();
-    		   /* if(isLoading != 0){    			   
-    			   $('body').scrollTop($(window).height()*2);
-    			   return false;
-    		   }  */
+    	  var currentNumberCard = $('.list-group .active').parent().find('.row-new').length;
+    	  var self = $('.list-group .active').parent();
+    	  /* console.log("Scroll totalCardInfo = "+totalCardInfo);
+    	  console.log("Scroll CurrentNumber = "+ currentNumberCard); */
+    	  
+    	  if(currentNumberCard < parseInt(totalCardInfo)){
+    		   
 	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
+	    		   
+	    		   if(typeLoading == 2 && (parseInt($('#sort-card-cnd').val()) == 1 || parseInt($('#sort-card-cnd').val()) == 2 
+	    				   || parseInt($('#sort-card-cnd').val()) == 5 || parseInt($('#sort-card-cnd').val()) == 6)){
+	    			// Load more card
+		     		  console.log("SCROLL : CURRENT = "+currentNumberCard);
+		     		  console.log("SCROLL : TOTALCARDINFO = "+totalCardInfo);
+		     		  console.log("SCROLL : LOADING = "+isLoading);
+		     		  
+		     		   var typeSort = $('#sort-card-cnd').val();
+		     		   var typeSearch = $("#selectSortBox option:selected").val();
+		     		   var strDate = self.attr("id");
+		     		   if(typeSort == 5){
+		               		strDate = strDate.slice(0,4)+"/"+strDate.slice(4,strDate.length+1);	
+		               	}
+		     		   
+		     		   if(isLoading != 0){    			       			   
+		     			   return false;
+		     		   }
+		     		   console.log("SCROLL : LOADING CURRENT = "+isLoading);
+		     		   console.log("SCROLL : PAGE = "+id_manager);
+		     		
+		     			$.xhrPool.abortAll();
+		    		    $.ajax({
+		 	    			type: 'POST',
+		 	    			url: 'search',
+		 	    			data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch + "&valueSearch=" + strDate
+		 	    		  }).done(function(resp, status, xhr) {
+		 	    			   var listGroupItem = "";
+		 	    			   totalCardInfo = resp.recordsTotal;
+		 	    			   console.log("TotalCardInfo = "+ totalCardInfo);
+		 	    				$.each( resp.data, function( key, value ) {
+		 	    					 $.each( value.lstCardInfo, function (k,v) {
+		 	    						 listGroupItem += '<div class="list-group-item pointer show-content">'
+		 	    				    					+'<div class="row row-new">'
+		 	    				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
+		 	    				    					+    '<input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
+		 	    				    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
+		 	    				    					+	 '</div></div>'
+		 	    				    					+	'<div class="col-md-5">'
+		 	    				    					+		'<div class="col-xs-11 mg-top">'
+		 	    				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+		 	    				    					+			'<p class="livepass">'+v.companyName+'</p>'
+		 	    				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+		 	    				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+		 	    				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+		 	    				    					+ '</div></div>'
+		 	    				    					+	'<div class="col-md-6">'
+		 	    				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+		 	    				    					+	'<div class="col-xs-7">'								
+		 	    				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+		 	    				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+		 	    				    					+	'</div> </div> </div> </div>';
+		 	    					 });
+		 	    				});
+		 	    				self.append(listGroupItem);
+		 	    				getImageSCP();
+		 	    				id_manager++;
+		 	    			}).fail(function(xhr, status, err) {
+		 	    				
+		 	    			});
+	    		   	}
 	    	    	// Call ajax here	
 	    	    	if($('#titleOfSearch').length){
 	    	    		//search
@@ -587,31 +648,14 @@
 
  $(document).ready(function(){
 	 $(document).on('click', '.list-group-item-title', function(event)  {
-		 $.xhrPool.abortAll();
-		// Hidden others and change icon
-        /* $(".list-group" ).not($(this)).find('.list-group-item-title').removeClass('active');
-        $(".list-group" ).not($(this)).find('.list-group-item ').removeClass('show-content');
-        $(".list-group" ).not($(this)).find('.list-group-item ').addClass('no-show-content'); */
-        
-        /*PHUONGNV CUSTOME  */
+		$.xhrPool.abortAll();
+		var clickMySelf = 0;
         $('.list-group-item-title').not($(this)).removeClass('active');
         $('.list-group-item-title').not($(this)).parent().find('.list-group-item').removeClass('show-content');
         $('.list-group-item-title').not($(this)).parent().find('.list-group-item').addClass('no-show-content');
-        /*END PHUONGNV CUSTOME  */
-        
-        // Show data end change icon
-       /*  if($(this).find('.list-group-item-title').hasClass('active')){
-        	$(this).find('.list-group-item-title').removeClass('active');
-            $(this).find('.list-group-item ').removeClass('show-content');
-            $(this).find('.list-group-item ').addClass('no-show-content');
-        } else {
-        	$(this).find('.list-group-item-title').addClass('active');
-            $(this).find('.list-group-item ').removeClass('no-show-content');
-            $(this).find('.list-group-item ').addClass('show-content');	
-        } */
-        
-        /*PHUONGNV CUSTOME  */
+
         if($(this).hasClass('active')){
+        	clickMySelf = 1;
         	$(this).removeClass('active');
             $(this).parent().find('.list-group-item ').removeClass('show-content');
             $(this).parent().find('.list-group-item ').addClass('no-show-content');
@@ -620,54 +664,56 @@
             $(this).parent().find('.list-group-item ').removeClass('no-show-content');
             $(this).parent().find('.list-group-item ').addClass('show-content');	
         }
-        /*END PHUONGNV CUSTOME  */
-        
-        if($(this).parent().find('.list-group-item').length <= 0){
-        	var self = $(this).parent();
-            var strDate = $(this).parent().attr("id");
-            var typeSort = $("#sort-card-cnd option:selected").val();
-           	var typeSearch = $("#selectSortBox option:selected").val();
-           	if(typeSort == 5){
-           		strDate = strDate.slice(0,4)+"/"+strDate.slice(4,strDate.length+1);	
-           	}
-           	
-              $.ajax({
-    			type: 'POST',
-    			url: 'search',
-    			data: 'page=' +strDate + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch
-    		  }).done(function(resp, status, xhr) {
-    			   var listGroupItem = "";
-    				$.each( resp.data, function( key, value ) {
-    					 $.each( value.lstCardInfo, function (k,v) {
-    						 listGroupItem += '<div class="list-group-item pointer show-content">'
-    				    					+'<div class="row row-new">'
-    				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
-    				    					+    '<input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
-    				    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
-    				    					+	 '</div></div>'
-    				    					+	'<div class="col-md-5">'
-    				    					+		'<div class="col-xs-11 mg-top">'
-    				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
-    				    					+			'<p class="livepass">'+v.companyName+'</p>'
-    				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
-    				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
-    				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
-    				    					+ '</div></div>'
-    				    					+	'<div class="col-md-6">'
-    				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
-    				    					+	'<div class="col-xs-7">'								
-    				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
-    				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-    				    					+	'</div> </div> </div> </div>';
-    					 });
-    				});
-    				self.append(listGroupItem);
-    				getImageSCP();	
-    			}).fail(function(xhr, status, err) {
-    				
-    			});
-              	
-        }
+        if(clickMySelf == 1){
+        	return false;
+        }        
+       	var self = $(this).parent();        	
+        var strDate = $(this).parent().attr("id");
+        var typeSort = $("#sort-card-cnd option:selected").val();
+       	var typeSearch = $("#selectSortBox option:selected").val();
+       	var page = 0;
+       	isLoading = 0;
+       	if(typeSort == 5){
+       		strDate = strDate.slice(0,4)+"/"+strDate.slice(4,strDate.length+1);	
+       	}
+       	self.find('.list-group-item').remove();
+          $.ajax({
+   			type: 'POST',
+   			url: 'search',
+   			data: 'page=' +page + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch + "&valueSearch=" + strDate
+   		  }).done(function(resp, status, xhr) {
+   			   var listGroupItem = "";
+   			   totalCardInfo = resp.recordsTotal;
+   			   console.log("TotalCardInfo = "+ totalCardInfo);
+   				$.each( resp.data, function( key, value ) {
+   					 $.each( value.lstCardInfo, function (k,v) {
+   						 listGroupItem += '<div class="list-group-item pointer show-content">'
+   				    					+'<div class="row row-new">'
+   				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
+   				    					+    '<input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
+   				    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
+   				    					+	 '</div></div>'
+   				    					+	'<div class="col-md-5">'
+   				    					+		'<div class="col-xs-11 mg-top">'
+   				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+   				    					+			'<p class="livepass">'+v.companyName+'</p>'
+   				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+   				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+   				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+   				    					+ '</div></div>'
+   				    					+	'<div class="col-md-6">'
+   				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+   				    					+	'<div class="col-xs-7">'								
+   				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+   				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+   				    					+	'</div> </div> </div> </div>';
+   					 });
+   				});
+   				self.append(listGroupItem);
+   				getImageSCP();	
+   			}).fail(function(xhr, status, err) {
+   				
+   			});
         
      });
 	 
@@ -952,12 +998,16 @@
 	        $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
 	       	var typeSort = $(this).val();
 	       	var typeSearch = $("#selectSortBox option:selected").val();
-	       	id_manager = "";
+	       	var valueSearch = "";
+	       	id_manager = 0;
+	       	isLoading = 0;
 	          $.ajax({
 				type: 'POST',
 				url: 'search',
-				data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch
+				data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch + "&valueSearch=" + valueSearch
 			  }).done(function(resp, status, xhr) {
+				 totalCardInfo = resp.recordsTotal;
+	   			 console.log("TotalCardInfo = "+ totalCardInfo);
 				 var listGroup = "";
 				 var listGroupItem = "";
 				 $('.business_card_book').html("");
@@ -1016,7 +1066,7 @@
 						 
 					 }
 				 });
-				 
+				id_manager++;
 			}).fail(function(xhr, status, err) {
 				
 			});
@@ -1270,7 +1320,8 @@
     	    });
     	});
       
-		function getImageFromSCP(fileImageName){			
+		function getImageFromSCP(fileImageName){
+			isLoading = isLoading + 1;
 			var target = $('img[name="'+fileImageName+'"]');			
 			$.ajax({
     	        type: 'POST',
@@ -2143,27 +2194,30 @@
 		}
 		
 		function getImageSCP() {
-			$(".business_card_book .list-group .active").parent().find('.img-responsive').each(function () {
-			  	isLoading=isLoading+1;
+			$(".business_card_book .list-group .active").parent().find('.img-responsive').each(function (e) {
+			  	
 				var target = $(this);
-			    var fileImageName =$(this).parent().find('input[name=fileImageName]').val();
-
-			    $.ajax({
-			        type: 'POST',
-			        url: "<c:url value='/user/getImageFile' />",
-			        data: 'fileImage='+fileImageName
-			    }).done(function(resp, status, xhr){
-			    	if(resp == ""){
-			    		target.attr('src','');    	  
-				        target.attr("src", "<c:url value='/assets/img/card_08.png' />");
-			    	} else {
-			    		target.attr('src','');    	  
-				        target.attr('src','data:image/png;base64,'+resp);	
-			    	}
-			    	
-			    }).fail(function(resp, status, xhr){
-			        //alert('Error');
-			    });
+				if($(this).attr('src') == '<c:url value='/assets/img/loading.gif'/>' || $(this).attr('src') == '<c:url value='/assets/img/card_08.png' />'){
+					isLoading=isLoading+1;
+				    var fileImageName =$(this).parent().find('input[name=fileImageName]').val();
+	
+				    $.ajax({
+				        type: 'POST',
+				        url: "<c:url value='/user/getImageFile' />",
+				        data: 'fileImage='+fileImageName
+				    }).done(function(resp, status, xhr){
+				    	if(resp == ""){
+				    		target.attr('src','');    	  
+					        target.attr("src", "<c:url value='/assets/img/card_08.png' />");
+				    	} else {
+				    		target.attr('src','');    	  
+					        target.attr('src','data:image/png;base64,'+resp);	
+				    	}
+				    	isLoading=isLoading-1;
+				    }).fail(function(resp, status, xhr){
+				        //alert('Error');
+				    });
+				}
 			});
 		}
 		
