@@ -56,7 +56,9 @@ public interface CardInfoDAO extends IGenericDao{
         
     public List<CardInfoAndPosCard> listCardPending(Integer userId);
     
-    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(Integer userId, Integer page);
+    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(Integer userId);
+    
+    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecentPaging(Integer userId, Integer page);
     
     public CardInfo registerCardImage(CardInfo cardInfo);
     

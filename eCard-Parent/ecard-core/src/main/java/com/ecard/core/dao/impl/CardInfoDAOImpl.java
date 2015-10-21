@@ -388,7 +388,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         return query.getResultList();
     } 
     
-    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(Integer userId, Integer page) {
+    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(Integer userId) {
         String sqlStr = "SELECT * FROM card_info WHERE old_card_flg = 0 " +
                         " AND approval_status = 1 " +
                         " AND delete_flg = 0 " +
@@ -399,7 +399,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         Query query = getEntityManager().createNativeQuery(sqlStr);
         
         query.setParameter("userId", userId);
-        query.setFirstResult(page * this.maxResult30);
+        query.setFirstResult(0);
         query.setMaxResults(this.maxResult30);
         
         List<Object[]> rows = query.getResultList();
@@ -411,6 +411,31 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         }
         
         return result;
+    }
+    
+    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecentPaging(Integer userId, Integer page){
+    	String sqlStr = "SELECT * FROM card_info WHERE old_card_flg = 0 " +
+                " AND approval_status = 1 " +
+                " AND delete_flg = 0 " +
+                " AND create_date >= (NOW() - INTERVAL 1 WEEK) " +
+                " AND card_owner_id = :userId " +
+                " ORDER BY create_date DESC";
+
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		
+		query.setParameter("userId", userId);
+		query.setFirstResult(page * this.maxResult30);
+		query.setMaxResults(this.maxResult30);
+		
+		List<Object[]> rows = query.getResultList();
+		List<com.ecard.core.vo.CardInfo> result = new ArrayList<>(rows.size());
+		for (Object[] row : rows) {
+		    result.add(new com.ecard.core.vo.CardInfo((Integer)row[0], (String)row[9], (String)row[11], (String)row[10], (String)row[12], (String)row[14],
+		            (String)row[13], (String)row[5], (String)row[6], (String)row[7], (String)row[2], (String)row[8], (Date)row[47], (Integer)row[45], 
+		            (String)row[22], (String)row[15]));
+		}
+		
+		return result;
     }
     
     public CardInfo registerCardImage(CardInfo cardInfo) {

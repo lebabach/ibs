@@ -708,7 +708,7 @@ public class CardInfoController extends RestExceptionHandler {
         	if(page == null){
             	page = 0;
             }
-            List<com.ecard.core.vo.CardInfo> cardInfo = cardInfoService.getListPossesionCardRecent(userId,page);
+            List<com.ecard.core.vo.CardInfo> cardInfo = cardInfoService.getListPossesionCardRecentPaging(userId, page);
             cardInfoResponse.setListCardInfo(CardInfoConverter.convertCardRecentList(cardInfo));
             cardInfoResponse.setTotalRecord(homeService.countRecentPossessionCard(userId).longValue());
             statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgListCardSuccess, token);            
