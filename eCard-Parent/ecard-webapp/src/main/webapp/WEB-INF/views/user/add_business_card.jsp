@@ -512,6 +512,7 @@ $(document).ready(function() {
 					<label class="l-a-b"><fmt:message key='card.detail.addressFull' /></label>
 					<div class="text-a-b-d">
 						<textarea class="text-a-b" name="addressFull" id="addressFull"></textarea>
+						<fmt:message key='card.memo.addressFull' />
 						<p class="mesage_error error_addressFull" />
 					</div>
 				</fieldset>
