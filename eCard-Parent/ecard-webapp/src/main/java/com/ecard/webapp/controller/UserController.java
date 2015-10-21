@@ -1869,22 +1869,16 @@ public class UserController {
 	  return lstcardInfoAndPosCardVO;
 	}
 
-	@RequestMapping(value = "overlapcardsbyname")
-	public ModelAndView overlapcardsbyname() {
+	@RequestMapping(value = "/overlapcardsbyname/{id:[\\d]+}", method = RequestMethod.GET)
+	public ModelAndView overlapcardsbyname(@PathVariable("id") int id) {
 		String name=StringUtils.EMPTY;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-		UserInfo user=userInfoService.getUserInfoByUserId(ecardUser.getUserId());
-		if(user!=null){
-			if(StringUtils.isEmpty(user.getName())){
-				name=StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " ");
-			}else{
-				name=user.getName();
-			}
-			return new ModelAndView("overlapcards","fullname",name);
+		
+		CardInfo card= cardInfoService.getCardInfoDetail(id);
+		if(card!=null){
+			return new ModelAndView("overlapcards","fullname",card.getName()==null?StringUtilsHelper.mergerStringEitherAWord(card.getLastName(), card.getFirstName(), " "):card.getName());
 		}
 		
-		return new ModelAndView("overlapcards","fullname",name);
+		return new ModelAndView("redirect:/user/home");
 	}
 	
 	@RequestMapping(value = "listConnectUser", method = RequestMethod.POST)

@@ -211,7 +211,7 @@
 									<c:choose>
 									  <c:when test="${notification.image!=''}">
 									   <td style="vertical-align: middle"  width="10%"><a href="notificationDetail/${notification.id}" class="${notification.noticeType}"><i
-											class="fa fa-angle-right"></i></a></td>
+											class="fa fa-angle-right"></i></a> <input type="hidden" class="card_id" value ="${notification.cardId}"/></td>
 									  </c:when>
 									  <c:otherwise>
 									   <td style="vertical-align: middle"  width="10%"><a class="" onclick="${notification.id}"><i
@@ -281,7 +281,9 @@ $(document).ready(function() {
         if(href) {
         	var notifyType=$(this).find("a").attr("class");
         	if(notifyType==4){
-        		window.location = "/ecard-webapp/user/overlapcardsbyname";
+        		var cardId=$(this).find(".card_id").val();
+        		console.log(cardId);
+        		window.location = "/ecard-webapp/user/overlapcardsbyname/"+cardId;
         		
         	}else{
         		window.location ="/ecard-webapp/user/"+ href;	
