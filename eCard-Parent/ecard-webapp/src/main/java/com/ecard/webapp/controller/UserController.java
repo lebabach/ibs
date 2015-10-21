@@ -1905,4 +1905,14 @@ public class UserController {
 		}
         return response;
 	}
+	
+	@RequestMapping(value = "totalConnect", method = RequestMethod.POST)
+	@ResponseBody
+    public int countListConnectUser(@RequestParam Integer recentFlg, HttpServletRequest request) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		BigInteger total = cardInfoService.totalListConnectUser(ecardUser.getUserId(), recentFlg);    
+      
+        return total.intValue();
+	}
 }

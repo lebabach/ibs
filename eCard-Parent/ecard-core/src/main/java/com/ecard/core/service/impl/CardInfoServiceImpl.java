@@ -566,4 +566,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public List<CardInfoNotifyChange> getListCardInfoNotifyChange(CardInfo cardInfo){
 		return cardInfoDAO.getListCardInfoNotifyChange(cardInfo);
 	}
+
+	@Override
+	public BigInteger totalListConnectUser(Integer userId, Integer recentFlg) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.totalListConnectUser(userId, recentFlg);
+	}
 }

@@ -1677,4 +1677,19 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         }
         return lstcardInfoUserVo;
 	}
+public BigInteger totalListConnectUser(Integer userId, Integer recentFlg) {
+
+		String sqlStr = "Select  count(*) " 
+					+ "FROM link_card lc INNER JOIN card_info c ON lc.card_id = c.card_id ";
+		if(recentFlg == 0){
+			sqlStr += "WHERE lc.card_owner_id = :userId";
+		}
+		else{
+			sqlStr += "WHERE lc.card_owner_id = :userId AND (lc.create_date_1 >=  (NOW() - INTERVAL 1 WEEK) OR lc.create_date_2 >=  (NOW() - INTERVAL 1 WEEK))";
+		}
+
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		query.setParameter("userId", userId);
+        return (BigInteger)getOrNull(query);
+	}
 }
