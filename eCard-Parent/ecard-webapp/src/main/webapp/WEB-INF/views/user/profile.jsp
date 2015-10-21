@@ -92,12 +92,10 @@
 	border-bottom: 1px solid #b1b1b1;
 	width: auto;
 	display: block;
-	padding-bottom: 5px;
-	margin-bottom: 5px;
 	text-align: left;
 	list-style: none;
-	padding: 0 30px 10px 30px;
-	margin-bottom: 10px;
+	padding: 13px 30px 0px 30px;
+	height: 45px
 }
 
 .list-profile li p {
@@ -148,7 +146,6 @@
 	border-left: 1px solid #b1b1b1;
 	border-radius: 0 0 4px 4px;
 	border-right: 1px solid #b1b1b1;
-	padding: 20px 0;
 	text-align: center;
 }
 </style>
