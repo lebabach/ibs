@@ -437,7 +437,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         return query.getResultList();
     } 
     
-    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(Integer userId) {
+    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(Integer userId, Integer page) {
         String sqlStr = "SELECT * FROM card_info WHERE old_card_flg = 0 " +
                         " AND approval_status = 1 " +
                         " AND delete_flg = 0 " +
@@ -448,7 +448,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         Query query = getEntityManager().createNativeQuery(sqlStr);
         
         query.setParameter("userId", userId);
-        query.setFirstResult(0);
+        query.setFirstResult(page * this.maxResult30);
         query.setMaxResults(this.maxResult30);
         
         List<Object[]> rows = query.getResultList();

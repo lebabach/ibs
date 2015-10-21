@@ -54,7 +54,7 @@ public interface CardInfoDAO {
         
     public List<CardInfoAndPosCard> listCardPending(Integer userId);
     
-    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(Integer userId);
+    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(Integer userId, Integer page);
     
     public CardInfo registerCardImage(CardInfo cardInfo);
     
