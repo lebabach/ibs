@@ -76,7 +76,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	public List<CardInfoConnectUser> listConnectUser(Integer userId, Integer recentFlg, Integer pageNumber) {
 
 		String sqlStr = "SELECT lc.card_id, lc.name, c.last_name, c.first_name, c.name_kana, c.first_name_kana, c.last_name_kana, "
-					+ "lc.company_name, lc.department_name, c.position_name, lc.image_file " 
+					+ "lc.company_name, lc.department_name, c.position_name, lc.image_file,c.tel_number_company,c.email " 
 					+ "FROM link_card lc INNER JOIN card_info c ON lc.card_id = c.card_id ";
 		if(recentFlg == 0){
 			sqlStr += "WHERE lc.card_owner_id = :userId";
@@ -96,7 +96,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		for (Object[] row : rows) {
 			result.add(new CardInfoConnectUser((Integer) row[0], (String) row[1], (String) row[2], (String) row[3],
 					(String) row[4], (String) row[5], (String) row[6], (String) row[7], (String) row[8],
-					(String) row[9], (String) row[10]));
+					(String) row[9], (String) row[10], (String) row[11], (String) row[12]));
 		}
 		return result;
 	}

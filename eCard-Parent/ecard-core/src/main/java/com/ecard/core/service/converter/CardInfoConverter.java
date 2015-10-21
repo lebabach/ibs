@@ -75,6 +75,8 @@ public final class CardInfoConverter {
                 cardInfo.setDepartmentName(cardInfoModel.getDepartmentName());
                 cardInfo.setImageFile(cardInfoModel.getImageFile());
                 cardInfo.setPositionName(cardInfoModel.getPositionName());
+                cardInfo.setTelNumberCompany(cardInfoModel.getTelNumberCompany());
+                cardInfo.setEmail(cardInfoModel.getEmail());
                 cardInfoList.add(cardInfo);
             }
         }
