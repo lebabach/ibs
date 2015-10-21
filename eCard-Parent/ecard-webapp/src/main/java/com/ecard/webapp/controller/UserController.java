@@ -805,17 +805,17 @@ public class UserController {
 	@RequestMapping(value = "profile/{id:[\\d]+}", method = RequestMethod.GET)
 	public ModelAndView profileCardConnect(@PathVariable("id") Integer userId) {
 		logger.debug("profileCardConnect", UserController.class);
-
+		String company=" ";
 		ModelAndView modelAndView = new ModelAndView();
 		try {
 			if (userId != null) {
 				UserInfo user = userInfoService.getUserInfoByUserId(userId);
 				UserInfoVO userVO = new UserInfoVO();
-				userVO.setCompanyName(
-						groupCompanyInfoService.getCompanyById(user.getGroupCompanyId()).getGroupCompanyName());
-				userVO.setDepartmentName(user.getDepartmentName());
-				userVO.setName(user.getName());
-				userVO.setPositionName(user.getPositionName());
+				company=groupCompanyInfoService.getCompanyById(user.getGroupCompanyId()).getGroupCompanyName();
+				userVO.setCompanyName(StringUtils.isEmpty(company)?" ":company);
+				userVO.setDepartmentName(StringUtils.isEmpty(user.getDepartmentName())? " ":user.getDepartmentName());
+				userVO.setName(StringUtils.isEmpty(user.getName())?" ":user.getName());
+				userVO.setPositionName(StringUtils.isEmpty(user.getPositionName())?" ": user.getPositionName());
 				userVO.setEmail(user.getEmail());
 
 				modelAndView.addObject("user", userVO);
@@ -832,15 +832,16 @@ public class UserController {
 	@RequestMapping("profile")
 	public ModelAndView profile() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String company=" ";
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		if (ecardUser != null) {
 			UserInfo user = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
 			UserInfoVO userVO = new UserInfoVO();
-			userVO.setCompanyName(
-					groupCompanyInfoService.getCompanyById(user.getGroupCompanyId()).getGroupCompanyName());
-			userVO.setDepartmentName(user.getDepartmentName());
-			userVO.setName(user.getName());
-			userVO.setPositionName(user.getPositionName());
+			company=groupCompanyInfoService.getCompanyById(user.getGroupCompanyId()).getGroupCompanyName();
+			userVO.setCompanyName(StringUtils.isEmpty(company)?" ":company);
+			userVO.setDepartmentName(StringUtils.isEmpty(user.getDepartmentName())? " ":user.getDepartmentName());
+			userVO.setName(StringUtils.isEmpty(user.getName())?" ":user.getName());
+			userVO.setPositionName(StringUtils.isEmpty(user.getPositionName())?" ": user.getPositionName());
 			userVO.setEmail(user.getEmail());
 			return new ModelAndView("profile", "user", userVO);
 		}
