@@ -942,14 +942,8 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			  query.setParameter("valueSearch", valueSearch);
 			}
 		}
-		
-		
-		/*String sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%m/%Y') AS groupDate, c FROM CardInfo c "
-				+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
-				+ "AND date_format(date(c.contactDate),'%m/%Y') = :strDate";
-		Query query = getEntityManager().createQuery(sqlStr);
-		query.setParameter("userId", userId);		
-		query.setParameter("strDate", valueSearch);*/
+		query.setFirstResult(0).setMaxResults(this.maxResult*3);
+
 		List<Object[]> listObj = query.getResultList();
 		List<CardInfoUserVo> lstcardInfoUserVo = new ArrayList<>();
 		for (Object[] object : listObj) {
