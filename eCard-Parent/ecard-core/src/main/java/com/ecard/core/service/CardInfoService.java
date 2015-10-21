@@ -55,7 +55,9 @@ public interface CardInfoService {
     
 //    public BigInteger getTotalCardSearchAllUser(String searchText,String name, String position,String department,String company, int pageNumber, int groupCompanyId); 
    
-   public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(Integer userId, Integer page);
+   public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(Integer userId);
+   
+   public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecentPaging(Integer userId, Integer page);
    
    public CardInfo registerCardImage(CardInfo cardInfo);
    public CardInfo registerCardImageOfAdmin(CardInfo cardInfo);
