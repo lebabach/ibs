@@ -120,9 +120,14 @@ public class CardInfoServiceImpl implements CardInfoService {
 //		return cardInfoDAO.getTotalCardSearchAllUser(searchText, name, position, department, company, pageNumber, groupCompanyId);
 //	}
     
-    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(Integer userId, Integer page) {
-        return cardInfoDAO.getListPossesionCardRecent(userId, page);
+    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(Integer userId) {
+        return cardInfoDAO.getListPossesionCardRecent(userId);
     }
+    
+    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecentPaging(Integer userId, Integer page) {
+        return cardInfoDAO.getListPossesionCardRecentPaging(userId, page);
+    }
+    
     
     public CardInfo registerCardImage(CardInfo cardInfo) {
     	//String indexId=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.ShootingApp);
