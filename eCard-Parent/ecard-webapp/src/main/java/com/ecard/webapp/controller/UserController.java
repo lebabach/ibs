@@ -1427,6 +1427,11 @@ public class UserController {
 			userSearchVO.setOwner(null);
 		} else {
 			userSearchVO.setFreeText(null);
+			userSearchVO.setCompany(userSearchVO.getCompany().equals("")?null:userSearchVO.getCompany());
+			userSearchVO.setName(userSearchVO.getName().equals("")?null:userSearchVO.getName());
+			userSearchVO.setPosition(userSearchVO.getPosition().equals("")?null:userSearchVO.getPosition());
+			userSearchVO.setDepartment(userSearchVO.getDepartment().equals("")?null:userSearchVO.getDepartment());
+			userSearchVO.setOwner(userSearchVO.getOwner().equals("")?null:userSearchVO.getOwner());
 		}
 
 		if (userSearchVO.getParameterFlg() == 0) {
