@@ -52,7 +52,7 @@
     
     <bean id="batchProcessCardCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="jobDetail" />
-        <property name="cronExpression" value=" 0 0 21 * * ? " />
+        <property name="cronExpression" value=" 0 0 3 1/1 * ? " />
     </bean>
     
     <bean id="jobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
@@ -86,7 +86,8 @@
     
     <bean id="batchUploadLostImageCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="batchUploadLostImageJobDetail" />
-        <property name="cronExpression" value=" 0/50 * * * * ? " />
+        <!-- <property name="cronExpression" value=" 0 0 13 ? * THU * " /> -->
+        <property name="cronExpression" value=" 0 0 5 * * ? " />
     </bean>
     
     <bean id="batchUploadLostImageJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">

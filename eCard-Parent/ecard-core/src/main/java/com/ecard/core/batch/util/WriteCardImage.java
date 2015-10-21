@@ -5,12 +5,6 @@
  */
 package com.ecard.core.batch.util;
 
-import com.ecard.core.batch.contants.BatchConstants;
-import com.ecard.core.model.CardInfo;
-import com.ecard.core.model.enums.TableTypeEnum;
-import com.ecard.core.service.CardInfoService;
-import com.ecard.core.util.DataIndexUtil;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -24,12 +18,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.ecard.core.batch.contants.BatchConstants;
 import com.ecard.core.model.CardInfo;
-import com.ecard.core.service.CardInfoService;
+import com.ecard.core.model.enums.TableTypeEnum;
+import com.ecard.core.util.DataIndexUtil;
 
 /**
  *
