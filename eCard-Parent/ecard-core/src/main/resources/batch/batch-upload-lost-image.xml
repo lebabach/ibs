@@ -30,36 +30,34 @@
     
     <import resource="context.xml"/>
     
-    <job id="batchProcessCard" xmlns="http://www.springframework.org/schema/batch" restartable="true">
-        <step id="batchProcessCardStep" allow-start-if-complete="true">
-            <tasklet ref="batchProcessCardTasklet"></tasklet>
+    <job id="batchUploadLostImage" xmlns="http://www.springframework.org/schema/batch" restartable="true">
+        <step id="step1" allow-start-if-complete="true">
+            <tasklet ref="batchUploadLostImageTasklet"></tasklet>
         </step>
     </job>
         
-    <bean id="batchProcessCardTasklet" class="com.ecard.core.batch.tasklet.BatchProcessCardTasklet">
+    <bean id="batchUploadLostImageTasklet" class="com.ecard.core.batch.tasklet.BatchUploadLostImageTasklet">
     	<property name="dataSource" ref="dataSource"/>
     </bean>
     
     <!-- run every 10 seconds -->
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
-            <list>
-				<ref bean="batchProcessCardCronTrigger"/>
-				<ref bean="batchUploadLostImageCronTrigger"/>
-			</list>
+            <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+                <property name="jobDetail" ref="jobDetail" />
+                <!--Fire at 11:00pm and at 11:45pm every Sunday -->
+                <!-- <property name="cronExpression" value=" 0 00,45 23 ? * SUN " /> -->
+                <!--Fire at 3pm and every day -->
+                <property name="cronExpression" value=" 0 0 4 * * ? " />
+            </bean>
         </property>
     </bean>
     
-    <bean id="batchProcessCardCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="jobDetail" />
-        <property name="cronExpression" value=" 0 0/5 * * * ? " />
-    </bean>
-    
     <bean id="jobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="com.ecard.core.batch.tasklet.scheduler.BatchProcessCardTaskScheduler"></property>
+        <property name="jobClass" value="com.ecard.core.batch.tasklet.scheduler.BatchUploadLostImageTaskScheduler"></property>
         <property name="jobDataAsMap">
             <map>
-                <entry key="jobName" value="batchProcessCard"></entry>
+                <entry key="jobName" value="batchUploadLostImage"></entry>
                 <entry key="jobLauncher" value-ref="jobLauncher"></entry>
                 <entry key="jobLocator" value-ref="jobRegistry"></entry>
             </map>
@@ -73,33 +71,4 @@
  
     <bean id="jobRegistry" class="org.springframework.batch.core.configuration.support.MapJobRegistry" />
 	    
-    <!-- Batch proccess lost image -->
-    <job id="batchUploadLostImage" xmlns="http://www.springframework.org/schema/batch" restartable="true">
-        <step id="batchUploadLostImageStep" allow-start-if-complete="true">
-            <tasklet ref="batchUploadLostImageTasklet"></tasklet>
-        </step>
-    </job>
-        
-    <bean id="batchUploadLostImageTasklet" class="com.ecard.core.batch.tasklet.BatchUploadLostImageTasklet">
-    	<property name="dataSource" ref="dataSource"/>
-    </bean>
-    
-    <bean id="batchUploadLostImageCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="batchUploadLostImageJobDetail" />
-        <property name="cronExpression" value=" 0 0 4 * * ? " />
-    </bean>
-    
-    <bean id="batchUploadLostImageJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="com.ecard.core.batch.tasklet.scheduler.BatchUploadLostImageTaskScheduler"></property>
-        <property name="jobDataAsMap">
-            <map>
-                <entry key="jobName" value="batchUploadLostImage"></entry>
-                <entry key="jobLauncher" value-ref="jobLauncher"></entry>
-                <entry key="jobLocator" value-ref="jobRegistry"></entry>
-            </map>
-        </property>
-        <property name="durability" value="true" />
-    </bean>
-    <!-- End Batch proccess lost image -->
-    
  </beans>
