@@ -103,6 +103,7 @@ private String fullName;
         this.departmentName = departmentName;
         this.cardId=old_card_id;
         this.positionName=position;
+        this.approvalStatus=2;
     }
 	
 	public CardInfo(Integer cardId, String name, String lastName, String firstName, String nameKana, String lastNameKana, String firstNameKana,

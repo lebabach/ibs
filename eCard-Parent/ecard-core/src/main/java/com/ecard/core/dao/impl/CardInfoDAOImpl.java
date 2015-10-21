@@ -892,7 +892,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
     }
     
 	@Override
-	public List<CardInfoUserVo> getListPossesionCard(Integer userId, Integer sortType, String valueSearch) {
+	public List<CardInfoUserVo> getListPossesionCard(Integer userId, Integer sortType, String valueSearch, int page) {
 		String sqlStr = "";
 		 
 		if (sortType == SearchConditions.CONTACT.getValue()) {
@@ -942,7 +942,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			  query.setParameter("valueSearch", valueSearch);
 			}
 		}
-		query.setFirstResult(0).setMaxResults(this.maxResult*3);
+		query.setFirstResult(page).setMaxResults(this.maxResult);
 
 		List<Object[]> listObj = query.getResultList();
 		List<CardInfoUserVo> lstcardInfoUserVo = new ArrayList<>();
@@ -1247,11 +1247,57 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		return (int) query.executeUpdate();
 	}
 
-	public Long countPossessionCard(Integer userId) {
-		String sqlStr = "SELECT count(*) FROM CardInfo c "
-				+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0";
+	public Long countPossessionCard(Integer userId, Integer typeSort, String valueSearch) {
+		String sqlStr = "";
+		 
+		if (typeSort == SearchConditions.CONTACT.getValue()) {
+			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
+					+ "AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch";
+			
+		} else if (typeSort == SearchConditions.NAME.getValue()) {
+			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+" AND (c.nameKana is not null AND c.nameKana <> '') "
+					+ "AND c.nameKana LIKE :valueSearch";
+			
+		} else if (typeSort == SearchConditions.COMPANY.getValue()) {			
+			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ " AND (c.companyNameKana is not null AND c.companyNameKana <> '') "
+					+ "AND c.companyNameKana = :valueSearch";
+			
+		} else if (typeSort == SearchConditions.TAG.getValue()) {
+			if (valueSearch.equals("cardNoTag")) {
+				sqlStr = "SELECT COUNT(*) FROM CardInfo c"
+						+" WHERE c.cardId NOT IN ( SELECT ct.id.cardId FROM CardTag ct INNER JOIN ct.userTag ut"
+						+ " 						WHERE ut.userInfo.userId = :userId GROUP BY ct.id.cardId)  "
+						+ "AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0";
+			} else {
+				sqlStr = "SELECT COUNT(*) FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
+						+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0"
+						+" AND (ut.tagName is not null AND ut.tagName <> '') "
+						+" AND ut.tagName = :valueSearch";
+			}
+			
+		} else {
+			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
+					+ " AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch";
+		}
+		
 		Query query = getEntityManager().createQuery(sqlStr);
 		query.setParameter("userId", userId);
+		
+		if (typeSort == SearchConditions.NAME.getValue()) {
+			if(valueSearch != "" || valueSearch != null)
+				query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
+			else 
+				query.setParameter("valueSearch", valueSearch + "%");
+		} else {
+			if(!valueSearch.equals("cardNoTag")){
+			  query.setParameter("valueSearch", valueSearch);
+			}
+		}
+
 		return (Long) getOrNull(query);
 
 	}
