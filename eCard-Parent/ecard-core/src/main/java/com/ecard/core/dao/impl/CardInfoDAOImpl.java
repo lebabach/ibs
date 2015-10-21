@@ -1524,7 +1524,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	}
 	
 	public List<com.ecard.core.vo.CardInfo> getListCardHistoryByCardId(Integer cardId){
-		String sqlStr = "SELECT C.contact_date, C.company_name, C.department_name FROM card_info AS C "
+		String sqlStr = "SELECT C.contact_date, C.company_name, C.department_name, O.old_card_id, C.position_name FROM card_info AS C "
 				+ "INNER JOIN old_card AS O "
 				+ "ON O.old_card_id = C.card_id AND O.card_id = " + cardId
 				+ " WHERE approval_status = 1 AND delete_flg = 0 ORDER BY contact_date DESC";
@@ -1533,7 +1533,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		List<Object[]> listObj = query.getResultList();
 		List<com.ecard.core.vo.CardInfo> cardInfoList = new ArrayList<>();
 		for (Object[] object : listObj) {
-			com.ecard.core.vo.CardInfo cardInfoVo = new com.ecard.core.vo.CardInfo((Date)object[0], (String) object[1], (String) object[2]);
+			com.ecard.core.vo.CardInfo cardInfoVo = new com.ecard.core.vo.CardInfo((Date)object[0], (String) object[1], (String) object[2], (Integer) object[3], (String) object[4]);
 			cardInfoList.add(cardInfoVo);
 		}
 
