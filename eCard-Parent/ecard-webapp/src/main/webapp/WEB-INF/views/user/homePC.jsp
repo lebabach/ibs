@@ -455,7 +455,7 @@
      var request = null;
       var id_manager = 1;
       var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
-      
+      var typeLoading = 0;
       var searchDetail ='<c:out value="${searchDetail}" />';
       if(searchDetail!=null&&searchDetail!=""){
 	   		var freeText = $("#hid-freeText").val();
@@ -593,14 +593,14 @@
 		       			    }
 		       			});
 	    	    	}
-	    	    	if(parseInt($('#selectSortBox').val()) == 4 || parseInt($('#selectSortBox').val()) == 5 ){
+	    	    	if(typeLoading == 3 && (parseInt($('#selectSortBox').val()) == 4 || parseInt($('#selectSortBox').val()) == 5 )){
 	    	    		var recentFlg =2;
 	    	    		if(parseInt($('#selectSortBox').val()) == 4){
 	    	    			recentFlg = 0;
 	    	    		}else if (parseInt($('#selectSortBox').val()) == 5){
 	    	    			recentFlg = 1;
 	    	    		}
-	    	    		//alert("recentFlg :" + recentFlg);
+	    	    		alert("recentFlg :" + recentFlg);
 	    	    		$.ajax({
 	     					type: 'POST',
 	     					url: 'listConnectUser',
@@ -782,7 +782,9 @@
      $('#selectSortBox').on('change', function(event) {
     	 $.xhrPool.abortAll();
          var typeSort =  $(this).val();
+         typeLoading = 3
          if(parseInt(typeSort) == 0){
+        	 typeLoading = 2
         	 $("#sort_cnd").show();
         	 $("#bulk_tag").show();
         	 $("#deleteTag").show();
@@ -965,6 +967,7 @@
 
        $('#sort-card-cnd').on('change', function() {
 	       	$.xhrPool.abortAll();
+	       	typeLoading = 2;
 	        $(".btn-group").find("#addTag, #deletePeople").addClass("disabled");
 	       	var typeSort = $(this).val();
 	       	var typeSearch = $("#selectSortBox option:selected").val();
