@@ -47,7 +47,7 @@ public enum RoleType {
 		switch (permissionType) {
 		case 1:
 			//comment not login with permission user
-			//url = "/user/home";
+			url = "/user/home";
 			break;
 		case 2:
 			url = "/manager/home";
