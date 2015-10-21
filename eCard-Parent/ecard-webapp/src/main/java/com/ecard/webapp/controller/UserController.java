@@ -213,10 +213,10 @@ public class UserController {
 			// Get listNameSort [2015/10,2015/11, .... ]
 			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), SearchConditions.CONTACT.getValue());
 			
-			listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId());
 			listTagGroup = getCardTag();
 			if(lstNameSort.size() > 0) {
-					List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.CONTACT.getValue() ,lstNameSort.get(0));
+					List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.CONTACT.getValue() ,lstNameSort.get(0), 0);
+					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(),SearchConditions.CONTACT.getValue() ,lstNameSort.get(0));
 					List<CardInfo> cardInfoDisp = new ArrayList<>();
 					for (CardInfoUserVo cardInfo : lstCardInfo) {
 						if (lstNameSort.get(0).trim().equals(cardInfo.getSortType().trim())) {
@@ -259,21 +259,24 @@ public class UserController {
 //		int limit = parseIntParameter(request.getParameter("page"), 0);
 		int searchType = parseIntParameter(request.getParameter("typeSearch"), 0);
 		int typeSort = parseIntParameter(request.getParameter("typeSort"), 0);
-		String valueSearch = request.getParameter("page");		
+		int page = parseIntParameter(request.getParameter("page"), 0);
+		String valueSearch = request.getParameter("valueSearch");	
 		DataPagingJsonVO<CardInfoPCVo> dataTableResponse = new DataPagingJsonVO<CardInfoPCVo>();
 		List<CardInfoPCVo> cardInfoSearchResponses = new ArrayList<CardInfoPCVo>();
 		List<String> lstNameSort = null;		
 		List<CardInfoUserVo> lstCardInfo = null;
-		
+		Long listTotalCardInfo = new Long(0);
 		// Search all
 		// 
 		if(searchType == 0) {
 			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), typeSort);
 			if(lstNameSort.size() > 0) {
 				if(valueSearch == "" || valueSearch == null){				
-					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).trim());
+					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).trim(), page);
+					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort,lstNameSort.get(0));
 				} else {
-					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, valueSearch);
+					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, valueSearch, page);
+					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort, valueSearch);
 				}
 				
 				
@@ -284,7 +287,8 @@ public class UserController {
 			 
 			if (typeSort == SearchConditions.TAG.getValue()) {
 				if(lstNameSort.size() <= 0) {
-					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, "cardNoTag");
+					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, "cardNoTag", page);
+					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort, "cardNoTag");
 				}
 				lstNameSort.add("cardNoTag");
 								
@@ -325,6 +329,7 @@ public class UserController {
 		}
 
 		dataTableResponse.setData(cardInfoSearchResponses);
+		dataTableResponse.setRecordsTotal(listTotalCardInfo);
 		return dataTableResponse;
 
 	}

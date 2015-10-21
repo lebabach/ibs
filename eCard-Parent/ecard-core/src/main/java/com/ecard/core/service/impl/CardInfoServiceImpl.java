@@ -264,8 +264,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 //	}
 
 	@Override
-	public List<CardInfoUserVo> getListPossesionCard(Integer userId,Integer typeSort, String valueSearch) {
-		return cardInfoDAO.getListPossesionCard(userId, typeSort, valueSearch);
+	public List<CardInfoUserVo> getListPossesionCard(Integer userId,Integer typeSort, String valueSearch, int page) {
+		return cardInfoDAO.getListPossesionCard(userId, typeSort, valueSearch, page);
 	}
 	public void updateOldCardInfo (CardInfo cardInfo){
 		cardInfoDAO.updateOldCardInfo(cardInfo);
@@ -334,8 +334,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 		return cardInfoDAO.updateContactDate(cardInfo);
 	}
 	
-	public Long countPossessionCard(Integer userId){
-		return cardInfoDAO.countPossessionCard(userId);
+	public Long countPossessionCard(Integer userId, Integer typeSort, String valueSearch){
+		return cardInfoDAO.countPossessionCard(userId, typeSort, valueSearch);
 	}
 
 	public CardInfo getNewestCardInfo(CardInfo cardInfo){
