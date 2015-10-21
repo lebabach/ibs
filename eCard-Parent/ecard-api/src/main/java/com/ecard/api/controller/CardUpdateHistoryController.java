@@ -8,6 +8,7 @@ import com.ecard.api.controller.helper.Constants;
 import com.ecard.core.datasource.SchemaContextHolder;
 import com.ecard.core.datasource.type.SchemaType;
 import com.ecard.core.model.AutoLogin;
+import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.CardUpdateHistoryService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.converter.CardUpdateHistoryConverter;
@@ -37,6 +38,8 @@ public class CardUpdateHistoryController extends RestExceptionHandler{
     private static final Logger logger = LoggerFactory.getLogger(CardUpdateHistoryController.class);
     
     private static final String HEADER_TOKEN = "token";
+    @Autowired
+    CardInfoService cardInfoService;
     
     @Autowired
     CardUpdateHistoryService cardUpdateHistoryService;
@@ -68,9 +71,11 @@ public class CardUpdateHistoryController extends RestExceptionHandler{
         }
         
         try{
-            List<CardUpdateHisAndUserInfo> cardList = cardUpdateHistoryService.getListCardUpdateHistory(cardId);
-            if(cardList.size() > 0){
-                response.setCardList(CardUpdateHistoryConverter.convertCardConnectUserList(cardList));
+            //List<CardUpdateHisAndUserInfo> cardList = cardUpdateHistoryService.getListCardUpdateHistory(cardId);
+            List<com.ecard.core.vo.CardInfo> cards=cardInfoService.getListCardHistoryByCardId(cardId);
+            if(cards.size() > 0){
+                //response.setCardList(CardUpdateHistoryConverter.convertCardConnectUserList(cards));
+                response.setCards(cards);
                 statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgListCardSuccess, token);                
             }
             else{

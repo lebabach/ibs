@@ -97,6 +97,14 @@ private String fullName;
         this.departmentName = departmentName;
     }
 	
+	public CardInfo(Date contactDate, String companyName, String departmentName, Integer old_card_id,String position){
+		this.contactDate = contactDate;
+		this.companyName = companyName;
+        this.departmentName = departmentName;
+        this.cardId=old_card_id;
+        this.positionName=position;
+    }
+	
 	public CardInfo(Integer cardId, String name, String lastName, String firstName, String nameKana, String lastNameKana, String firstNameKana,
             String companyName, String departmentName, String positionName, String imageFile, Integer approvalStatus ,Date createDate){
         this.cardId = cardId;

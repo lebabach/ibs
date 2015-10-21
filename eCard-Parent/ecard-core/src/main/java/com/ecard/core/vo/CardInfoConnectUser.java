@@ -19,6 +19,8 @@ public class CardInfoConnectUser {
     private String departmentName;
     private String positionName;
     private String imageFile;
+    private String telNumberCompany;
+    private String email;
     
     public CardInfoConnectUser(){}
     
@@ -36,6 +38,23 @@ public class CardInfoConnectUser {
         this.departmentName = departmentName;
         this.positionName = positionName;
         this.imageFile = imageFile;
+    }
+    public CardInfoConnectUser(Integer cardId, String name, String lastName, String firstName,
+            String nameKana, String lastNameKana, String firstNameKana,
+            String companyName, String departmentName, String positionName, String imageFile,String telNumberCompany,String email){
+        this.cardId = cardId;
+        this.name = name;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.nameKana = nameKana;
+        this.lastNameKana = lastNameKana;
+        this.firstNameKana = firstNameKana;        
+        this.companyName = companyName;
+        this.departmentName = departmentName;
+        this.positionName = positionName;
+        this.imageFile = imageFile;
+        this.telNumberCompany = telNumberCompany;
+        this.email = email;
     }
 
     /**
@@ -191,4 +210,21 @@ public class CardInfoConnectUser {
     public void setFirstNameKana(String firstNameKana) {
         this.firstNameKana = firstNameKana;
     }
+
+	public String getTelNumberCompany() {
+		return telNumberCompany;
+	}
+
+	public void setTelNumberCompany(String telNumberCompany) {
+		this.telNumberCompany = telNumberCompany;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+    
 }
