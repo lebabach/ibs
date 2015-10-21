@@ -499,64 +499,67 @@
     	  if(currentNumberCard < parseInt(totalCardInfo)){
     		   
 	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
-	    		// Load more card
-	     		  console.log("SCROLL : CURRENT = "+currentNumberCard);
-	     		  console.log("SCROLL : TOTALCARDINFO = "+totalCardInfo);
-	     		  console.log("SCROLL : LOADING = "+isLoading);
-	     		  
-	     		   var typeSort = $('#sort-card-cnd').val();
-	     		   var typeSearch = $("#selectSortBox option:selected").val();
-	     		   var strDate = self.attr("id");
-	     		   if(typeSort == 5){
-	               		strDate = strDate.slice(0,4)+"/"+strDate.slice(4,strDate.length+1);	
-	               	}
-	     		   
-	     		   if(isLoading != 0){    			       			   
-	     			   return false;
-	     		   }
-	     		   console.log("SCROLL : LOADING CURRENT = "+isLoading);
-	     		   console.log("SCROLL : PAGE = "+id_manager);
-	     		
-	     		$.xhrPool.abortAll();
-	    		    $.ajax({
-	 	    			type: 'POST',
-	 	    			url: 'search',
-	 	    			data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch + "&valueSearch=" + strDate
-	 	    		  }).done(function(resp, status, xhr) {
-	 	    			   var listGroupItem = "";
-	 	    			   totalCardInfo = resp.recordsTotal;
-	 	    			   console.log("TotalCardInfo = "+ totalCardInfo);
-	 	    				$.each( resp.data, function( key, value ) {
-	 	    					 $.each( value.lstCardInfo, function (k,v) {
-	 	    						 listGroupItem += '<div class="list-group-item pointer show-content">'
-	 	    				    					+'<div class="row row-new">'
-	 	    				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
-	 	    				    					+    '<input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
-	 	    				    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
-	 	    				    					+	 '</div></div>'
-	 	    				    					+	'<div class="col-md-5">'
-	 	    				    					+		'<div class="col-xs-11 mg-top">'
-	 	    				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
-	 	    				    					+			'<p class="livepass">'+v.companyName+'</p>'
-	 	    				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
-	 	    				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
-	 	    				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
-	 	    				    					+ '</div></div>'
-	 	    				    					+	'<div class="col-md-6">'
-	 	    				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
-	 	    				    					+	'<div class="col-xs-7">'								
-	 	    				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
-	 	    				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
-	 	    				    					+	'</div> </div> </div> </div>';
-	 	    					 });
-	 	    				});
-	 	    				self.append(listGroupItem);
-	 	    				getImageSCP();
-	 	    				id_manager++;
-	 	    			}).fail(function(xhr, status, err) {
-	 	    				
-	 	    			});
 	    		   
+	    		   if(typeLoading == 2 && (parseInt($('#sort-card-cnd').val()) == 1 || parseInt($('#sort-card-cnd').val()) == 2 
+	    				   || parseInt($('#sort-card-cnd').val()) == 5 || parseInt($('#sort-card-cnd').val()) == 6)){
+	    			// Load more card
+		     		  console.log("SCROLL : CURRENT = "+currentNumberCard);
+		     		  console.log("SCROLL : TOTALCARDINFO = "+totalCardInfo);
+		     		  console.log("SCROLL : LOADING = "+isLoading);
+		     		  
+		     		   var typeSort = $('#sort-card-cnd').val();
+		     		   var typeSearch = $("#selectSortBox option:selected").val();
+		     		   var strDate = self.attr("id");
+		     		   if(typeSort == 5){
+		               		strDate = strDate.slice(0,4)+"/"+strDate.slice(4,strDate.length+1);	
+		               	}
+		     		   
+		     		   if(isLoading != 0){    			       			   
+		     			   return false;
+		     		   }
+		     		   console.log("SCROLL : LOADING CURRENT = "+isLoading);
+		     		   console.log("SCROLL : PAGE = "+id_manager);
+		     		
+		     			$.xhrPool.abortAll();
+		    		    $.ajax({
+		 	    			type: 'POST',
+		 	    			url: 'search',
+		 	    			data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch + "&valueSearch=" + strDate
+		 	    		  }).done(function(resp, status, xhr) {
+		 	    			   var listGroupItem = "";
+		 	    			   totalCardInfo = resp.recordsTotal;
+		 	    			   console.log("TotalCardInfo = "+ totalCardInfo);
+		 	    				$.each( resp.data, function( key, value ) {
+		 	    					 $.each( value.lstCardInfo, function (k,v) {
+		 	    						 listGroupItem += '<div class="list-group-item pointer show-content">'
+		 	    				    					+'<div class="row row-new">'
+		 	    				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
+		 	    				    					+    '<input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
+		 	    				    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
+		 	    				    					+	 '</div></div>'
+		 	    				    					+	'<div class="col-md-5">'
+		 	    				    					+		'<div class="col-xs-11 mg-top">'
+		 	    				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+		 	    				    					+			'<p class="livepass">'+v.companyName+'</p>'
+		 	    				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+		 	    				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+		 	    				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+		 	    				    					+ '</div></div>'
+		 	    				    					+	'<div class="col-md-6">'
+		 	    				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+		 	    				    					+	'<div class="col-xs-7">'								
+		 	    				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+		 	    				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+		 	    				    					+	'</div> </div> </div> </div>';
+		 	    					 });
+		 	    				});
+		 	    				self.append(listGroupItem);
+		 	    				getImageSCP();
+		 	    				id_manager++;
+		 	    			}).fail(function(xhr, status, err) {
+		 	    				
+		 	    			});
+	    		   	}
 	    	    	// Call ajax here	
 	    	    	if($('#titleOfSearch').length){
 	    	    		//search
