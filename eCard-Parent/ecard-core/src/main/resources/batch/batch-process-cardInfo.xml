@@ -48,7 +48,7 @@
                 <!--Fire at 11:00pm and at 11:45pm every Sunday -->
                 <!-- <property name="cronExpression" value=" 0 00,45 23 ? * SUN " /> -->
                 <!--Fire at 3pm and every day -->
-                <property name="cronExpression" value=" 0 0 4 * * ? " />
+                <property name="cronExpression" value=" 0 0 12 1/1 * ? * " />
             </bean>
         </property>
     </bean>
