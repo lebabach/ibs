@@ -338,13 +338,13 @@ history.pushState(null, null, null);
 									});  */
 
 						});
-						$('#backToManage').on('click',function() {
+						$('#backToManage').on('click',function(evt) {
 								$.ajax({
 									  type: "POST",
 									  url: '/ecard-webapp/cards/updateIsEditting',
 									  data: 'Id='+$("input[name=cardId]").val(),
 									  success: function(){
-										  document.location.href = '/ecard-webapp/cards/list';
+										  document.location.href = '/ecard-webapp/cards/list';										 
 									  },
 								});
 											
