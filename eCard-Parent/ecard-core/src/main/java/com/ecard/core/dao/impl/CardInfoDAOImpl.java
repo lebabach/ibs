@@ -82,7 +82,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 
 	public List<CardInfoConnectUser> listConnectUser(Integer userId, Integer recentFlg, Integer pageNumber) {
 
-		String sqlStr = "SELECT lc.card_id, lc.name, c.last_name, c.first_name, c.name_kana, c.first_name_kana, c.last_name_kana, "
+		String sqlStr = "SELECT  DISTINCT lc.card_id, lc.name, c.last_name, c.first_name, c.name_kana, c.first_name_kana, c.last_name_kana, "
 					+ "lc.company_name, lc.department_name, c.position_name, lc.image_file,c.tel_number_company,c.email " 
 					+ "FROM link_card lc INNER JOIN card_info c ON lc.card_id = c.card_id "
 					+ "WHERE c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 ";
@@ -1708,13 +1708,13 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	}
 public BigInteger totalListConnectUser(Integer userId, Integer recentFlg) {
 
-		String sqlStr = "Select  count(*) " 
-					+ "FROM link_card lc INNER JOIN card_info c ON lc.card_id = c.card_id ";
+		String sqlStr = "Select  count(DISTINCT(lc.card_id)) " 
+					+ "FROM link_card lc INNER JOIN card_info c ON lc.card_id = c.card_id WHERE c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0  ";
 		if(recentFlg == 0){
-			sqlStr += "WHERE lc.card_owner_id = :userId";
+			sqlStr += "AND lc.card_owner_id = :userId";
 		}
 		else{
-			sqlStr += "WHERE lc.card_owner_id = :userId AND (lc.create_date_1 >=  (NOW() - INTERVAL 1 WEEK) OR lc.create_date_2 >=  (NOW() - INTERVAL 1 WEEK))";
+			sqlStr += "AND lc.card_owner_id = :userId AND (lc.create_date_1 >=  (NOW() - INTERVAL 1 WEEK) OR lc.create_date_2 >=  (NOW() - INTERVAL 1 WEEK))";
 		}
 
 		Query query = getEntityManager().createNativeQuery(sqlStr);
@@ -1723,7 +1723,7 @@ public BigInteger totalListConnectUser(Integer userId, Integer recentFlg) {
 	}
 	
 	public List<NotificationList> getImagesBy(List<Integer> cardIds) {
-		String sqlQuery = "SELECT u.image_file,u.card_id FROM card_info u WHERE u.delete_flg = 0 AND u.card_id in (:card_id)  ";
+		String sqlQuery = "SELECT u.image_file,u.card_id FROM card_info u WHERE u.card_id in (:card_id)  ";
 		Query query = getEntityManager().createNativeQuery(sqlQuery);
 		query.setParameter("card_id", cardIds);
 		List<Object[]> rows = query.getResultList();
