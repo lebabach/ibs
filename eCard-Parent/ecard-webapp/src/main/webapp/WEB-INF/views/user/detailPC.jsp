@@ -2077,7 +2077,7 @@ label.error {
 				} else {
 					BootstrapDialog.show({
 	    				title: '<fmt:message key="popup.title.info" />',
-	    				message: '<fmt:message key="remove.card.failed" />'
+	    				message: '<fmt:message key="edit.card.failed" />'
 	    	      	});
 	        		window.location.reload(true);
 				}
@@ -2085,7 +2085,7 @@ label.error {
         	error: function(error){
         		BootstrapDialog.show({
     				title: '<fmt:message key="popup.title.info" />',
-    				message: '<fmt:message key="remove.card.failed" />'
+    				message: '<fmt:message key="edit.card.failed" />'
     	      	});
 		  	}
         });	
