@@ -140,7 +140,11 @@
 } */
 </style>
 <!-- START HEADER -->
+<div id="loading-copy" style="display: block; z-index: 1000; position: fixed;top: 50%;left: 50%;margin-top: -100px;margin-left: -100px;">
+	<img src="<c:url value='/assets/img/loading-card.gif'/>" />
+</div>
 <div class="" style="border: solid 1px #f3f3f4;background: #e3e3e3;">
+	  
       <div class="row clearfix">        
           <div class="col-md-2 " style="width: 250px; display:inline-block">
             <div class="form-group">
@@ -488,7 +492,7 @@
 	   		$("#parameterFlg").val(parameterFlg);
 	   	}
       
-      var page = 1;
+      var scrollAllow = 1;
       var isLoading = 0;
       $(window).scroll(function() {     	  
     	  var currentNumberCard = $('.list-group .active').parent().find('.row-new').length;
@@ -500,7 +504,7 @@
     		   
 	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
 	    		   
-	    		   if(typeLoading == 2 && (parseInt($('#sort-card-cnd').val()) == 1 || parseInt($('#sort-card-cnd').val()) == 2 
+	    		   if(typeLoading == 2 && scrollAllow == 1 && (parseInt($('#sort-card-cnd').val()) == 1 || parseInt($('#sort-card-cnd').val()) == 2 
 	    				   || parseInt($('#sort-card-cnd').val()) == 5 || parseInt($('#sort-card-cnd').val()) == 6)){
 	    			// Load more card
 		     		  console.log("SCROLL : CURRENT = "+currentNumberCard);
@@ -648,7 +652,9 @@
 
  $(document).ready(function(){
 	 $(document).on('click', '.list-group-item-title', function(event)  {
+		
 		typeLoading = 2;
+		scrollAllow = 0;		 
 		$.xhrPool.abortAll();
 		var clickMySelf = 0;
         $('.list-group-item-title').not($(this)).removeClass('active');
@@ -678,6 +684,7 @@
        		strDate = strDate.slice(0,4)+"/"+strDate.slice(4,strDate.length+1);	
        	}
        	self.find('.list-group-item').remove();
+       	$("#loading-copy").show();
           $.ajax({
    			type: 'POST',
    			url: 'search',
@@ -711,11 +718,12 @@
    					 });
    				});
    				self.append(listGroupItem);
-   				getImageSCP();	
+   				getImageSCP();
+   				scrollAllow = 1;
+   				$("#loading-copy").hide();
    			}).fail(function(xhr, status, err) {
    				
    			});
-        
      });
 	 
    	 $(".business_card_book .list-group").each(function() {
@@ -2235,3 +2243,5 @@
 		
 
     </script>
+
+    
