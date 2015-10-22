@@ -129,6 +129,10 @@ a {
 .career_section{
 	padding: 0px;
 }
+
+.career_date a, #rowData a{
+    color: #676a6c;
+}
 </style>
 
 <c:if test="${not empty isExpried and isExpried == true}">
@@ -656,7 +660,7 @@ a {
                     <div class="panel-body" id="contact-hist-body">
                         <c:if test="${ not empty contactHistoryList }">
                         	<c:forEach var="contactHistory" items="${contactHistoryList}" varStatus="loop">
-	                        <div class="career_section selected">
+	                        <div class="career_section selected" style="border-bottom:0px;">
 	                            <div class="career_date" style="font-weight: bold !important;">
 	                            	<fmt:formatDate value='${ contactHistory.contactDate }' pattern="yyyy年MM月dd日"/>
 	                            	<div class="delContactHist" id="${ contactHistory.contactHistoryId }">x</div>
@@ -696,18 +700,22 @@ a {
 					<div class="panel-body" id="old_card_body">
 						<c:if test="${ not empty listOldCard }">
 							<c:forEach var="oldCardList" items="${listOldCard}" varStatus="loop">
-							<div class="career_section selected">
+							<div class="career_section selected" style="border-bottom:0px;">
 								<div class="career_date " style="font-weight: bold !important;">
-									<fmt:formatDate value='${ oldCardList.contactDate }' pattern="yyyy年MM月dd日"/>
+									<a href="<c:url value='/user/card/details/${ oldCardList.cardId }'/>">
+										<fmt:formatDate value='${ oldCardList.contactDate }' pattern="yyyy年MM月dd日"/>
+									</a>
 								</div>
 								<div>
 									<table class="table">
 										<tbody>
 											<tr id="rowData">
 												<td>
-													<p><c:out value="${ oldCardList.companyName }"></c:out> </p>
+													<p><a href="<c:url value='/user/card/details/${ oldCardList.cardId }'/>">
+													<c:out value="${ oldCardList.companyName }"></c:out></a> </p>
 													<p></p>
-													<p><c:out value="${ oldCardList.departmentName }"></c:out></p>
+													<p><a href="<c:url value='/user/card/details/${ oldCardList.cardId }'/>">
+													<c:out value="${ oldCardList.departmentName }"></c:out></a></p>
 												</td>
 	
 											</tr>
@@ -1919,7 +1927,7 @@ label.error {
 	       		var responseHTML = "";
 	       		$.each(response, function(index, value){
 		       		var contactDate = formatDate(value["contactDate"]);
-	       			responseHTML += "<div class='career_section selected'><div class='career_date ' style='font-weight: bold !important;'>"
+	       			responseHTML += "<div class='career_section selected' style='border-bottom:0px;'><div class='career_date ' style='font-weight: bold !important;'>"
 	            				+ contactDate 
 	            				+ "<span class='delContactHist' id='"+ value["contactHistoryId"] +"'>x</span></div>"
 	            				+ "<div><table class='table'><tbody>"
