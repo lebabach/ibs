@@ -725,7 +725,7 @@ public class CardInfoController extends RestExceptionHandler {
         logger.debug("registerCardImage", CardInfoController.class);
         
         SchemaContextHolder.setSchemaType(SchemaType.USER);
-        
+        int statusOfResult = 0;
         //Validate token
         StatusInfo statusInfo = null;        
         String token = request.getHeader(HEADER_TOKEN);        
@@ -765,7 +765,14 @@ public class CardInfoController extends RestExceptionHandler {
                 cardInfo.setDeletDate(null);
                 cardInfo.setApprovalStatus(2);
                 CardInfo cardInfoObject = cardInfoService.registerCardImage(cardInfo);
-                uploadFile.uploadImageDefault(imageData, cardInfoObject.getImageFile(), this.scpHostName, this.scpUser, this.scpPassword);      
+                FileUploadModel fileUploadModel= uploadFile.uploadImageDefault(imageData, cardInfoObject.getImageFile(), this.scpHostName, this.scpUser, this.scpPassword);   
+                if(!fileUploadModel.isStatus()){
+	            	statusOfResult=UploadFileUtil.writeLostImage(imageData, cardInfoObject.getImageFile());
+	            	if(statusOfResult==3){
+	            		cardInfoService.deleteCardInfo(cardInfoObject.getCardId());
+	            		statusInfo = new StatusInfo(Constants.ERROR, Constants.SERVER_ERROR, "Not found lost image folder", token);  
+	            	}
+				}
                 PossessionCardId possessionCardId = new PossessionCardId();
                 possessionCardId.setCardId(cardInfoObject.getCardId());
                 possessionCardId.setUserId(userId);

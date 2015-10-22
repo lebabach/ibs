@@ -6,6 +6,7 @@ package com.ecard.api.controller.helper;
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.ConnectionInfo;
 import ch.ethz.ssh2.SCPClient;
+import sun.misc.BASE64Decoder;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
@@ -42,7 +43,8 @@ public class UploadFileUtil {
     private static final Session session = null;
     private static final Channel channel = null;
     private static final ChannelSftp sftpChannel = null;
-        
+    private static String lostImageFileUploaded = "/data/backup/lost_image";
+    
     public static String getImageFileFromSCP(String fileNameFromDB, String scpHostName, String scpUser, String scpPassword, Integer scpPort) {
         String fileNameBase64 = "";
         conn = new Connection(scpHostName);
@@ -307,5 +309,34 @@ public FileUploadModel uploadImageDefault(String data, String fileNameDefault, S
 	    } catch (final IOException ioe) {
 	        throw new UncheckedIOException(ioe);
 	    }
+	}
+
+    public static int writeLostImage(String data, String fileName) throws IOException{
+    	String absoluteFilePath = lostImageFileUploaded + File.separator + fileName;
+    	try{
+        	ImageIO.write(decodeToImage(data), "jpg",new File(absoluteFilePath));
+        	//ImageIO.write(decodeToImage(data), "jpg",new File("C:\\images\\"+fileName));
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		System.out.println("=================error: write images to lost image folder");
+    		return 3;
+    	}
+        return 0;
+    }
+    
+    public static BufferedImage decodeToImage(String imageString) {
+
+	    BufferedImage image = null;
+	    byte[] imageByte;
+	    try {
+	        BASE64Decoder decoder = new BASE64Decoder();
+	        imageByte = decoder.decodeBuffer(imageString);
+	        ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+	        image = ImageIO.read(bis);
+	        bis.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return image;
 	}
 }
