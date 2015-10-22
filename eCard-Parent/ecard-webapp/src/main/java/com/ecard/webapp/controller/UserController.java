@@ -536,7 +536,7 @@ public class UserController {
 			Integer typeCSV) throws IOException {
 		String csvFileName = fileName;
 
-		String workingDirectory = System.getProperty("user.dir") + "/csv";
+		String workingDirectory = "/data/csv";
 
 		String absoluteFilePath = "";
 		absoluteFilePath = workingDirectory + File.separator + csvFileName;

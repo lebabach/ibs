@@ -368,9 +368,10 @@
           
           <div class="col-md-3 setDisplayTerm" style="max-width:120px;padding-left : 5px !important;float:right" id = "sort_cnd">
               <select class="input-sm form-control input-s-sm inline" id = "sort-card-cnd" >
-                <option value="5" selected>交換月順</option>
+                
                 <option value="1" >名前順</option>
                 <option value="2">会社名順</option>
+                <option value="5" selected>交換月順</option>
                 <option value="6">タグ順</option>                          
             </select>
           </div>
