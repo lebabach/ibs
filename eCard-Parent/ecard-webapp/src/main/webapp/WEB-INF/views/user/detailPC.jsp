@@ -129,6 +129,10 @@ a {
 .career_section{
 	padding: 0px;
 }
+
+.career_date a, #rowData a{
+    color: #676a6c;
+}
 </style>
 
 <c:if test="${not empty isExpried and isExpried == true}">
@@ -571,7 +575,7 @@ a {
 					<div class="panel-body">
 						<textarea id="textarea-memo" class="form-control custom-control"
 							rows="3" style="resize: vertical; margin-bottom: 5px;"
-							placeholder="出会いの記録をメモしておきましょう"></textarea>
+							></textarea>
 						<button class="btn btn-sm btn-primary pull-right click-memo">保存</button>
 					</div>
 					
@@ -587,7 +591,7 @@ a {
 				</c:if>
 				
 				<div class="row" style="padding: 10px;">
-					<p style="color:red;">コンタクト履歴は公開されるため、機密情報を入力しないで下さい。</p>
+					<p style="color:red;">コンタクト履歴は他ユーザに公開されるため、機密情報等についてはメモ欄にご入力下さい。</p>
 				</div>
 				<!-- Contact history -->
                 <div class="panel panel-default">
@@ -595,7 +599,7 @@ a {
                         <h5 style="position: relative;">コンタクト履歴
                         <c:if test="${ isMyCard == true }">
                         <button data-toggle="modal" data-target="#modal-example2" class="btn btn-primary btn-lg" 
-                        	style=" position: absolute;right: 0;top: -4px; padding:6px 9px; font-size:13px;">の追加</button>
+                        	style=" position: absolute;right: 0;top: -4px; padding:6px 9px; font-size:13px;">追加</button>
                         </c:if>	
                         </h5>
                     </div>
@@ -656,7 +660,7 @@ a {
                     <div class="panel-body" id="contact-hist-body">
                         <c:if test="${ not empty contactHistoryList }">
                         	<c:forEach var="contactHistory" items="${contactHistoryList}" varStatus="loop">
-	                        <div class="career_section selected">
+	                        <div class="career_section selected" style="border-bottom:0px;">
 	                            <div class="career_date" style="font-weight: bold !important;">
 	                            	<fmt:formatDate value='${ contactHistory.contactDate }' pattern="yyyy年MM月dd日"/>
 	                            	<div class="delContactHist" id="${ contactHistory.contactHistoryId }">x</div>
@@ -696,18 +700,22 @@ a {
 					<div class="panel-body" id="old_card_body">
 						<c:if test="${ not empty listOldCard }">
 							<c:forEach var="oldCardList" items="${listOldCard}" varStatus="loop">
-							<div class="career_section selected">
+							<div class="career_section selected" style="border-bottom:0px;">
 								<div class="career_date " style="font-weight: bold !important;">
-									<fmt:formatDate value='${ oldCardList.contactDate }' pattern="yyyy年MM月dd日"/>
+									<a href="<c:url value='/user/card/details/${ oldCardList.cardId }'/>">
+										<fmt:formatDate value='${ oldCardList.contactDate }' pattern="yyyy年MM月dd日"/>
+									</a>
 								</div>
 								<div>
 									<table class="table">
 										<tbody>
 											<tr id="rowData">
 												<td>
-													<p><c:out value="${ oldCardList.companyName }"></c:out> </p>
+													<p><a href="<c:url value='/user/card/details/${ oldCardList.cardId }'/>">
+													<c:out value="${ oldCardList.companyName }"></c:out></a> </p>
 													<p></p>
-													<p><c:out value="${ oldCardList.departmentName }"></c:out></p>
+													<p><a href="<c:url value='/user/card/details/${ oldCardList.cardId }'/>">
+													<c:out value="${ oldCardList.departmentName }"></c:out></a></p>
 												</td>
 	
 											</tr>
@@ -1919,7 +1927,7 @@ label.error {
 	       		var responseHTML = "";
 	       		$.each(response, function(index, value){
 		       		var contactDate = formatDate(value["contactDate"]);
-	       			responseHTML += "<div class='career_section selected'><div class='career_date ' style='font-weight: bold !important;'>"
+	       			responseHTML += "<div class='career_section selected' style='border-bottom:0px;'><div class='career_date ' style='font-weight: bold !important;'>"
 	            				+ contactDate 
 	            				+ "<span class='delContactHist' id='"+ value["contactHistoryId"] +"'>x</span></div>"
 	            				+ "<div><table class='table'><tbody>"
@@ -2027,8 +2035,8 @@ label.error {
 		var approvalStatus = $("input[name=approvalStatus]").val();		
 		/////////////////
 		var d = $("#editForm input[name=contactDate]").val();
-		var dateTime = new Date((Number(d.split("-")[0])), (Number(d.split("-")[1])), (Number(d.split("-")[2])));
-  		var strDateTime =  dateTime.getFullYear() + "-" + (dateTime.getMonth()+1) + "-" + dateTime.getDate();
+		var dateTime = new Date((Number(d.split("-")[0])), (Number(d.split("-")[1]) - 1), (Number(d.split("-")[2])));
+  		//var strDateTime =  dateTime.getFullYear() + "-" + (dateTime.getMonth()+1) + "-" + dateTime.getDate();
 		/////////////////
 		var address1 = $("input[name=address1]").val();
 		var address2 = $("input[name=address2]").val();
@@ -2053,7 +2061,7 @@ label.error {
 		var companyUrl = $("input[name=companyUrl]").val();
 		
 		var json = {"cardId": cardId, "imageFile" : imageFile, "fileOutputFlg" : fileOutputFlg, "cardOwnerId" : cardOwnerId, 
-					"approvalStatus" : approvalStatus, "publishStatus" : publishStatus, "contactDate" : strDateTime, "address1" : address1,
+					"approvalStatus" : approvalStatus, "publishStatus" : publishStatus, "contactDate" : dateTime, "address1" : address1,
 					"address2" : address2, "address3" : address3, "address4" : address4, "companyName" : companyName,
 					"companyNameKana" : companyNameKana, "departmentName" : departmentName, "positionName" : positionName, "lastNameKana" : lastNameKana,
 					"firstNameKana" : firstNameKana, "email" : email, "telNumberDirect" : telNumberDirect, "telNumberDepartment" : telNumberDepartment,

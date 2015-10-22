@@ -368,10 +368,11 @@
           
           <div class="col-md-3 setDisplayTerm" style="max-width:120px;padding-left : 5px !important;float:right" id = "sort_cnd">
               <select class="input-sm form-control input-s-sm inline" id = "sort-card-cnd" >
-                <option value="5" selected>交換月順</option>
-                <option value="1">氏名順</option>
+                
+                <option value="1" selected>名前順</option>
                 <option value="2">会社名順</option>
-                <option value="6">タグ一覧から</option>                          
+                <option value="5">交換月順</option>
+                <option value="6">タグ順</option>                          
             </select>
           </div>
           
@@ -384,10 +385,10 @@
 		   		<div class="list-group" style="margin-bottom: 0px !important" id="<c:out value='${nameSort}'/>">
 		   			<c:if test="${loopCount.count == 1}">
 			        	<div class="ul-left-li active list-group-item-title ">
-			        		<c:set var="string1" value="${nameSort}"/>
+			        		<%-- <c:set var="string1" value="${nameSort}"/>
 							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" />
-																								    
-			        		<c:out value="${string2}月" />
+ --%>																								    
+			        		<c:out value="${nameSort}" />
 			        	</div>
 	       				<c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">  						        
 					        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
@@ -422,9 +423,9 @@
 			        </c:if>
 			        <c:if test="${loopCount.count != 1}">
 			       		<div class="ul-left-li list-group-item-title ">
-			       			<c:set var="string1" value="${nameSort}"/>
-							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" />																	    
-			        		<c:out value="${string2}月" />		       			
+			       			<%-- <c:set var="string1" value="${nameSort}"/>
+							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" /> --%>																	    
+			        		<c:out value="${nameSort}" />		       			
 			       		</div>
 		       		</c:if>
 		       	</div>       	
@@ -903,8 +904,9 @@
 					url: 'listCardPending'
 				}).done(function(resp, status, xhr) { 					
 					$(".business_card_book").html("");
+					$(".business_card_book").append('<div class="list-group">');
 					$.each( resp, function( k, v ) {
-						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+						 $(".list-group").append('<div class="list-group-item pointer show-content">'
 			 					+'<div class="row row-new">'
 								+	'<div class="col-md-1 col-xs-1"><input type="hidden" name="cardId" value = "none"></div>'
 								+	'<div class="col-md-5">'
@@ -920,7 +922,7 @@
 								+	'</div> </div> </div> </div>');
 			 					getImageFromSCP(v.imageFile);
 					});
-					
+					$(".business_card_book").append('</div>');
 				}).fail(function(xhr, status, err) {
 					console.log('BBB='+err);
 				});  

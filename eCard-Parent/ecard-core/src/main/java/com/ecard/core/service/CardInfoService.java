@@ -86,6 +86,8 @@ public interface CardInfoService {
    
    public List<CardInfo> getCompanyCard(Integer groupCompanyName);
    
+   public List<CardInfo> getGroupCompanyCard(Integer groupCompanyName);
+   
    public void saveDownloadHistory(DownloadCsv downloadCSVId);
    
    public void registerPrusalHistory(Integer userId, Integer cardId);

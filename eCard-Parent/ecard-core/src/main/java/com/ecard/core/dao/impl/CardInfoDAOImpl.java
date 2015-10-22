@@ -698,7 +698,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	public List<CardInfo> getListMyCard(Integer userId) {
 		Query query = getEntityManager().createQuery(
 				"SELECT c FROM CardInfo c WHERE c.cardOwnerId = :userId "
-						+ " AND c.approvalStatus = 1 AND c.deleteFlg = 0");
+						+ " AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0");
 		query.setParameter("userId", userId);
 		return query.getResultList();
 	}
@@ -717,28 +717,28 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		 */
 		Query query = getEntityManager()
 				.createQuery("SELECT c FROM CardInfo c WHERE c.groupCompanyId = :groupCompanyName"
-						+ " AND c.approvalStatus = 1 AND c.deleteFlg = 0");
+						+ " AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0");
 
 		query.setParameter("groupCompanyName", groupCompanyName);
 		return query.getResultList();
 	}
-
+	
+	public List<CardInfo> getGroupCompanyCard(Integer groupCompanyName) {
+		String sqlStr = "SELECT c FROM CardInfo c WHERE c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0";
+		//groupCompanyId
+		if (groupCompanyName == 1 || groupCompanyName == 2 || groupCompanyName == 3 || groupCompanyName == 4
+				|| groupCompanyName == 5) {
+			sqlStr += " AND (c.groupCompanyId IN(1,2,3,4,5) OR (c.groupCompanyId NOT IN(1,2,3,4,5) AND c.contactDate >= '"
+					+ this.complianceDate + "')) ";
+		} else {
+			sqlStr += " AND (c.groupCompanyId = " + groupCompanyName + " OR (c.groupCompanyId <> " + groupCompanyName
+					+ "  AND c.contactDate >= '" + this.complianceDate + "')) ";
+		}
+		Query query = getEntityManager().createQuery(sqlStr);		
+		return query.getResultList();
+	}
+	
 	public void saveDownloadHistory(DownloadCsv downloadCsvId) {
-		/*
-		 * Query query = getEntityManager().createNativeQuery(
-		 * "INSERT INTO download_csv (user_id, csv_type, request_date, csv_approval_status, approval_date, csv_url) "
-		 * +
-		 * "VALUES(:userId, :csvType, :requestDate, :csvApprovalStatus, :approvalDate, :csvUrl)"
-		 * ); query.setParameter("userId",
-		 * downloadCsvId.getUserInfo().getUserId());
-		 * query.setParameter("csvType", downloadCsvId.getCsvType());
-		 * query.setParameter("requestDate", downloadCsvId.getRequestDate());
-		 * query.setParameter("csvApprovalStatus",
-		 * downloadCsvId.getCsvApprovalStatus());
-		 * query.setParameter("approvalDate", downloadCsvId.getApprovalDate());
-		 * query.setParameter("csvUrl", downloadCsvId.getCsvUrl()); return
-		 * query.executeUpdate();
-		 */
 		getEntityManager().persist(downloadCsvId);
 		getEntityManager().flush();
 	}
@@ -935,9 +935,9 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ "AND c.nameKana LIKE :valueSearch";
 			
 		} else if (sortType == SearchConditions.COMPANY.getValue()) {			
-			sqlStr = "SELECT c.companyNameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
-					+ " AND (c.companyNameKana is not null AND c.companyNameKana <> '') "
-					+ "AND c.companyNameKana = :valueSearch";
+			sqlStr = "SELECT c.companyName AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
+					+ " AND (c.companyName is not null AND c.companyName <> '') "
+					+ "AND c.companyName = :valueSearch";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
 			if (valueSearch.equals("cardNoTag")) {
@@ -1242,10 +1242,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ "GROUP BY SUBSTR((c.nameKana),1,1) ORDER BY c.nameKana ASC ";
 			
 		} else if (sortType == SearchConditions.COMPANY.getValue()) {
-			sqlStr = "SELECT c.companyNameKana AS groupDate FROM CardInfo c "
+			sqlStr = "SELECT c.companyName AS groupDate FROM CardInfo c "
 					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
-					+ " AND (c.companyNameKana is not null AND c.companyNameKana <> '') "
-					+ "GROUP BY c.companyNameKana ORDER BY c.companyNameKana ASC ";
+					+ " AND (c.companyName is not null AND c.companyName <> '') "
+					+ "GROUP BY c.companyName ORDER BY c.companyNameKana ASC ";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
 			sqlStr = "SELECT ut.tagName AS groupDate FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
@@ -1291,8 +1291,8 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			
 		} else if (typeSort == SearchConditions.COMPANY.getValue()) {			
 			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
-					+ " AND (c.companyNameKana is not null AND c.companyNameKana <> '') "
-					+ "AND c.companyNameKana = :valueSearch";
+					+ " AND (c.companyName is not null AND c.companyName <> '') "
+					+ "AND c.companyName = :valueSearch";
 			
 		} else if (typeSort == SearchConditions.TAG.getValue()) {
 			if (valueSearch.equals("cardNoTag")) {
