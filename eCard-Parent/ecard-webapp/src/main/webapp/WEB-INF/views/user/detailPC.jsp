@@ -2027,8 +2027,8 @@ label.error {
 		var approvalStatus = $("input[name=approvalStatus]").val();		
 		/////////////////
 		var d = $("#editForm input[name=contactDate]").val();
-		var dateTime = new Date((Number(d.split("-")[0])), (Number(d.split("-")[1])), (Number(d.split("-")[2])));
-  		var strDateTime =  dateTime.getFullYear() + "-" + (dateTime.getMonth()+1) + "-" + dateTime.getDate();
+		var dateTime = new Date((Number(d.split("-")[0])), (Number(d.split("-")[1]) - 1), (Number(d.split("-")[2])));
+  		//var strDateTime =  dateTime.getFullYear() + "-" + (dateTime.getMonth()+1) + "-" + dateTime.getDate();
 		/////////////////
 		var address1 = $("input[name=address1]").val();
 		var address2 = $("input[name=address2]").val();
@@ -2053,7 +2053,7 @@ label.error {
 		var companyUrl = $("input[name=companyUrl]").val();
 		
 		var json = {"cardId": cardId, "imageFile" : imageFile, "fileOutputFlg" : fileOutputFlg, "cardOwnerId" : cardOwnerId, 
-					"approvalStatus" : approvalStatus, "publishStatus" : publishStatus, "contactDate" : strDateTime, "address1" : address1,
+					"approvalStatus" : approvalStatus, "publishStatus" : publishStatus, "contactDate" : dateTime, "address1" : address1,
 					"address2" : address2, "address3" : address3, "address4" : address4, "companyName" : companyName,
 					"companyNameKana" : companyNameKana, "departmentName" : departmentName, "positionName" : positionName, "lastNameKana" : lastNameKana,
 					"firstNameKana" : firstNameKana, "email" : email, "telNumberDirect" : telNumberDirect, "telNumberDepartment" : telNumberDepartment,

@@ -1132,6 +1132,9 @@ public class UserController {
 			userCardMemo.setCreateDate(new Date());
 			userCardMemo.setUserId(userId);
 
+			String memo = userCardMemo.getMemo().replace("\n", "<br/>");
+			userCardMemo.setMemo(memo);
+			
 			int seq;
 			if (userCardMemo.getSeq() != 0) {
 				cardMemoService.registerCardMemo(userCardMemo);
