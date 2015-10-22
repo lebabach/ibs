@@ -859,7 +859,7 @@ label.error {
                     			    },
                     			    zipCode : {
                     			    	required: false,
-                    			    	digits : true
+                    			    	customphone : true
                     			    }
                     			},
                     			messages: {
