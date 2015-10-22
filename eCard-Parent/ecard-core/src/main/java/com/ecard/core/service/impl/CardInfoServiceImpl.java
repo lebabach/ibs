@@ -466,8 +466,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 				copy.start();
 			}else{
 				OldCard oldcard=new OldCard();
+				
 				CardInfo cardInfor=new CardInfo();
 				cardInfor.setCardId(card2.getCardId());
+				
 				OldCardId oldCardId=new OldCardId();
 				oldCardId.setCardId(card2.getCardId());
 				oldCardId.setCardOwnerId(currentUserId);
@@ -477,6 +479,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 				
 				oldcard.setId(oldCardId);
 				oldCardDAO.persist(oldcard);
+				oldCardDAO.updateCardIdWithOldCard(oldcard.getCardInfo().getCardId(),cardid1);
 				userCardMemoDAO.updateUserCardMemo(cardid1, currentUserId, cardid2);
 				contactHistoryDAO.updateContactHistory(cardid1, currentUserId, cardid2);
 				
