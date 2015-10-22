@@ -422,7 +422,11 @@ body{
 			color:#1a629d;
 			font-size:12px;
 			font-weight:bold;
-			}				
+			}
+			
+	.active {
+		background-color : #1F74C7 !important;
+	} 
   </style>
 
 <div id="content">
@@ -438,6 +442,7 @@ body{
                     <a id="1"  class="export">自分の名刺をダウンロード</a>
                     <c:if test="${roleAdminId == 7}">
                     	<a id="2" class="export">自社の名刺をダウンロード</a>
+                    	<a id="3" class="export">グループ名刺をダウンロード</a>
                     </c:if>
                 </div>
                 <p class="p-line"></p>
