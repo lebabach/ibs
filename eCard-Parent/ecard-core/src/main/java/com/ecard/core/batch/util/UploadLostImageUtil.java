@@ -22,17 +22,20 @@ import com.jcraft.jsch.SftpException;
 public class UploadLostImageUtil {
 	private static final Logger logger = LoggerFactory.getLogger(UploadLostImageUtil.class);
 	
-	@Value("${scp.hostname}")
     private String scpHostName;
-    
-    @Value("${scp.user}")
     private String scpUser;
-    
-    @Value("${scp.password}")
     private String scpPassword;
     
     private static final String directoryFrom = "/data/backup/lost_image";
     private static final String directoryBackup = "/data/photo/card";
+    
+    public UploadLostImageUtil(){}
+    
+    public UploadLostImageUtil(String scpHostName, String scpUser, String scpPassword){
+    	this.scpHostName = scpHostName;
+    	this.scpUser = scpUser;
+    	this.scpPassword = scpPassword;
+    }
     
 	public void uploadLostImageFile() throws JSchException, SftpException{
 		//String directoryTo = "ssh://"+ BatchConstants.scpUserName +":"+ BatchConstants.scpPassword +"@"+ BatchConstants.scpHostName + directoryBackup;
@@ -41,9 +44,9 @@ public class UploadLostImageUtil {
         config.put("StrictHostKeyChecking", "no");
 
         JSch ssh = new JSch();
-        Session session = ssh.getSession(BatchConstants.scpUserName, BatchConstants.scpHostName, 22);
+        Session session = ssh.getSession(this.scpUser, this.scpHostName, 22);
         session.setConfig(config);
-        session.setPassword(BatchConstants.scpPassword);
+        session.setPassword(this.scpPassword);
         session.connect();
 
         Channel channel = session.openChannel("sftp");
