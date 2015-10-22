@@ -89,7 +89,7 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 				//notifications=UploadFileUtil.getImageFileFromSCPForNotification(notifications, scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
 				ObjectNotification objectNotification=new ObjectNotification();
 				//objectNotification.setNotifications(notifications);
-				objectNotification.setNumberOfNotification(homeService.countNotificationCard(ecardUser.getUserId()).bitCount());
+				objectNotification.setNumberOfNotification(homeService.countNotificationCard(ecardUser.getUserId()).intValue());
 				
 				//remove se/ssion if isDetail is false
 				HttpSession session= request.getSession();
