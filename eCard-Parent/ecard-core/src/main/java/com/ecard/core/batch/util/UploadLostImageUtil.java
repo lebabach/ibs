@@ -35,7 +35,7 @@ public class UploadLostImageUtil {
     private static final String directoryBackup = "/data/photo/card";
     
 	public void uploadLostImageFile() throws JSchException, SftpException{
-		String directoryTo = "ssh://"+ BatchConstants.scpUserName +":"+ BatchConstants.scpPassword +"@"+ BatchConstants.scpHostName + directoryBackup;
+		//String directoryTo = "ssh://"+ BatchConstants.scpUserName +":"+ BatchConstants.scpPassword +"@"+ BatchConstants.scpHostName + directoryBackup;
 		
 		java.util.Properties config = new java.util.Properties();
         config.put("StrictHostKeyChecking", "no");
@@ -61,8 +61,8 @@ public class UploadLostImageUtil {
                 //list.add(entry.getFilename());
             	File file = new File(directoryFrom+"/"+entry.getFilename());
             	try (FileInputStream fis = new FileInputStream(file)) {
-            		sftp.cd(directoryTo);
-            		sftp.put(fis, directoryBackup);
+            		sftp.cd(directoryBackup);
+            		sftp.put(fis, directoryBackup+"/"+entry.getFilename());
             		
             		if(file.exists())
             			file.delete();
