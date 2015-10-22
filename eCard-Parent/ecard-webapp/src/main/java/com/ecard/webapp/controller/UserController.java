@@ -856,7 +856,8 @@ public class UserController {
 	}
 
 	@RequestMapping("changepass")
-	public ModelAndView changepass() {
+	public ModelAndView changepass(HttpSession session) {
+		session.setAttribute("isFirstLogin", true);
 		return new ModelAndView("changepass");
 	}
 
@@ -881,6 +882,8 @@ public class UserController {
 			UserInfo user = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
 			user.setPassword((new BCryptPasswordEncoder().encode(newPass)));
 			userInfoService.updateProfileAdminAllocation(user);
+			//Set first login
+            userInfoService.updateFisrtLogin(ecardUser.getUserId(), 1);
 		}
 		return true;
 	}

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.ecard.core.model.CardInfo;
+import com.ecard.core.model.UserInfo;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.NotificationInfoService;
 import com.ecard.core.service.UserInfoService;
@@ -39,6 +40,9 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
     CardInfoService cardInfoService;
 	
+	@Autowired
+	UserInfoService userInfoService;
+	
 	@Value("${scp.hostname}")
 	private String scpHostName;
 	    
@@ -54,11 +58,13 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		
 		boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 		if (!ajax) {
 			try{
 				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 				EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+				
 				List<NotificationList> listUpdate = notificationInfoService.listAllNofiticationUser(ecardUser.getUserId());
 				List<NotificationOfUserVO> notifications=new ArrayList<NotificationOfUserVO>();
 				CardInfo card=null;
@@ -98,12 +104,20 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 					}
 		        }
 				request.setAttribute("objectNotification", objectNotification);
+				
+				String urlChangePass = request.getContextPath() + "/user/changepass";
+				UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+				
+				//System.out.println("====> "+request.getRequestURI());
+				if(userInfo.getFirstLoginF() == 0 && !(urlChangePass.equals(request.getRequestURI()))){
+					response.sendRedirect(urlChangePass);
+				}
+				
 			}catch(Exception e){
 				e.printStackTrace();
 				System.out.println("=======================PCInterceptor fail=========================: ");
 				return false;
 			}
-			
 		}
 		return true;
 	}
