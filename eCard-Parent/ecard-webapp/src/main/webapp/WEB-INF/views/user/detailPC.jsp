@@ -934,7 +934,7 @@ label.error {
 						<input type="hidden" name="cardOwnerId" value="${cardInfo.cardOwnerId}" />
 						<input type="hidden" name="publishStatus" value="${cardInfo.publishStatus}" />
 						<input type="hidden" name="approvalStatus" value="${cardInfo.approvalStatus}" />
-						<input type="hidden" name="contactDate"  value="<fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy-MM-dd HH:mm:ss"/>" />
+						<input type="hidden" name="contactDate"  value="<fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy-MM-dd"/>" />
 						<div class="section">
 							<dl>
 								<dt>
@@ -2026,7 +2026,8 @@ label.error {
 		var publishStatus = $("input[name=publishStatus]").val();
 		var approvalStatus = $("input[name=approvalStatus]").val();		
 		/////////////////
-		var dateTime = new Date($("#editForm input[name=contactDate]").val());
+		var d = $("#editForm input[name=contactDate]").val();
+		var dateTime = new Date((Number(d.split("-")[0])), (Number(d.split("-")[1])), (Number(d.split("-")[2])));
   		var strDateTime =  dateTime.getFullYear() + "-" + (dateTime.getMonth()+1) + "-" + dateTime.getDate();
 		/////////////////
 		var address1 = $("input[name=address1]").val();
