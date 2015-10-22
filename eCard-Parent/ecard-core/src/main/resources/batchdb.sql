@@ -17,10 +17,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Table structure for table `batch_job_execution`
+-- Table structure for table `BATCH_JOB_EXECUTION`
 --
 
-CREATE TABLE IF NOT EXISTS `batch_job_execution` (
+CREATE TABLE IF NOT EXISTS `BATCH_JOB_EXECUTION` (
   `JOB_EXECUTION_ID` bigint(20) NOT NULL,
   `VERSION` bigint(20) DEFAULT NULL,
   `JOB_INSTANCE_ID` bigint(20) NOT NULL,
@@ -36,30 +36,30 @@ CREATE TABLE IF NOT EXISTS `batch_job_execution` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `batch_job_execution`
+-- Dumping data for table `BATCH_JOB_EXECUTION`
 --
 -- --------------------------------------------------------
 
 --
--- Table structure for table `batch_job_execution_context`
+-- Table structure for table `BATCH_JOB_EXECUTION_CONTEXT`
 --
 
-CREATE TABLE IF NOT EXISTS `batch_job_execution_context` (
+CREATE TABLE IF NOT EXISTS `BATCH_JOB_EXECUTION_CONTEXT` (
   `JOB_EXECUTION_ID` bigint(20) NOT NULL,
   `SHORT_CONTEXT` varchar(2500) COLLATE utf8_unicode_ci NOT NULL,
   `SERIALIZED_CONTEXT` text COLLATE utf8_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `batch_job_execution_context`
+-- Dumping data for table `BATCH_JOB_EXECUTION_CONTEXT`
 --
 -- --------------------------------------------------------
 
 --
--- Table structure for table `batch_job_execution_params`
+-- Table structure for table `BATCH_JOB_EXECUTION_PARAMS`
 --
 
-CREATE TABLE IF NOT EXISTS `batch_job_execution_params` (
+CREATE TABLE IF NOT EXISTS `BATCH_JOB_EXECUTION_PARAMS` (
   `JOB_EXECUTION_ID` bigint(20) NOT NULL,
   `TYPE_CD` varchar(6) COLLATE utf8_unicode_ci NOT NULL,
   `KEY_NAME` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
@@ -73,25 +73,25 @@ CREATE TABLE IF NOT EXISTS `batch_job_execution_params` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `batch_job_execution_seq`
+-- Table structure for table `BATCH_JOB_EXECUTION_SEQ`
 --
 
-CREATE TABLE IF NOT EXISTS `batch_job_execution_seq` (
+CREATE TABLE IF NOT EXISTS `BATCH_JOB_EXECUTION_SEQ` (
   `ID` bigint(20) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `batch_job_execution_seq`
+-- Dumping data for table `BATCH_JOB_EXECUTION_SEQ`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `batch_job_instance`
+-- Table structure for table `BATCH_JOB_INSTANCE`
 --
 
-CREATE TABLE IF NOT EXISTS `batch_job_instance` (
+CREATE TABLE IF NOT EXISTS `BATCH_JOB_INSTANCE` (
   `JOB_INSTANCE_ID` bigint(20) NOT NULL,
   `VERSION` bigint(20) DEFAULT NULL,
   `JOB_NAME` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
@@ -99,30 +99,30 @@ CREATE TABLE IF NOT EXISTS `batch_job_instance` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `batch_job_instance`
+-- Dumping data for table `BATCH_JOB_INSTANCE`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `batch_job_seq`
+-- Table structure for table `BATCH_JOB_SEQ`
 --
 
-CREATE TABLE IF NOT EXISTS `batch_job_seq` (
+CREATE TABLE IF NOT EXISTS `BATCH_JOB_SEQ` (
   `ID` bigint(20) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `batch_job_seq`
+-- Dumping data for table `BATCH_JOB_SEQ`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `batch_step_execution`
+-- Table structure for table `BATCH_STEP_EXECUTION`
 --
 
-CREATE TABLE IF NOT EXISTS `batch_step_execution` (
+CREATE TABLE IF NOT EXISTS `BATCH_STEP_EXECUTION` (
   `STEP_EXECUTION_ID` bigint(20) NOT NULL,
   `VERSION` bigint(20) NOT NULL,
   `STEP_NAME` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
@@ -144,37 +144,37 @@ CREATE TABLE IF NOT EXISTS `batch_step_execution` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `batch_step_execution`
+-- Dumping data for table `BATCH_STEP_EXECUTION`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `batch_step_execution_context`
+-- Table structure for table `BATCH_STEP_EXECUTION_CONTEXT`
 --
 
-CREATE TABLE IF NOT EXISTS `batch_step_execution_context` (
+CREATE TABLE IF NOT EXISTS `BATCH_STEP_EXECUTION_CONTEXT` (
   `STEP_EXECUTION_ID` bigint(20) NOT NULL,
   `SHORT_CONTEXT` varchar(2500) COLLATE utf8_unicode_ci NOT NULL,
   `SERIALIZED_CONTEXT` text COLLATE utf8_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `batch_step_execution_context`
+-- Dumping data for table `BATCH_STEP_EXECUTION_CONTEXT`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `batch_step_execution_seq`
+-- Table structure for table `BATCH_STEP_EXECUTION_SEQ`
 --
 
-CREATE TABLE IF NOT EXISTS `batch_step_execution_seq` (
+CREATE TABLE IF NOT EXISTS `BATCH_STEP_EXECUTION_SEQ` (
   `ID` bigint(20) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `batch_step_execution_seq`
+-- Dumping data for table `BATCH_STEP_EXECUTION_SEQ`
 --
 
 
@@ -184,75 +184,75 @@ CREATE TABLE IF NOT EXISTS `batch_step_execution_seq` (
 --
 
 --
--- Indexes for table `batch_job_execution`
+-- Indexes for table `BATCH_JOB_EXECUTION`
 --
-ALTER TABLE `batch_job_execution`
+ALTER TABLE `BATCH_JOB_EXECUTION`
   ADD KEY `JOB_INST_EXEC_FK` (`JOB_INSTANCE_ID`);
 
 --
--- Indexes for table `batch_job_execution_context`
+-- Indexes for table `BATCH_JOB_EXECUTION_CONTEXT`
 --
-ALTER TABLE `batch_job_execution_context`
+ALTER TABLE `BATCH_JOB_EXECUTION_CONTEXT`
   ADD PRIMARY KEY (`JOB_EXECUTION_ID`);
 
 --
--- Indexes for table `batch_job_execution_params`
+-- Indexes for table `BATCH_JOB_EXECUTION_PARAMS`
 --
-ALTER TABLE `batch_job_execution_params`
+ALTER TABLE `BATCH_JOB_EXECUTION_PARAMS`
   ADD KEY `JOB_EXEC_PARAMS_FK` (`JOB_EXECUTION_ID`);
 
 --
--- Indexes for table `batch_job_instance`
+-- Indexes for table `BATCH_JOB_INSTANCE`
 --
-ALTER TABLE `batch_job_instance`
+ALTER TABLE `BATCH_JOB_INSTANCE`
   ADD PRIMARY KEY (`JOB_INSTANCE_ID`), ADD UNIQUE KEY `JOB_INST_UN` (`JOB_NAME`,`JOB_KEY`);
 
 --
--- Indexes for table `batch_step_execution`
+-- Indexes for table `BATCH_STEP_EXECUTION`
 --
-ALTER TABLE `batch_step_execution`
+ALTER TABLE `BATCH_STEP_EXECUTION`
   ADD PRIMARY KEY (`STEP_EXECUTION_ID`), ADD KEY `JOB_EXEC_STEP_FK` (`JOB_EXECUTION_ID`);
 
 --
--- Indexes for table `batch_step_execution_context`
+-- Indexes for table `BATCH_STEP_EXECUTION_CONTEXT`
 --
-ALTER TABLE `batch_step_execution_context`
+ALTER TABLE `BATCH_STEP_EXECUTION_CONTEXT`
   ADD PRIMARY KEY (`STEP_EXECUTION_ID`);
 
 --
--- Constraints for table `batch_job_execution`
+-- Constraints for table `BATCH_JOB_EXECUTION`
 --
-ALTER TABLE `batch_job_execution`
-ADD CONSTRAINT `JOB_INST_EXEC_FK` FOREIGN KEY (`JOB_INSTANCE_ID`) REFERENCES `batch_job_instance` (`JOB_INSTANCE_ID`);
+ALTER TABLE `BATCH_JOB_EXECUTION`
+ADD CONSTRAINT `JOB_INST_EXEC_FK` FOREIGN KEY (`JOB_INSTANCE_ID`) REFERENCES `BATCH_JOB_INSTANCE` (`JOB_INSTANCE_ID`);
 
 --
--- Constraints for table `batch_job_execution_context`
+-- Constraints for table `BATCH_JOB_EXECUTION_CONTEXT`
 --
-ALTER TABLE `batch_job_execution_context`
-ADD CONSTRAINT `JOB_EXEC_CTX_FK` FOREIGN KEY (`JOB_EXECUTION_ID`) REFERENCES `batch_job_execution` (`JOB_EXECUTION_ID`);
+ALTER TABLE `BATCH_JOB_EXECUTION_CONTEXT`
+ADD CONSTRAINT `JOB_EXEC_CTX_FK` FOREIGN KEY (`JOB_EXECUTION_ID`) REFERENCES `BATCH_JOB_EXECUTION` (`JOB_EXECUTION_ID`);
 
 --
--- Constraints for table `batch_job_execution_params`
+-- Constraints for table `BATCH_JOB_EXECUTION_PARAMS`
 --
-ALTER TABLE `batch_job_execution_params`
-ADD CONSTRAINT `JOB_EXEC_PARAMS_FK` FOREIGN KEY (`JOB_EXECUTION_ID`) REFERENCES `batch_job_execution` (`JOB_EXECUTION_ID`);
+ALTER TABLE `BATCH_JOB_EXECUTION_PARAMS`
+ADD CONSTRAINT `JOB_EXEC_PARAMS_FK` FOREIGN KEY (`JOB_EXECUTION_ID`) REFERENCES `BATCH_JOB_EXECUTION` (`JOB_EXECUTION_ID`);
 
 --
--- Constraints for table `batch_step_execution`
+-- Constraints for table `BATCH_STEP_EXECUTION`
 --
-ALTER TABLE `batch_step_execution`
-ADD CONSTRAINT `JOB_EXEC_STEP_FK` FOREIGN KEY (`JOB_EXECUTION_ID`) REFERENCES `batch_job_execution` (`JOB_EXECUTION_ID`);
+ALTER TABLE `BATCH_STEP_EXECUTION`
+ADD CONSTRAINT `JOB_EXEC_STEP_FK` FOREIGN KEY (`JOB_EXECUTION_ID`) REFERENCES `BATCH_JOB_EXECUTION` (`JOB_EXECUTION_ID`);
 
 --
--- Constraints for table `batch_step_execution_context`
+-- Constraints for table `BATCH_STEP_EXECUTION_CONTEXT`
 --
-ALTER TABLE `batch_step_execution_context`
-ADD CONSTRAINT `STEP_EXEC_CTX_FK` FOREIGN KEY (`STEP_EXECUTION_ID`) REFERENCES `batch_step_execution` (`STEP_EXECUTION_ID`);
+ALTER TABLE `BATCH_STEP_EXECUTION_CONTEXT`
+ADD CONSTRAINT `STEP_EXEC_CTX_FK` FOREIGN KEY (`STEP_EXECUTION_ID`) REFERENCES `BATCH_STEP_EXECUTION` (`STEP_EXECUTION_ID`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
-insert into batch_step_execution_seq values(0);
-insert into batch_job_execution_seq values(0);
-insert into batch_job_seq values(0);
+insert into BATCH_STEP_EXECUTION_SEQ values(0);
+insert into BATCH_JOB_EXECUTION_SEQ values(0);
+insert into BATCH_JOB_SEQ values(0);
