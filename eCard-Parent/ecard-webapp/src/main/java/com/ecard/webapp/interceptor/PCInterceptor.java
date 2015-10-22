@@ -1,5 +1,6 @@
 package com.ecard.webapp.interceptor;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.service.CardInfoService;
+import com.ecard.core.service.HomeService;
 import com.ecard.core.service.NotificationInfoService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.UserNotifyService;
@@ -51,6 +53,9 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 	@Value("${scp.port}")
 	private String scpPort;
 	
+	@Autowired
+    private HomeService homeService;
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -59,7 +64,8 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 			try{
 				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 				EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
-				List<NotificationList> listUpdate = notificationInfoService.listAllNofiticationUser(ecardUser.getUserId());
+				/*List<NotificationList> listUpdate = notificationInfoService.listAllNofiticationUser(ecardUser.getUserId());
+				BigInteger noticeCnt = homeService.countNotificationCard(ecardUser.getUserId());
 				List<NotificationOfUserVO> notifications=new ArrayList<NotificationOfUserVO>();
 				CardInfo card=null;
 				for(NotificationList item:listUpdate){
@@ -78,12 +84,12 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 					notification.setImage(card!=null?card.getImageFile():"");
 					notification.setRead_flg(item.getRead_flg());
 					notifications.add(notification);
-				}
+				}*/
 					
-				notifications=UploadFileUtil.getImageFileFromSCPForNotification(notifications, scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
+				//notifications=UploadFileUtil.getImageFileFromSCPForNotification(notifications, scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
 				ObjectNotification objectNotification=new ObjectNotification();
-				objectNotification.setNotifications(notifications);
-				objectNotification.setNumberOfNotification(listUpdate.stream().filter(x->x.getRead_flg()==0).collect(Collectors.toList()).size());
+				//objectNotification.setNotifications(notifications);
+				objectNotification.setNumberOfNotification(homeService.countNotificationCard(ecardUser.getUserId()).bitCount());
 				
 				//remove se/ssion if isDetail is false
 				HttpSession session= request.getSession();

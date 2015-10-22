@@ -22,4 +22,6 @@ public interface NotificationListDAO {
     public List<NotificationListManager> listAllNofiticationManager();
     
     public int updateReadFlgById(UserNotification notify);
+    
+    public List<NotificationList> getListNotificationPaging(Integer userId, Integer page);
 }

@@ -24,6 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.LoggerFactory;
 
+import com.ecard.core.vo.NotificationList;
 import com.ecard.webapp.vo.NotificationOfUserVO;
 
 import ch.ethz.ssh2.Connection;
@@ -133,11 +134,11 @@ public class UploadFileUtil {
     	 return files;
     }
     
-    public static List<NotificationOfUserVO> getImageFileFromSCPForNotification(List<NotificationOfUserVO> files, String scpHostName, String scpUser, String scpPassword, Integer scpPort) {
+    public static List<NotificationList> getImageFileFromSCPForNotification(List<NotificationList> files, String scpHostName, String scpUser, String scpPassword, Integer scpPort) {
 		return processingCardForNotification(files, scpHostName, scpUser, scpPassword, scpPort);
 	}
     
-    private static List<NotificationOfUserVO> processingCardForNotification(List<NotificationOfUserVO> files, String scpHostName, String scpUser, String scpPassword, Integer scpPort){
+    private static List<NotificationList> processingCardForNotification(List<NotificationList> files, String scpHostName, String scpUser, String scpPassword, Integer scpPort){
     	try{
 			conn = new Connection(scpHostName);
 			try {

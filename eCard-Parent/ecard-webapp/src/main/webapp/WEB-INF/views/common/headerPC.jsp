@@ -110,9 +110,9 @@
 		      padding: 4px 5px;
 		  }
 		  .scrollbarVerital{
-   			  height: 191px;
+ 			 height: 191px;
    			  overflow-y: scroll;
-   			  overflow-x:hidden;
+   			  overflow-x:hidden; 
 		  }
           </style>
            <p class="abc-ex"><%-- ${pageContext.request.remoteUser} --%>
@@ -146,10 +146,14 @@
                         </li>
                         <li>   
                         <div class="scrollbarVerital">
-                                      
+                               <div id="loading-notify" style="display: none;">
+									<p>
+										<img src="../assets/img/loader.gif" height="200" width="235" style="border-radius: 238px; opacity: 0.5;">
+									</p>
+								</div> 
                             <table class="table table-hover" id="notification">
 
-							<tbody>
+							<%-- <tbody>
 								
 								<c:forEach var="notification" items="${objectNotification.notifications}" varStatus="loop">
 									<tr class="pointer">
@@ -188,26 +192,6 @@
 										</td>
 									  </c:otherwise>
 									</c:choose>
-									
-									 <%-- <c:if test="${notification.image!=''}">
-									      <td style="vertical-align: middle" width="30%"><img alt="image"
-											style="width: 100%" src="data:image/png;base64,${notification.image}"></td>
-								      </c:if>
-									
-									<td style="vertical-align: middle"  width="60%" >
-									
-									     <c:choose>
-										  <c:when test="${notification.read_flg==0}">
-										   	<div class="content_notice" style="font-weight: bold">${notification.contents}</div>
-										  </c:when>
-										  <c:otherwise>
-										   	<div class="content_notice">${notification.contents}</div>
-										  </c:otherwise>
-										</c:choose>
-										
-										
-										<div class="date">${notification.date}</div>
-									</td> --%>
 									<c:choose>
 									  <c:when test="${notification.image!=''}">
 									   <td style="vertical-align: middle"  width="10%"><a href="notificationDetail/${notification.id}" class="${notification.noticeType}"><i
@@ -220,7 +204,7 @@
 									</c:choose>
 									</tr>
 								</c:forEach>
-							</tbody>
+							</tbody> --%>
 						</table> <!-- </div> -->
                         <!-- </div> -->
                         </div> 
@@ -265,7 +249,7 @@
 function deleteAllNotify(){
 	$.ajax({
 	    type: 'POST',
-	    url: 'deleteAllNotify',
+	    url: '/ecard-webapp/user/deleteAllNotify',
 	    data: { 
 	        'id':$(this).find("a").attr("onclick")
 	    },
@@ -275,7 +259,95 @@ function deleteAllNotify(){
 	});
 }
 
+function notifyPaging(page){
+	$.ajax({
+	    type: 'POST',
+	    url: '/ecard-webapp/user/getNotitfyOfCurrentUser',
+	    data:{ 
+	        'page':page
+	    },
+	    success: function(data){
+	    	$("#loading-notify").hide();
+	    	setNotifies(data)
+	    }
+	});
+};
+
+function setNotify(image,content,date,card_id,notifyType,id){
+	var data='<tr class="pointer">'
+	+'<td style="vertical-align: middle" width="30%"><img name='+image+' alt="image" src="<c:url value="/assets/img/loading.gif"/>" style="width: 100%"></td>'
+	+'<td style="vertical-align: middle" width="60%">'
+	+'		<div class="content_notice" title="'+content+'">'+content+'</div>'
+	+'	<div class="date">'+date+'</div>'
+	+'</td>'
+	+'<td style="vertical-align: middle" width="10%"><a href="notificationDetail/'+id+'" class='+notifyType+'><i class="fa fa-angle-right"></i></a> <input type="hidden" class="card_id" value='+card_id+'></td>'
+	+'</tr>'
+	return data;
+}
+function setNotifies(notifies){
+	
+	$.each(notifies, function( key, notify ) {
+		$("#notification").append(setNotify(notify.image,notify.notify_message,notify.notice_date,notify.card_id,notify.notice_type,notify.notice_id));
+		getImageFromSCP(notify.image);
+	});
+}
+
+function getImageFromSCP(fileImageName){
+	isLoading = isLoading + 1;
+	var target = $('#notification img[name="'+fileImageName+'"]');			
+	$.ajax({
+        type: 'POST',
+        url: 'getImageFile',
+        data: 'fileImage='+fileImageName,    	        
+    }).done(function(resp, status, xhr){
+    	if(target == []){
+    		target = $('img[name="'+fileImageName+'"]');
+    	}
+    	if(resp == ""){
+    		target.attr('src','');    	  
+	        target.attr('src','/ecard-webapp/assets/img/card_08.png');
+    	} else {
+    		target.attr('src','');    	  
+	        target.attr('src','data:image/png;base64,'+resp);	
+    	}
+    	isLoading=isLoading-1;
+    }).fail(function(resp, status, xhr){
+        //alert('Error');
+    });						
+}
+/*
+  
+ this.notice_id = notice_id;
+        this.notice_type = notice_type;
+        this.card_id = card_id;
+        this.change_param_type = change_param_type;
+        this.read_flg = read_flg;
+        this.notice_date = notice_date;
+        this.notify_message = notify_message;
+ */
+function scrollNotify(page){  
+    var scrolltop=$('.scrollbarVerital').attr('scrollTop');  
+    var scrollheight=$('.scrollbarVerital').attr('scrollHeight');  
+    var windowheight=$('.scrollbarVerital').attr('clientHeight');  
+    var scrolloffset=11;  
+    if(scrolltop>=(scrollheight-(windowheight+scrolloffset)))  
+    {  
+        //fetch new items  
+    	notifyPaging(page); 
+    }  
+}
 $(document).ready(function() {
+	var page=0;
+	//scrollNotify(++page); 
+	$(window).bind('scroll', function() {
+		if($(".dropdown-toggle.count-info").attr("aria-expanded")=="true"){
+			if($(window).scrollTop() >= $('.scrollbarVerital').offset().top + $('.scrollbarVerital').outerHeight() - window.innerHeight) {
+	        	notifyPaging(++page); 
+	        }
+		}
+	        
+	});
+		
     $('#notification tr').click(function() {
         var href = $(this).find("a").attr("href");
         if(href) {
@@ -292,7 +364,7 @@ $(document).ready(function() {
         }else{
         	$.ajax({
         	    type: 'POST',
-        	    url: 'notificationDetailRibbon',
+        	    url: '/ecard-webapp/user/notificationDetailRibbon',
         	    data: { 
         	        'id':$(this).find("a").attr("onclick")
         	    },
@@ -304,7 +376,15 @@ $(document).ready(function() {
         	});
         }
     });
-    
+    $(".nav.navbar-top-links.navbar-right").click(function(){
+    	if($(".dropdown-toggle.count-info").attr("aria-expanded")=="false" || $(".dropdown-toggle.count-info").attr("aria-expanded")==undefined){
+    		$("#loading-notify").show();
+    		$("#notification >tbody").remove();
+        	notifyPaging(0);
+        	page=0;	
+    	}
+    	
+    });
     
 
 });

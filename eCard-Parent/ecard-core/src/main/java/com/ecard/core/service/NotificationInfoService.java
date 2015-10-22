@@ -24,4 +24,6 @@ public interface NotificationInfoService {
     public int updateReadFlgById(UserNotification notify);
     
     public boolean deleteAllNotify(List<NotificationList> notifies);
+    
+    public List<NotificationList> getListNotificationPaging(Integer userId, Integer page);
 }
