@@ -213,12 +213,12 @@ public class UserController {
 		List<String> lstNameSort = new ArrayList<>();
 		if (ecardUser != null) {
 			// Get listNameSort [2015/10,2015/11, .... ]
-			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), SearchConditions.NAME.getValue());
+			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), SearchConditions.CONTACT.getValue());
 			
 			listTagGroup = getCardTag();
 			if(lstNameSort.size() > 0) {
-					List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.NAME.getValue() ,lstNameSort.get(0), 0);
-					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(),SearchConditions.NAME.getValue() ,lstNameSort.get(0));
+					List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.CONTACT.getValue() ,lstNameSort.get(0), 0);
+					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(),SearchConditions.CONTACT.getValue() ,lstNameSort.get(0));
 					List<CardInfo> cardInfoDisp = new ArrayList<>();
 					for (CardInfoUserVo cardInfo : lstCardInfo) {
 						if (lstNameSort.get(0).trim().equals(cardInfo.getSortType().trim())) {
@@ -282,7 +282,7 @@ public class UserController {
 				}
 				
 				
-				if (typeSort == SearchConditions.NAME.getValue()) {
+				if (typeSort == SearchConditions.NAME.getValue() || typeSort == SearchConditions.COMPANY.getValue()) {
 					lstNameSort = lstNameSort.stream().map(str-> str!= "" ? str.substring(0, 1).toUpperCase() : str).collect(Collectors.toList());
 				}
 			}
@@ -302,7 +302,7 @@ public class UserController {
 		for (String nameSort : lstNameSort) {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
 			for (CardInfoUserVo cardInfo : lstCardInfo) {
-				if(typeSort == SearchConditions.NAME.getValue()){
+				if(typeSort == SearchConditions.NAME.getValue() || typeSort == SearchConditions.COMPANY.getValue()){
 					if(cardInfo.getSortType() != ""){
 						if (nameSort.equals(cardInfo.getSortType().toUpperCase().substring(0,1))) {
 							cardInfoDisp.add(cardInfo.getCardInfo());
