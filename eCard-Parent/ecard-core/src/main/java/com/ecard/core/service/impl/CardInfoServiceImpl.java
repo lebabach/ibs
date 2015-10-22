@@ -48,6 +48,7 @@ import com.ecard.core.vo.CardInfoConnectUser;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
+import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.TagUser;
 
 /**
@@ -558,5 +559,11 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public BigInteger totalListConnectUser(Integer userId, Integer recentFlg) {
 		// TODO Auto-generated method stub
 		return cardInfoDAO.totalListConnectUser(userId, recentFlg);
+	}
+
+	@Override
+	public List<NotificationList> getImagesBy(List<Integer> cardIds) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.getImagesBy(cardIds);
 	}
 }

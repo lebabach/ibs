@@ -19,6 +19,7 @@ public class NotificationList {
     private Integer read_flg;
     private String notify_message;
     private Date notice_date;
+    private String image;
     
     public NotificationList(){}
     
@@ -124,5 +125,13 @@ public class NotificationList {
 
 	public void setNotify_message(String notify_message) {
 		this.notify_message = notify_message;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 }

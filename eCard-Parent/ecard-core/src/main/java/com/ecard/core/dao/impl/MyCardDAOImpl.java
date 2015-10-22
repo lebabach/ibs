@@ -33,6 +33,7 @@ public class MyCardDAOImpl extends GenericDao implements MyCardDAO {
                         "WHERE p.user_id = :userId AND p.prusal_date >= (NOW() - INTERVAL 1 WEEK) \n" +
                         "AND c.approval_status = 1 \n" +
                         "AND c.delete_flg = 0 \n" +
+                        "AND c.old_card_flg = 0 \n" +
                         "ORDER BY p.prusal_date DESC";
         Query query = getEntityManager().createNativeQuery(sqlStr);
         query.setParameter("userId", userId);

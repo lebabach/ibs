@@ -12,6 +12,7 @@ import com.ecard.core.vo.CardInfoConnectUser;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
+import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.TagUser;
 
 import java.math.BigInteger;
@@ -160,4 +161,5 @@ public interface CardInfoDAO extends IGenericDao{
     
     public List<com.ecard.core.vo.CardInfo> searchCompanyTrees(String searchText);
     public BigInteger totalListConnectUser(Integer userId, Integer recentFlg);
+    public List<NotificationList> getImagesBy(List<Integer> cardIds) ;
 }
