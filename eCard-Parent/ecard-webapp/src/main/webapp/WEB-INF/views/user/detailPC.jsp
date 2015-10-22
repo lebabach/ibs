@@ -571,7 +571,7 @@ a {
 					<div class="panel-body">
 						<textarea id="textarea-memo" class="form-control custom-control"
 							rows="3" style="resize: vertical; margin-bottom: 5px;"
-							placeholder="出会いの記録をメモしておきましょう"></textarea>
+							></textarea>
 						<button class="btn btn-sm btn-primary pull-right click-memo">保存</button>
 					</div>
 					
@@ -587,7 +587,7 @@ a {
 				</c:if>
 				
 				<div class="row" style="padding: 10px;">
-					<p style="color:red;">コンタクト履歴は公開されるため、機密情報を入力しないで下さい。</p>
+					<p style="color:red;">コンタクト履歴は他ユーザに公開されるため、機密情報等についてはメモ欄にご入力下さい。</p>
 				</div>
 				<!-- Contact history -->
                 <div class="panel panel-default">
@@ -595,7 +595,7 @@ a {
                         <h5 style="position: relative;">コンタクト履歴
                         <c:if test="${ isMyCard == true }">
                         <button data-toggle="modal" data-target="#modal-example2" class="btn btn-primary btn-lg" 
-                        	style=" position: absolute;right: 0;top: -4px; padding:6px 9px; font-size:13px;">の追加</button>
+                        	style=" position: absolute;right: 0;top: -4px; padding:6px 9px; font-size:13px;">追加</button>
                         </c:if>	
                         </h5>
                     </div>
