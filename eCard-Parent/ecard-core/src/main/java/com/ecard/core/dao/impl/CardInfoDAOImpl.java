@@ -1627,7 +1627,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	}
 	
 	public List<NotificationList> getImagesBy(List<Integer> cardIds) {
-		String sqlQuery = "SELECT u.image_file,u.card_id FROM card_info u WHERE u.delete_flg = 0 AND u.card_id in (:card_id)  ";
+		String sqlQuery = "SELECT u.image_file,u.card_id FROM card_info u WHERE u.card_id in (:card_id)  ";
 		Query query = getEntityManager().createNativeQuery(sqlQuery);
 		query.setParameter("card_id", cardIds);
 		List<Object[]> rows = query.getResultList();
