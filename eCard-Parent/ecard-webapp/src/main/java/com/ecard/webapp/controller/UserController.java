@@ -213,12 +213,12 @@ public class UserController {
 		List<String> lstNameSort = new ArrayList<>();
 		if (ecardUser != null) {
 			// Get listNameSort [2015/10,2015/11, .... ]
-			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), SearchConditions.CONTACT.getValue());
+			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), SearchConditions.NAME.getValue());
 			
 			listTagGroup = getCardTag();
 			if(lstNameSort.size() > 0) {
-					List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.CONTACT.getValue() ,lstNameSort.get(0), 0);
-					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(),SearchConditions.CONTACT.getValue() ,lstNameSort.get(0));
+					List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.NAME.getValue() ,lstNameSort.get(0), 0);
+					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(),SearchConditions.NAME.getValue() ,lstNameSort.get(0));
 					List<CardInfo> cardInfoDisp = new ArrayList<>();
 					for (CardInfoUserVo cardInfo : lstCardInfo) {
 						if (lstNameSort.get(0).trim().equals(cardInfo.getSortType().trim())) {
