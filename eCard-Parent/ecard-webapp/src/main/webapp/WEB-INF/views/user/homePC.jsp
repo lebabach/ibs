@@ -904,8 +904,9 @@
 					url: 'listCardPending'
 				}).done(function(resp, status, xhr) { 					
 					$(".business_card_book").html("");
+					$(".business_card_book").append('<div class="list-group">');
 					$.each( resp, function( k, v ) {
-						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+						 $(".list-group").append('<div class="list-group-item pointer show-content">'
 			 					+'<div class="row row-new">'
 								+	'<div class="col-md-1 col-xs-1"><input type="hidden" name="cardId" value = "none"></div>'
 								+	'<div class="col-md-5">'
@@ -921,7 +922,7 @@
 								+	'</div> </div> </div> </div>');
 			 					getImageFromSCP(v.imageFile);
 					});
-					
+					$(".business_card_book").append('</div>');
 				}).fail(function(xhr, status, err) {
 					console.log('BBB='+err);
 				});  
