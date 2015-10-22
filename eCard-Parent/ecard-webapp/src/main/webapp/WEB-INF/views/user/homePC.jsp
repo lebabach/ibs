@@ -140,7 +140,7 @@
 } */
 </style>
 <!-- START HEADER -->
-<div id="loading-copy" style="display: block; z-index: 1000; position: fixed;top: 50%;left: 50%;margin-top: -100px;margin-left: -100px;">
+<div id="loading-copy" style="display: none; z-index: 1000; position: fixed;top: 50%;left: 50%;margin-top: -100px;margin-left: -100px;">
 	<img src="<c:url value='/assets/img/loading-card.gif'/>" />
 </div>
 <div class="" style="border: solid 1px #f3f3f4;background: #e3e3e3;">
