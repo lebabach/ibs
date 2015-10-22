@@ -396,15 +396,23 @@ public class UserController {
 			String current = new SimpleDateFormat("ddMMyyyyhhmmss").format(new Date());
 			String fileName = new String();
 			List<CardInfoCSV> listUserInfoCSV;
-			if (id == 2) {
+			if (id == 3 ) {
+				listUserInfoCSV = null;
+				if (userInfo.getGroupCompanyId() != null) {
+					List<CardInfo> listCardInfo = cardInfoService.getGroupCompanyCard(userInfo.getGroupCompanyId());
+					listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
+				} 
+				fileName = "GroupCompanyCard_" + current + userInfo.getUserId() + ".csv";
+				downloadCsvId.setCsvType(listUserInfoCSV.size());
+				downloadCsvId.setCsvUrl(fileName);				
+				createCSVFile(response, fileName, listUserInfoCSV, CsvConstant.DOWNLOAD_NOT_DIRECT);
+				cardInfoService.saveDownloadHistory(downloadCsvId);
+			} else if (id == 2) {
 				listUserInfoCSV = null;
 				if (userInfo.getGroupCompanyId() != null) {
 					List<CardInfo> listCardInfo = cardInfoService.getCompanyCard(userInfo.getGroupCompanyId());
 					listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
-				} else {
-					List<CardInfo> listCardInfo = cardInfoService.getListMyCard(userInfo.getUserId());
-					listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
-				}
+				} 
 				fileName = "CompanyCard_" + current + userInfo.getUserId() + ".csv";
 				downloadCsvId.setCsvType(listUserInfoCSV.size());
 				downloadCsvId.setCsvUrl(fileName);				
@@ -1124,6 +1132,9 @@ public class UserController {
 			userCardMemo.setCreateDate(new Date());
 			userCardMemo.setUserId(userId);
 
+			String memo = userCardMemo.getMemo().replace("\n", "<br/>");
+			userCardMemo.setMemo(memo);
+			
 			int seq;
 			if (userCardMemo.getSeq() != 0) {
 				cardMemoService.registerCardMemo(userCardMemo);

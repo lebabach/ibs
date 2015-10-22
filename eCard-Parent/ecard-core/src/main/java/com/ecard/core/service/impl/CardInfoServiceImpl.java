@@ -246,6 +246,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public List<CardInfo> getCompanyCard(Integer groupCompanyName) {
 		return cardInfoDAO.getCompanyCard(groupCompanyName);
 	}
+	
+	public List<CardInfo> getGroupCompanyCard(Integer groupCompanyName) {
+		return cardInfoDAO.getGroupCompanyCard(groupCompanyName);
+	}
 
 	public void saveDownloadHistory(DownloadCsv downloadCsvId) {
 		cardInfoDAO.saveDownloadHistory(downloadCsvId);
