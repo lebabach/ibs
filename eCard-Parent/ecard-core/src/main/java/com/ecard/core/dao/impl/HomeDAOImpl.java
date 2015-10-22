@@ -76,7 +76,7 @@ public class HomeDAOImpl extends GenericDao implements HomeDAO{
     
     public BigInteger countConnectCard(Integer userId) {
         
-        String sqlStr = "SELECT count(*) FROM link_card lc "
+        String sqlStr = "SELECT count(DISTINCT(lc.card_id))  FROM link_card lc "
         		+ " INNER JOIN card_info c ON lc.card_id = c.card_id"
         		+ " WHERE lc.card_owner_id = :userId "
         		+ " AND c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 ";
@@ -88,7 +88,7 @@ public class HomeDAOImpl extends GenericDao implements HomeDAO{
     }
     
     public BigInteger countRecentConnectCard(Integer userId) {
-    	String sqlStr = "SELECT count(*) FROM link_card lc"
+    	String sqlStr = "SELECT count(DISTINCT(lc.card_id)) FROM link_card lc"
     			+ " INNER JOIN card_info c ON lc.card_id = c.card_id"
     			+ " WHERE lc.card_owner_id = :userId "
     			+ " AND (lc.create_date_1 >=  (NOW() - INTERVAL 1 WEEK) OR lc.create_date_2 >=  (NOW() - INTERVAL 1 WEEK))"
