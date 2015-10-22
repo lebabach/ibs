@@ -693,6 +693,8 @@ a {
 						}
 					</style>
 				</c:if>
+				
+				<c:if test="${ not empty listOldCard }">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h5>名刺履歴</h5>
@@ -727,6 +729,7 @@ a {
 						</c:if>						
 					</div>
 				</div>
+				</c:if>
 				<!-- End User connected -->
 			</div>
 			<c:if test="${ isMyCard == true }">
