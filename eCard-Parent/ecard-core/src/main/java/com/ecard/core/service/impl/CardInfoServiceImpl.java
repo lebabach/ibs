@@ -445,7 +445,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 				card2.setCardOwnerName(name);
 				card2.setGroupCompanyId(card1.getGroupCompanyId());
 				CardInfo newCard= this.registerCardImageManualPCOfAdmin(setCardInfo(card2));
-				OldCard oldcard=new OldCard();
+				/*OldCard oldcard=new OldCard();
 				oldcard.setCardInfo(newCard);
 				
 				OldCardId oldCardId=new OldCardId();
@@ -455,7 +455,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 				oldCardId.setOldCardId(card1.getCardId());
 				oldcard.setId(oldCardId);
 				
-				oldCardDAO.saveOrUpdate(oldcard);
+				oldCardDAO.saveOrUpdate(oldcard);*/
+				oldCardDAO.insertOldCard(newCard.getCardId(), card1.getCardId(), currentUserId, 0);
 				
 				//update cardid in old_card
 				oldCardDAO.updateCardIdWithOldCard(newCard.getCardId(),cardid1);

@@ -31,5 +31,27 @@ public class OldCardDAOImpl  extends GenericDao  implements OldCardDAO{
 		}
 		
 	}
+	
+	public boolean insertOldCard(int card_id,int old_card_id, int card_owner_id, int seq){
+		String sql = "INSERT INTO old_card (card_id, old_card_id, card_owner_id	, seq) "+ "VALUES(:card_id, :old_card_id, :card_owner_id, :seq)";
+		Query query = getEntityManager().createNativeQuery(sql);
+		query.setParameter("card_id", card_id);
+		query.setParameter("old_card_id", old_card_id);
+		query.setParameter("card_owner_id", card_owner_id);
+		query.setParameter("seq", seq);
+		try{
+			int result = query.executeUpdate();
+			if (result == 0) {
+				return false;
+			} else {
+				return true;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println("==================== Can not update updateCardIdWithOldCard");
+			return false;
+		}
+		
+	}
 
 }
