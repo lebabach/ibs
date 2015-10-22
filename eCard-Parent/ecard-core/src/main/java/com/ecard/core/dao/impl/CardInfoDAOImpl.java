@@ -36,7 +36,9 @@ import com.ecard.core.vo.CardInfoConnectUser;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
+import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.TagUser;
+import com.ecard.core.vo.UserInfoVo;
 
 /**
  *
@@ -1621,5 +1623,21 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		Query query = getEntityManager().createNativeQuery(sqlStr);
 		query.setParameter("userId", userId);
         return (BigInteger)getOrNull(query);
+	}
+	
+	public List<NotificationList> getImagesBy(List<Integer> cardIds) {
+		String sqlQuery = "SELECT u.image_file,u.card_id FROM card_info u WHERE u.delete_flg = 0 AND u.card_id in (:card_id)  ";
+		Query query = getEntityManager().createNativeQuery(sqlQuery);
+		query.setParameter("card_id", cardIds);
+		List<Object[]> rows = query.getResultList();
+	    List<NotificationList> result = new ArrayList<>(rows.size());
+	    NotificationList card=null;
+        for (Object[] row : rows) {
+        	card=new NotificationList();
+        	card.setImage((String)row[0]);;
+        	card.setCard_id((Integer)row[1]);
+            result.add(card);
+        }
+		return result;
 	}
 }

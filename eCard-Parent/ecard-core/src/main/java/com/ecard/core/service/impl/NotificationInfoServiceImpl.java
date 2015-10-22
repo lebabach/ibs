@@ -32,6 +32,10 @@ public class NotificationInfoServiceImpl implements NotificationInfoService {
         return notificationListDAO.getListNotification(userId);
     }
     
+    public List<NotificationList> getListNotificationPaging(Integer userId, Integer page){
+        return notificationListDAO.getListNotificationPaging(userId,page);
+    }
+    
     public void updateListAllNotificationUser(Integer userId){
         notificationListDAO.updateListNotification(userId);
     }

@@ -1909,4 +1909,29 @@ public class UserController {
       
         return total.intValue();
 	}
+	
+	@RequestMapping(value = "getNotitfyOfCurrentUser", method = RequestMethod.POST)
+	@ResponseBody
+    public List<NotificationList> getNotitfyOfCurrentUser(@RequestParam(value = "page") int page) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<NotificationList> listUpdate = notificationInfoService.getListNotificationPaging(ecardUser.getUserId(),page);
+		if(!CollectionUtils.isEmpty(listUpdate)){
+			List<Integer> cardIds=listUpdate.stream().map(x->x.getCard_id()).collect(Collectors.toList());
+			if(!CollectionUtils.isEmpty(cardIds)){
+				List<NotificationList> notifies= cardInfoService.getImagesBy(cardIds);
+				listUpdate.forEach(n->{
+					List<NotificationList> matchImage=notifies.stream().filter(x->x.getCard_id().intValue()==n.getCard_id().intValue()).collect(Collectors.toList());
+					if(CollectionUtils.isEmpty(matchImage)){
+						n.setImage("");	
+					}else{
+						n.setImage(matchImage.stream().findFirst().get().getImage());
+					}
+					
+				});
+			}
+		}
+		//listUpdate=UploadFileUtil.getImageFileFromSCPForNotification(listUpdate, scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
+        return listUpdate;
+	}
 }
