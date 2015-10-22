@@ -47,6 +47,7 @@ public class HomeDAOImpl extends GenericDao implements HomeDAO{
                         "WHERE p.user_id = :userId AND p.prusal_date >= (NOW() - INTERVAL 1 WEEK) \n" +
                         "AND c.approval_status = 1 \n" +
                         "AND c.delete_flg = 0 \n" +
+                        "AND c.old_card_flg = 0 \n" +
                         "ORDER BY p.prusal_date DESC";
         
         Query query = getEntityManager().createNativeQuery(sqlStr);
@@ -58,7 +59,7 @@ public class HomeDAOImpl extends GenericDao implements HomeDAO{
     public Long countPossessionCard(Integer userId) {
         Query query = getEntityManager().createQuery("SELECT count(*) "
                 + "FROM PossessionCard p, CardInfo c "
-                + " WHERE p.id.cardId = c.cardId AND p.id.userId = :userId AND c.approvalStatus = 1");
+                + " WHERE p.id.cardId = c.cardId AND p.id.userId = :userId AND c.approvalStatus = 1  AND c.oldCardFlg = 0");
         query.setParameter("userId", userId);
         return (Long)getOrNull(query);
     }
@@ -75,7 +76,10 @@ public class HomeDAOImpl extends GenericDao implements HomeDAO{
     
     public BigInteger countConnectCard(Integer userId) {
         
-        String sqlStr = "SELECT count(*) FROM link_card WHERE card_owner_id = :userId";
+        String sqlStr = "SELECT count(*) FROM link_card lc "
+        		+ " INNER JOIN card_info c ON lc.card_id = c.card_id"
+        		+ " WHERE lc.card_owner_id = :userId "
+        		+ " AND c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 ";
         
         Query query = getEntityManager().createNativeQuery(sqlStr);
         query.setParameter("userId", userId);
@@ -84,8 +88,11 @@ public class HomeDAOImpl extends GenericDao implements HomeDAO{
     }
     
     public BigInteger countRecentConnectCard(Integer userId) {
-    	String sqlStr = "SELECT count(*) FROM link_card WHERE card_owner_id = :userId "
-    			+ "AND (create_date_1 >=  (NOW() - INTERVAL 1 WEEK) OR create_date_2 >=  (NOW() - INTERVAL 1 WEEK))";
+    	String sqlStr = "SELECT count(*) FROM link_card lc"
+    			+ " INNER JOIN card_info c ON lc.card_id = c.card_id"
+    			+ " WHERE lc.card_owner_id = :userId "
+    			+ " AND (lc.create_date_1 >=  (NOW() - INTERVAL 1 WEEK) OR lc.create_date_2 >=  (NOW() - INTERVAL 1 WEEK))"
+    			+ " AND c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 ";
     	
         Query query = getEntityManager().createNativeQuery(sqlStr);
         query.setParameter("userId", userId);
