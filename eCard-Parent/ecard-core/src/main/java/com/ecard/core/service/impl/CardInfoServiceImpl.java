@@ -428,6 +428,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 		return cardInfoDAO.getListConnectCards(card);
 	}
 	
+	@Transactional
 	public boolean handleConnectCards(int cardid1,int cardid2, int currentUserId, String name){
 		try{
 			CardInfo card1=this.getCardInfoDetail(cardid1);
