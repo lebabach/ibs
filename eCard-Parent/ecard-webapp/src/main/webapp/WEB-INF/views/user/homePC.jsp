@@ -1256,7 +1256,7 @@
 	    		 <%  
 	    		 session.setAttribute("searchDetail", null);
 	    		 %>
-	    		location.reload();
+	    		 window.location.reload(true);
 	    		
 	    	});
 		   	 
