@@ -268,19 +268,33 @@ function notifyPaging(page){
 	    },
 	    success: function(data){
 	    	$("#loading-notify").hide();
-	    	setNotifies(data)
+	    	setNotifies(data);
+	    	clickNotify();
 	    }
 	});
 };
 
-function setNotify(image,content,date,card_id,notifyType,id){
+function setNotify(image,content,date,card_id,notifyType,id,read_flg){
+	var tdImage='<td style="vertical-align: middle" width="30%"><img name='+image+' alt="image" src="<c:url value="/assets/img/loading.gif"/>" style="width: 100%"></td>';
+	var tdContent='<td style="vertical-align: middle" width="60%">';
+	var divContent='<div class="content_notice" title="'+content+'">'+content+'</div>';
+	var td3='<td style="vertical-align: middle" width="10%"><a href="notificationDetail/'+id+'" class='+notifyType+'><i class="fa fa-angle-right"></i></a> <input type="hidden" class="card_id" value='+card_id+'></td>';
+	
+	if(card_id==0){
+		tdImage='';
+		tdContent='<td style="vertical-align: middle" width="60%" colspan="2">';
+		td3='<td style="vertical-align: middle" width="10%"><a onclick="'+id+'" class=""><i class="fa fa-angle-right"></i></a> <input type="hidden" class="card_id" value='+card_id+'></td>';
+	}
+	if(read_flg==0){
+		divContent='<div class="content_notice" style="font-weight: bold" title="'+content+'">'+content+'</div>'
+	}
 	var data='<tr class="pointer">'
-	+'<td style="vertical-align: middle" width="30%"><img name='+image+' alt="image" src="<c:url value="/assets/img/loading.gif"/>" style="width: 100%"></td>'
-	+'<td style="vertical-align: middle" width="60%">'
-	+'		<div class="content_notice" title="'+content+'">'+content+'</div>'
+	+tdImage
+	+tdContent
+	+divContent
 	+'	<div class="date">'+date+'</div>'
 	+'</td>'
-	+'<td style="vertical-align: middle" width="10%"><a href="notificationDetail/'+id+'" class='+notifyType+'><i class="fa fa-angle-right"></i></a> <input type="hidden" class="card_id" value='+card_id+'></td>'
+	+td3
 	+'</tr>'
 	return data;
 }
@@ -293,7 +307,6 @@ function setNotifies(notifies){
 }
 
 function getImageFromSCP(fileImageName){
-	isLoading = isLoading + 1;
 	var target = $('#notification img[name="'+fileImageName+'"]');			
 	$.ajax({
         type: 'POST',
@@ -310,7 +323,6 @@ function getImageFromSCP(fileImageName){
     		target.attr('src','');    	  
 	        target.attr('src','data:image/png;base64,'+resp);	
     	}
-    	isLoading=isLoading-1;
     }).fail(function(resp, status, xhr){
         //alert('Error');
     });						
@@ -336,6 +348,40 @@ function scrollNotify(page){
     	notifyPaging(page); 
     }  
 }
+ 
+ function clickNotify(){
+	 $('#notification tr').click(function() {
+		 $("#loading-notify").show();
+	        var href = $(this).find("a").attr("href");
+	        if(href) {
+	        	var notifyType=$(this).find("a").attr("class");
+	        	if(notifyType==4){
+	        		var cardId=$(this).find(".card_id").val();
+	        		console.log(cardId);
+	        		window.location = "/ecard-webapp/user/overlapcardsbyname/"+cardId;
+	        		
+	        	}else{
+	        		window.location ="/ecard-webapp/user/"+ href;	
+	        	}
+	            
+	        }else{
+	        	$.ajax({
+	        	    type: 'POST',
+	        	    url: '/ecard-webapp/user/notificationDetailRibbon',
+	        	    data: { 
+	        	        'id':$(this).find("a").attr("onclick")
+	        	    },
+	        	    success: function(msg){
+	        	        if(msg==true){
+	        	        	window.location = "https://bc-ribbon.temp-holdings.co.jp/";
+	        	        }
+	        	    }
+	        	});
+	        }
+	        $("#loading-notify").hide();
+	    }); 
+ }
+ 
 $(document).ready(function() {
 	var page=0;
 	//scrollNotify(++page); 
@@ -348,35 +394,10 @@ $(document).ready(function() {
 	        
 	});
 		
-    $('#notification tr').click(function() {
-        var href = $(this).find("a").attr("href");
-        if(href) {
-        	var notifyType=$(this).find("a").attr("class");
-        	if(notifyType==4){
-        		var cardId=$(this).find(".card_id").val();
-        		console.log(cardId);
-        		window.location = "/ecard-webapp/user/overlapcardsbyname/"+cardId;
-        		
-        	}else{
-        		window.location ="/ecard-webapp/user/"+ href;	
-        	}
-            
-        }else{
-        	$.ajax({
-        	    type: 'POST',
-        	    url: '/ecard-webapp/user/notificationDetailRibbon',
-        	    data: { 
-        	        'id':$(this).find("a").attr("onclick")
-        	    },
-        	    success: function(msg){
-        	        if(msg==true){
-        	        	window.location = "https://bc-ribbon.temp-holdings.co.jp/";
-        	        }
-        	    }
-        	});
-        }
-    });
+    
+    
     $(".nav.navbar-top-links.navbar-right").click(function(){
+    	console.log($(".dropdown-toggle.count-info").attr("aria-expanded"));
     	if($(".dropdown-toggle.count-info").attr("aria-expanded")=="false" || $(".dropdown-toggle.count-info").attr("aria-expanded")==undefined){
     		$("#loading-notify").show();
     		$("#notification >tbody").remove();
