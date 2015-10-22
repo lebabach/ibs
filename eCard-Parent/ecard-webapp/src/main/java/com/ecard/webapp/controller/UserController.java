@@ -213,12 +213,12 @@ public class UserController {
 		List<String> lstNameSort = new ArrayList<>();
 		if (ecardUser != null) {
 			// Get listNameSort [2015/10,2015/11, .... ]
-			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), SearchConditions.CONTACT.getValue());
+			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), SearchConditions.NAME.getValue());
 			
 			listTagGroup = getCardTag();
 			if(lstNameSort.size() > 0) {
-					List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.CONTACT.getValue() ,lstNameSort.get(0), 0);
-					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(),SearchConditions.CONTACT.getValue() ,lstNameSort.get(0));
+					List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.NAME.getValue() ,lstNameSort.get(0), 0);
+					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(),SearchConditions.NAME.getValue() ,lstNameSort.get(0));
 					List<CardInfo> cardInfoDisp = new ArrayList<>();
 					for (CardInfoUserVo cardInfo : lstCardInfo) {
 						if (lstNameSort.get(0).trim().equals(cardInfo.getSortType().trim())) {
@@ -396,15 +396,23 @@ public class UserController {
 			String current = new SimpleDateFormat("ddMMyyyyhhmmss").format(new Date());
 			String fileName = new String();
 			List<CardInfoCSV> listUserInfoCSV;
-			if (id == 2) {
+			if (id == 3 ) {
+				listUserInfoCSV = null;
+				if (userInfo.getGroupCompanyId() != null) {
+					List<CardInfo> listCardInfo = cardInfoService.getGroupCompanyCard(userInfo.getGroupCompanyId());
+					listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
+				} 
+				fileName = "GroupCompanyCard_" + current + userInfo.getUserId() + ".csv";
+				downloadCsvId.setCsvType(listUserInfoCSV.size());
+				downloadCsvId.setCsvUrl(fileName);				
+				createCSVFile(response, fileName, listUserInfoCSV, CsvConstant.DOWNLOAD_NOT_DIRECT);
+				cardInfoService.saveDownloadHistory(downloadCsvId);
+			} else if (id == 2) {
 				listUserInfoCSV = null;
 				if (userInfo.getGroupCompanyId() != null) {
 					List<CardInfo> listCardInfo = cardInfoService.getCompanyCard(userInfo.getGroupCompanyId());
 					listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
-				} else {
-					List<CardInfo> listCardInfo = cardInfoService.getListMyCard(userInfo.getUserId());
-					listUserInfoCSV = CardInfoConverter.convertCardInfoList(listCardInfo);
-				}
+				} 
 				fileName = "CompanyCard_" + current + userInfo.getUserId() + ".csv";
 				downloadCsvId.setCsvType(listUserInfoCSV.size());
 				downloadCsvId.setCsvUrl(fileName);				
