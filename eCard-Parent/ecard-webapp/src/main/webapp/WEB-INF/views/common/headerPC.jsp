@@ -275,7 +275,7 @@ function notifyPaging(page){
 };
 
 function setNotify(image,content,date,card_id,notifyType,id,read_flg){
-	var tdImage='<td style="vertical-align: middle" width="30%"><img name='+image+' alt="image" src="<c:url value="/assets/img/loading.gif"/>" style="width: 100%"></td>';
+	var tdImage='<td style="vertical-align: middle" width="30%"><img name="'+image+'" alt="image" src="<c:url value="/assets/img/loading.gif"/>" style="width: 100%"></td>';
 	var tdContent='<td style="vertical-align: middle" width="60%">';
 	var divContent='<div class="content_notice" title="'+content+'">'+content+'</div>';
 	var td3='<td style="vertical-align: middle" width="10%"><a href="notificationDetail/'+id+'" class='+notifyType+'><i class="fa fa-angle-right"></i></a> <input type="hidden" class="card_id" value='+card_id+'></td>';
@@ -310,7 +310,7 @@ function getImageFromSCP(fileImageName){
 	var target = $('#notification img[name="'+fileImageName+'"]');			
 	$.ajax({
         type: 'POST',
-        url: 'getImageFile',
+        url: '/ecard-webapp/user/getImageFile',
         data: 'fileImage='+fileImageName,    	        
     }).done(function(resp, status, xhr){
     	if(target == []){
