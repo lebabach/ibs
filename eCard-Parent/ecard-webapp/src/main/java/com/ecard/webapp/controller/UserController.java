@@ -1461,10 +1461,8 @@ public class UserController {
 					userSearchVO.getName(), userSearchVO.getPosition(), userSearchVO.getDepartment(),
 					userSearchVO.getCompany(), userSearchVO.getPage(), userInfo.getGroupCompanyId());
 		}
-		if (session.getAttribute("searchDetail") == null) {
-			userSearchVO.setDetail(false);
-			session.setAttribute("searchDetail", userSearchVO);
-		}
+		userSearchVO.setDetail(false);
+		session.setAttribute("searchDetail", userSearchVO);
 		cardLoadMore.setCardInfo(cardInfo);
 		cardLoadMore.setCount(count);
 		return cardLoadMore;
