@@ -582,8 +582,8 @@ public class UserController {
 			cardInfo = cardInfoService.getCardInfoDetail(id);
 			String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser,
 					scpPassword, Integer.parseInt(scpPort));
-			cardInfo.setImageFile(fileNameFromSCP);
-
+			//cardInfo.setImageFile(fileNameFromSCP);
+			modelAndView.addObject("imageFile", fileNameFromSCP);
 			// List card connected
 			cardList = cardInfoService.listCardConnect(cardInfo.getCardOwnerId(), cardInfo.getGroupCompanyId(),
 					cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
@@ -936,11 +936,12 @@ public class UserController {
 		return new ModelAndView("redirect:" + CommonConstants.REDIRECT_CARD_DETAIL + item.getCard_id());
 	}
 
-	@RequestMapping(value = "editCardInfo", method = RequestMethod.POST)
-	public ModelAndView editCardInfo(CardInfo cardInfo) {
+	@RequestMapping(value = "editCardInfo", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public boolean editCardInfo(@RequestBody CardInfo cardInfo, HttpServletRequest request) {
 		logger.debug("editCardInfo", UserController.class);
-
-		ModelAndView modelAndView = new ModelAndView();
+		boolean result = false;
+		
 		try {
 			String name = cardInfo.getLastName();
 			String nameKana = cardInfo.getLastNameKana();
@@ -988,15 +989,16 @@ public class UserController {
 			cardInfo.setCompanyInfo(companyInfo);
 
 			if (cardInfoService.editCardInfo(cardInfo)) {
-				modelAndView.addObject("isEdit", true);
+				result = true;
 			} else {
-				modelAndView.addObject("isEdit", false);
+				result = false;
 			}
 		} catch (Exception ex) {
 			logger.debug("Exception : ", ex.getMessage());
+			result = true;
 		}
-		modelAndView.setViewName("redirect:" + CommonConstants.REDIRECT_CARD_DETAIL + cardInfo.getCardId());
-		return modelAndView;
+		
+		return result;
 	}
 
 	@RequestMapping(value = "editContactDate", method = RequestMethod.POST)
