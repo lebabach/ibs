@@ -337,7 +337,7 @@ $(document).ready(function() {
 				
 				$.ajax({
 					type: 'POST',
-					url:'sendmailcontact',
+					url:"<c:url value='/mails/sendmailcontact'/>",
 					data:{"sendType":sendType,"userSendTo":user_send_to,"titleMail":tileMail,"contentMail":contentMail}
 				}).done(function(resp, status, xhr) {
 				    if(resp ==0){
