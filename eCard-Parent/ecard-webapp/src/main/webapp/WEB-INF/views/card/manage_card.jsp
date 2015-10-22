@@ -17,6 +17,153 @@ history.pushState(null, null, null);
 
 
 <script type="text/javascript">
+var dataTables = '';
+
+
+function initDatatables(status, user, criteria) {
+	var dataTables  = $('#listCard').dataTable({
+		"fnDrawCallback" : function() {
+			loadDataComplete();
+		},
+		"dom" : '<<t>ip>',
+		"iDisplayLength" : 5,
+		"processing" : true,
+		"serverSide" : true,
+		"searching" : false,
+		"ordering" : false,
+		"language" : {
+			"zeroRecords" : '<fmt:message key="operator.list.table.emptyTable"/>',
+			"emptyTable" : '<fmt:message key="operator.list.table.emptyTable"/>',
+			"info" : '<fmt:message key="operator.list.table.info"/>',
+			"infoEmpty" : '<fmt:message key="operator.list.table.info"/>',
+			"paginate" : {
+				"previous" : '<fmt:message key="operator.list.table.paginate.previous"/>',
+				"next" : '<fmt:message key="operator.list.table.paginate.next"/>'
+			}
+		},
+		"bStateSave": true,
+		"ajax" : {
+			"url" : "search",
+			"type" : "POST",
+			"data" : function(dataTableRequest) {
+				console.log(dataTableRequest);
+				var statusOperator = '';
+				if (typeof status === 'undefined')
+					statusOperator = $('#statusSort').val();
+				else
+					statusOperator = status;
+				
+				var criteriaOperator = '';
+				if (typeof criteria === 'undefined')
+					criteriaOperator = $('#criteriaSearch').val();
+				else
+					criteriaOperator = criteria;
+				
+				var userOperator = '';
+				if (typeof user === 'undefined')
+					userOperator = $('#dateSort').val();
+				else
+					userOperator = user;				
+				dataTableRequest.criteriaSearch = criteriaOperator;
+				dataTableRequest.status = statusOperator;
+				dataTableRequest.userId = userOperator;
+				return dataTableRequest;
+			},
+			"dataSrc" : "data",
+			"error" : function(xhr) {
+				alert('error datatable')
+			}
+		},
+		"columns" : [
+				 {
+					"data" : "cardIndexNo",
+						"createdCell" : function(
+								td,
+								cellData,
+								rowData,
+								row,
+								col) {
+							if (cellData) {
+								$(td).html("</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
+							}
+						}
+				}, 
+				{
+					"data" : "imageFile",
+					"createdCell" : function(
+							td, cellData,
+							rowData, row,
+							col) {
+						if (cellData) {
+							$(td).html("<a href='#'><img src='data:image/png;base64,"+cellData+"' width='90' /></a>");
+						}
+					}
+				},
+				{
+					"data" : "name"
+				},
+				{
+					"data" : "companyName"
+				},
+				{
+					"data" : "positionName"
+				},
+				{
+					"data" : "email"
+				},
+				{
+					"data" : "mobileNumber"
+				},
+				{
+					"data" : "createDate"
+				}
+				,
+				<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+				{
+					"data" : "approvalStatus",
+					"createdCell" : function(
+							td, cellData,
+							rowData, row,
+							col) {
+						if (cellData) {
+							$(td).html(getStatus(cellData));
+						}
+					}
+				},
+				</c:if>
+				{
+					"data" : "is_editting",
+					"className" : "hidden-column"
+				},
+				{
+					"data" : "cardId",
+					"className" : "ch-color-link",
+					"createdCell" : function(
+							td, cellData,
+							rowData, row,
+							col) {
+						if (cellData) {
+							
+							<c:choose>
+						    <c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+						        $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
+						    </c:when>
+						    <c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
+					           $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
+					        </c:when>
+						    <c:otherwise>
+						         $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> "
+									+ "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>");
+						       
+						    </c:otherwise>
+						  </c:choose>
+							
+						}
+					}
+				}, ],
+			});
+	return dataTables;
+}
 function loadDataIsEditting(){
 	$('#listCard').find("tr").each(function(){
 		if ($(this).attr("class") != undefined && ($(this).attr("class") == "odd" || $(this).attr("class") == "even")) {
@@ -44,47 +191,58 @@ function loadDataIsEditting(){
 		}
 	});
 }
-	$(document)
-			.ready(
-					function() {
-						var status = new Object();
-						status['approved'] = "<fmt:message key = 'card.status.approved'/>";
-						status['inputWating'] = "<fmt:message key = 'card.status.inputWating'/>";
-						status['editWating'] = "<fmt:message key = 'card.status.editWating'/>";
-						status['approvedPending'] = "<fmt:message key = 'card.status.approvedPending'/>";
-						status['recognitioning'] = "<fmt:message key = 'card.status.recognitioning'/>";
-						
-						function getStatus(k) {
-							return status[k];
-						}
-						function loadDataComplete() {
-							$('#listCard')
-									.find("tr")
-									.each(
-											function() {
-												if ($(this).attr("class") != undefined && ($(this).attr("class") == "odd" || $(this).attr("class") == "even")) {
-													var href = $(this).find("td").last().find('a').first().attr("href");
-													var imageTd = $(this).children('td').eq(1);
-													imageTd.find("a").attr("href", href);
-													//https://livepass.backlog.jp/view/MEISHI-788
-													var is_editting_column=$(this).find(".hidden-column");
-													if(is_editting_column.text()=="1"){
-														var is_role="${pageContext.request.isUserInRole('ROLE_SUPERVISOR')}";
-														if(is_role!="true"){
-															imageTd.find("a").removeAttr("href");
-														}
-															
-														
-													}
-												}
-											});
+
+function getStatus(k) {
+	var status = new Object();
+	status['approved'] = "<fmt:message key = 'card.status.approved'/>";
+	status['inputWating'] = "<fmt:message key = 'card.status.inputWating'/>";
+	status['editWating'] = "<fmt:message key = 'card.status.editWating'/>";
+	status['approvedPending'] = "<fmt:message key = 'card.status.approvedPending'/>";
+	status['recognitioning'] = "<fmt:message key = 'card.status.recognitioning'/>";
+	return status[k];
+}
+
+function loadDataComplete() {
+	$('#listCard').find("tr").each(function() {
+						if ($(this).attr("class") != undefined && ($(this).attr("class") == "odd" || $(this).attr("class") == "even")) {
+							var href = $(this).find("td").last().find('a').first().attr("href");
+							var imageTd = $(this).children('td').eq(1);
+							imageTd.find("a").attr("href", href);
 							//https://livepass.backlog.jp/view/MEISHI-788
-							loadDataIsEditting();
+							var is_editting_column=$(this).find(".hidden-column");
+							if(is_editting_column.text()=="1"){
+								var is_role="${pageContext.request.isUserInRole('ROLE_SUPERVISOR')}";
+								if(is_role!="true"){
+									imageTd.find("a").removeAttr("href");
+								}
+									
+								
+							}
 						}
-						var dataTables = $('#listCard')
-								.dataTable(
-										{
-											"fnDrawCallback" : function() {
+					});
+	//https://livepass.backlog.jp/view/MEISHI-788
+	loadDataIsEditting();
+}
+
+	$(document).ready(function() {
+						var status = sessionStorage.getItem('statusSearchOperator') || "";
+						$('#statusSort').val(status);
+						var user = sessionStorage.getItem('userSearchOperator') || 0;
+						$('#dateSort').val(user);
+						var criteria = sessionStorage.getItem('criteriaSearchOperator');
+						$('#criteriaSearch').val(criteria);
+						dataTables = initDatatables(status, user, criteria);
+						
+						$("#criteriaSearch").keyup(function (e) {
+							  if (e.which == 13) {
+								  $('#searchCard').trigger('click');
+							  }
+						 });
+
+						$('#searchCard').on('click',function() {
+							dataTables.api().destroy();
+							dataTables = $('#listCard').dataTable({
+												"fnDrawCallback" : function() {
 												loadDataComplete();
 											},
 											"dom" : '<<t>ip>',
@@ -108,38 +266,28 @@ function loadDataIsEditting(){
 												"type" : "POST",
 												"data" : function(dataTableRequest) {
 													dataTableRequest.criteriaSearch = $('#criteriaSearch').val();
-													dataTableRequest.status = $('#status').val();
+													dataTableRequest.status = $('#statusSort').val();
 													dataTableRequest.userId = $('#dateSort').val();
 													return dataTableRequest;
 												},
 												"dataSrc" : "data",
-												"error" : function(xhr) {
+												"error" : function(
+														xhr) {
 													alert('error datatable')
 												}
 											},
 											"columns" : [
-													 {
-														"data" : "cardIndexNo",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
-																if (cellData) {
-																	$(
-																			td)
-																			.html(
-																					"</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
-																}
-															}
-													}, 
+												   {
+													"data" : "cardIndexNo",
+													"createdCell" : function(td,cellData,rowData,row,col) {
+														if (cellData) {
+															$(td).html("</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
+														}
+													 }
+													},
 													{
 														"data" : "imageFile",
-														"createdCell" : function(
-																td, cellData,
-																rowData, row,
-																col) {
+														"createdCell" : function(td,cellData,rowData,row,col) {
 															if (cellData) {
 																$(td).html("<a href='#'><img src='data:image/png;base64,"+cellData+"' width='90' /></a>");
 															}
@@ -162,19 +310,13 @@ function loadDataIsEditting(){
 													},
 													{
 														"data" : "createDate"
-													}
-													,
+													},
 													<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
 													{
 														"data" : "approvalStatus",
-														"createdCell" : function(
-																td, cellData,
-																rowData, row,
-																col) {
+														"createdCell" : function(td,cellData,rowData,row,col) {
 															if (cellData) {
-																$(td)
-																		.html(
-																				getStatus(cellData));
+																$(td).html(getStatus(cellData));
 															}
 														}
 													},
@@ -186,365 +328,179 @@ function loadDataIsEditting(){
 													{
 														"data" : "cardId",
 														"className" : "ch-color-link",
-														"createdCell" : function(
-																td, cellData,
-																rowData, row,
-																col) {
+														"createdCell" : function(td,cellData,rowData,row,col) {
 															if (cellData) {
-																
 																<c:choose>
 															    <c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
-															        $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
+															    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
 															    </c:when>
 															    <c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
 														           $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
 														        </c:when>
 															    <c:otherwise>
-															         $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> "
+															    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> "
 																		+ "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>");
-															       
 															    </c:otherwise>
 															  </c:choose>
-																
 															}
 														}
 													}, ],
 										});
-						
-						$("#criteriaSearch").keyup(function (e) {
-							  if (e.which == 13) {
-								  $('#searchCard').trigger('click');
-							  }
-						 });
-
-						$('#searchCard')
-								.on(
-										'click',
-										function() {
-											dataTables.api().destroy();
-											dataTables = $('#listCard')
-													.dataTable(
-															{
-																"fnDrawCallback" : function() {
-																	loadDataComplete();
-																},
-																"dom" : '<<t>ip>',
-																"iDisplayLength" : 5,
-																"processing" : true,
-																"serverSide" : true,
-																"searching" : false,
-																"ordering" : false,
-																"language" : {
-																	"zeroRecords" : '<fmt:message key="operator.list.table.emptyTable"/>',
-																	"emptyTable" : '<fmt:message key="operator.list.table.emptyTable"/>',
-																	"info" : '<fmt:message key="operator.list.table.info"/>',
-																	"infoEmpty" : '<fmt:message key="operator.list.table.info"/>',
-																	"paginate" : {
-																		"previous" : '<fmt:message key="operator.list.table.paginate.previous"/>',
-																		"next" : '<fmt:message key="operator.list.table.paginate.next"/>'
-																	}
-																},
-																"ajax" : {
-																	"url" : "search",
-																	"type" : "POST",
-																	"data" : function(
-																			dataTableRequest) {
-																		dataTableRequest.criteriaSearch = $(
-																				'#criteriaSearch')
-																				.val();
-																		dataTableRequest.status = $(
-																				'#statusSort')
-																				.val();
-																		dataTableRequest.userId = $(
-																				'#dateSort')
-																				.val();
-																		return dataTableRequest;
-																	},
-																	"dataSrc" : "data",
-																	"error" : function(
-																			xhr) {
-																		alert('error datatable')
-																	}
-																},
-																"columns" : [
-																	   {
-																			"data" : "cardIndexNo",
-																			"createdCell" : function(
-																						td,
-																						cellData,
-																						rowData,
-																						row,
-																						col) {
-																					if (cellData) {
-																						$(
-																								td)
-																								.html(
-																										"</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
-																					}
-																				}
-																		},
-																		{
-																			"data" : "imageFile",
-																			"createdCell" : function(
-																					td,
-																					cellData,
-																					rowData,
-																					row,
-																					col) {
-																				if (cellData) {
-																					$(
-																							td)
-																							.html(
-																									"<a href='#'><img src='data:image/png;base64,"+cellData+"' width='90' /></a>");
-																				}
-																			}
-																		},
-																		{
-																			"data" : "name"
-																		},
-																		{
-																			"data" : "companyName"
-																		},
-																		{
-																			"data" : "positionName"
-																		},
-																		{
-																			"data" : "email"
-																		},
-																		{
-																			"data" : "mobileNumber"
-																		},
-																		{
-																			"data" : "createDate"
-																		},
-																		<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
-																		{
-																			"data" : "approvalStatus",
-																			"createdCell" : function(
-																					td,
-																					cellData,
-																					rowData,
-																					row,
-																					col) {
-																				if (cellData) {
-																					$(
-																							td)
-																							.html(
-																									getStatus(cellData));
-																				}
-																			}
-																		},
-																		</c:if>
-																		{
-																			"data" : "is_editting",
-																			"className" : "hidden-column"
-																		},
-																		{
-																			"data" : "cardId",
-																			"className" : "ch-color-link",
-																			"createdCell" : function(
-																					td,
-																					cellData,
-																					rowData,
-																					row,
-																					col) {
-																				if (cellData) {
-																					<c:choose>
-																				    <c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
-																				    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
-																				    </c:when>
-																				    <c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
-																			           $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
-																			        </c:when>
-																				    <c:otherwise>
-																				    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> "
-																							+ "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>");
-																				    </c:otherwise>
-																				  </c:choose>
-																				}
-																			}
-																		}, ],
-															});
-										});
+						});
 
 						$(document).on('click','a.ch-del',function() {
-							console.log('click');
-											if (confirm('<fmt:message key="card.list.confirmDelete"/>')) {
-												if(confirm('<fmt:message key="operator.list.confirmDeleteAgain"/>')){
-													var cardId = $(this).parent().parent().find('td input[id=cardId]').val();
-													var target = $(this).closest('tr');
-													$.ajax({
-																		type : 'POST',
-																		url : 'delete',
-																		cache : false,
-																		data : 'cardId='+ cardId
-															})
-															.done(function(resp,status,	xhr) {
-																console.log(resp);
-																		if (resp == 1) {
-																			dataTables.fnDeleteRow(target.prop('id'));
-																		      var currentPage = $('.current', '#listCard_paginate').text()
-																		      $('#listCard_paginate').find('.paginate_button').each(function () {
-																		       if ($(this).text() === currentPage)
-																		         $(this).click();
-																		      });
-																		} else {
-																			alert('Error');
-																		}
-																	})
-															.fail(
-																	function(resp,status,xhr) {
-																		alert('Error');
-																	});
-												}														
-												
-											}
-										});
+							if (confirm('<fmt:message key="card.list.confirmDelete"/>')) {
+								if(confirm('<fmt:message key="operator.list.confirmDeleteAgain"/>')){
+									var cardId = $(this).parent().parent().find('td input[id=cardId]').val();
+									var target = $(this).closest('tr');
+									$.ajax({
+										type : 'POST',
+										url : 'delete',
+										cache : false,
+										data : 'cardId='+ cardId
+									}).done(function(resp,status,	xhr) {
+										if (resp == 1) {
+											dataTables.fnDeleteRow(target.prop('id'));
+										      var currentPage = $('.current', '#listCard_paginate').text()
+										      $('#listCard_paginate').find('.paginate_button').each(function () {
+										       if ($(this).text() === currentPage)
+										         $(this).click();
+										      });
+										} else {
+											alert('Error');
+										}
+									}).fail(function(resp,status,xhr) {
+										alert('Error');
+									});
+								}														
+								
+							}
+						});
+						
+						$(document).on('click','a.ch-edit',function() {
+							sessionStorage.setItem('statusSearchOperator', $('#statusSort').val());
+							sessionStorage.setItem('userSearchOperator', $('#dateSort').val());
+							sessionStorage.setItem('criteriaSearchOperator', $('#criteriaSearch').val());
+							//sessionStorage.setItem('currentPageSearchOperator', $('.current', '#listCard_paginate').text());
+						});
+						
+						$(document).on('click','a.paginate_button',function() {
+							sessionStorage.removeItem('currentPageSearchOperator');
+						})
 
 						$('#statusSort').on('change', function() {
 							var status = $(this).val();
 							//$('#searchCard').click();
 							dataTables.api().destroy();
-							dataTables = $('#listCard')
-									.dataTable(
+							dataTables = $('#listCard').dataTable({
+									"fnDrawCallback" : function() {
+										loadDataComplete();
+									},
+									"dom" : '<<t>ip>',
+									"iDisplayLength" : 5,
+									"processing" : true,
+									"serverSide" : true,
+									"searching" : false,
+									"ordering" : false,
+									"language" : {
+										"zeroRecords" : '<fmt:message key="operator.list.table.emptyTable"/>',
+										"emptyTable" : '<fmt:message key="operator.list.table.emptyTable"/>',
+										"info" : '<fmt:message key="operator.list.table.info"/>',
+										"infoEmpty" : '<fmt:message key="operator.list.table.info"/>',
+										"paginate" : {
+											"previous" : '<fmt:message key="operator.list.table.paginate.previous"/>',
+											"next" : '<fmt:message key="operator.list.table.paginate.next"/>'
+										}
+									},
+									"ajax" : {
+										"url" : "search",
+										"type" : "POST",
+										"data" : function(dataTableRequest) {
+											dataTableRequest.criteriaSearch = $('#criteriaSearch').val();
+											dataTableRequest.status = $('#statusSort').val();
+											dataTableRequest.userId = $('#dateSort').val();
+											return dataTableRequest;
+										},
+										"dataSrc" : "data",
+										"error" : function(xhr) {
+											alert('error datatable')
+										}
+									},
+									"columns" : [
+										   {
+												"data" : "cardIndexNo",
+												"createdCell" : function(td,cellData,rowData,row,col) {
+													if (cellData) {
+														$(td).html("</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
+													}
+												}
+											},
 											{
-												"fnDrawCallback" : function() {
-													loadDataComplete();
-												},
-												"dom" : '<<t>ip>',
-												"iDisplayLength" : 5,
-												"processing" : true,
-												"serverSide" : true,
-												"searching" : false,
-												"ordering" : false,
-												"language" : {
-													"zeroRecords" : '<fmt:message key="operator.list.table.emptyTable"/>',
-													"emptyTable" : '<fmt:message key="operator.list.table.emptyTable"/>',
-													"info" : '<fmt:message key="operator.list.table.info"/>',
-													"infoEmpty" : '<fmt:message key="operator.list.table.info"/>',
-													"paginate" : {
-														"previous" : '<fmt:message key="operator.list.table.paginate.previous"/>',
-														"next" : '<fmt:message key="operator.list.table.paginate.next"/>'
+												"data" : "imageFile",
+												"createdCell" : function(td,cellData,rowData,row,col) {
+													if (cellData) {
+														$(td).html("<a href='#'><img src='data:image/png;base64,"+cellData+"' width='90' /></a>");
 													}
-												},
-												"ajax" : {
-													"url" : "search",
-													"type" : "POST",
-													"data" : function(
-															dataTableRequest) {
-														dataTableRequest.criteriaSearch = $(
-																'#criteriaSearch')
-																.val();
-														dataTableRequest.status = $(
-																'#statusSort')
-																.val();
-														dataTableRequest.userId = $(
-																'#dateSort')
-																.val();
-														return dataTableRequest;
-													},
-													"dataSrc" : "data",
-													"error" : function(
-															xhr) {
-														alert('error datatable')
+												}
+											},
+											{
+												"data" : "name"
+											},
+											{
+												"data" : "companyName"
+											},
+											{
+												"data" : "positionName"
+											},
+											{
+												"data" : "email"
+											},
+											{
+												"data" : "mobileNumber"
+											},
+											{
+												"data" : "createDate"
+											},
+											<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+											{
+												"data" : "approvalStatus",
+												"createdCell" : function(td,cellData,rowData,row,col) {
+													if (cellData) {
+														$(td).html(getStatus(cellData));
 													}
-												},
-												"columns" : [
-													   {
-															"data" : "cardIndexNo",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
-																if (cellData) {
-																	$(
-																			td)
-																			.html(
-																					"</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
-																}
-															}
-														},
-														{
-															"data" : "imageFile",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
-																if (cellData) {
-																	$(td).html("<a href='#'><img src='data:image/png;base64,"+cellData+"' width='90' /></a>");
-																}
-															}
-														},
-														{
-															"data" : "name"
-														},
-														{
-															"data" : "companyName"
-														},
-														{
-															"data" : "positionName"
-														},
-														{
-															"data" : "email"
-														},
-														{
-															"data" : "mobileNumber"
-														},
-														{
-															"data" : "createDate"
-														},
-														<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
-														{
-															"data" : "approvalStatus",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
-																if (cellData) {
-																	$(
-																			td)
-																			.html(
-																					getStatus(cellData));
-																}
-															}
-														},
-														</c:if>
-														{
-															"data" : "is_editting",
-															"className" : "hidden-column"
-														},
-														{
-															"data" : "cardId",
-															"className" : "ch-color-link",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
-																if (cellData) {
-																	<c:choose>
-																    <c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
-																    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
-																    </c:when>
-																    <c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
-															           $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
-															        </c:when>
-																    <c:otherwise>
-																    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> "
-																			+ "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>");
-																    </c:otherwise>
-																  </c:choose>
-																}
-															}
-														}, ],
-											});
+												}
+											},
+											</c:if>
+											{
+												"data" : "is_editting",
+												"className" : "hidden-column"
+											},
+											{
+												"data" : "cardId",
+												"className" : "ch-color-link",
+												"createdCell" : function(td,cellData,rowData,row,col) {
+													if (cellData) {
+														<c:choose>
+													    <c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+													    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
+													    </c:when>
+													    <c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
+												           $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
+												        </c:when>
+													    <c:otherwise>
+													    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> "
+																+ "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>");
+													    </c:otherwise>
+													  </c:choose>
+													}
+												}
+											}, ],
+								});
+							
+							/*$('a .ch-edit').on('click', function() {
+								console.log('111111111')
+								sessionStorage.setItem('status', $('#statusSort').val());
+							});*/
 							
 						});
 						
@@ -552,9 +508,7 @@ function loadDataIsEditting(){
 							var status = $(this).val();
 							
 							dataTables.api().destroy();
-							dataTables = $('#listCard')
-									.dataTable(
-											{
+							dataTables = $('#listCard').dataTable({
 												"fnDrawCallback" : function() {
 													loadDataComplete();
 												},
@@ -577,50 +531,29 @@ function loadDataIsEditting(){
 												"ajax" : {
 													"url" : "search",
 													"type" : "POST",
-													"data" : function(
-															dataTableRequest) {
-														dataTableRequest.criteriaSearch = $(
-																'#criteriaSearch')
-																.val();
-														dataTableRequest.status = $(
-																'#statusSort')
-																.val();
-														dataTableRequest.userId = $(
-																'#dateSort')
-																.val();
+													"data" : function(dataTableRequest) {
+														dataTableRequest.criteriaSearch = $('#criteriaSearch').val();
+														dataTableRequest.status = $('#statusSort').val();
+														dataTableRequest.userId = $('#dateSort').val();
 														return dataTableRequest;
 													},
 													"dataSrc" : "data",
-													"error" : function(
-															xhr) {
+													"error" : function(xhr) {
 														alert('error datatable')
 													}
 												},
 												"columns" : [
 													   {
 															"data" : "cardIndexNo",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
+															"createdCell" : function(td,cellData,rowData,row,col) {
 																if (cellData) {
-																	$(
-																			td)
-																			.html(
-																					"</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
+																	$(td).html("</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
 																}
 															}
 														},
 														{
 															"data" : "imageFile",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
+															"createdCell" : function(td,cellData,rowData,row,col) {
 																if (cellData) {
 																	$(td).html("<a href='#'><img src='data:image/png;base64,"+cellData+"' width='90' /></a>");
 																}
@@ -647,17 +580,9 @@ function loadDataIsEditting(){
 														<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
 														{
 															"data" : "approvalStatus",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
+															"createdCell" : function(td,cellData,rowData,row,col) {
 																if (cellData) {
-																	$(
-																			td)
-																			.html(
-																					getStatus(cellData));
+																	$(td).html(getStatus(cellData));
 																}
 															}
 														},
@@ -669,12 +594,7 @@ function loadDataIsEditting(){
 														{
 															"data" : "cardId",
 															"className" : "ch-color-link",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
+															"createdCell" : function(td,cellData,rowData,row,col) {
 																if (cellData) {
 																	<c:choose>
 																    <c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">

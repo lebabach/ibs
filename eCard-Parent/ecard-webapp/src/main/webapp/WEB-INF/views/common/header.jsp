@@ -4,12 +4,20 @@
 <%@ page import="java.lang.Integer"%>
 <%@ page import="java.util.List"%>
 <%@ page import="com.ecard.webapp.security.EcardUser"%>
+<script type="text/javascript">
+$(document).on('click','a.btn_back_home',function() {
+	localStorage.removeItem('DataTables_listCard_/ecard-webapp/cards/list');
+	sessionStorage.removeItem('statusSearchOperator');
+	sessionStorage.removeItem('userSearchOperator');
+	sessionStorage.removeItem('criteriaSearchOperator');
+});
+</script>
 <div class="row border-bottom">
 
 	<nav class="navbar navbar-static-top bg-white box-shadow"
 		role="navigation" style="margin-bottom: 0">
 		<div class="navbar-header" style="position: relative;">
-			<a class="navbar-minimalize minimalize-styl-2 btn btn-primary "
+			<a class="navbar-minimalize minimalize-styl-2 btn btn-primary btn_back_home"
 				href="<c:url value='/manager/home'/>" style="position: absolute;">
 				<i class="fa fa-bars" href="<c:url value='/manager/home'/>"></i>
 			</a>

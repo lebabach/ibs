@@ -390,17 +390,35 @@ public class CardController {
 			// bach.le https://livepass.backlog.jp/view/MEISHI-575
 			if(!"".equals(cardInfo.getAddressFull().trim())){
 				List<String> listAddress = new ArrayList<String>(Arrays.asList(cardInfo.getAddressFull().trim().split(" ")));
-				cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
-				cardInfo.setAddress2(listAddress.get(1) != null ? listAddress.get(1) : "");
-				cardInfo.setAddress3(listAddress.get(2) != null ? listAddress.get(2) : "");
-				if (listAddress.get(0) != null) {
-					listAddress.remove(0);
-				}
-				if (listAddress.get(0) != null) {
-					listAddress.remove(0);
-				}
-				if (listAddress.get(0) != null) {
-					listAddress.remove(0);
+				if(listAddress.size() ==3){
+					cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
+					cardInfo.setAddress2(listAddress.get(1) != null ? listAddress.get(1) : "");
+					cardInfo.setAddress3(listAddress.get(2) != null ? listAddress.get(2) : "");
+					if (listAddress.get(0) != null) {
+						listAddress.remove(0);
+					}
+					if (listAddress.get(0) != null) {
+						listAddress.remove(0);
+					}
+					if (listAddress.get(0) != null) {
+						listAddress.remove(0);
+					}
+				}else if(listAddress.size() ==2) {
+					cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
+					cardInfo.setAddress2(listAddress.get(1) != null ? listAddress.get(1) : "");
+					if (listAddress.get(0) != null) {
+						listAddress.remove(0);
+					}
+					if (listAddress.get(0) != null) {
+						listAddress.remove(0);
+					}
+					
+				}else if(listAddress.size() ==1) {
+					cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
+					if (listAddress.get(0) != null) {
+						listAddress.remove(0);
+					}
+					
 				}
 	
 				cardInfo.setAddress4(listAddress.stream().collect(Collectors.joining(" ")));

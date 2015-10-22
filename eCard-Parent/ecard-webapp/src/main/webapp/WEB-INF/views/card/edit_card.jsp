@@ -230,222 +230,123 @@ history.pushState(null, null, null);
 		}
 		return true;
 	}
-	$(document)
-			.ready(
-					function() {
+	$(document).ready(function() {
 						var ENUM_APPROVAL = 1;
 						var ENUM_TEMP = 3;
 						var ENUM_TEMP_SAVE = 4;
 						$("#rote-image").val(0);
 						
 						$(".img-100").onload=function(){
-						    
 						    drawRotated(0);
 						}
 						
-						$('#tempSave')
-								.on(
-										'click',
-										function() {
-											/* resetValidationForm();
-											if (!checkValidationForm()) {
-												return false;
-											} */
+						$('#tempSave').on('click',function() {
+								/* resetValidationForm();
+								if (!checkValidationForm()) {
+									return false;
+								} */
+								if (($('.input-group.date').datepicker('getDate').toString() != "Invalid Date")) {
+									$('input[name=contactDate]').val($('.input-group.date').datepicker('getDate'));
+									$('input[name=contactDate]').value = $('.input-group.date').datepicker('getDate');
+								} else {
+									removerDate();
+								}
+								$("#cardInforEditSubmitForm").attr("action","/ecard-webapp/cards/editDirect");
+								/* $('input[name=approvalStatus]',
+										'#cardInforEditSubmitForm')
+										.val(ENUM_TEMP); */
+								$('#cardInforEditSubmitForm').submit();
 
-											if (($('.input-group.date')
-													.datepicker('getDate')
-													.toString() != "Invalid Date")) {
-												$('input[name=contactDate]')
-														.val(
-																$(
-																		'.input-group.date')
-																		.datepicker(
-																				'getDate'));
-												$('input[name=contactDate]').value = $(
-														'.input-group.date')
-														.datepicker('getDate');
-											} else {
-												removerDate();
-											}
+						});
+						$('#saveTempStatus4').on('click',function() {
+								resetValidationForm();
+								if (!checkValidationForm()) {
+									return false;
+								}
+								if (($('.input-group.date').datepicker('getDate').toString() != "Invalid Date")) {
+									$('input[name=contactDate]').val($('.input-group.date').datepicker('getDate'));
+									$('input[name=contactDate]').value = $('.input-group.date').datepicker('getDate');
+								} else {
+									removerDate();
+								}
+								//$("#cardInforEditSubmitForm").attr("action", "/ecard-webapp/cards/editDirect");
+								$('input[name=approvalStatus]','#cardInforEditSubmitForm').val(ENUM_TEMP_SAVE);
+								$('#cardInforEditSubmitForm').submit();
 
-											$("#cardInforEditSubmitForm")
-													.attr("action",
-															"/ecard-webapp/cards/editDirect");
-											/* $('input[name=approvalStatus]',
-													'#cardInforEditSubmitForm')
-													.val(ENUM_TEMP); */
-											$('#cardInforEditSubmitForm')
-													.submit();
+						});
+						$('#moveFix').on('click',function() {
+								 resetValidationForm();
+								if (!checkValidationForm()) {
+									return false;
+								} 
+								if (($('.input-group.date').datepicker('getDate').toString() != "Invalid Date")) {
+									$('input[name=contactDate]').val($('.input-group.date').datepicker('getDate'));
+									$('input[name=contactDate]').value = $('.input-group.date').datepicker('getDate');
+								} else {
+									removerDate();
+								}
+								$("#cardInforEditSubmitForm").attr("action","/ecard-webapp/cards/editDirect");
+								$('input[name=approvalStatus]','#cardInforEditSubmitForm').val(ENUM_TEMP);
+								$('#cardInforEditSubmitForm').submit();
 
-										});
-						$('#saveTempStatus4')
-								.on(
-										'click',
-										function() {
-											resetValidationForm();
-											if (!checkValidationForm()) {
-												return false;
-											}
+					   });
+						$('#approvalSave').on('click',function() {
+								resetValidationForm();
+								if (!checkValidationForm()) {
+									return false;
+								}
+								if (!checkApproval()) {
+									return false;
+								}
+								
+								var cardOwnerId = $("input[name=cardOwnerId]").val();
+								var cardId = $("input[name=cardId]").val();
+								var cardName = $("input[name=cardName]").val();
+                                 if(cardName == ""){
+                                     cardName =$("input[name=lastName]").val() + $("input[name=firstName]").val();
+                                 }
+								var msg = cardName + " さんの名刺が承認されました。";
+								var type = 4;
+								if (($('.input-group.date').datepicker('getDate').toString() != "Invalid Date")) {
+									$('input[name=contactDate]').val($('.input-group.date').datepicker('getDate'));
+									$('input[name=contactDate]').value = $('.input-group.date').datepicker('getDate');
+								} else {
+									removerDate();
+								}
+								$("#cardInforEditSubmitForm").attr("action","/ecard-webapp/cards/editDirect");
+								$('input[name=approvalStatus]','#cardInforEditSubmitForm').val(ENUM_APPROVAL);
+								$('#cardInforEditSubmitForm').submit();
+						
+								 	/* $.ajax({
+													type : 'POST',
+													url : '/ecard-webapp/notification/push',
+													data : 'cardOwnerId='
+															+ cardOwnerId
+															+ '&msg='
+															+ msg
+															+ '&cardId='
+															+ cardId
+															+ '&type='
+															+ type
+									}).done(function(resp,status, xhr) {
+													$("#cardInforEditSubmitForm").attr("action","/ecard-webapp/cards/editDirect");
+													$('input[name=approvalStatus]','#cardInforEditSubmitForm').val(ENUM_APPROVAL);
+													$('#cardInforEditSubmitForm').submit();
+												})
+									.fail(function(xhr,status, err) {
+													alert('Error');
+									});  */
 
-											if (($('.input-group.date')
-													.datepicker('getDate')
-													.toString() != "Invalid Date")) {
-												$('input[name=contactDate]')
-														.val(
-																$(
-																		'.input-group.date')
-																		.datepicker(
-																				'getDate'));
-												$('input[name=contactDate]').value = $(
-														'.input-group.date')
-														.datepicker('getDate');
-											} else {
-												removerDate();
-											}
-											//$("#cardInforEditSubmitForm").attr("action", "/ecard-webapp/cards/editDirect");
-											$('input[name=approvalStatus]',
-													'#cardInforEditSubmitForm')
-													.val(ENUM_TEMP_SAVE);
-											$('#cardInforEditSubmitForm')
-													.submit();
-
-										});
-						$('#moveFix')
-								.on(
-										'click',
-										function() {
-											 resetValidationForm();
-											if (!checkValidationForm()) {
-												return false;
-											} 
-
-											if (($('.input-group.date')
-													.datepicker('getDate')
-													.toString() != "Invalid Date")) {
-												$('input[name=contactDate]')
-														.val(
-																$(
-																		'.input-group.date')
-																		.datepicker(
-																				'getDate'));
-												$('input[name=contactDate]').value = $(
-														'.input-group.date')
-														.datepicker('getDate');
-											} else {
-												removerDate();
-											}
-
-											$("#cardInforEditSubmitForm")
-													.attr("action",
-															"/ecard-webapp/cards/editDirect");
-											$('input[name=approvalStatus]',
-													'#cardInforEditSubmitForm')
-													.val(ENUM_TEMP);
-											$('#cardInforEditSubmitForm')
-													.submit();
-
-										});
-						$('#approvalSave')
-								.on(
-										'click',
-										function() {
-											resetValidationForm();
-											if (!checkValidationForm()) {
-												return false;
-											}
-											if (!checkApproval()) {
-												return false;
-											}
-											
-											var cardOwnerId = $(
-													"input[name=cardOwnerId]")
-													.val();
-											var cardId = $("input[name=cardId]")
-													.val();
-											var cardName = $("input[name=cardName]")
-													.val();
-                                            if(cardName == ""){
-                                                cardName =$("input[name=lastName]").val() + $("input[name=firstName]").val();
-                                            }
-											var msg = cardName + " さんの名刺が承認されました。";
-											var type = 4;
-
-											if (($('.input-group.date')
-													.datepicker('getDate')
-													.toString() != "Invalid Date")) {
-												$('input[name=contactDate]')
-														.val(
-																$(
-																		'.input-group.date')
-																		.datepicker(
-																				'getDate'));
-												$('input[name=contactDate]').value = $(
-														'.input-group.date')
-														.datepicker('getDate');
-											} else {
-												removerDate();
-											}
-											$(
-											"#cardInforEditSubmitForm")
-											.attr(
-													"action",
-													"/ecard-webapp/cards/editDirect");
-											$(
-													'input[name=approvalStatus]',
-													'#cardInforEditSubmitForm')
-													.val(
-															ENUM_APPROVAL);
-											$(
-													'#cardInforEditSubmitForm')
-													.submit();
-									
-/* 											$
-													.ajax(
-															{
-																type : 'POST',
-																url : '/ecard-webapp/notification/push',
-																data : 'cardOwnerId='
-																		+ cardOwnerId
-																		+ '&msg='
-																		+ msg
-																		+ '&cardId='
-																		+ cardId
-																		+ '&type='
-																		+ type
-															})
-													.done(
-															function(resp,
-																	status, xhr) {
-																$(
-																		"#cardInforEditSubmitForm")
-																		.attr(
-																				"action",
-																				"/ecard-webapp/cards/editDirect");
-																$(
-																		'input[name=approvalStatus]',
-																		'#cardInforEditSubmitForm')
-																		.val(
-																				ENUM_APPROVAL);
-																$(
-																		'#cardInforEditSubmitForm')
-																		.submit();
-															})
-													.fail(
-															function(xhr,
-																	status, err) {
-																alert('Error');
-															}); */
-
-										});
-						$('#backToManage').on('click',function() {
-										$.ajax({
-											  type: "POST",
-											  url: '/ecard-webapp/cards/updateIsEditting',
-											  data: 'Id='+$("input[name=cardId]").val(),
-											  success: function(){
-												  document.location.href = '/ecard-webapp/cards/list';
-											  },
-											});
+						});
+						$('#backToManage').on('click',function(evt) {
+								$.ajax({
+									  type: "POST",
+									  url: '/ecard-webapp/cards/updateIsEditting',
+									  data: 'Id='+$("input[name=cardId]").val(),
+									  success: function(){
+										  document.location.href = '/ecard-webapp/cards/list';										 
+									  },
+								});
 											
 							});
 
@@ -634,12 +535,7 @@ history.pushState(null, null, null);
 		</c:if>
 	</c:if>
 
-	<form id="cardInforEditSubmitForm" class="h-adr" method="POST"
-		action="/ecard-webapp/cards/edit/${cardInfo.cardId}"
-		accept-charset="UFT-8">
-
-
-
+	<form id="cardInforEditSubmitForm" class="h-adr" method="POST" action="/ecard-webapp/cards/edit/${cardInfo.cardId}" accept-charset="UFT-8">
 		<input type="hidden" name="cardId" value="${cardInfo.cardId}">
 		<input type="hidden" name="cardOwnerId"
 			value="${cardInfo.cardOwnerId}"> <input type="hidden"
