@@ -277,15 +277,15 @@ margin: 20px auto 30px auto;
 
 <div class="div-list">  
    	<div class="box-1">
-    	<div class="title-box-1">é¡§å®¢çµ„ç¹”ä¸€è¦§</div>
+    	<div class="title-box-1">顧客組織一覧</div>
     	<div class="content-box-1">  
            <form class="form-cm" name="searchForm" id="searchForm" method="post">
                <div class="form-group col-md-11">
-          			<label class="label-c">ä¼æ¥­å</label>
+          			<label class="label-c">企業名</label>
                		<input class="input-c" value="" name="companyName" />
                </div>
                <div class="col-md-1" style="margin-left: -65px;">
-               	<input type="button" value="æ¤œç´¢" class="submit" id="searchCompany" />
+               	<input type="button" value="検索" class="submit" id="searchCompany" />
                </div>
            </form>
            
