@@ -648,6 +648,7 @@
 
  $(document).ready(function(){
 	 $(document).on('click', '.list-group-item-title', function(event)  {
+		typeLoading = 2;
 		$.xhrPool.abortAll();
 		var clickMySelf = 0;
         $('.list-group-item-title').not($(this)).removeClass('active');
