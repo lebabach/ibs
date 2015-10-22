@@ -482,9 +482,9 @@ body{
 	    var id = $(this).attr('id');
 		if(id == 1){
 			document.location.href="downloadCSV/"+id;
-			setTimeout(function(){ 				
+			/* setTimeout(function(){ 				
 				document.location.href='/ecard-webapp/user/download';
-			}, 3000);
+			}, 3000); */
 		} else {
 			$.ajax({
 				type: 'GET',
