@@ -14,6 +14,7 @@ import com.ecard.core.vo.CardInfoNotifyChange;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
+import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.TagUser;
 
 import java.math.BigInteger;
@@ -170,4 +171,6 @@ public interface CardInfoDAO extends IGenericDao{
     public List<CardInfoNotifyChange> getListCardInfoNotifyChange(CardInfo cardInfo);
     
     public void updateListCardInfors(List<CardInfo> cards);
+
+public List<NotificationList> getImagesBy(List<Integer> cardIds) ;
 }

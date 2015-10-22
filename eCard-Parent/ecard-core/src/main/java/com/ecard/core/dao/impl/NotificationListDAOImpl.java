@@ -44,6 +44,7 @@ public class NotificationListDAOImpl extends GenericDao implements NotificationL
         return result;
     }
     
+   
     public List<NotificationList> getListNotificationPaging(Integer userId, Integer page){
         // Get user update info
 //        Query query = getEntityManager().createQuery("SELECT NEW com.ecard.core.vo.NotificationList(un.noticeId, un.noticeType, un.cardId, un.changeParamType, un.readFlg, un.noticeDate) "       

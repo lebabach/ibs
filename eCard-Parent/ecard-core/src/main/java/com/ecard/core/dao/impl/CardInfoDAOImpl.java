@@ -38,7 +38,9 @@ import com.ecard.core.vo.CardInfoNotifyChange;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
+import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.TagUser;
+import com.ecard.core.vo.UserInfoVo;
 
 /**
  *
@@ -82,12 +84,13 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 
 		String sqlStr = "SELECT lc.card_id, lc.name, c.last_name, c.first_name, c.name_kana, c.first_name_kana, c.last_name_kana, "
 					+ "lc.company_name, lc.department_name, c.position_name, lc.image_file,c.tel_number_company,c.email " 
-					+ "FROM link_card lc INNER JOIN card_info c ON lc.card_id = c.card_id ";
+					+ "FROM link_card lc INNER JOIN card_info c ON lc.card_id = c.card_id "
+					+ "WHERE c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 ";
 		if(recentFlg == 0){
-			sqlStr += "WHERE lc.card_owner_id = :userId";
+			sqlStr += "AND lc.card_owner_id = :userId";
 		}
 		else{
-			sqlStr += "WHERE lc.card_owner_id = :userId AND (lc.create_date_1 >=  (NOW() - INTERVAL 1 WEEK) OR lc.create_date_2 >=  (NOW() - INTERVAL 1 WEEK))";
+			sqlStr += "AND lc.card_owner_id = :userId AND (lc.create_date_1 >=  (NOW() - INTERVAL 1 WEEK) OR lc.create_date_2 >=  (NOW() - INTERVAL 1 WEEK))";
 		}
 
 		Query query = getEntityManager().createNativeQuery(sqlStr);
@@ -113,7 +116,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			query = getEntityManager().createNativeQuery("SELECT "
 					+ "c.card_id AS cardId, c.company_id AS companyId, c.company_name AS companyName, c.company_name_kana AS companyNameKana, COUNT(c.card_id) AS cardCnt "
 					+ "FROM possession_card po LEFT JOIN card_info AS c " + "ON po.card_id = c.card_Id "
-					+ "WHERE po.user_id = :userId AND c.approval_status = 1 AND c.contact_date IN (select c.contact_date from card_info c "
+					+ "WHERE po.user_id = :userId AND c.approval_status = 1 AND c.old_card_flg = 0 AND c.contact_date IN (select c.contact_date from card_info c "
 					+ "where contact_date  = " + "(select max(contact_date) from card_info where contact_date >= '"
 					+ this.complianceDate + "')) AND c.delete_flg != 1 " + "GROUP BY c.company_id "
 					+ "ORDER BY companyNameKana DESC");
@@ -121,7 +124,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			query = getEntityManager().createNativeQuery(
 					"SELECT c.card_id AS cardId, c.company_id AS companyId, c.company_name AS companyName, c.company_name_kana AS companyNameKana, COUNT(c.card_id) AS cardCnt "
 							+ "FROM possession_card po LEFT JOIN card_info AS c " + "ON po.card_id = c.card_Id "
-							+ "WHERE po.user_id = :userId AND c.approval_status = 1 AND c.delete_flg != 1 "
+							+ "WHERE po.user_id = :userId AND c.approval_status = 1 AND c.delete_flg != 1 AND c.old_card_flg = 0 "
 							+ "GROUP BY c.company_name " + "ORDER BY c.company_name_kana DESC");
 		}
 
@@ -144,7 +147,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ " c.last_name_kana AS lastNameKana, c.first_name_kana AS firstNameKana, "
 					+ " c.company_name AS companyName, c.department_name AS departmentName, c.position_name AS positionName, c.image_file AS imageFile "
 					+ "FROM possession_card po LEFT JOIN card_info AS c " + "ON po.card_id = c.card_Id "
-					+ "WHERE po.user_id = :userId AND c.approval_status = 1 AND c.delete_flg != 1 "
+					+ "WHERE po.user_id = :userId AND c.approval_status = 1 AND c.delete_flg != 1 AND c.old_card_flg = 0 "
 					+ "AND c.company_name = :companyName "
 					+ "AND c.contact_date IN (select ci.contact_date from card_info ci " + "where ci.contact_date  = "
 					+ "(select max(contact_date) from card_info where contact_date >= '" + this.complianceDate + "')) "
@@ -155,7 +158,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ " c.last_name_kana AS lastNameKana, c.first_name_kana AS firstNameKana, "
 					+ "c.company_name AS companyName, c.department_name AS departmentName, c.position_name AS positionName, c.image_file AS imageFile "
 					+ "FROM possession_card po LEFT JOIN card_info AS c " + "ON po.card_id = c.card_Id "
-					+ "WHERE po.user_id = :userId AND c.approval_status = 1 AND c.delete_flg != 1 "
+					+ "WHERE po.user_id = :userId AND c.approval_status = 1 AND c.delete_flg != 1 AND c.old_card_flg = 0 "
 					+ "AND c.company_name = :companyName " + "GROUP BY c.card_id " + "ORDER BY c.create_date DESC");
 		}
 		query.setParameter("userId", userId);
@@ -191,7 +194,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
     
     public List<CardInfo> getListPossesionCard(Integer userId, String searchText, String sort, int pageNumber){
         String sqlStr = "SELECT c FROM CardInfo c "
-                + "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 ";
+                + "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 ";
         Query query = null;
         if(searchText != null) {
             sqlStr += "AND ( c.name LIKE :searchText "
@@ -436,97 +439,98 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		}
 		
 		return result;
-    }
-    
-    public CardInfo registerCardImage(CardInfo cardInfo) {
-        getEntityManager().persist(cardInfo);
-        getEntityManager().flush();
-        
-        return cardInfo;
-    }
-    
-    public int deleteCardInfo(Integer cardId){
-        Validate.notNull(cardId, "CardId is not null");
-        Query query = getEntityManager().createQuery("UPDATE CardInfo c SET c.deleteFlg = 1, c.deletDate = :deletDate WHERE c.cardId = :cardId");
-        query.setParameter("cardId", cardId);
-        query.setParameter("deletDate", new Date());
-        return query.executeUpdate();
-    }
-    
-    public List<CardConnectModel> listCardConnect(Integer cardOwnerId, Integer groupCompanyId, String name, String companyName, String email){
-        Validate.notNull(cardOwnerId, "cardOwnerId is not null");
-        Validate.notNull(groupCompanyId, "groupCompanyId is not null");
-        
-        /*String sqlStr = "SELECT u.*, c.card_id FROM user_info AS u INNER JOIN " +
-                    "(SELECT ci.card_owner_id FROM card_info AS ci WHERE ci.old_card_flg = 0 AND ci.approval_status = 1 "
-                    + "AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";*/
-        String sqlStr = "SELECT u.* FROM user_info AS u INNER JOIN " +
-                "(SELECT ci.card_owner_id FROM card_info AS ci WHERE ci.approval_status = 1 "
-                + "AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";
-        
-        if (groupCompanyId == 1 || groupCompanyId ==2 || groupCompanyId ==3 || groupCompanyId == 4 || groupCompanyId == 5 ){
-            sqlStr += "AND ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName)) " 
-                    + "AND (ci.group_company_id IN(1,2,3,4,5) OR (ci.group_company_id NOT IN(1,2,3,4,5) AND contact_date >= '"+ this.complianceDate +"')) " 
-                    + "GROUP BY card_owner_id";
-        }
-        else{
-            sqlStr += "AND ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName)) " 
-                    + "AND (ci.group_company_id = "+ groupCompanyId +" OR (ci.group_company_id <> "+ groupCompanyId +" AND contact_date >= '"+ this.complianceDate +"')) " 
-                    + "GROUP BY card_owner_id";
-        }
-        sqlStr += ") AS c ON u.user_id = c.card_owner_id AND u.delete_flg = 0";
-        
-        Query query = getEntityManager().createNativeQuery(sqlStr);
-        query.setParameter("cardOwnerId", cardOwnerId);
-        query.setParameter("name", name);
-        query.setParameter("companyName", companyName);
-        query.setParameter("email", email);
-        
-        List<Object[]> rows = query.getResultList();
-        List<CardConnectModel> result = new ArrayList<>(rows.size());
-        for (Object[] row : rows) {
-            result.add(new CardConnectModel(0,(String)row[15], (String)row[16], (String)row[17],(String)row[18], (String)row[19], 
-            		(String)row[20], (String)row[22],(String)row[24], (String)row[25], (String)row[32], (String)row[4], (String)row[23]));
-        }
-        
-        return result;
-    }
-    
-    public String getCardImage(Integer cardId) {
-        Validate.notNull(cardId, "CardId is not null");
-        Query query = getEntityManager().createQuery("SELECT c.imageFile FROM CardInfo c WHERE c.cardId = :cardId");
-        query.setParameter("cardId", cardId);
-        
-        return (String)getOrNull(query);
-    }
-    
-    @SuppressWarnings("unchecked")
-	public List<com.ecard.core.vo.CardInfo> searchCard(String criteriaSearch, int status, List<Integer> listStatus, int limit, int offet) {
-    	String sqlQuery = "SELECT * FROM card_info AS u WHERE ";
-    	if (!criteriaSearch.isEmpty())
-    		sqlQuery += "(u.name REGEXP  :criteriaSearch "
-    				+ "OR u.last_name REGEXP :criteriaSearch "
-    				+ "OR u.first_name REGEXP :criteriaSearch "
-    				+ "OR u.last_name_kana REGEXP :criteriaSearch "
-    				+ "OR u.department_name REGEXP :criteriaSearch "
-    				+ "OR u.tel_number_company REGEXP :criteriaSearch "
-    				+ "OR u.email REGEXP :criteriaSearch "
-    				+ "OR u.position_name REGEXP :criteriaSearch "
-    				+ "OR u.address_full REGEXP :criteriaSearch "
-    				+ "OR u.first_name_kana REGEXP :criteriaSearch "
-    				+ "OR u.company_name REGEXP :criteriaSearch "
-    				+ "OR u.company_name_kana REGEXP :criteriaSearch "
-    				+ "OR u.mobile_number REGEXP :criteriaSearch) AND ";
-    	if (status > 0)
-    		sqlQuery += "u.approval_status = :status AND ";
-    	sqlQuery += "u.delete_flg = 0 AND u.approval_status IN (:listStatus) ORDER BY u.create_date DESC";    	
-    	Query query = null;    	
-    	if (limit > -1 && offet > -1){
-		   query = getEntityManager().createNativeQuery(sqlQuery).setFirstResult(offet).setMaxResults(limit);
-    	}else{
-    		query = getEntityManager().createNativeQuery(sqlQuery);
-    	}
-		if (!criteriaSearch.isEmpty()){
+	}
+
+	public CardInfo registerCardImage(CardInfo cardInfo) {
+		getEntityManager().persist(cardInfo);
+		getEntityManager().flush();
+
+		return cardInfo;
+	}
+
+	public int deleteCardInfo(Integer cardId) {
+		Validate.notNull(cardId, "CardId is not null");
+		Query query = getEntityManager().createQuery(
+				"UPDATE CardInfo c SET c.deleteFlg = 1, c.deletDate = :deletDate WHERE c.cardId = :cardId");
+		query.setParameter("cardId", cardId);
+		query.setParameter("deletDate", new Date());
+		return query.executeUpdate();
+	}
+
+	public List<CardConnectModel> listCardConnect(Integer cardOwnerId, Integer groupCompanyId, String name,
+			String companyName, String email) {
+		Validate.notNull(cardOwnerId, "cardOwnerId is not null");
+		Validate.notNull(groupCompanyId, "groupCompanyId is not null");
+
+		/*
+		 * String sqlStr =
+		 * "SELECT u.*, c.card_id FROM user_info AS u INNER JOIN " +
+		 * "(SELECT ci.card_owner_id FROM card_info AS ci WHERE ci.old_card_flg = 0 AND ci.approval_status = 1 "
+		 * + "AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";
+		 */
+		String sqlStr = "SELECT u.* FROM user_info AS u INNER JOIN "
+				+ "(SELECT ci.card_owner_id FROM card_info AS ci WHERE ci.approval_status = 1 "
+				+ "AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";
+
+		if (groupCompanyId == 1 || groupCompanyId == 2 || groupCompanyId == 3 || groupCompanyId == 4
+				|| groupCompanyId == 5) {
+			sqlStr += "AND ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName)) "
+					+ "AND (ci.group_company_id IN(1,2,3,4,5) OR (ci.group_company_id NOT IN(1,2,3,4,5) AND contact_date >= '"
+					+ this.complianceDate + "')) " + "GROUP BY card_owner_id";
+		} else {
+			sqlStr += "AND ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName)) "
+					+ "AND (ci.group_company_id = " + groupCompanyId + " OR (ci.group_company_id <> " + groupCompanyId
+					+ " AND contact_date >= '" + this.complianceDate + "')) " + "GROUP BY card_owner_id";
+		}
+		sqlStr += ") AS c ON u.user_id = c.card_owner_id AND u.delete_flg = 0";
+
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		query.setParameter("cardOwnerId", cardOwnerId);
+		query.setParameter("name", name);
+		query.setParameter("companyName", companyName);
+		query.setParameter("email", email);
+
+		List<Object[]> rows = query.getResultList();
+		List<CardConnectModel> result = new ArrayList<>(rows.size());
+		for (Object[] row : rows) {
+			result.add(new CardConnectModel(0, (String) row[15], (String) row[16], (String) row[17], (String) row[18],
+					(String) row[19], (String) row[20], (String) row[22], (String) row[24], (String) row[25],
+					(String) row[32], (String) row[4], (String) row[23], (Integer) row[0]));
+		}
+
+		return result;
+	}
+
+	public String getCardImage(Integer cardId) {
+		Validate.notNull(cardId, "CardId is not null");
+		Query query = getEntityManager().createQuery("SELECT c.imageFile FROM CardInfo c WHERE c.cardId = :cardId");
+		query.setParameter("cardId", cardId);
+
+		return (String) getOrNull(query);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<com.ecard.core.vo.CardInfo> searchCard(String criteriaSearch, int status, List<Integer> listStatus,
+			int limit, int offet) {
+		String sqlQuery = "SELECT * FROM card_info AS u WHERE ";
+		if (!criteriaSearch.isEmpty())
+			sqlQuery += "(u.name REGEXP  :criteriaSearch " + "OR u.last_name REGEXP :criteriaSearch "
+					+ "OR u.first_name REGEXP :criteriaSearch " + "OR u.last_name_kana REGEXP :criteriaSearch "
+					+ "OR u.department_name REGEXP :criteriaSearch " + "OR u.tel_number_company REGEXP :criteriaSearch "
+					+ "OR u.email REGEXP :criteriaSearch " + "OR u.position_name REGEXP :criteriaSearch "
+					+ "OR u.address_full REGEXP :criteriaSearch " + "OR u.first_name_kana REGEXP :criteriaSearch "
+					+ "OR u.company_name REGEXP :criteriaSearch " + "OR u.company_name_kana REGEXP :criteriaSearch "
+					+ "OR u.mobile_number REGEXP :criteriaSearch) AND ";
+		if (status > 0)
+			sqlQuery += "u.approval_status = :status AND ";
+		sqlQuery += "u.delete_flg = 0 AND u.approval_status IN (:listStatus) ORDER BY u.create_date DESC";
+		Query query = null;
+		if (limit > -1 && offet > -1) {
+			query = getEntityManager().createNativeQuery(sqlQuery).setFirstResult(offet).setMaxResults(limit);
+		} else {
+			query = getEntityManager().createNativeQuery(sqlQuery);
+		}
+		if (!criteriaSearch.isEmpty()) {
 			query.setParameter("criteriaSearch", criteriaSearch);
 		}
 		if (status > 0) {
@@ -921,17 +925,17 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		String sqlStr = "";
 		 
 		if (sortType == SearchConditions.CONTACT.getValue()) {
-			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
 					+ "AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch";
 			
 		} else if (sortType == SearchConditions.NAME.getValue()) {
-			sqlStr = "SELECT c.nameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+			sqlStr = "SELECT c.nameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+" AND (c.nameKana is not null AND c.nameKana <> '') "
 					+ "AND c.nameKana LIKE :valueSearch";
 			
 		} else if (sortType == SearchConditions.COMPANY.getValue()) {			
-			sqlStr = "SELECT c.companyNameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+			sqlStr = "SELECT c.companyNameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.companyNameKana is not null AND c.companyNameKana <> '') "
 					+ "AND c.companyNameKana = :valueSearch";
 			
@@ -940,16 +944,16 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				sqlStr = "SELECT 'cardNoTag' AS groupDate, c FROM CardInfo c"
 						+" WHERE c.cardId NOT IN ( SELECT ct.id.cardId FROM CardTag ct INNER JOIN ct.userTag ut"
 						+ " 						WHERE ut.userInfo.userId = :userId GROUP BY ct.id.cardId)  "
-						+ "AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0";
+						+ "AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 ";
 			} else {
 				sqlStr = "SELECT ut.tagName AS groupDate, c FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
-						+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0"
+						+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 						+" AND (ut.tagName is not null AND ut.tagName <> '') "
 						+" AND ut.tagName = :valueSearch";
 			}
 			
 		} else {
-			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
 					+ " AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch";
 		}
@@ -1227,32 +1231,32 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		 
 		if (sortType == SearchConditions.CONTACT.getValue()) {
 			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate FROM CardInfo c "
-					+ " WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ " WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
 					+ " GROUP BY DATE_FORMAT(c.contactDate,'%Y/%m') ORDER BY c.contactDate DESC ";
 			
 		} else if (sortType == SearchConditions.NAME.getValue()) {
 			sqlStr = "SELECT c.nameKana  AS groupDate FROM CardInfo c "
-					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.nameKana is not null AND c.nameKana <> '') "
 					+ "GROUP BY SUBSTR((c.nameKana),1,1) ORDER BY c.nameKana ASC ";
 			
 		} else if (sortType == SearchConditions.COMPANY.getValue()) {
 			sqlStr = "SELECT c.companyNameKana AS groupDate FROM CardInfo c "
-					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.companyNameKana is not null AND c.companyNameKana <> '') "
 					+ "GROUP BY c.companyNameKana ORDER BY c.companyNameKana ASC ";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
 			sqlStr = "SELECT ut.tagName AS groupDate FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
-					+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId  AND c.deleteFlg = 0 AND c.approvalStatus = 1"
+					+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId  AND c.deleteFlg = 0 AND c.approvalStatus = 1 AND c.oldCardFlg = 0 "
 					+" AND (ut.tagName is not null AND ut.tagName <> '') "
 					+" GROUP BY ut.tagName ORDER BY ut.tagName ASC" ;
 					
 			
 		} else {
 			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate FROM CardInfo c "
-					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
 					+ "GROUP BY DATE_FORMAT(c.contactDate,'%Y/%m') ORDER BY c.contactDate DESC ";
 		}
@@ -1276,17 +1280,17 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		String sqlStr = "";
 		 
 		if (typeSort == SearchConditions.CONTACT.getValue()) {
-			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
 					+ "AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch";
 			
 		} else if (typeSort == SearchConditions.NAME.getValue()) {
-			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+" AND (c.nameKana is not null AND c.nameKana <> '') "
 					+ "AND c.nameKana LIKE :valueSearch";
 			
 		} else if (typeSort == SearchConditions.COMPANY.getValue()) {			
-			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.companyNameKana is not null AND c.companyNameKana <> '') "
 					+ "AND c.companyNameKana = :valueSearch";
 			
@@ -1295,16 +1299,16 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				sqlStr = "SELECT COUNT(*) FROM CardInfo c"
 						+" WHERE c.cardId NOT IN ( SELECT ct.id.cardId FROM CardTag ct INNER JOIN ct.userTag ut"
 						+ " 						WHERE ut.userInfo.userId = :userId GROUP BY ct.id.cardId)  "
-						+ "AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0";
+						+ "AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 ";
 			} else {
 				sqlStr = "SELECT COUNT(*) FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
-						+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0"
+						+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 						+" AND (ut.tagName is not null AND ut.tagName <> '') "
 						+" AND ut.tagName = :valueSearch";
 			}
 			
 		} else {
-			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 "
+			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
 					+ " AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch";
 		}
@@ -1716,5 +1720,21 @@ public BigInteger totalListConnectUser(Integer userId, Integer recentFlg) {
 		Query query = getEntityManager().createNativeQuery(sqlStr);
 		query.setParameter("userId", userId);
         return (BigInteger)getOrNull(query);
+	}
+	
+	public List<NotificationList> getImagesBy(List<Integer> cardIds) {
+		String sqlQuery = "SELECT u.image_file,u.card_id FROM card_info u WHERE u.delete_flg = 0 AND u.card_id in (:card_id)  ";
+		Query query = getEntityManager().createNativeQuery(sqlQuery);
+		query.setParameter("card_id", cardIds);
+		List<Object[]> rows = query.getResultList();
+	    List<NotificationList> result = new ArrayList<>(rows.size());
+	    NotificationList card=null;
+        for (Object[] row : rows) {
+        	card=new NotificationList();
+        	card.setImage((String)row[0]);;
+        	card.setCard_id((Integer)row[1]);
+            result.add(card);
+        }
+		return result;
 	}
 }

@@ -14,6 +14,7 @@ import com.ecard.core.vo.CardInfoNotifyChange;
 import com.ecard.core.vo.CardInfoUserVo;
 import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
+import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.TagUser;
 
 import java.math.BigInteger;
@@ -174,4 +175,5 @@ public BigInteger totalListConnectUser(Integer userId, Integer recentFlg);
    public List<CardInfoNotifyChange> getListCardInfoNotifyChange(CardInfo cardInfo);
    
    public void updateCardInfoNoIndex(List<CardInfo> cardInfoList);
+public List<NotificationList> getImagesBy(List<Integer> cardIds);
 }

@@ -582,8 +582,8 @@ public class UserController {
 			cardInfo = cardInfoService.getCardInfoDetail(id);
 			String fileNameFromSCP = UploadFileUtil.getImageFileFromSCP(cardInfo.getImageFile(), scpHostName, scpUser,
 					scpPassword, Integer.parseInt(scpPort));
-			cardInfo.setImageFile(fileNameFromSCP);
-
+			//cardInfo.setImageFile(fileNameFromSCP);
+			modelAndView.addObject("imageFile", fileNameFromSCP);
 			// List card connected
 			cardList = cardInfoService.listCardConnect(cardInfo.getCardOwnerId(), cardInfo.getGroupCompanyId(),
 					cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
@@ -856,7 +856,8 @@ public class UserController {
 	}
 
 	@RequestMapping("changepass")
-	public ModelAndView changepass() {
+	public ModelAndView changepass(HttpSession session) {
+		session.setAttribute("isFirstLogin", true);
 		return new ModelAndView("changepass");
 	}
 
@@ -881,6 +882,8 @@ public class UserController {
 			UserInfo user = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
 			user.setPassword((new BCryptPasswordEncoder().encode(newPass)));
 			userInfoService.updateProfileAdminAllocation(user);
+			//Set first login
+            userInfoService.updateFisrtLogin(ecardUser.getUserId(), 1);
 		}
 		return true;
 	}
@@ -936,11 +939,12 @@ public class UserController {
 		return new ModelAndView("redirect:" + CommonConstants.REDIRECT_CARD_DETAIL + item.getCard_id());
 	}
 
-	@RequestMapping(value = "editCardInfo", method = RequestMethod.POST)
-	public ModelAndView editCardInfo(CardInfo cardInfo) {
+	@RequestMapping(value = "editCardInfo", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public boolean editCardInfo(@RequestBody CardInfo cardInfo, HttpServletRequest request) {
 		logger.debug("editCardInfo", UserController.class);
-
-		ModelAndView modelAndView = new ModelAndView();
+		boolean result = false;
+		
 		try {
 			String name = cardInfo.getLastName();
 			String nameKana = cardInfo.getLastNameKana();
@@ -988,15 +992,16 @@ public class UserController {
 			cardInfo.setCompanyInfo(companyInfo);
 
 			if (cardInfoService.editCardInfo(cardInfo)) {
-				modelAndView.addObject("isEdit", true);
+				result = true;
 			} else {
-				modelAndView.addObject("isEdit", false);
+				result = false;
 			}
 		} catch (Exception ex) {
 			logger.debug("Exception : ", ex.getMessage());
+			result = true;
 		}
-		modelAndView.setViewName("redirect:" + CommonConstants.REDIRECT_CARD_DETAIL + cardInfo.getCardId());
-		return modelAndView;
+		
+		return result;
 	}
 
 	@RequestMapping(value = "editContactDate", method = RequestMethod.POST)
@@ -1908,5 +1913,30 @@ public class UserController {
 		BigInteger total = cardInfoService.totalListConnectUser(ecardUser.getUserId(), recentFlg);    
       
         return total.intValue();
+	}
+	
+	@RequestMapping(value = "getNotitfyOfCurrentUser", method = RequestMethod.POST)
+	@ResponseBody
+    public List<NotificationList> getNotitfyOfCurrentUser(@RequestParam(value = "page") int page) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<NotificationList> listUpdate = notificationInfoService.getListNotificationPaging(ecardUser.getUserId(),page);
+		if(!CollectionUtils.isEmpty(listUpdate)){
+			List<Integer> cardIds=listUpdate.stream().map(x->x.getCard_id()).collect(Collectors.toList());
+			if(!CollectionUtils.isEmpty(cardIds)){
+				List<NotificationList> notifies= cardInfoService.getImagesBy(cardIds);
+				listUpdate.forEach(n->{
+					List<NotificationList> matchImage=notifies.stream().filter(x->x.getCard_id().intValue()==n.getCard_id().intValue()).collect(Collectors.toList());
+					if(CollectionUtils.isEmpty(matchImage)){
+						n.setImage("");	
+					}else{
+						n.setImage(matchImage.stream().findFirst().get().getImage());
+					}
+					
+				});
+			}
+		}
+		//listUpdate=UploadFileUtil.getImageFileFromSCPForNotification(listUpdate, scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
+        return listUpdate;
 	}
 }

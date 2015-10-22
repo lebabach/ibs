@@ -165,15 +165,15 @@ a {
                    </ul> -->
 				<div class="card">
 					<div class="card_img">
-						<c:if test="${cardInfo.imageFile ==''}">
+						<c:if test="${empty imageFile}">
 							<a href="#" title="Image from Unsplash" data-target="#myModal"
 							id="popup"> <img id="imageresource" width="318" height="190"
 							src='<c:url value="/assets/img/card_08.png"></c:url>'></a>	
 						</c:if>
-						<c:if test="${not empty cardInfo.imageFile}">
+						<c:if test="${not empty imageFile}">
 							<a href="#" title="Image from Unsplash" data-target="#myModal"
 							id="popup"> <img id="imageresource" width="318" height="190"
-							src="data:image/png;base64,${cardInfo.imageFile}"></a>	
+							src="data:image/png;base64,${imageFile}"></a>	
 						</c:if>
 						
 					</div>
@@ -859,7 +859,7 @@ label.error {
                     			    },
                     			    zipCode : {
                     			    	required: false,
-                    			    	digits : true
+                    			    	customphone : true
                     			    }
                     			},
                     			messages: {
@@ -893,8 +893,9 @@ label.error {
                                     $('.p-fomr2').hide();
                                     $('.div-pen').removeClass('div-pen-ac') 
                                     $(".input-new-1").attr('readonly', 'readonly');
-                                    
-                           			$("#editForm").submit();
+                                    $("input[name=contactDate]").datepicker("getDate");
+                           			//$("#editForm").submit();
+                                    saveEditCardInfo();                           			
                            		}
                            		else{
                            			$(".input-new-1").addClass("input-new-1-ac");
@@ -926,14 +927,14 @@ label.error {
                 </script>
                 
 				<div class="panel-body" style="padding: 15px 15px 0 15px;">
-					<form action="<c:url value='/user/editCardInfo' />" method="post" id="editForm">
+					<form id="editForm">
 						<input type="hidden" name="cardId" value="${ cardInfo.cardId }" />
 						<input type="hidden" name="imageFile" value="${cardInfo.imageFile}" />
 						<input type="hidden" name="fileOutputFlg" value="${cardInfo.fileOutputFlg}" />
 						<input type="hidden" name="cardOwnerId" value="${cardInfo.cardOwnerId}" />
 						<input type="hidden" name="publishStatus" value="${cardInfo.publishStatus}" />
 						<input type="hidden" name="approvalStatus" value="${cardInfo.approvalStatus}" />
-
+						<input type="hidden" name="contactDate"  value="<fmt:formatDate value='${ cardInfo.contactDate }' pattern="yyyy-MM-dd HH:mm:ss"/>" />
 						<div class="section">
 							<dl>
 								<dt>
@@ -1081,7 +1082,7 @@ label.error {
 						
 						<p class="p-fomr2"
 							style="border: none; margin: 0 0 0 -15px; width: 107.4%; display: none">
-							<input type="button" class="input-submit" value="保存"> 
+							<input type="button" class="input-submit" id="btn-editForm" value="保存"> 
 							<input type="reset" class="input-reset" value="キャンセル">
 						</p>
 					</form>
@@ -2015,6 +2016,79 @@ label.error {
 			$("#errors").html('');
 			return true;
 		}
+	}
+
+	function saveEditCardInfo(){
+		var cardId = $("input[name=cardId]").val();
+		var imageFile = $("#editForm input[name=imageFile]").val();
+		var fileOutputFlg = $("input[name=fileOutputFlg]").val();
+		var cardOwnerId = $("input[name=cardOwnerId]").val();
+		var publishStatus = $("input[name=publishStatus]").val();
+		var approvalStatus = $("input[name=approvalStatus]").val();		
+		/////////////////
+		var dateTime = new Date($("#editForm input[name=contactDate]").val());
+  		var strDateTime =  dateTime.getFullYear() + "-" + (dateTime.getMonth()+1) + "-" + dateTime.getDate();
+		/////////////////
+		var address1 = $("input[name=address1]").val();
+		var address2 = $("input[name=address2]").val();
+		var address3 = $("input[name=address3]").val();
+		var address4 = $("input[name=address4]").val();
+
+		var lastName = $("input[name=lastName]").val();
+		var firstName = $("input[name=firstName]").val();
+		
+		var companyName = $("input[name=companyName]").val();
+		var companyNameKana = $("input[name=companyNameKana]").val();
+		var departmentName = $("input[name=departmentName]").val();		
+		var positionName = $("input[name=positionName]").val();
+		var lastNameKana = $("input[name=lastNameKana]").val();
+		var firstNameKana = $("input[name=firstNameKana]").val();
+		var email = $("input[name=email]").val();
+		var telNumberDirect = $("input[name=telNumberDirect]").val();
+		var telNumberDepartment = $("input[name=telNumberDepartment]").val();		
+		var mobileNumber = $("input[name=mobileNumber]").val();		
+		var faxNumber = $("input[name=faxNumber]").val();
+		var zipCode = $("input[name=zipCode]").val();
+		var companyUrl = $("input[name=companyUrl]").val();
+		
+		var json = {"cardId": cardId, "imageFile" : imageFile, "fileOutputFlg" : fileOutputFlg, "cardOwnerId" : cardOwnerId, 
+					"approvalStatus" : approvalStatus, "publishStatus" : publishStatus, "contactDate" : strDateTime, "address1" : address1,
+					"address2" : address2, "address3" : address3, "address4" : address4, "companyName" : companyName,
+					"companyNameKana" : companyNameKana, "departmentName" : departmentName, "positionName" : positionName, "lastNameKana" : lastNameKana,
+					"firstNameKana" : firstNameKana, "email" : email, "telNumberDirect" : telNumberDirect, "telNumberDepartment" : telNumberDepartment,
+					"mobileNumber" : mobileNumber, "faxNumber" : faxNumber, "zipCode" : zipCode, "companyUrl" : companyUrl, "lastName":lastName, "firstName":firstName
+					 };
+		$.ajax({
+        	url: "<c:url value='/user/editCardInfo' />",
+        	data: JSON.stringify(json),
+        	type: "POST",
+        	dataType: 'json',
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(resp) {
+				if(resp = true){
+					BootstrapDialog.show({
+	    				title: '<fmt:message key="popup.title.info" />',
+	    				message: '<fmt:message key="popup.edit.card.success" />'
+	    	      	});
+	        		window.location.reload(true);
+				} else {
+					BootstrapDialog.show({
+	    				title: '<fmt:message key="popup.title.info" />',
+	    				message: '<fmt:message key="remove.card.failed" />'
+	    	      	});
+	        		window.location.reload(true);
+				}
+        	},
+        	error: function(error){
+        		BootstrapDialog.show({
+    				title: '<fmt:message key="popup.title.info" />',
+    				message: '<fmt:message key="remove.card.failed" />'
+    	      	});
+		  	}
+        });	
 	}
    </script>
    
