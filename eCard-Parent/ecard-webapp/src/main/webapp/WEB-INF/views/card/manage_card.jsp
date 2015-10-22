@@ -217,334 +217,252 @@ function loadDataIsEditting(){
 							  }
 						 });
 
-						$('#searchCard')
-								.on(
-										'click',
-										function() {
-											dataTables.api().destroy();
-											dataTables = $('#listCard')
-													.dataTable(
-															{
-																"fnDrawCallback" : function() {
-																	loadDataComplete();
-																},
-																"dom" : '<<t>ip>',
-																"iDisplayLength" : 5,
-																"processing" : true,
-																"serverSide" : true,
-																"searching" : false,
-																"ordering" : false,
-																"language" : {
-																	"zeroRecords" : '<fmt:message key="operator.list.table.emptyTable"/>',
-																	"emptyTable" : '<fmt:message key="operator.list.table.emptyTable"/>',
-																	"info" : '<fmt:message key="operator.list.table.info"/>',
-																	"infoEmpty" : '<fmt:message key="operator.list.table.info"/>',
-																	"paginate" : {
-																		"previous" : '<fmt:message key="operator.list.table.paginate.previous"/>',
-																		"next" : '<fmt:message key="operator.list.table.paginate.next"/>'
-																	}
-																},
-																"ajax" : {
-																	"url" : "search",
-																	"type" : "POST",
-																	"data" : function(
-																			dataTableRequest) {
-																		dataTableRequest.criteriaSearch = $(
-																				'#criteriaSearch')
-																				.val();
-																		dataTableRequest.status = $(
-																				'#statusSort')
-																				.val();
-																		dataTableRequest.userId = $(
-																				'#dateSort')
-																				.val();
-																		return dataTableRequest;
-																	},
-																	"dataSrc" : "data",
-																	"error" : function(
-																			xhr) {
-																		alert('error datatable')
-																	}
-																},
-																"columns" : [
-																	   {
-																			"data" : "cardIndexNo",
-																			"createdCell" : function(
-																						td,
-																						cellData,
-																						rowData,
-																						row,
-																						col) {
-																					if (cellData) {
-																						$(
-																								td)
-																								.html(
-																										"</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
-																					}
-																				}
-																		},
-																		{
-																			"data" : "imageFile",
-																			"createdCell" : function(
-																					td,
-																					cellData,
-																					rowData,
-																					row,
-																					col) {
-																				if (cellData) {
-																					$(
-																							td)
-																							.html(
-																									"<a href='#'><img src='data:image/png;base64,"+cellData+"' width='90' /></a>");
-																				}
-																			}
-																		},
-																		{
-																			"data" : "name"
-																		},
-																		{
-																			"data" : "companyName"
-																		},
-																		{
-																			"data" : "positionName"
-																		},
-																		{
-																			"data" : "email"
-																		},
-																		{
-																			"data" : "mobileNumber"
-																		},
-																		{
-																			"data" : "createDate"
-																		},
-																		<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
-																		{
-																			"data" : "approvalStatus",
-																			"createdCell" : function(
-																					td,
-																					cellData,
-																					rowData,
-																					row,
-																					col) {
-																				if (cellData) {
-																					$(
-																							td)
-																							.html(
-																									getStatus(cellData));
-																				}
-																			}
-																		},
-																		</c:if>
-																		{
-																			"data" : "is_editting",
-																			"className" : "hidden-column"
-																		},
-																		{
-																			"data" : "cardId",
-																			"className" : "ch-color-link",
-																			"createdCell" : function(
-																					td,
-																					cellData,
-																					rowData,
-																					row,
-																					col) {
-																				if (cellData) {
-																					<c:choose>
-																				    <c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
-																				    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
-																				    </c:when>
-																				    <c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
-																			           $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
-																			        </c:when>
-																				    <c:otherwise>
-																				    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> "
-																							+ "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>");
-																				    </c:otherwise>
-																				  </c:choose>
-																				}
-																			}
-																		}, ],
-															});
+						$('#searchCard').on('click',function() {
+							dataTables.api().destroy();
+							dataTables = $('#listCard').dataTable({
+												"fnDrawCallback" : function() {
+												loadDataComplete();
+											},
+											"dom" : '<<t>ip>',
+											"iDisplayLength" : 5,
+											"processing" : true,
+											"serverSide" : true,
+											"searching" : false,
+											"ordering" : false,
+											"language" : {
+												"zeroRecords" : '<fmt:message key="operator.list.table.emptyTable"/>',
+												"emptyTable" : '<fmt:message key="operator.list.table.emptyTable"/>',
+												"info" : '<fmt:message key="operator.list.table.info"/>',
+												"infoEmpty" : '<fmt:message key="operator.list.table.info"/>',
+												"paginate" : {
+													"previous" : '<fmt:message key="operator.list.table.paginate.previous"/>',
+													"next" : '<fmt:message key="operator.list.table.paginate.next"/>'
+												}
+											},
+											"ajax" : {
+												"url" : "search",
+												"type" : "POST",
+												"data" : function(dataTableRequest) {
+													dataTableRequest.criteriaSearch = $('#criteriaSearch').val();
+													dataTableRequest.status = $('#statusSort').val();
+													dataTableRequest.userId = $('#dateSort').val();
+													return dataTableRequest;
+												},
+												"dataSrc" : "data",
+												"error" : function(
+														xhr) {
+													alert('error datatable')
+												}
+											},
+											"columns" : [
+												   {
+													"data" : "cardIndexNo",
+													"createdCell" : function(td,cellData,rowData,row,col) {
+														if (cellData) {
+															$(td).html("</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
+														}
+													 }
+													},
+													{
+														"data" : "imageFile",
+														"createdCell" : function(td,cellData,rowData,row,col) {
+															if (cellData) {
+																$(td).html("<a href='#'><img src='data:image/png;base64,"+cellData+"' width='90' /></a>");
+															}
+														}
+													},
+													{
+														"data" : "name"
+													},
+													{
+														"data" : "companyName"
+													},
+													{
+														"data" : "positionName"
+													},
+													{
+														"data" : "email"
+													},
+													{
+														"data" : "mobileNumber"
+													},
+													{
+														"data" : "createDate"
+													},
+													<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+													{
+														"data" : "approvalStatus",
+														"createdCell" : function(td,cellData,rowData,row,col) {
+															if (cellData) {
+																$(td).html(getStatus(cellData));
+															}
+														}
+													},
+													</c:if>
+													{
+														"data" : "is_editting",
+														"className" : "hidden-column"
+													},
+													{
+														"data" : "cardId",
+														"className" : "ch-color-link",
+														"createdCell" : function(td,cellData,rowData,row,col) {
+															if (cellData) {
+																<c:choose>
+															    <c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+															    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
+															    </c:when>
+															    <c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
+														           $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
+														        </c:when>
+															    <c:otherwise>
+															    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> "
+																		+ "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>");
+															    </c:otherwise>
+															  </c:choose>
+															}
+														}
+													}, ],
 										});
+						});
 
 						$(document).on('click','a.ch-del',function() {
-							console.log('click');
-											if (confirm('<fmt:message key="card.list.confirmDelete"/>')) {
-												if(confirm('<fmt:message key="operator.list.confirmDeleteAgain"/>')){
-													var cardId = $(this).parent().parent().find('td input[id=cardId]').val();
-													var target = $(this).closest('tr');
-													$.ajax({
-																		type : 'POST',
-																		url : 'delete',
-																		cache : false,
-																		data : 'cardId='+ cardId
-															})
-															.done(function(resp,status,	xhr) {
-																console.log(resp);
-																		if (resp == 1) {
-																			dataTables.fnDeleteRow(target.prop('id'));
-																		      var currentPage = $('.current', '#listCard_paginate').text()
-																		      $('#listCard_paginate').find('.paginate_button').each(function () {
-																		       if ($(this).text() === currentPage)
-																		         $(this).click();
-																		      });
-																		} else {
-																			alert('Error');
-																		}
-																	})
-															.fail(
-																	function(resp,status,xhr) {
-																		alert('Error');
-																	});
-												}														
-												
-											}
-										});
+							if (confirm('<fmt:message key="card.list.confirmDelete"/>')) {
+								if(confirm('<fmt:message key="operator.list.confirmDeleteAgain"/>')){
+									var cardId = $(this).parent().parent().find('td input[id=cardId]').val();
+									var target = $(this).closest('tr');
+									$.ajax({
+										type : 'POST',
+										url : 'delete',
+										cache : false,
+										data : 'cardId='+ cardId
+									}).done(function(resp,status,	xhr) {
+										if (resp == 1) {
+											dataTables.fnDeleteRow(target.prop('id'));
+										      var currentPage = $('.current', '#listCard_paginate').text()
+										      $('#listCard_paginate').find('.paginate_button').each(function () {
+										       if ($(this).text() === currentPage)
+										         $(this).click();
+										      });
+										} else {
+											alert('Error');
+										}
+									}).fail(function(resp,status,xhr) {
+										alert('Error');
+									});
+								}														
+								
+							}
+						});
 
 						$('#statusSort').on('change', function() {
 							var status = $(this).val();
 							//$('#searchCard').click();
 							dataTables.api().destroy();
-							dataTables = $('#listCard')
-									.dataTable(
+							dataTables = $('#listCard').dataTable({
+									"fnDrawCallback" : function() {
+										loadDataComplete();
+									},
+									"dom" : '<<t>ip>',
+									"iDisplayLength" : 5,
+									"processing" : true,
+									"serverSide" : true,
+									"searching" : false,
+									"ordering" : false,
+									"language" : {
+										"zeroRecords" : '<fmt:message key="operator.list.table.emptyTable"/>',
+										"emptyTable" : '<fmt:message key="operator.list.table.emptyTable"/>',
+										"info" : '<fmt:message key="operator.list.table.info"/>',
+										"infoEmpty" : '<fmt:message key="operator.list.table.info"/>',
+										"paginate" : {
+											"previous" : '<fmt:message key="operator.list.table.paginate.previous"/>',
+											"next" : '<fmt:message key="operator.list.table.paginate.next"/>'
+										}
+									},
+									"ajax" : {
+										"url" : "search",
+										"type" : "POST",
+										"data" : function(dataTableRequest) {
+											dataTableRequest.criteriaSearch = $('#criteriaSearch').val();
+											dataTableRequest.status = $('#statusSort').val();
+											dataTableRequest.userId = $('#dateSort').val();
+											return dataTableRequest;
+										},
+										"dataSrc" : "data",
+										"error" : function(xhr) {
+											alert('error datatable')
+										}
+									},
+									"columns" : [
+										   {
+												"data" : "cardIndexNo",
+												"createdCell" : function(td,cellData,rowData,row,col) {
+													if (cellData) {
+														$(td).html("</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
+													}
+												}
+											},
 											{
-												"fnDrawCallback" : function() {
-													loadDataComplete();
-												},
-												"dom" : '<<t>ip>',
-												"iDisplayLength" : 5,
-												"processing" : true,
-												"serverSide" : true,
-												"searching" : false,
-												"ordering" : false,
-												"language" : {
-													"zeroRecords" : '<fmt:message key="operator.list.table.emptyTable"/>',
-													"emptyTable" : '<fmt:message key="operator.list.table.emptyTable"/>',
-													"info" : '<fmt:message key="operator.list.table.info"/>',
-													"infoEmpty" : '<fmt:message key="operator.list.table.info"/>',
-													"paginate" : {
-														"previous" : '<fmt:message key="operator.list.table.paginate.previous"/>',
-														"next" : '<fmt:message key="operator.list.table.paginate.next"/>'
+												"data" : "imageFile",
+												"createdCell" : function(td,cellData,rowData,row,col) {
+													if (cellData) {
+														$(td).html("<a href='#'><img src='data:image/png;base64,"+cellData+"' width='90' /></a>");
 													}
-												},
-												"ajax" : {
-													"url" : "search",
-													"type" : "POST",
-													"data" : function(
-															dataTableRequest) {
-														dataTableRequest.criteriaSearch = $(
-																'#criteriaSearch')
-																.val();
-														dataTableRequest.status = $(
-																'#statusSort')
-																.val();
-														dataTableRequest.userId = $(
-																'#dateSort')
-																.val();
-														return dataTableRequest;
-													},
-													"dataSrc" : "data",
-													"error" : function(
-															xhr) {
-														alert('error datatable')
+												}
+											},
+											{
+												"data" : "name"
+											},
+											{
+												"data" : "companyName"
+											},
+											{
+												"data" : "positionName"
+											},
+											{
+												"data" : "email"
+											},
+											{
+												"data" : "mobileNumber"
+											},
+											{
+												"data" : "createDate"
+											},
+											<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+											{
+												"data" : "approvalStatus",
+												"createdCell" : function(td,cellData,rowData,row,col) {
+													if (cellData) {
+														$(td).html(getStatus(cellData));
 													}
-												},
-												"columns" : [
-													   {
-															"data" : "cardIndexNo",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
-																if (cellData) {
-																	$(
-																			td)
-																			.html(
-																					"</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
-																}
-															}
-														},
-														{
-															"data" : "imageFile",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
-																if (cellData) {
-																	$(td).html("<a href='#'><img src='data:image/png;base64,"+cellData+"' width='90' /></a>");
-																}
-															}
-														},
-														{
-															"data" : "name"
-														},
-														{
-															"data" : "companyName"
-														},
-														{
-															"data" : "positionName"
-														},
-														{
-															"data" : "email"
-														},
-														{
-															"data" : "mobileNumber"
-														},
-														{
-															"data" : "createDate"
-														},
-														<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
-														{
-															"data" : "approvalStatus",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
-																if (cellData) {
-																	$(
-																			td)
-																			.html(
-																					getStatus(cellData));
-																}
-															}
-														},
-														</c:if>
-														{
-															"data" : "is_editting",
-															"className" : "hidden-column"
-														},
-														{
-															"data" : "cardId",
-															"className" : "ch-color-link",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
-																if (cellData) {
-																	<c:choose>
-																    <c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
-																    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
-																    </c:when>
-																    <c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
-															           $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
-															        </c:when>
-																    <c:otherwise>
-																    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> "
-																			+ "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>");
-																    </c:otherwise>
-																  </c:choose>
-																}
-															}
-														}, ],
-											});
+												}
+											},
+											</c:if>
+											{
+												"data" : "is_editting",
+												"className" : "hidden-column"
+											},
+											{
+												"data" : "cardId",
+												"className" : "ch-color-link",
+												"createdCell" : function(td,cellData,rowData,row,col) {
+													if (cellData) {
+														<c:choose>
+													    <c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">
+													    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
+													    </c:when>
+													    <c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
+												           $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> ");
+												        </c:when>
+													    <c:otherwise>
+													    $(td).html( "<a href='<c:url value='/cards/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> "
+																+ "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>");
+													    </c:otherwise>
+													  </c:choose>
+													}
+												}
+											}, ],
+								});
 							
 						});
 						
@@ -552,9 +470,7 @@ function loadDataIsEditting(){
 							var status = $(this).val();
 							
 							dataTables.api().destroy();
-							dataTables = $('#listCard')
-									.dataTable(
-											{
+							dataTables = $('#listCard').dataTable({
 												"fnDrawCallback" : function() {
 													loadDataComplete();
 												},
@@ -577,50 +493,29 @@ function loadDataIsEditting(){
 												"ajax" : {
 													"url" : "search",
 													"type" : "POST",
-													"data" : function(
-															dataTableRequest) {
-														dataTableRequest.criteriaSearch = $(
-																'#criteriaSearch')
-																.val();
-														dataTableRequest.status = $(
-																'#statusSort')
-																.val();
-														dataTableRequest.userId = $(
-																'#dateSort')
-																.val();
+													"data" : function(dataTableRequest) {
+														dataTableRequest.criteriaSearch = $('#criteriaSearch').val();
+														dataTableRequest.status = $('#statusSort').val();
+														dataTableRequest.userId = $('#dateSort').val();
 														return dataTableRequest;
 													},
 													"dataSrc" : "data",
-													"error" : function(
-															xhr) {
+													"error" : function(xhr) {
 														alert('error datatable')
 													}
 												},
 												"columns" : [
 													   {
 															"data" : "cardIndexNo",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
+															"createdCell" : function(td,cellData,rowData,row,col) {
 																if (cellData) {
-																	$(
-																			td)
-																			.html(
-																					"</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
+																	$(td).html("</a><input type='hidden' id='cardId' value='"+rowData.cardId+"'/>" +cellData );
 																}
 															}
 														},
 														{
 															"data" : "imageFile",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
+															"createdCell" : function(td,cellData,rowData,row,col) {
 																if (cellData) {
 																	$(td).html("<a href='#'><img src='data:image/png;base64,"+cellData+"' width='90' /></a>");
 																}
@@ -647,17 +542,9 @@ function loadDataIsEditting(){
 														<c:if test="${not pageContext.request.isUserInRole('ROLE_OPERATOR')}">
 														{
 															"data" : "approvalStatus",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
+															"createdCell" : function(td,cellData,rowData,row,col) {
 																if (cellData) {
-																	$(
-																			td)
-																			.html(
-																					getStatus(cellData));
+																	$(td).html(getStatus(cellData));
 																}
 															}
 														},
@@ -669,12 +556,7 @@ function loadDataIsEditting(){
 														{
 															"data" : "cardId",
 															"className" : "ch-color-link",
-															"createdCell" : function(
-																	td,
-																	cellData,
-																	rowData,
-																	row,
-																	col) {
+															"createdCell" : function(td,cellData,rowData,row,col) {
 																if (cellData) {
 																	<c:choose>
 																    <c:when test="${pageContext.request.isUserInRole('ROLE_OPERATOR')}">

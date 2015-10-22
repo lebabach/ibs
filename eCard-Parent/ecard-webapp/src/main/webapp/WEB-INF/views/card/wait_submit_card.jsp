@@ -35,16 +35,10 @@ $(document).ready(function(){
 <!-- BODY -->
 <div class="bg-detail">
 	<!-- BODY -->
-	<form
-		class="container padding-top20 bg-container height100per container-collectname"
-		id="formsubmitCard" method="POST"
-		action="/ecard-webapp/cards/editSuccess" accept-charset="UFT-8">
-		<input type="hidden" name="cardId"
-			value="${cardInfoWithRoteVO.cardInfo.cardId}"> <input
-			type="hidden" name="approvalStatus"
-			value="${cardInfoWithRoteVO.cardInfo.approvalStatus}"> <input
-			type="hidden" name="cardBackImgFile"
-			value="${cardInfoWithRoteVO.cardInfo.cardBackImgFile}">
+	<form class="container padding-top20 bg-container height100per container-collectname"  id="formsubmitCard" method="POST" action="/ecard-webapp/cards/editSuccess" accept-charset="UFT-8">
+		<input type="hidden" name="cardId"  value="${cardInfoWithRoteVO.cardInfo.cardId}"> 
+		<input type="hidden" name="approvalStatus" value="${cardInfoWithRoteVO.cardInfo.approvalStatus}"> 
+		<input type="hidden" name="cardBackImgFile" value="${cardInfoWithRoteVO.cardInfo.cardBackImgFile}">
 		<!-- CENTER SIDE -->
 
 		<div id="center-side" class="col-sm-12 ch-title">
