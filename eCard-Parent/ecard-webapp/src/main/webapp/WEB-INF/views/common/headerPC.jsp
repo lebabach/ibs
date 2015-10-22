@@ -301,7 +301,7 @@ function setNotify(image,content,date,card_id,notifyType,id,read_flg){
 function setNotifies(notifies){
 	
 	$.each(notifies, function( key, notify ) {
-		$("#notification").append(setNotify(notify.image,notify.notify_message,notify.notice_date,notify.card_id,notify.notice_type,notify.notice_id));
+		$("#notification").append(setNotify(notify.image,notify.notify_message,notify.notice_date,notify.card_id,notify.notice_type,notify.notice_id,notify.read_flg));
 		getImageFromSCP(notify.image);
 	});
 }
@@ -357,7 +357,7 @@ function scrollNotify(page){
 	        	var notifyType=$(this).find("a").attr("class");
 	        	if(notifyType==4){
 	        		var cardId=$(this).find(".card_id").val();
-	        		console.log(cardId);
+	        		//console.log(cardId);
 	        		window.location = "/ecard-webapp/user/overlapcardsbyname/"+cardId;
 	        		
 	        	}else{
@@ -397,7 +397,7 @@ $(document).ready(function() {
     
     
     $(".nav.navbar-top-links.navbar-right").click(function(){
-    	console.log($(".dropdown-toggle.count-info").attr("aria-expanded"));
+    	//console.log($(".dropdown-toggle.count-info").attr("aria-expanded"));
     	if($(".dropdown-toggle.count-info").attr("aria-expanded")=="false" || $(".dropdown-toggle.count-info").attr("aria-expanded")==undefined){
     		$("#loading-notify").show();
     		$("#notification >tbody").remove();
