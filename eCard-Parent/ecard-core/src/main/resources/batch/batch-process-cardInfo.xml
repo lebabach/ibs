@@ -46,6 +46,7 @@
             <list>
 				<ref bean="batchProcessCardCronTrigger"/>
 				<ref bean="batchUploadLostImageCronTrigger"/>
+				<ref bean="batchLinkCardCronTrigger"/>
 			</list>
         </property>
     </bean>
@@ -87,7 +88,7 @@
     <bean id="batchUploadLostImageCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="batchUploadLostImageJobDetail" />
         <!-- <property name="cronExpression" value=" 0 0 13 ? * THU * " /> -->
-        <property name="cronExpression" value=" 0 0/30 * * * ? " />
+        <property name="cronExpression" value=" 0 0/5 * * * ? " />
     </bean>
     
     <bean id="batchUploadLostImageJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
@@ -103,4 +104,32 @@
     </bean>
     <!-- End Batch proccess lost image -->
     
+    <!-- Batch proccess link card -->
+    <job id="batchLinkCard" xmlns="http://www.springframework.org/schema/batch" restartable="true">
+        <step id="batchLinkCardStep" allow-start-if-complete="true">
+            <tasklet ref="batchLinkCardTasklet"></tasklet>
+        </step>
+    </job>
+        
+    <bean id="batchLinkCardTasklet" class="com.ecard.core.batch.tasklet.BatchLinkCardTasklet">
+    	<property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    <bean id="batchLinkCardCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="batchLinkCardJobDetail" />
+        <property name="cronExpression" value=" 0 30 20 * * ? " />
+    </bean>
+    
+    <bean id="batchLinkCardJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.ecard.core.batch.tasklet.scheduler.BatchLinkCardTaskScheduler"></property>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobName" value="batchLinkCard"></entry>
+                <entry key="jobLauncher" value-ref="jobLauncher"></entry>
+                <entry key="jobLocator" value-ref="jobRegistry"></entry>
+            </map>
+        </property>
+        <property name="durability" value="true" />
+    </bean>
+    <!-- Batch proccess link card -->
  </beans>
