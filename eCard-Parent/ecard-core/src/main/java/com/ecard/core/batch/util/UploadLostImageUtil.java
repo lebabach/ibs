@@ -32,7 +32,7 @@ public class UploadLostImageUtil {
     private String scpPassword;
     
     private static final String directoryFrom = "/data/backup/lost_image";
-    private static final String directoryBackup = "/data/backup/test_lost_image";
+    private static final String directoryBackup = "/data/photo/card";
     
 	public void uploadLostImageFile() throws JSchException, SftpException{
 		String directoryTo = "ssh://"+ BatchConstants.scpUserName +":"+ BatchConstants.scpPassword +"@"+ BatchConstants.scpHostName + directoryBackup;
