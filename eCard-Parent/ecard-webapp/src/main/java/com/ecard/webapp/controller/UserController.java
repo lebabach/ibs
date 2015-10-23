@@ -1703,40 +1703,50 @@ public class UserController {
 		CardInfo cardOwner=cardInfoService.getCardInfoDetail(cardid2);
 		/*return cardInfoService.handleConnectCards(cardid1, cardid2, ecardUser.getUserId(),
 				StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));*/
-		int card_id=cardInfoService.connectCards(cardid1, cardid2, ecardUser.getUserId(), StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
-		if(cardOwner.getCardOwnerId().intValue()!=ecardUser.getUserId().intValue()){
-			OldCard oldcard=new OldCard();
-			CardInfo newCardInfo=new CardInfo();
-			newCardInfo.setCardId(card_id);
-			oldcard.setCardInfo(newCardInfo);
-			
-			OldCardId oldCardId=new OldCardId();
-			oldCardId.setCardId(newCardInfo.getCardId());
-			oldCardId.setCardOwnerId(ecardUser.getUserId());
-			oldCardId.setSeq(0);
-			oldCardId.setOldCardId(cardid1);
-			oldcard.setId(oldCardId);
-			
-			oldcard=oldCardService.insertOldCard(oldcard);
-			oldCardService.updateCardIdWithOldCard(cardOwner.getCardId(), cardid1);
-		}else{
-			OldCard oldcard=new OldCard();
-			
-			CardInfo cardInfor=new CardInfo();
-			cardInfor.setCardId(card_id);
-			
-			OldCardId oldCardId=new OldCardId();
-			oldCardId.setCardId(card_id);
-			oldCardId.setCardOwnerId(ecardUser.getUserId());
-			oldCardId.setSeq(0);
-			oldCardId.setOldCardId(cardid1);
-			oldcard.setCardInfo(cardInfor);
-			
-			oldcard.setId(oldCardId);
-			
-			oldcard=oldCardService.insertOldCard(oldcard);
-			oldCardService.updateCardIdWithOldCard(oldcard.getId().getCardId(), cardid1);
+		try{
+			int card_id=cardInfoService.connectCards(cardid1, cardid2, ecardUser.getUserId(), StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
+			if(cardOwner.getCardOwnerId().intValue()!=ecardUser.getUserId().intValue()){
+				OldCard oldcard=new OldCard();
+				CardInfo newCardInfo=new CardInfo();
+				newCardInfo.setCardId(card_id);
+				oldcard.setCardInfo(newCardInfo);
+				
+				OldCardId oldCardId=new OldCardId();
+				oldCardId.setCardId(newCardInfo.getCardId());
+				oldCardId.setCardOwnerId(ecardUser.getUserId());
+				oldCardId.setSeq(0);
+				oldCardId.setOldCardId(cardid1);
+				oldcard.setId(oldCardId);
+				System.out.println("=====================================before: owner insertOldCard===================================");
+				oldcard=oldCardService.insertOldCard(oldcard);
+				System.out.println("=====================================after: owner insertOldCard===================================");
+				oldCardService.updateCardIdWithOldCard(cardOwner.getCardId(), cardid1);
+				System.out.println("=====================================after:owner updateCardIdWithOldCard===================================");
+			}else{
+				OldCard oldcard=new OldCard();
+				
+				CardInfo cardInfor=new CardInfo();
+				cardInfor.setCardId(card_id);
+				
+				OldCardId oldCardId=new OldCardId();
+				oldCardId.setCardId(card_id);
+				oldCardId.setCardOwnerId(ecardUser.getUserId());
+				oldCardId.setSeq(0);
+				oldCardId.setOldCardId(cardid1);
+				oldcard.setCardInfo(cardInfor);
+				
+				oldcard.setId(oldCardId);
+				System.out.println("=====================================before: insertOldCard===================================");
+				oldcard=oldCardService.insertOldCard(oldcard);
+				System.out.println("=================================after: insertOldCard===================================: ");
+				oldCardService.updateCardIdWithOldCard(oldcard.getId().getCardId(), cardid1);
+				System.out.println("=====================================after: updateCardIdWithOldCard===================================");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println("=====================================handleConnectCards error=================================="+e.getMessage());
 		}
+		
 		return true;
 	}
 
