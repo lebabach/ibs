@@ -291,7 +291,7 @@ public class UserController {
 				}
 				
 				
-				if (typeSort == SearchConditions.NAME.getValue() || typeSort == SearchConditions.COMPANY.getValue()) {
+				if (typeSort == SearchConditions.NAME.getValue()) {
 					lstNameSort = lstNameSort.stream().map(str-> str!= "" ? str.substring(0, 1).toUpperCase() : str).collect(Collectors.toList());
 				}
 			}
@@ -311,7 +311,7 @@ public class UserController {
 		for (String nameSort : lstNameSort) {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
 			for (CardInfoUserVo cardInfo : lstCardInfo) {
-				if(typeSort == SearchConditions.NAME.getValue() || typeSort == SearchConditions.COMPANY.getValue()){
+				if(typeSort == SearchConditions.NAME.getValue()){
 					if(cardInfo.getSortType() != ""){
 						if (nameSort.equals(cardInfo.getSortType().toUpperCase().substring(0,1))) {
 							cardInfoDisp.add(cardInfo.getCardInfo());

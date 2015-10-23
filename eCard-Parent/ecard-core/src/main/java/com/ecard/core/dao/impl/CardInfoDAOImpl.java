@@ -937,7 +937,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		} else if (sortType == SearchConditions.COMPANY.getValue()) {			
 			sqlStr = "SELECT c.companyNameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.companyNameKana is not null AND c.companyNameKana <> '') "
-					+ "AND c.companyNameKana LIKE :valueSearch";
+					+ "AND c.companyNameKana = :valueSearch";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
 			if (valueSearch.equals("cardNoTag")) {
@@ -961,7 +961,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		Query query = getEntityManager().createQuery(sqlStr);
 		query.setParameter("userId", userId);
 		
-		if (sortType == SearchConditions.NAME.getValue() || sortType == SearchConditions.COMPANY.getValue()) {
+		if (sortType == SearchConditions.NAME.getValue()) {
 			if(valueSearch != "" || valueSearch != null)
 				query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
 			else 
@@ -1293,7 +1293,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		} else if (typeSort == SearchConditions.COMPANY.getValue()) {			
 			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.companyNameKana is not null AND c.companyNameKana <> '') "
-					+ "AND c.companyNameKana LIKE :valueSearch";
+					+ "AND c.companyNameKana = :valueSearch";
 			
 		} else if (typeSort == SearchConditions.TAG.getValue()) {
 			if (valueSearch.equals("cardNoTag")) {
