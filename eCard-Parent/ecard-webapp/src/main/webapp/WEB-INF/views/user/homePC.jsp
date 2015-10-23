@@ -456,11 +456,18 @@
   <!-- End Container -->
     
 <script>
-     var request = null;
-      var id_manager = 1;
-      var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
-      var typeLoading = 0;
-      var searchDetail ='<c:out value="${searchDetail}" />';
+	var request = null;     
+    var id_manager = 1;
+    var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
+    var typeLoading = 0;
+    var searchDetail ='<c:out value="${searchDetail}" />';
+    var arrayHirgana = ["ア","イ","ウ","エ","オ","カ","ガ","キ","ギ","ク","グ","ケ","ゲ","コ","ゴ","サ","ザ","シ","ジ","ス","ズ","セ","ゼ","ソ","ゾ",
+                        "タ","ダ","チ","ヂ","ツ","ヅ","テ","デ","ト","ド","ナ","ニ","ヌ","ネ","ノ","ハ","バ","パ","ヒ","ビ","ピ","フ","ブ","プ","ヘ",
+                        "ベ","ペ","ホ","ボ","ポ","マ","ミ","ム","メ","モ","ヤ","ユ","ヨ","ラ","リ","ル","レ","ロ","ワ"];
+    
+    var arrayAphabet = ["あ","い","う","え","お","か","が","き","ぎ","く","ぐ","け","げ","こ","ご","さ","ざ","し","じ","す","ず","せ","ぜ","そ","ぞ",
+                        "た","だ","ち","ぢ","つ","づ","て","で","と","ど","な","に","ぬ","ね","の","は","ば","ぱ","ひ","び","ぴ","ふ","ぶ","ぷ","へ",
+                        "べ","ぺ","ほ","ぼ","ぽ","ま","み","む","め","も","や","ゆ","よ","ら","り","る","れ","ろ","わ"];  
       if(searchDetail!=null&&searchDetail!=""){
 	   		var freeText = $("#hid-freeText").val();
 	   		var owner = $("#hid-owner").val();
@@ -1023,12 +1030,17 @@
 				 $.each( resp.data, function( key, value ) {
 					 if(typeSort == 5) {
 						 nameShow = value.nameSort.replace("/","年")+"月";
-					 } else {
+					 } else if(typeSort == 6 && value.nameSort=="cardNoTag") {
+						 nameShow = "（タグ設定なし)";
+					 } else if (typeSort == 1 ){
+						nameShow = changeAphabetToHigrana(value.nameSort);		 
+					 }
+					 
+					 else {
 						 nameShow = value.nameSort;
 					 }
-					 if(typeSort == 6 && value.nameSort=="cardNoTag") {
-						 nameShow = "（タグ設定なし)";
-					 }
+					 
+					 
 					 if(key == 0){	
 						listGroup = $('.business_card_book').append(
 								'<div class="list-group" style="margin-bottom: 0px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
@@ -2241,6 +2253,14 @@
 		    return year + "年" + month + "月";
 		}
 		
+		function changeAphabetToHigrana(character){
+			var index = arrayHirgana.indexOf(character); 
+			if(index != -1){
+				return arrayAphabet[index];					
+			} else {
+				return character;
+			}
+		}
 		
 
     </script>
