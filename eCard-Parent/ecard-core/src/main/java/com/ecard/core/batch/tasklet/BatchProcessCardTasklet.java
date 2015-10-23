@@ -48,7 +48,7 @@ public class BatchProcessCardTasklet implements Tasklet{
     	logger.debug("execute method", BatchProcessCardTasklet.class);
     	try{
     		List<CardInfo> cardInfoList = cardInfoService.listCardInfoByCardType(1);
-    		
+    		System.out.println("cardInfoList.size : "+cardInfoList.size());
     		WriteCardImage cardImage = new WriteCardImage(defaultImage64, scpHostName, scpUser, scpPassword);
             cardImage.writeCardImage(cardInfoList);
             

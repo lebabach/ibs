@@ -53,7 +53,7 @@
     
     <bean id="batchProcessCardCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="jobDetail" />
-        <property name="cronExpression" value=" 0 0 4 * * ? " />
+        <property name="cronExpression" value=" 0 0 3 * * ? " />
     </bean>
     
     <bean id="jobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
@@ -117,7 +117,7 @@
     
     <bean id="batchLinkCardCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="batchLinkCardJobDetail" />
-        <property name="cronExpression" value=" 0 30 20 * * ? " />
+        <property name="cronExpression" value=" 0 30 3 * * ? " />
     </bean>
     
     <bean id="batchLinkCardJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
