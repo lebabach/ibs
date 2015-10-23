@@ -629,6 +629,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 			String oldImageData=UploadFileUtil.getImageFileFromSCP(oldImage, scpHostName, scpUser, scpPassword,Integer.parseInt(scpPort));
 			try {
 				UploadFileUtil.writeImage(oldImageData, newImage, scpHostName, scpUser, scpPassword);
+				System.out.println("=====================================Copy image OK===================================");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -653,8 +654,9 @@ public class CardInfoServiceImpl implements CardInfoService {
 				card2.setCardOwnerId(currentUserId);
 				card2.setCardOwnerName(name);
 				card2.setGroupCompanyId(card1.getGroupCompanyId());
+				System.out.println("=====================================before: registerCardImageManualPCOfAdmin===================================");
 				CardInfo newCard= this.registerCardImageManualPCOfAdmin(setCardInfo(card2));
-				
+				System.out.println("=====================================after: registerCardImageManualPCOfAdmin===================================: "+newCard.getCardId());
 				/*oldCardDAO.insertOldCard(newCard.getCardId(), card1.getCardId(), currentUserId, 0);
 				oldCardDAO.updateCardIdWithOldCard(newCard.getCardId(),cardid1);*/
 				newCard_id=newCard.getCardId();
@@ -662,7 +664,9 @@ public class CardInfoServiceImpl implements CardInfoService {
 				card2.setCardOwnerId(ownerUserId);
 				card2.setCardOwnerName(ownerName);
 				card2.setGroupCompanyId(ownerGroupCompanyId);
+				System.out.println("=====================================before: updateCardInfoNotCreateIndex===================================");
 				this.updateCardInfoNotCreateIndex(card2);
+				System.out.println("=====================================after: updateCardInfoNotCreateIndex===================================: "+newCard.getCardId());
 				CopyImage copy=new CopyImage(card2.getImageFile(),newCard.getImageFile());
 				copy.start();
 			}else{
@@ -689,6 +693,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 			}
 		}catch(Exception e){
 			e.printStackTrace();
+			System.out.println("=====================================can not connectCards error===================================");
 			return 0;
 		}
 		return newCard_id;
