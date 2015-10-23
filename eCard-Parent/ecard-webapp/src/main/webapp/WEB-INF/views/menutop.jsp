@@ -183,13 +183,13 @@
 		type="text/javascript"></script>
 	<script src="<c:url value='/assets/js/bootstrap.min.js'/>"
 		type="text/javascript"></script>
-	<script
+	<%-- <script
 		src="<c:url value='/assets/js/plugins/slimscroll/jquery.slimscroll.min.js'/>"
-		type="text/javascript"></script>
+		type="text/javascript"></script> --%>
 	<script src="<c:url value='/assets/js/plugins/iCheck/icheck.min.js'/>"
 		type="text/javascript"></script>
-	<script src="<c:url value='/assets/s/plugins/pace/pace.min.js'/>"
-		type="text/javascript"></script>
+<%-- 	<script src="<c:url value='/assets/s/plugins/pace/pace.min.js'/>"
+		type="text/javascript"></script> --%>
 	<script
 		src="<c:url value='/assets/js/plugins/peity/jquery.peity.min.js'/>"
 		type="text/javascript"></script>
