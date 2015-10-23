@@ -67,6 +67,8 @@ import com.ecard.core.model.CompanyInfo;
 import com.ecard.core.model.ContactHistory;
 import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.InquiryInfo;
+import com.ecard.core.model.OldCard;
+import com.ecard.core.model.OldCardId;
 import com.ecard.core.model.PossessionCard;
 import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.PrusalHistory;
@@ -87,6 +89,7 @@ import com.ecard.core.service.GroupCompanyInfoService;
 import com.ecard.core.service.LogEventService;
 import com.ecard.core.service.MyCardService;
 import com.ecard.core.service.NotificationInfoService;
+import com.ecard.core.service.OldCardService;
 import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.SearchInfoService;
 import com.ecard.core.service.SettingsInfoService;
@@ -202,6 +205,9 @@ public class UserController {
 
 	@Value("${card.default.base64}")
 	private String defaultImage64;
+	
+	@Autowired
+	OldCardService oldCardService;
 
 	@RequestMapping("home")
 	public ModelAndView home(HttpServletRequest request) {
@@ -1691,8 +1697,44 @@ public class UserController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		UserInfo user = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
-		return cardInfoService.handleConnectCards(cardid1, cardid2, ecardUser.getUserId(),
-				StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
+		CardInfo cardOwner=cardInfoService.getCardInfoDetail(cardid2);
+		/*return cardInfoService.handleConnectCards(cardid1, cardid2, ecardUser.getUserId(),
+				StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));*/
+		int card_id=cardInfoService.connectCards(cardid1, cardid2, ecardUser.getUserId(), StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
+		if(cardOwner.getCardOwnerId().intValue()!=ecardUser.getUserId().intValue()){
+			OldCard oldcard=new OldCard();
+			CardInfo newCardInfo=new CardInfo();
+			newCardInfo.setCardId(card_id);
+			oldcard.setCardInfo(newCardInfo);
+			
+			OldCardId oldCardId=new OldCardId();
+			oldCardId.setCardId(newCardInfo.getCardId());
+			oldCardId.setCardOwnerId(ecardUser.getUserId());
+			oldCardId.setSeq(0);
+			oldCardId.setOldCardId(cardid1);
+			oldcard.setId(oldCardId);
+			
+			oldcard=oldCardService.insertOldCard(oldcard);
+			oldCardService.updateCardIdWithOldCard(cardOwner.getCardId(), cardid1);
+		}else{
+			OldCard oldcard=new OldCard();
+			
+			CardInfo cardInfor=new CardInfo();
+			cardInfor.setCardId(card_id);
+			
+			OldCardId oldCardId=new OldCardId();
+			oldCardId.setCardId(card_id);
+			oldCardId.setCardOwnerId(ecardUser.getUserId());
+			oldCardId.setSeq(0);
+			oldCardId.setOldCardId(cardid1);
+			oldcard.setCardInfo(cardInfor);
+			
+			oldcard.setId(oldCardId);
+			
+			oldcard=oldCardService.insertOldCard(oldcard);
+			oldCardService.updateCardIdWithOldCard(oldcard.getId().getCardId(), cardid1);
+		}
+		return true;
 	}
 
 	class UploadCardThread extends Thread {

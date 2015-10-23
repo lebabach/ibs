@@ -5,13 +5,14 @@ import java.util.List;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecard.core.dao.OldCardDAO;
 import com.ecard.core.model.OldCard;
 
 @Repository("oldCardDAO")
 public class OldCardDAOImpl  extends GenericDao  implements OldCardDAO{
-	@Override
+	@Transactional
 	public boolean updateCardIdWithOldCard(int cardId,int oldcard){
 		String sql = "UPDATE old_card SET card_id = :card_id WHERE card_id = :oldcard";
 		Query query = getEntityManager().createNativeQuery(sql);
@@ -32,14 +33,16 @@ public class OldCardDAOImpl  extends GenericDao  implements OldCardDAO{
 		
 	}
 	
+	@Transactional
 	public boolean insertOldCard(int card_id,int old_card_id, int card_owner_id, int seq){
+		try{
 		String sql = "INSERT INTO old_card (card_id, old_card_id, card_owner_id	, seq) "+ "VALUES(:card_id, :old_card_id, :card_owner_id, :seq)";
 		Query query = getEntityManager().createNativeQuery(sql);
 		query.setParameter("card_id", card_id);
 		query.setParameter("old_card_id", old_card_id);
 		query.setParameter("card_owner_id", card_owner_id);
 		query.setParameter("seq", seq);
-		try{
+		
 			int result = query.executeUpdate();
 			if (result == 0) {
 				return false;
@@ -50,6 +53,19 @@ public class OldCardDAOImpl  extends GenericDao  implements OldCardDAO{
 			e.printStackTrace();
 			System.out.println("==================== Can not update updateCardIdWithOldCard");
 			return false;
+		}
+		
+	}
+	
+	@Transactional
+	public OldCard insertOldCard(OldCard oldCard){
+		try{
+			this.persist(oldCard);
+			return oldCard;
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println("======================"+e.getMessage());
+			return null;
 		}
 		
 	}

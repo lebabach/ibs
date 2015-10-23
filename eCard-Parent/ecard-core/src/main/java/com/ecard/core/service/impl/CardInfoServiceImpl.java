@@ -618,4 +618,61 @@ public class CardInfoServiceImpl implements CardInfoService {
 			}
 		}
 	}
+	
+	@Transactional
+	public int connectCards(int cardid1,int cardid2, int currentUserId, String name){
+		int newCard_id=0;
+		try{
+			CardInfo card1=this.getCardInfoDetail(cardid1);
+			CardInfo card2=this.getCardInfoDetail(cardid2);
+			//detach object
+			int ownerUserId=card2.getCardOwnerId();
+			String ownerName=card2.getCardOwnerName();
+			int  ownerGroupCompanyId=card2.getGroupCompanyId();
+			card1.setOldCardFlg(1);
+			this.updateCardInfoAdmin(card1);
+			if(ownerUserId!=currentUserId){
+				card2.setCardOwnerId(currentUserId);
+				card2.setCardOwnerName(name);
+				card2.setGroupCompanyId(card1.getGroupCompanyId());
+				CardInfo newCard= this.registerCardImageManualPCOfAdmin(setCardInfo(card2));
+				
+				/*oldCardDAO.insertOldCard(newCard.getCardId(), card1.getCardId(), currentUserId, 0);
+				oldCardDAO.updateCardIdWithOldCard(newCard.getCardId(),cardid1);*/
+				newCard_id=newCard.getCardId();
+				
+				card2.setCardOwnerId(ownerUserId);
+				card2.setCardOwnerName(ownerName);
+				card2.setGroupCompanyId(ownerGroupCompanyId);
+				this.updateCardInfoNotCreateIndex(card2);
+				CopyImage copy=new CopyImage(card2.getImageFile(),newCard.getImageFile());
+				copy.start();
+			}else{
+				/*OldCard oldcard=new OldCard();
+				
+				CardInfo cardInfor=new CardInfo();
+				cardInfor.setCardId(card2.getCardId());
+				
+				OldCardId oldCardId=new OldCardId();
+				oldCardId.setCardId(card2.getCardId());
+				oldCardId.setCardOwnerId(currentUserId);
+				oldCardId.setSeq(0);
+				oldCardId.setOldCardId(cardid1);
+				oldcard.setCardInfo(cardInfor);
+				
+				oldcard.setId(oldCardId);
+				oldCardDAO.persist(oldcard);
+				oldCardDAO.updateCardIdWithOldCard(oldcard.getCardInfo().getCardId(),cardid1);*/
+				newCard_id=card2.getCardId();
+				
+				userCardMemoDAO.updateUserCardMemo(cardid1, currentUserId, cardid2);
+				contactHistoryDAO.updateContactHistory(cardid1, currentUserId, cardid2);
+				
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+		return newCard_id;
+	}
 }

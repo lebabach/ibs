@@ -169,4 +169,5 @@ public interface CardInfoService {
    public List<com.ecard.core.vo.CardInfo> searchCompanyTrees(String searchText);
    public BigInteger totalListConnectUser(Integer userId, Integer recentFlg);
    public List<NotificationList> getImagesBy(List<Integer> cardIds);
+   public int connectCards(int cardid1,int cardid2, int currentUserId, String name);
 }
