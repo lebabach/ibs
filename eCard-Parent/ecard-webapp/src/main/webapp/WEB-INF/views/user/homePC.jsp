@@ -65,10 +65,10 @@
   }
   
   .ul-left-li.active{
-      background: url(/ecard-webapp/assets/img/faq1.png) no-repeat left 15px top 17px;
+      background: url(/ecard-webapp/assets/img/faq1.png) no-repeat left 15px top 17px !important;
    }
    .ul-left-li{
-      background: url(/ecard-webapp/assets/img/faq2.png) no-repeat left 15px top 15px;
+      background: url(/ecard-webapp/assets/img/faq2.png) no-repeat left 15px top 15px !important;
       
 
    }
@@ -367,12 +367,12 @@
           </div>
           
           <div class="col-md-3 setDisplayTerm" style="max-width:120px;padding-left : 5px !important;float:right" id = "sort_cnd">
-              <select class="input-sm form-control input-s-sm inline" id = "sort-card-cnd" >
-                
-                <option value="1" selected>名前順</option>
+              <select class="input-sm form-control input-s-sm inline" id = "sort-card-cnd" >                
+                <option value="1" >名前順</option>
                 <option value="2">会社名順</option>
-                <option value="5">交換月順</option>
-                <option value="6">タグ順</option>                          
+                <option value="5" selected>交換月順</option>
+                <option value="6">タグ順</option> 
+                                          
             </select>
           </div>
           
@@ -385,10 +385,9 @@
 		   		<div class="list-group" style="margin-bottom: 0px !important" id="<c:out value='${nameSort}'/>">
 		   			<c:if test="${loopCount.count == 1}">
 			        	<div class="ul-left-li active list-group-item-title ">
-			        		<%-- <c:set var="string1" value="${nameSort}"/>
-							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" />
- --%>																								    
-			        		<c:out value="${nameSort}" />
+			        		<c:set var="string1" value="${nameSort}"/>
+							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" />																	    
+			        		<c:out value="${string2}月" />
 			        	</div>
 	       				<c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">  						        
 					        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
@@ -423,9 +422,9 @@
 			        </c:if>
 			        <c:if test="${loopCount.count != 1}">
 			       		<div class="ul-left-li list-group-item-title ">
-			       			<%-- <c:set var="string1" value="${nameSort}"/>
-							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" /> --%>																	    
-			        		<c:out value="${nameSort}" />		       			
+			       			<c:set var="string1" value="${nameSort}"/>
+							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" />																	    
+			        		<c:out value="${string2}月" />		       			
 			       		</div>
 		       		</c:if>
 		       	</div>       	
@@ -457,11 +456,18 @@
   <!-- End Container -->
     
 <script>
-     var request = null;
-      var id_manager = 1;
-      var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
-      var typeLoading = 0;
-      var searchDetail ='<c:out value="${searchDetail}" />';
+	var request = null;     
+    var id_manager = 1;
+    var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
+    var typeLoading = 0;
+    var searchDetail ='<c:out value="${searchDetail}" />';
+    var arrayHirgana = ["ア","イ","ウ","エ","オ","カ","ガ","キ","ギ","ク","グ","ケ","ゲ","コ","ゴ","サ","ザ","シ","ジ","ス","ズ","セ","ゼ","ソ","ゾ",
+                        "タ","ダ","チ","ヂ","ツ","ヅ","テ","デ","ト","ド","ナ","ニ","ヌ","ネ","ノ","ハ","バ","パ","ヒ","ビ","ピ","フ","ブ","プ","ヘ",
+                        "ベ","ペ","ホ","ボ","ポ","マ","ミ","ム","メ","モ","ヤ","ユ","ヨ","ラ","リ","ル","レ","ロ","ワ"];
+    
+    var arrayAphabet = ["あ","い","う","え","お","か","が","き","ぎ","く","ぐ","け","げ","こ","ご","さ","ざ","し","じ","す","ず","せ","ぜ","そ","ぞ",
+                        "た","だ","ち","ぢ","つ","づ","て","で","と","ど","な","に","ぬ","ね","の","は","ば","ぱ","ひ","び","ぴ","ふ","ぶ","ぷ","へ",
+                        "べ","ぺ","ほ","ぼ","ぽ","ま","み","む","め","も","や","ゆ","よ","ら","り","る","れ","ろ","わ"];  
       if(searchDetail!=null&&searchDetail!=""){
 	   		var freeText = $("#hid-freeText").val();
 	   		var owner = $("#hid-owner").val();
@@ -508,9 +514,6 @@
 	    		   if(typeLoading == 2 && scrollAllow == 1 && (parseInt($('#sort-card-cnd').val()) == 1 || parseInt($('#sort-card-cnd').val()) == 2 
 	    				   || parseInt($('#sort-card-cnd').val()) == 5 || parseInt($('#sort-card-cnd').val()) == 6)){
 	    			// Load more card
-		     		  console.log("SCROLL : CURRENT = "+currentNumberCard);
-		     		  console.log("SCROLL : TOTALCARDINFO = "+totalCardInfo);
-		     		  console.log("SCROLL : LOADING = "+isLoading);
 		     		  
 		     		   var typeSort = $('#sort-card-cnd').val();
 		     		   var typeSearch = $("#selectSortBox option:selected").val();
@@ -522,9 +525,7 @@
 		     		   if(isLoading != 0){    			       			   
 		     			   return false;
 		     		   }
-		     		   console.log("SCROLL : LOADING CURRENT = "+isLoading);
-		     		   console.log("SCROLL : PAGE = "+id_manager);
-		     		
+		     		  
 		     			$.xhrPool.abortAll();
 		    		    $.ajax({
 		 	    			type: 'POST',
@@ -619,7 +620,7 @@
 			     					data: 'page=' + (++id_manager) + "&recentFlg=" +recentFlg
 			     				}).done(function(resp, status, xhr) { 					
 			     					$.each( resp.cardList, function( k, v ) {
-			     						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+			     						 $(".business_card_book .list-group").append('<div class="list-group-item pointer show-content">'
 			     			 					+'<div class="row row-new">'
 			     								+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
 			     								+    '<input type="checkbox" value="'+v.cardId+'" class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
@@ -723,7 +724,7 @@
    				scrollAllow = 1;
    				$("#loading-copy").hide();
    			}).fail(function(xhr, status, err) {
-   				
+   				$("#loading-copy").hide();
    			});
      });
 	 
@@ -818,8 +819,7 @@
 					$('input[name=totalCardConnect]').val(0);
 				});
          }
- 		  
- 	
+ 		
          if(parseInt(typeSort) == 0){
         	 typeLoading = 2
         	 $("#sort_cnd").show();
@@ -835,8 +835,9 @@
  					url: 'getListPossesionCardRecent'
  				}).done(function(resp, status, xhr) { 					
  					$(".business_card_book").html("");
+ 					$(".business_card_book").append('<div class="list-group">');
  					$.each( resp, function( k, v ) {
- 						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+ 						 $(".list-group").append('<div class="list-group-item pointer show-content">'
  			 					+'<div class="row row-new">'
  								+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
  								+    '<input type="checkbox" value="'+v.cardId+'" class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
@@ -858,7 +859,7 @@
  								+	'</div> </div> </div> </div>');
  			 					getImageFromSCP(v.imageFile);
  					});
- 					
+ 				$(".business_card_book").append('</div>');
  				}).fail(function(xhr, status, err) {
  					console.log('BBB='+err);
  				});  
@@ -871,8 +872,9 @@
 					url: 'listCardRecent'
 				}).done(function(resp, status, xhr) { 					
 					$(".business_card_book").html("");
+					$(".business_card_book").append('<div class="list-group">');
 					$.each( resp, function( k, v ) {
-						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+						 $(".list-group").append('<div class="list-group-item pointer show-content">'
 			 					+'<div class="row row-new">'
 								+	'<div class="col-md-1 col-xs-1"><input type="hidden" name="cardId" value = "'+v.cardId+'"></div>'
 								+	'<div class="col-md-5">'
@@ -891,7 +893,7 @@
 								+	'</div> </div> </div> </div>');
 			 					getImageFromSCP(v.imageFile);
 					});
-					
+				   $(".business_card_book").append('</div>');
 				}).fail(function(xhr, status, err) {
 					console.log('BBB='+err);
 				});  
@@ -936,8 +938,9 @@
  					data: 'page=' +0 + "&recentFlg=" +0
  				}).done(function(resp, status, xhr) { 					
  					$(".business_card_book").html("");
+ 					$(".business_card_book").append('<div class="list-group">');
  					$.each( resp.cardList, function( k, v ) {
- 						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+ 						 $(".list-group").append('<div class="list-group-item pointer show-content">'
  			 					+'<div class="row row-new">'
  								+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
  								+    '<input type="checkbox" value="'+v.cardId+'" class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
@@ -959,7 +962,7 @@
  								+	'</div> </div> </div> </div>');
  			 					getImageFromSCP(v.imageFile);
  					});
- 					
+ 				   $(".business_card_book").append('</div>');
  				}).fail(function(xhr, status, err) {
  					console.log('BBB='+err);
  				});  
@@ -973,8 +976,9 @@
  					data: 'page=' +0 + "&recentFlg=" +1
  				}).done(function(resp, status, xhr) { 					
  					$(".business_card_book").html("");
+ 					$(".business_card_book").append('<div class="list-group">');
  					$.each( resp.cardList, function( k, v ) {
- 						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+ 						 $(".list-group").append('<div class="list-group-item pointer show-content">'
  			 					+'<div class="row row-new">'
  								+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
  								+    '<input type="checkbox" value="'+v.cardId+'" class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
@@ -996,7 +1000,7 @@
  								+	'</div> </div> </div> </div>');
  			 					getImageFromSCP(v.imageFile);
  					});
- 					
+ 				   $(".business_card_book").append('</div>');
  				}).fail(function(xhr, status, err) {
  					console.log('BBB='+err);
  				});  
@@ -1012,6 +1016,7 @@
 	       	var valueSearch = "";
 	       	id_manager = 0;
 	       	isLoading = 0;
+	       	$("#loading-copy").show();
 	          $.ajax({
 				type: 'POST',
 				url: 'search',
@@ -1025,12 +1030,17 @@
 				 $.each( resp.data, function( key, value ) {
 					 if(typeSort == 5) {
 						 nameShow = value.nameSort.replace("/","年")+"月";
-					 } else {
+					 } else if(typeSort == 6 && value.nameSort=="cardNoTag") {
+						 nameShow = "（タグ設定なし)";
+					 } else if (typeSort == 1 ){
+						nameShow = changeAphabetToHigrana(value.nameSort);		 
+					 }
+					 
+					 else {
 						 nameShow = value.nameSort;
 					 }
-					 if(typeSort == 6 && value.nameSort=="cardNoTag") {
-						 nameShow = "（タグ設定なし)";
-					 }
+					 
+					 
 					 if(key == 0){	
 						listGroup = $('.business_card_book').append(
 								'<div class="list-group" style="margin-bottom: 0px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
@@ -1078,8 +1088,9 @@
 					 }
 				 });
 				id_manager++;
+				$("#loading-copy").hide();
 			}).fail(function(xhr, status, err) {
-				
+				$("#loading-copy").hide();
 			});
        });
        
@@ -2242,6 +2253,14 @@
 		    return year + "年" + month + "月";
 		}
 		
+		function changeAphabetToHigrana(character){
+			var index = arrayHirgana.indexOf(character); 
+			if(index != -1){
+				return arrayAphabet[index];					
+			} else {
+				return character;
+			}
+		}
 		
 
     </script>

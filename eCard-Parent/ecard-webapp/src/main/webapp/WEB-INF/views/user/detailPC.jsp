@@ -171,16 +171,18 @@ a {
 					<div class="card_img">
 						<c:if test="${empty imageFile}">
 							<a href="#" title="Image from Unsplash" data-target="#myModal"
-							id="popup"> <img id="imageresource" width="318" height="190"
+							id="popup"> <img id="imageresource" width="330" height="190"
 							src='<c:url value="/assets/img/card_08.png"></c:url>'></a>	
 						</c:if>
 						<c:if test="${not empty imageFile}">
 							<a href="#" title="Image from Unsplash" data-target="#myModal"
-							id="popup"> <img id="imageresource" width="318" height="190"
+							id="popup"> <img id="imageresource" width="320" height="190"
 							src="data:image/png;base64,${imageFile}"></a>	
 						</c:if>
-						
 					</div>
+					<c:if test="${ isMyCard == true }">
+						<div style="color:#fff; width:330px; margin-top:5px"><fmt:message key="msg.card.disabled" /></div>
+					</c:if>
 				</div>
 			</div>
 		</div>

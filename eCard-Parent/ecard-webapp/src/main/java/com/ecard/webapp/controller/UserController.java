@@ -194,6 +194,9 @@ public class UserController {
 	@Value("${msg.download.log}")
 	private String msgDownloadLog;
 
+	@Value("${saleforce.url}")
+	private String saleForceUrl;
+	
 	@Autowired
 	SettingsInfoService settingsInfoService;
 
@@ -219,12 +222,12 @@ public class UserController {
 		List<String> lstNameSort = new ArrayList<>();
 		if (ecardUser != null) {
 			// Get listNameSort [2015/10,2015/11, .... ]
-			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), SearchConditions.NAME.getValue());
+			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), SearchConditions.CONTACT.getValue());
 			
 			listTagGroup = getCardTag();
 			if(lstNameSort.size() > 0) {
-					List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.NAME.getValue() ,lstNameSort.get(0), 0);
-					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(),SearchConditions.NAME.getValue() ,lstNameSort.get(0));
+					List<CardInfoUserVo> lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), SearchConditions.CONTACT.getValue() ,lstNameSort.get(0), 0);
+					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(),SearchConditions.CONTACT.getValue() ,lstNameSort.get(0));
 					List<CardInfo> cardInfoDisp = new ArrayList<>();
 					for (CardInfoUserVo cardInfo : lstCardInfo) {
 						if (lstNameSort.get(0).trim().equals(cardInfo.getSortType().trim())) {
@@ -542,7 +545,7 @@ public class UserController {
 			Integer typeCSV) throws IOException {
 		String csvFileName = fileName;
 
-		String workingDirectory = System.getProperty("user.dir") + "/csv";
+		String workingDirectory ="/data/csv";
 
 		String absoluteFilePath = "";
 		absoluteFilePath = workingDirectory + File.separator + csvFileName;
@@ -742,7 +745,7 @@ public class UserController {
 	public String loginSaleForce(@RequestBody CardInfoSaleforce cardInfo) {
 		logger.debug("loginSaleForce", UserController.class);
 
-		final String URI = "http://52.68.0.143/api/";
+		final String URI = this.saleForceUrl;
 
 		RestTemplate restTemplate = new RestTemplate();
 		String result = "";

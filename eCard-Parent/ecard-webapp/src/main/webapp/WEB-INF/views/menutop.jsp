@@ -33,7 +33,7 @@
 					<c:forEach var="teamInfo" items="${teamDisInfos}">
 						<div class="item one">
 							<div class="item_head one_1">
-								<p class="wrap_menutop" title="${teamInfo.teamName}">
+								<p class="wrap_menutop" style=" text-overflow: ellipsis;max-width: 200px;white-space: nowrap;overflow: hidden;"; title="${teamInfo.teamName}">
 									<c:out value="チーム ${teamInfo.teamName}" />
 								</p>
 							</div>
@@ -183,13 +183,13 @@
 		type="text/javascript"></script>
 	<script src="<c:url value='/assets/js/bootstrap.min.js'/>"
 		type="text/javascript"></script>
-	<script
+	<%-- <script
 		src="<c:url value='/assets/js/plugins/slimscroll/jquery.slimscroll.min.js'/>"
-		type="text/javascript"></script>
+		type="text/javascript"></script> --%>
 	<script src="<c:url value='/assets/js/plugins/iCheck/icheck.min.js'/>"
 		type="text/javascript"></script>
-	<script src="<c:url value='/assets/s/plugins/pace/pace.min.js'/>"
-		type="text/javascript"></script>
+<%-- 	<script src="<c:url value='/assets/s/plugins/pace/pace.min.js'/>"
+		type="text/javascript"></script> --%>
 	<script
 		src="<c:url value='/assets/js/plugins/peity/jquery.peity.min.js'/>"
 		type="text/javascript"></script>

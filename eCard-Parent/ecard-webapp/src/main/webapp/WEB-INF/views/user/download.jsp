@@ -434,8 +434,8 @@ body{
 		<div class="box-1">
 			<div class="title-box-1">名刺のダウンロード</div>
 			<div class="content-box-1">
-                  <p id="titleMsg" class="p-box-1 p-box-1-blue" style="display: none">
-					<fmt:message key="user.waiting.request" />
+                <p id="titleMsg" class="p-box-1 p-box-1-blue" style="display: none">
+					ダウンロードファイルの作成を行います。しばらくお待ちください。	
 				</p>
                   
                 <div class="box-3">
@@ -458,9 +458,9 @@ body{
                     </tr>
                     <c:forEach var="downloadCSVHistory" items="${downloadCSVHistory}" varStatus="loop">
 						<tr id="${downloadCSVHistory.csvId}">
-							<td><fmt:formatDate value="${downloadCSVHistory.requestDate}" pattern="dd-MM-yyyy" /></td>
+							<td><fmt:formatDate value="${downloadCSVHistory.requestDate}" pattern="yyyy-MM-dd" /></td>
 							<td><c:out value="${downloadCSVHistory.csvType}" /></td>
-							<td><fmt:formatDate value="${downloadCSVHistory.approvalDate}" pattern="dd-MM-yyyy" /></td>
+							<td><fmt:formatDate value="${downloadCSVHistory.approvalDate}" pattern="yyyy-MM-dd" /></td>
 							<td style="text-align:right;">
 								<c:if test="${downloadCSVHistory.csvApprovalStatus != 1}">
 									<%-- <c:out value="${downloadCSVHistory.csvUrl}" /> --%>
@@ -491,15 +491,18 @@ body{
 				document.location.href='/ecard-webapp/user/download';
 			}, 3000); */
 		} else {
+			$("#titleMsg").css('display','block');
 			$.ajax({
 				type: 'GET',
 				url: '/ecard-webapp/user/downloadCSV/'+id
 			}).done(function(resp, status, xhr) {
+				$("#titleMsg").css('display','none');
 				setTimeout(function(){ 				
 					document.location.href='/ecard-webapp/user/download';
 				}, 3000);
 								
 			}).fail(function(xhr, status, err) {
+				$("#titleMsg").css('display','none');
 				document.location.href='/ecard-webapp/user/download';
 			});	
 		}

@@ -1198,8 +1198,9 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		} else if (sortType == SearchConditions.COMPANY.getValue()) {
 			sqlStr = "SELECT c.companyName AS groupDate FROM CardInfo c "
 					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
-					+ " AND (c.companyName is not null AND c.companyName <> '') "
-					+ "GROUP BY c.companyName ORDER BY c.companyNameKana ASC ";
+					+ " AND (c.companyNameKana is not null AND c.companyNameKana <> '') "
+					//+ "GROUP BY SUBSTR((c.companyNameKana),1,1) ORDER BY c.companyNameKana ASC, c.companyName ASC ";
+					+ "GROUP BY c.companyName ORDER BY c.companyNameKana ASC, c.companyName ASC ";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
 			sqlStr = "SELECT ut.tagName AS groupDate FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
