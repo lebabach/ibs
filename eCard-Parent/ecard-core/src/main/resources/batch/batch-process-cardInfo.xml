@@ -88,7 +88,7 @@
     <bean id="batchUploadLostImageCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="batchUploadLostImageJobDetail" />
         <!-- <property name="cronExpression" value=" 0 0 13 ? * THU * " /> -->
-        <property name="cronExpression" value=" 0 0/5 * * * ? " />
+        <property name="cronExpression" value=" 0 0/30 * * * ? " />
     </bean>
     
     <bean id="batchUploadLostImageJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
