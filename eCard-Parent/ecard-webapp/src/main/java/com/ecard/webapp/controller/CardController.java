@@ -117,6 +117,9 @@ public class CardController {
 	@Value("${scp.port}")
 	private String scpPort;
 	
+	@Value("${push.api}")
+	private String pushApi;
+	
 	/*
 	 * Return list user to sort card of user.
 	 * if user have role is operator then only get list of user have the same team of user login
@@ -758,7 +761,7 @@ public class CardController {
 				pushNotification.setTitle(title);
 				pushNotification.setAlert(msg);
 				
-				String result = restTemplate.postForObject("http://52.68.0.143/ecard-api/pushNotification", pushNotification, String.class);
+				String result = restTemplate.postForObject(this.pushApi, pushNotification, String.class);
 				System.out.println("CardOwnerID = "+cardOwnerId +",TOKEN = "+pushInfoId.getDeviceToken()+", type = "+pushInfoId.getDeviceType()+ ", userId="+pushInfoId.getUserId()+" ,AppID ="+appId);
 				System.out.println("RESULT = "+ result);
 				/*String jsonStr = " {" 
