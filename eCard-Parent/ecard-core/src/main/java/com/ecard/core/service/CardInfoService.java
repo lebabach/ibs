@@ -178,4 +178,6 @@ public BigInteger totalListConnectUser(Integer userId, Integer recentFlg);
    
    public void updateCardInfoNoIndex(List<CardInfo> cardInfoList);
 public List<NotificationList> getImagesBy(List<Integer> cardIds);
+
+   public int connectCards(int cardid1,int cardid2, int currentUserId, String name);
 }
