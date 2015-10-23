@@ -47,7 +47,7 @@ public class BatchProcessCardTasklet implements Tasklet{
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
     	logger.debug("execute method", BatchProcessCardTasklet.class);
     	try{
-    		List<CardInfo> cardInfoList = cardInfoService.listCardInfoByCardType(2);
+    		List<CardInfo> cardInfoList = cardInfoService.listCardInfoByCardType(1);
     		
     		WriteCardImage cardImage = new WriteCardImage(defaultImage64, scpHostName, scpUser, scpPassword);
             cardImage.writeCardImage(cardInfoList);
@@ -55,6 +55,7 @@ public class BatchProcessCardTasklet implements Tasklet{
             //Update card_type = 0
             cardInfoService.updateCardType();
             cardInfoService.updateCardInfoNoIndex(cardInfoList);
+            System.out.println("Success.......");
     	}
     	catch(Exception ex){
             logger.debug("Exception : ", ex.getMessage());

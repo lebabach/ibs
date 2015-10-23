@@ -59,9 +59,10 @@ public class WriteCardImage {
 		    ClassLoader classLoader = WriteCardImage.class.getClassLoader();
 			File file = new File(classLoader.getResource("MSMINCHO.TTF").getFile());
 			Font font = Font.createFont(Font.TRUETYPE_FONT, file);
-			
+			System.out.println("cardInfo size : "+cardInfoList.size());
 			for (CardInfo cardInfo : cardInfoList) {
 				if(cardInfo.getImageFile().equals("card_04.jpg")){
+					System.out.println("if function ");
 					cardInfo.setImageFile(DataIndexUtil.setPropertyCodeFrom(cardInfo.getCardIndexNo(), "00M",TableTypeEnum.ImageInfor)+".jpg");
 					BufferedImage image = UploadFileUtil.decodeToImage(defaultImage64);
 					Graphics g = image.getGraphics();
@@ -79,8 +80,10 @@ public class WriteCardImage {
 					g2.drawString(cardInfo.getName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getName()) : StringUtils.EMPTY,BatchConstants.xCooder + 30, BatchConstants.yCooder + 150);
 					g2.dispose();
 					UploadFileUtil.overrideImage(UploadFileUtil.encodeToString(image, "jpg"), scpHostName, scpUser, scpPassword, cardInfo.getImageFile());
+					System.out.println("end if function ");
 				}
 			}
+			System.out.println("end for function ");
 		} catch (Exception ex) {
 			logger.error("Error upload default card image: " + ex.getMessage());
 		}
