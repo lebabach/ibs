@@ -191,6 +191,9 @@ public class UserController {
 	@Value("${msg.download.log}")
 	private String msgDownloadLog;
 
+	@Value("${saleforce.url}")
+	private String saleForceUrl;
+	
 	@Autowired
 	SettingsInfoService settingsInfoService;
 
@@ -282,7 +285,7 @@ public class UserController {
 				}
 				
 				
-				if (typeSort == SearchConditions.NAME.getValue() || typeSort == SearchConditions.COMPANY.getValue()) {
+				if (typeSort == SearchConditions.NAME.getValue()) {
 					lstNameSort = lstNameSort.stream().map(str-> str!= "" ? str.substring(0, 1).toUpperCase() : str).collect(Collectors.toList());
 				}
 			}
@@ -302,7 +305,7 @@ public class UserController {
 		for (String nameSort : lstNameSort) {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
 			for (CardInfoUserVo cardInfo : lstCardInfo) {
-				if(typeSort == SearchConditions.NAME.getValue() || typeSort == SearchConditions.COMPANY.getValue()){
+				if(typeSort == SearchConditions.NAME.getValue()){
 					if(cardInfo.getSortType() != ""){
 						if (nameSort.equals(cardInfo.getSortType().toUpperCase().substring(0,1))) {
 							cardInfoDisp.add(cardInfo.getCardInfo());
@@ -736,7 +739,7 @@ public class UserController {
 	public String loginSaleForce(@RequestBody CardInfoSaleforce cardInfo) {
 		logger.debug("loginSaleForce", UserController.class);
 
-		final String URI = "http://52.68.0.143/api/";
+		final String URI = this.saleForceUrl;
 
 		RestTemplate restTemplate = new RestTemplate();
 		String result = "";

@@ -507,9 +507,6 @@
 	    		   if(typeLoading == 2 && scrollAllow == 1 && (parseInt($('#sort-card-cnd').val()) == 1 || parseInt($('#sort-card-cnd').val()) == 2 
 	    				   || parseInt($('#sort-card-cnd').val()) == 5 || parseInt($('#sort-card-cnd').val()) == 6)){
 	    			// Load more card
-		     		  console.log("SCROLL : CURRENT = "+currentNumberCard);
-		     		  console.log("SCROLL : TOTALCARDINFO = "+totalCardInfo);
-		     		  console.log("SCROLL : LOADING = "+isLoading);
 		     		  
 		     		   var typeSort = $('#sort-card-cnd').val();
 		     		   var typeSearch = $("#selectSortBox option:selected").val();
@@ -521,9 +518,7 @@
 		     		   if(isLoading != 0){    			       			   
 		     			   return false;
 		     		   }
-		     		   console.log("SCROLL : LOADING CURRENT = "+isLoading);
-		     		   console.log("SCROLL : PAGE = "+id_manager);
-		     		
+		     		  
 		     			$.xhrPool.abortAll();
 		    		    $.ajax({
 		 	    			type: 'POST',
