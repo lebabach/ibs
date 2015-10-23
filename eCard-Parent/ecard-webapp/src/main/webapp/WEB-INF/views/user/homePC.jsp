@@ -65,10 +65,10 @@
   }
   
   .ul-left-li.active{
-      background: url(/ecard-webapp/assets/img/faq1.png) no-repeat left 15px top 17px;
+      background: url(/ecard-webapp/assets/img/faq1.png) no-repeat left 15px top 17px !important;
    }
    .ul-left-li{
-      background: url(/ecard-webapp/assets/img/faq2.png) no-repeat left 15px top 15px;
+      background: url(/ecard-webapp/assets/img/faq2.png) no-repeat left 15px top 15px !important;
       
 
    }
@@ -367,12 +367,12 @@
           </div>
           
           <div class="col-md-3 setDisplayTerm" style="max-width:120px;padding-left : 5px !important;float:right" id = "sort_cnd">
-              <select class="input-sm form-control input-s-sm inline" id = "sort-card-cnd" >
-                
-                <option value="1" selected>名前順</option>
+              <select class="input-sm form-control input-s-sm inline" id = "sort-card-cnd" >                
+                <option value="1" >名前順</option>
                 <option value="2">会社名順</option>
-                <option value="5">交換月順</option>
-                <option value="6">タグ順</option>                          
+                <option value="5" selected>交換月順</option>
+                <option value="6">タグ順</option> 
+                                          
             </select>
           </div>
           
@@ -385,10 +385,9 @@
 		   		<div class="list-group" style="margin-bottom: 0px !important" id="<c:out value='${nameSort}'/>">
 		   			<c:if test="${loopCount.count == 1}">
 			        	<div class="ul-left-li active list-group-item-title ">
-			        		<%-- <c:set var="string1" value="${nameSort}"/>
-							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" />
- --%>																								    
-			        		<c:out value="${nameSort}" />
+			        		<c:set var="string1" value="${nameSort}"/>
+							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" />																	    
+			        		<c:out value="${string2}月" />
 			        	</div>
 	       				<c:forEach var="cardInfoPCVo" items="${lstCardInfoPCVo}">  						        
 					        <c:forEach var="cardInfo" items="${cardInfoPCVo.lstCardInfo}">
@@ -423,9 +422,9 @@
 			        </c:if>
 			        <c:if test="${loopCount.count != 1}">
 			       		<div class="ul-left-li list-group-item-title ">
-			       			<%-- <c:set var="string1" value="${nameSort}"/>
-							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" /> --%>																	    
-			        		<c:out value="${nameSort}" />		       			
+			       			<c:set var="string1" value="${nameSort}"/>
+							<c:set var="string2" value="${fn:replace(string1,'/', '年')}" />																	    
+			        		<c:out value="${string2}月" />		       			
 			       		</div>
 		       		</c:if>
 		       	</div>       	
@@ -508,9 +507,6 @@
 	    		   if(typeLoading == 2 && scrollAllow == 1 && (parseInt($('#sort-card-cnd').val()) == 1 || parseInt($('#sort-card-cnd').val()) == 2 
 	    				   || parseInt($('#sort-card-cnd').val()) == 5 || parseInt($('#sort-card-cnd').val()) == 6)){
 	    			// Load more card
-		     		  console.log("SCROLL : CURRENT = "+currentNumberCard);
-		     		  console.log("SCROLL : TOTALCARDINFO = "+totalCardInfo);
-		     		  console.log("SCROLL : LOADING = "+isLoading);
 		     		  
 		     		   var typeSort = $('#sort-card-cnd').val();
 		     		   var typeSearch = $("#selectSortBox option:selected").val();
@@ -522,9 +518,7 @@
 		     		   if(isLoading != 0){    			       			   
 		     			   return false;
 		     		   }
-		     		   console.log("SCROLL : LOADING CURRENT = "+isLoading);
-		     		   console.log("SCROLL : PAGE = "+id_manager);
-		     		
+		     		  
 		     			$.xhrPool.abortAll();
 		    		    $.ajax({
 		 	    			type: 'POST',
@@ -723,7 +717,7 @@
    				scrollAllow = 1;
    				$("#loading-copy").hide();
    			}).fail(function(xhr, status, err) {
-   				
+   				$("#loading-copy").hide();
    			});
      });
 	 
@@ -1015,6 +1009,7 @@
 	       	var valueSearch = "";
 	       	id_manager = 0;
 	       	isLoading = 0;
+	       	$("#loading-copy").show();
 	          $.ajax({
 				type: 'POST',
 				url: 'search',
@@ -1081,8 +1076,9 @@
 					 }
 				 });
 				id_manager++;
+				$("#loading-copy").hide();
 			}).fail(function(xhr, status, err) {
-				
+				$("#loading-copy").hide();
 			});
        });
        
