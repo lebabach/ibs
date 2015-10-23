@@ -619,7 +619,7 @@
 			     					data: 'page=' + (++id_manager) + "&recentFlg=" +recentFlg
 			     				}).done(function(resp, status, xhr) { 					
 			     					$.each( resp.cardList, function( k, v ) {
-			     						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+			     						 $(".business_card_book .list-group").append('<div class="list-group-item pointer show-content">'
 			     			 					+'<div class="row row-new">'
 			     								+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
 			     								+    '<input type="checkbox" value="'+v.cardId+'" class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
@@ -818,8 +818,7 @@
 					$('input[name=totalCardConnect]').val(0);
 				});
          }
- 		  
- 	
+ 		
          if(parseInt(typeSort) == 0){
         	 typeLoading = 2
         	 $("#sort_cnd").show();
@@ -835,8 +834,9 @@
  					url: 'getListPossesionCardRecent'
  				}).done(function(resp, status, xhr) { 					
  					$(".business_card_book").html("");
+ 					$(".business_card_book").append('<div class="list-group">');
  					$.each( resp, function( k, v ) {
- 						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+ 						 $(".list-group").append('<div class="list-group-item pointer show-content">'
  			 					+'<div class="row row-new">'
  								+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
  								+    '<input type="checkbox" value="'+v.cardId+'" class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
@@ -858,7 +858,7 @@
  								+	'</div> </div> </div> </div>');
  			 					getImageFromSCP(v.imageFile);
  					});
- 					
+ 				$(".business_card_book").append('</div>');
  				}).fail(function(xhr, status, err) {
  					console.log('BBB='+err);
  				});  
@@ -871,8 +871,9 @@
 					url: 'listCardRecent'
 				}).done(function(resp, status, xhr) { 					
 					$(".business_card_book").html("");
+					$(".business_card_book").append('<div class="list-group">');
 					$.each( resp, function( k, v ) {
-						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+						 $(".list-group").append('<div class="list-group-item pointer show-content">'
 			 					+'<div class="row row-new">'
 								+	'<div class="col-md-1 col-xs-1"><input type="hidden" name="cardId" value = "'+v.cardId+'"></div>'
 								+	'<div class="col-md-5">'
@@ -891,7 +892,7 @@
 								+	'</div> </div> </div> </div>');
 			 					getImageFromSCP(v.imageFile);
 					});
-					
+				   $(".business_card_book").append('</div>');
 				}).fail(function(xhr, status, err) {
 					console.log('BBB='+err);
 				});  
@@ -936,8 +937,9 @@
  					data: 'page=' +0 + "&recentFlg=" +0
  				}).done(function(resp, status, xhr) { 					
  					$(".business_card_book").html("");
+ 					$(".business_card_book").append('<div class="list-group">');
  					$.each( resp.cardList, function( k, v ) {
- 						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+ 						 $(".list-group").append('<div class="list-group-item pointer show-content">'
  			 					+'<div class="row row-new">'
  								+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
  								+    '<input type="checkbox" value="'+v.cardId+'" class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
@@ -959,7 +961,7 @@
  								+	'</div> </div> </div> </div>');
  			 					getImageFromSCP(v.imageFile);
  					});
- 					
+ 				   $(".business_card_book").append('</div>');
  				}).fail(function(xhr, status, err) {
  					console.log('BBB='+err);
  				});  
@@ -973,8 +975,9 @@
  					data: 'page=' +0 + "&recentFlg=" +1
  				}).done(function(resp, status, xhr) { 					
  					$(".business_card_book").html("");
+ 					$(".business_card_book").append('<div class="list-group">');
  					$.each( resp.cardList, function( k, v ) {
- 						 $(".business_card_book").append('<div class="list-group-item pointer show-content">'
+ 						 $(".list-group").append('<div class="list-group-item pointer show-content">'
  			 					+'<div class="row row-new">'
  								+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
  								+    '<input type="checkbox" value="'+v.cardId+'" class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
@@ -996,7 +999,7 @@
  								+	'</div> </div> </div> </div>');
  			 					getImageFromSCP(v.imageFile);
  					});
- 					
+ 				   $(".business_card_book").append('</div>');
  				}).fail(function(xhr, status, err) {
  					console.log('BBB='+err);
  				});  
