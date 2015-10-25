@@ -1034,8 +1034,8 @@
 				 $.each( resp.data, function( key, value ) {
 					 if(typeSort == 5) {
 						 nameShow = value.nameSort.replace("/","年")+"月";
-					 } else if(typeSort == 6 && value.nameSort=="cardNoTag") {
-						 nameShow = "（タグ設定なし)";
+					 /* } else if(typeSort == 6 && value.nameSort=="cardNoTag") {
+						 nameShow = "（タグ設定なし)"; */
 					 } else if (typeSort == 1 ){
 						nameShow = changeAphabetToHigrana(value.nameSort);		 
 					 }
@@ -1091,6 +1091,12 @@
 						 
 					 }
 				 });
+	          	 if(resp.data.length == 0){
+	          		BootstrapDialog.show({
+	       				title: '<fmt:message key="popup.title.info" />',
+	      	             	message: '<fmt:message key="add.tag.failed" />'
+	       	      		});
+	          	 }
 				id_manager++;
 				$("#loading-copy").hide();
 			}).fail(function(xhr, status, err) {
@@ -1219,6 +1225,7 @@
        
           
           $(".modal-content .btn-lg").click(function() {
+        	  
              	resetValidationForm();
        			if (!checkValidationFormSearch()) {
        				return false;
@@ -1234,8 +1241,7 @@
        			if($("#parameterFlg").val()==0){
        				owner="";	
        	        }
-       	   		$(".modal-header button").click();
-       	   		
+       	   		$(".modal-header button").click();       	   		
        	   		ListSearch(freeText,owner,company,department,position,name,parameterFlg);
               });
           
@@ -1279,7 +1285,7 @@
  
       
       function ListSearch(freeText,owner,company,department,position,name,parameterFlg){
-    	  	
+		 
  	   		id_manager=0;
  			$.ajax({
  			    type: 'POST',

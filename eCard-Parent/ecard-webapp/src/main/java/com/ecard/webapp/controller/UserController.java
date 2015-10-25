@@ -296,14 +296,13 @@ public class UserController {
 				}
 			}
 			 
-			if (typeSort == SearchConditions.TAG.getValue()) {
+			/*if (typeSort == SearchConditions.TAG.getValue()) {
 				if(lstNameSort.size() <= 0) {
 					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, "cardNoTag", page);
 					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort, "cardNoTag");
 				}
 				lstNameSort.add("cardNoTag");
-								
-			}
+			}*/
 			
 		}
 		
