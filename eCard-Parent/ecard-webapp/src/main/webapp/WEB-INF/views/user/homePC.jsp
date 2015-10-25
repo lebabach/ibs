@@ -604,7 +604,7 @@
 		       			    }
 		       			});
 	    	    	}
-	    	    	if(typeLoading == 3 && (parseInt($('#selectSortBox').val()) == 4 || parseInt($('#selectSortBox').val()) == 5 )){
+	    	    	if( isLoading == 0 &&typeLoading == 3 && (parseInt($('#selectSortBox').val()) == 4 || parseInt($('#selectSortBox').val()) == 5 )){
 	    	    		var recentFlg =0;
 	    	    		var total = 0;
 	    	    		if(parseInt($('#selectSortBox').val()) == 4){
@@ -931,6 +931,7 @@
 					console.log('BBB='+err);
 				});  
          }else if(parseInt(typeSort) == 4){
+        	 isLoading = 0;
         	 $("#sort_cnd").hide();
         	 $("#bulk_tag").show();
         	 $("#deleteTag").show();
@@ -973,6 +974,7 @@
         	 $("#sort_cnd").hide();
         	 $("#bulk_tag").show();
         	 $("#deleteTag").show();
+        	 isLoading = 0;
         	 page = 1;
         		$.ajax({
  					type: 'POST',
