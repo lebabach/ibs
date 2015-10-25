@@ -460,6 +460,7 @@
     var id_manager = 1;
     var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
     var typeLoading = 0;
+    var page = 1;
     var searchDetail ='<c:out value="${searchDetail}" />';
     var arrayHirgana = ["ア","イ","ウ","エ","オ","カ","ガ","キ","ギ","ク","グ","ケ","ゲ","コ","ゴ","サ","ザ","シ","ジ","ス","ズ","セ","ゼ","ソ","ゾ",
                         "タ","ダ","チ","ヂ","ツ","ヅ","テ","デ","ト","ド","ナ","ニ","ヌ","ネ","ノ","ハ","バ","パ","ヒ","ビ","ピ","フ","ブ","プ","ヘ",
@@ -501,6 +502,7 @@
       
       var scrollAllow = 1;
       var isLoading = 0;
+      
       $(window).scroll(function() {     	  
     	  var currentNumberCard = $('.list-group .active').parent().find('.row-new').length;
     	  var self = $('.list-group .active').parent();
@@ -617,7 +619,7 @@
 			    	    		 $.ajax({
 			     					type: 'POST',
 			     					url: 'listConnectUser',
-			     					data: 'page=' + (++id_manager) + "&recentFlg=" +recentFlg
+			     					data: 'page=' + page + "&recentFlg=" +recentFlg
 			     				}).done(function(resp, status, xhr) { 					
 			     					$.each( resp.cardList, function( k, v ) {
 			     						 $(".business_card_book .list-group").append('<div class="list-group-item pointer show-content">'
@@ -642,7 +644,7 @@
 			     								+	'</div> </div> </div> </div>');
 			     			 					getImageFromSCP(v.imageFile);
 			     					});
-			     					
+			     					page++;
 			     				}).fail(function(xhr, status, err) {
 			     					console.log('BBB='+err);
 			     				}); 
@@ -932,6 +934,7 @@
         	 $("#sort_cnd").hide();
         	 $("#bulk_tag").show();
         	 $("#deleteTag").show();
+        	  page = 1;
         		$.ajax({
  					type: 'POST',
  					url: 'listConnectUser',
@@ -970,6 +973,7 @@
         	 $("#sort_cnd").hide();
         	 $("#bulk_tag").show();
         	 $("#deleteTag").show();
+        	 page = 1;
         		$.ajax({
  					type: 'POST',
  					url: 'listConnectUser',
