@@ -27,32 +27,34 @@
 	<div
 		class="row bg-white box-shadow box-marginTop5 padding-top-bottom menu-top">
 		<!-- progress bar screen -->
-		<div class="container container-progress" style="display: block;">
-			<div class="row ">
-				<div id="carousel" class="carousel col-md-10 ">
-					<c:forEach var="teamInfo" items="${teamDisInfos}">
-						<div class="item one">
-							<div class="item_head one_1">
-								<p class="wrap_menutop" style=" text-overflow: ellipsis;max-width: 200px;white-space: nowrap;overflow: hidden;"; title="${teamInfo.teamName}">
-									<c:out value="チーム ${teamInfo.teamName}" />
-								</p>
+		<div class="container container-progress" style="display: block;height:500px;">
+		<c:if test="${pageContext.request.isUserInRole('ROLE_LEADER') or pageContext.request.isUserInRole('ROLE_OPERATOR') or pageContext.request.isUserInRole('ROLE_SUPERVISOR') or pageContext.request.isUserInRole('ROLE_ADMIN') }">
+				<div class="row ">
+					<div id="carousel" class="carousel col-md-10 ">
+						<c:forEach var="teamInfo" items="${teamDisInfos}">
+							<div class="item one">
+								<div class="item_head one_1">
+									<p class="wrap_menutop" title="${teamInfo.teamName}">
+										<c:out value="チーム ${teamInfo.teamName}" />
+									</p>
+								</div>
+								<div class="progress-content">
+									<p>
+										目標入力数 <span><c:out value="${teamInfo.processNumber}" /></span>
+									</p>
+									<p>
+										入力数 <span><c:out value="${teamInfo.memberNumber}" /></span>
+									</p>
+									<p>
+										進捗状況 <span><c:out value="${teamInfo.stateProgress}%" /></span>
+									</p>
+								</div>
 							</div>
-							<div class="progress-content">
-								<p>
-									目標入力数 <span><c:out value="${teamInfo.processNumber}" /></span>
-								</p>
-								<p>
-									入力数 <span><c:out value="${teamInfo.memberNumber}" /></span>
-								</p>
-								<p>
-									進捗状況 <span><c:out value="${teamInfo.stateProgress}%" /></span>
-								</p>
-							</div>
-						</div>
-					</c:forEach>
+						</c:forEach>
+					</div>
+	
 				</div>
-
-			</div>
+			</c:if>
 		</div>
 		<!-- END PROGRESS BAR SCREEN -->
 		<!-- BENGIN BACKUP RESTORE SCREEN -->

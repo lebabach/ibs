@@ -851,9 +851,9 @@ public class CardInfoController extends RestExceptionHandler {
         Validate.notNull(userId, this.msgUserIdNotNull);
         
         try {
-            List<PossessionCard> listPosCard = possessionCardService.getListPossessionCardById(userId, cardId.getCardId());
+            //List<PossessionCard> listPosCard = possessionCardService.getListPossessionCardById(userId, cardId.getCardId());
             
-            if(listPosCard.size() > 0){            
+            //if(listPosCard.size() > 0){            
                 SchemaContextHolder.setSchemaType(SchemaType.MANAGER);
                 if(possessionCardService.deletePossessionCard(userId, cardId.getCardId()) != 0){
                 	statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgDeleteCardSucess, token);                    
@@ -861,10 +861,10 @@ public class CardInfoController extends RestExceptionHandler {
                 else{
                 	statusInfo = new StatusInfo(Constants.ERROR, Constants.SERVER_ERROR, this.msgDeleteCardFailed, token);                    
                 }
-            }
-            else{
-            	statusInfo = new StatusInfo(Constants.SUCCESS, Constants.NO_CONTENT, this.msgNoContent, token);
-            }
+            //}
+            //else{
+            	//statusInfo = new StatusInfo(Constants.SUCCESS, Constants.NO_CONTENT, this.msgNoContent, token);
+            //}
         }
         catch(Exception ex) {
         	statusInfo = new StatusInfo(Constants.ERROR, Constants.SERVER_ERROR, this.msgDeleteCardFailed, token);

@@ -112,6 +112,7 @@ public class PCInterceptor extends HandlerInterceptorAdapter {
 						session.setAttribute("searchDetail", null);
 					}
 		        }
+				
 				request.setAttribute("objectNotification", objectNotification);
 				
 				String urlChangePass = request.getContextPath() + "/user/changepass";

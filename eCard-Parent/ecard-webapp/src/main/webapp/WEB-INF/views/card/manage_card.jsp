@@ -45,28 +45,10 @@ function initDatatables(status, user, criteria) {
 		"ajax" : {
 			"url" : "search",
 			"type" : "POST",
-			"data" : function(dataTableRequest) {
-				console.log(dataTableRequest);
-				var statusOperator = '';
-				if (typeof status === 'undefined')
-					statusOperator = $('#statusSort').val();
-				else
-					statusOperator = status;
-				
-				var criteriaOperator = '';
-				if (typeof criteria === 'undefined')
-					criteriaOperator = $('#criteriaSearch').val();
-				else
-					criteriaOperator = criteria;
-				
-				var userOperator = '';
-				if (typeof user === 'undefined')
-					userOperator = $('#dateSort').val();
-				else
-					userOperator = user;				
-				dataTableRequest.criteriaSearch = criteriaOperator;
-				dataTableRequest.status = statusOperator;
-				dataTableRequest.userId = userOperator;
+			"data" : function(dataTableRequest) {		
+				dataTableRequest.criteriaSearch = criteria;
+				dataTableRequest.status = status;
+				dataTableRequest.userId = user;
 				return dataTableRequest;
 			},
 			"dataSrc" : "data",
@@ -225,12 +207,33 @@ function loadDataComplete() {
 }
 
 	$(document).ready(function() {
-						var status = sessionStorage.getItem('statusSearchOperator') || "";
-						$('#statusSort').val(status);
-						var user = sessionStorage.getItem('userSearchOperator') || 0;
-						$('#dateSort').val(user);
+						var status = sessionStorage.getItem('statusSearchOperator');				
+						var user = sessionStorage.getItem('userSearchOperator');
 						var criteria = sessionStorage.getItem('criteriaSearchOperator');
-						$('#criteriaSearch').val(criteria);
+						console.log("status:" + status);
+						console.log("user:" +user);
+						console.log("criteriaSearch:" + criteria);
+						if(status == "" || status == null || typeof status === 'undefined' ){
+							status = $('#statusSort').val();
+						}else{
+							$('#statusSort').val(status);
+						}
+						
+						if(user=="" ||user == null || typeof user === 'undefined' ){
+							user = $('#dateSort').val();
+						}else{
+							$('#dateSort').val(user);
+						}
+						
+						if(criteria =="" ||criteria == null || typeof criteria === 'undefined' || criteria == 'undefined'){
+							criteria = $('#criteriaSearch').val();
+							if(typeof criteria === 'undefined' || criteria == 'undefined' ){
+								criteria="";
+							}
+						}else{
+							$('#criteriaSearch').val(criteria);
+						}
+						
 						dataTables = initDatatables(status, user, criteria);
 						
 						$("#criteriaSearch").keyup(function (e) {
