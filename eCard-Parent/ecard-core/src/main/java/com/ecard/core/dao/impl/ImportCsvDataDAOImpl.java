@@ -71,9 +71,9 @@ public class ImportCsvDataDAOImpl extends GenericDao implements ImportCsvDataDAO
 		
 		for (CardInfo cardInfo : cardInfoList) {
 			// card info
-			String indexId = processingDataIndex(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Migration, cardInfo.getCardIndexNo(), null);
+			/*String indexId = processingDataIndex(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Migration, cardInfo.getCardIndexNo(), null);
 			cardInfo.setCardIndexNo(indexId);
-			cardInfo.setImageFile(DataIndexUtil.getIndexNoOfImageBy(TableTypeEnum.ImageInfor, indexId) + ".jpg");
+			cardInfo.setImageFile(DataIndexUtil.getIndexNoOfImageBy(TableTypeEnum.ImageInfor, indexId) + ".jpg");*/
 			getEntityManager().persist(cardInfo);
 			
 			// possession Card

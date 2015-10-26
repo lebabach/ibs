@@ -39,9 +39,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.supercsv.cellprocessor.Optional;
-import org.supercsv.cellprocessor.ParseDate;
-import org.supercsv.cellprocessor.ParseInt;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
@@ -53,8 +50,6 @@ import com.ecard.core.model.PossessionCard;
 import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.Roles;
 import com.ecard.core.model.UserInfo;
-import com.ecard.core.model.UserMigration;
-import com.ecard.core.model.UserMigrationId;
 import com.ecard.core.model.UserTag;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.CardTagService;
@@ -66,8 +61,8 @@ import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.UserTagService;
 import com.ecard.webapp.constant.CommonConstants;
+import com.ecard.webapp.constant.CsvConstant;
 import com.ecard.webapp.security.EcardUser;
-import com.ecard.webapp.security.RoleType;
 import com.ecard.webapp.util.CsvFileReader;
 import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.util.UploadFileUtil;
@@ -511,7 +506,7 @@ public class DataProcessController {
 					} else {
 						cardModel.setContactDate(cardModel.getCreateDate());
 					}
-					// cardModel.setImageFile(CsvConstant.IMAGE_DEFAUT);
+					cardModel.setImageFile(CsvConstant.IMAGE_DEFAUT);
 					cardModel.setCompanyName(cardInfo.getCompanyName());// companyName,
 					cardModel.setCompanyNameKana(cardInfo.getCompanyNameKana());// companyNameKana,
 					cardModel.setDepartmentName(cardInfo.getDepartmentName());// departmentName,
