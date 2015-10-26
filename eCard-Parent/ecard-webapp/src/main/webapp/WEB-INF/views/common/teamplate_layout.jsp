@@ -39,7 +39,7 @@
 <link rel="stylesheet"
 	href="<c:url value='/assets/css/plugins/datapicker/datepicker3.css'/>"
 	type="text/css" media="all" />
-	<link href="<c:url value='/assets/css/bootstrap-dialog.min.css'/>" rel="stylesheet" type="text/css" />
+<link href="<c:url value='/assets/css/bootstrap-dialog.min.css'/>" rel="stylesheet" type="text/css" />
 
 <script src="<c:url value='/assets/js/jquery-2.1.1.js'/>"
 	type="text/javascript"></script>
@@ -81,6 +81,9 @@
 	type="text/javascript" charset="UTF-8"></script>
 <link rel="icon" type="image/png"
 	href="<c:url value='/assets/img/logo_icon_favion.png'/>" />
+<script src="<c:url value='/assets/js/bootstrap-dialog.min.js'/>"></script>
+
+
 <title><tiles:insertAttribute name="title" /></title>
 </head>
 

@@ -344,7 +344,7 @@ history.pushState(null, null, null);
 									  url: '/ecard-webapp/cards/updateIsEditting',
 									  data: 'Id='+$("input[name=cardId]").val(),
 									  success: function(){
-										  document.location.href = '/ecard-webapp/cards/list';										 
+										  document.location.href = '/ecard-webapp/cards/list';
 									  },
 								});
 											
@@ -527,9 +527,7 @@ history.pushState(null, null, null);
 	<c:if
 		test="${pageContext.request.isUserInRole('ROLE_OPERATOR') and (cardInfo.approvalStatus == 4 or cardInfo.approvalStatus == 5)}">
 		<c:if test="${not permissionEdit}">
-			<script type="text/javascript">
-				alert("You haven't permission to edit this card");				
-			</script>
+			
 			<meta http-equiv="Refresh"
 				content="0; url='<c:url value='/cards/list"'/>'">
 		</c:if>
