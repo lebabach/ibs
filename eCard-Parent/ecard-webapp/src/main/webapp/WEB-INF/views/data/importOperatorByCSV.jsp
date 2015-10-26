@@ -12,7 +12,9 @@
 </style>
 
 <div class="container-fluid padding-top20 bg-container height100per">
-
+	<input type="text" name="recordSuccess" id="recordSuccess" class="hidden" value="${recordSuccess}"> 
+	<input type="text" name="recordError" id="recordError" class="hidden" value="${recordError}"> 
+	<input type="text" name="recordEmpty" id="recordEmpty" class="hidden" value="${recordEmpty}">
 
         <!-- CENTER SIDE -->
  <div id="center-side" class="col-sm-12">
@@ -38,6 +40,11 @@
      <!-- END BAR TOP -->
      <div class="row bg-white box-shadow box-marginTop5 padding-top-bottom" >
         <div style="margin: 0 auto">
+        	<div class="row" style="text-align: center; margin: 25px;">
+					<p style="color: red;" class="mesage_record recordSuccess"></p>
+					<p style="color: red;" class="mesage_record recordError"></p>
+					<p style="color: red;" class="mesage_record recordEmpty"></p>
+				</div>
              <div class="col-md-12 col-xs-offset-5">
              	<form class="form-horizontal" role="form" id="upload" action = "/ecard-webapp/data/uploadOperatorCSV" enctype="multipart/form-data" method="post">
                  <div class="row" style="margin-bottom:5px">
@@ -111,6 +118,19 @@
 	      $('.js-ch-click input').click();
 	  });
 	  
+	  var recordSuccess = $('input[name=recordSuccess]').val();
+	  var recordError = $('input[name=recordError]').val();
+	  var recordEmpty = $('input[name=recordEmpty]').val();
+	  	/* var errorLineNo = $('input[name=errorLineNo]').val(); */
+	  if (recordSuccess != 0 || recordError != 0 || recordEmpty != 0){
+	  		$(".recordSuccess").text("Number of success record : "+recordSuccess);
+	  		$(".recordError").text("Number of error record : "+recordError);
+	  		$(".recordEmpty").text("Number of empty record : "+recordEmpty);
+	  		/* $(".errorLineNo").html(errorLineNo); */
+	          $(".mesage_record").css("display","block");
+	          /* $("#showLog").css("display","block"); */
+	          
+	  }
 	  var error = getUrlParameter('error');
 	  if(error == "formatCSV"){
 		  $(".error_exception").text("CSV形式が正しくないため、データの取り込みは行われませんでした。");
