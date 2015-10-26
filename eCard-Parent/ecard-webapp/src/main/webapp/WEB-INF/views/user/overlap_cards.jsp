@@ -365,15 +365,38 @@ function setConnectCard(cardId,email,name,companyName,addressFull,departmentName
 	return modal;
 }
 
-function setNewConnectCard(cardId,email,name,companyName,addressFull,departmentName,positionName,telNumberCompany,owner,contactDate){
+function setNewConnectCard(cardId,email,name,companyName,addressFull,departmentName,positionName,telNumberCompany,owner,contactDate,image){
 	var modal=	'<tr id='+cardId+'>'
 	+'<td style="text-align: center;"><div class="iradio_square-green_combo"><input type="radio" class="i-checks" name="bla1" value='+cardId+'></div></td>'
 	+'<td>'+name+'<br><br>'+companyName+'<br>'+email+'</td>'
+	+'<td ><a href="/ecard-webapp/user/card/details/'+cardId+'" ><img name="'+image+'" alt="image" src="<c:url value="/assets/img/loading.gif"/>" style="width: 100%"></a></td>'
 	+'<td>'+addressFull+'<br><br>'+telNumberCompany+'</td>'
 	+'<td>'+positionName+'<br><br>'+departmentName+'</td>'
 	+'<td>'+contactDate+'<br><br>'+owner+'</td>'
 	+'</tr>'
 	return modal;
+}
+
+function getImageFromSCP(fileImageName){
+	var target = $('#tbl-connect-cards img[name="'+fileImageName+'"]');			
+	$.ajax({
+        type: 'POST',
+        url: '/ecard-webapp/user/getImageFile',
+        data: 'fileImage='+fileImageName,    	        
+    }).done(function(resp, status, xhr){
+    	if(target == []){
+    		target = $('img[name="'+fileImageName+'"]');
+    	}
+    	if(resp == ""){
+    		target.attr('src','');    	  
+	        target.attr('src','/ecard-webapp/assets/img/card_08.png');
+    	} else {
+    		target.attr('src','');    	  
+	        target.attr('src','data:image/png;base64,'+resp);	
+    	}
+    }).fail(function(resp, status, xhr){
+        //alert('Error');
+    });						
 }
 
 $(document).ready(function() {
@@ -406,7 +429,8 @@ $(document).ready(function() {
 			    success: function(cards){
 			    	$("#tbl-connect-cards >tbody").remove();
 			    	$.each( cards, function( key, data ) {
-			    		$("#tbl-connect-cards").append(setNewConnectCard(data.cardId,data.email,data.name,data.companyName,data.addressFull,data.departmentName,data.positionName,data.telNumberCompany,data.owner,data.contactDateString));	
+			    		$("#tbl-connect-cards").append(setNewConnectCard(data.cardId,data.email,data.name,data.companyName,data.addressFull,data.departmentName,data.positionName,data.telNumberCompany,data.owner,data.contactDateString,data.image));
+			    		getImageFromSCP(data.image);
 			    	});
 			    	loadDataComplete();
 			    	return false;
@@ -619,7 +643,8 @@ $(document).ready(function() {
 										<th><fmt:message key='overlap.cards.table1.owner' /></th> --%>
 										
 										<th style="width: 378px"><fmt:message key='overlap.cards.table1.name.email.company' /></th>
-										<th style="width: 380px"><fmt:message key='overlap.cards.table1.address' /> <br><fmt:message key='overlap.cards.table1.TEL' /></th>
+										<th style="width: 100px">Image</th>
+										<th style="width: 280px"><fmt:message key='overlap.cards.table1.address' /> <br><fmt:message key='overlap.cards.table1.TEL' /></th>
 										<th style="width: 173px"><fmt:message key='overlap.cards.table1.department' /> <br><fmt:message key='overlap.cards.table1.position' /></th>
 										<th><fmt:message key='overlap.cards.table1.exchanges' /><br>名刺所有者</th>
 									</tr>

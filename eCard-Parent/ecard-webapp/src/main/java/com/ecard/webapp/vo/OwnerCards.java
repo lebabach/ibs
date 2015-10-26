@@ -15,6 +15,7 @@ public class OwnerCards {
 	private String contactDateString;
 	private String telNumberCompany;
 	private String owner;
+	private String image;
 	public Integer getCardId() {
 		return cardId;
 	}
@@ -128,5 +129,13 @@ public class OwnerCards {
 	@Override
 	public int hashCode() {
 		return this.email.hashCode();
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 }

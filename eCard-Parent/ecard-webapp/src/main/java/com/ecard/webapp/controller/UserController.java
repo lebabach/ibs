@@ -1675,6 +1675,7 @@ public class UserController {
 				ownerCard.setName(item.getName());
 				ownerCard.setPositionName(item.getPositionName());
 				ownerCard.setTelNumberCompany(item.getTelNumberCompany());
+				ownerCard.setImage(item.getImageFile());
 				userTemps = users.stream().filter(x -> x.getUserId().intValue() == item.getCardOwnerId().intValue()).collect(Collectors.toList());
 				if(!CollectionUtils.isEmpty(userTemps)){
 					user = userTemps.stream().findFirst().get();
