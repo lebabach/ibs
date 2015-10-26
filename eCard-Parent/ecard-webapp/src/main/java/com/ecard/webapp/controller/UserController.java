@@ -124,6 +124,7 @@ import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.ListCardDelete;
 import com.ecard.webapp.vo.ObjectCards;
 import com.ecard.webapp.vo.ObjectListSearchUsers;
+import com.ecard.webapp.vo.OverlapSearchDetail;
 import com.ecard.webapp.vo.OwnerCards;
 import com.ecard.webapp.vo.TagUserHome;
 import com.ecard.webapp.vo.UserInfoVO;
@@ -673,12 +674,19 @@ public class UserController {
 			List<com.ecard.core.vo.CardInfo> listOldCard = cardInfoService.getListCardHistoryByCardId(cardInfo.getCardId());
 			modelAndView.addObject("listOldCard", listOldCard);
 
-			// set search detail session
+			// set search detail session (homepc)
 			if (session.getAttribute("searchDetail") != null) {
 				UserSearchVO userSearch = (UserSearchVO) session.getAttribute("searchDetail");
 				userSearch.setDetail(true);
 				session.setAttribute("searchDetail", userSearch);
 			}
+			
+			// set search detail session in overlap
+			/*if (session.getAttribute("overlapSearchDetail") != null) {
+				OverlapSearchDetail overlapSearchDetail=(OverlapSearchDetail)session.getAttribute("overlapSearchDetail");
+				overlapSearchDetail.setDetail(true);
+				session.setAttribute("overlapSearchDetail", overlapSearchDetail);
+			}*/
 
 			// Get contact history
 			List<com.ecard.core.vo.ContactHistory> contactHistoryList = contactHistoryService
@@ -1646,7 +1654,25 @@ public class UserController {
 		dataTableResponse.setRecordsTotal(totalRecord.longValue());
 		dataTableResponse.setRecordsFiltered(totalRecord.longValue());
 		dataTableResponse.setData(cards);
-
+		HttpSession session= request.getSession();
+		//back from detail PC
+		/*if(!criteriaSearch.equals("")){
+			
+			OverlapSearchDetail overlapSearchDetail=(OverlapSearchDetail)session.getAttribute("overlapSearchDetail");
+			if(overlapSearchDetail.isDetail()==false){
+				
+				overlapSearchDetail.setSearch(criteriaSearch);
+				overlapSearchDetail.setCards(null);
+				overlapSearchDetail.setDetail(false);
+				session.setAttribute("overlapSearchDetail", overlapSearchDetail);	
+			}
+				
+		}else{
+			OverlapSearchDetail overlapSD=new OverlapSearchDetail();
+			session.setAttribute("overlapSearchDetail", overlapSD);	
+		}*/
+		
+		
 		return dataTableResponse;
 	}
 
@@ -1688,7 +1714,16 @@ public class UserController {
 				
 
 			}
+			
 		}
+		
+		/*if (session.getAttribute("overlapSearchDetail") != null) {
+			OverlapSearchDetail overlapSearchDetail=(OverlapSearchDetail)session.getAttribute("overlapSearchDetail");
+			overlapSearchDetail.setCards(cardInfo);
+			session.setAttribute("overlapSearchDetail", overlapSearchDetail);
+        }
+		
+		session.setAttribute("overlapSearchDetail", userSearchVO);*/
 
 		return ownerCards;
 	}

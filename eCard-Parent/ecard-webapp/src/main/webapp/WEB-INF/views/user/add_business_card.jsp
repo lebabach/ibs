@@ -341,22 +341,6 @@ function checkValidationForm() {
 		checkValidation = false;
 		$(".mesage_error").css("display", "block");
 	}
-	
-	var regex = "^[ァ-ヶ]*$"; //check pattern
-	if (!(regex.test(firstnamekana))) {
-		$(".error_newpass1").text(
-				"<fmt:message key='user.profile.format.pass'/>");
-		checkValidation = false;
-		$(".mesage_error").css("display", "block");
-	}
-	
-	if (!(regex.test(lastnamekana))) {
-		$(".error_newpass1").text(
-				"<fmt:message key='user.profile.format.pass'/>");
-		checkValidation = false;
-		$(".mesage_error").css("display", "block");
-	}
-
 	return checkValidation;
 }
 function resetValidationForm() {

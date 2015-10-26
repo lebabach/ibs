@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+	<%@ page import="com.ecard.webapp.vo.OverlapSearchDetail"%>
 <style type="text/css">
  .ibox-content-company .dataTables_wrapper {
  	width: 100% !important;
@@ -341,12 +342,55 @@ td {
 <script type="text/javascript">
 var dataTables;
 function loadDataComplete() {
+		loadICheck();
+		debugger;
+		var email=$(".hid-email").val();
+		var firstName=$(".hid-firstName").val();
+		var companyName=$(".hid-companyName").val();
+		var addressFull=$(".hid-addressFull").val();
+		var departmentName=$(".hid-departmentName").val();
+		var positionName=$(".hid-positionName").val();
+		var telNumberCompany=$(".hid-telNumberCompany").val();
+		var groupCompanyId=$(".hid-groupCompanyId").val();
+		if(email!=""){
+			sendAjaxListConnectCards(email,companyName,addressFull,departmentName,positionName,telNumberCompany,groupCompanyId,firstName);	
+		}
+}
+
+function loadICheck() {
 	$('.i-checks').iCheck({
-        checkboxClass: 'icheckbox_square-green',
-        radioClass: 'iradio_square-green',                
-   		});
-	
-	
+      checkboxClass: 'icheckbox_square-green',
+      radioClass: 'iradio_square-green',                
+	});
+}
+
+function sendAjaxListConnectCards(email,companyName,addressFull,departmentName,positionName,telNumberCompany,groupCompanyId,firstName){
+	$.ajax({
+	    type: 'POST',
+	    url: '/ecard-webapp/user/listConnectCards',
+	    dataType: 'json', 
+		 contentType: 'application/json',
+		 mimeType: 'application/json',
+	    data: JSON.stringify({ 
+	        'email':email,
+	        'companyName':companyName,
+	        'addressFull':addressFull,
+	        'departmentName':departmentName,
+	        'positionName':positionName,
+	        'telNumberCompany':telNumberCompany,
+	        'groupCompanyId':groupCompanyId,
+	        'firstName':firstName
+	    }),
+	    success: function(cards){
+	    	$("#tbl-connect-cards >tbody").remove();
+	    	$.each( cards, function( key, data ) {
+	    		$("#tbl-connect-cards").append(setNewConnectCard(data.cardId,data.email,data.name,data.companyName,data.addressFull,data.departmentName,data.positionName,data.telNumberCompany,data.owner,data.contactDateString,data.image));
+	    		getImageFromSCP(data.image);
+	    	});
+	    	loadICheck();
+	    	return false;
+	    }
+});
 }
 
 function setConnectCard(cardId,email,name,companyName,addressFull,departmentName,positionName,telNumberCompany,owner,contactDate){
@@ -410,32 +454,7 @@ $(document).ready(function() {
 		var positionName=$(this).closest( "tr" ).find(".positionName").val();
 		var telNumberCompany=$(this).closest( "tr" ).find(".telNumberCompany").val();
 		var groupCompanyId=$(this).closest( "tr" ).find(".groupCompanyId").val(); 
-		$.ajax({
-			    type: 'POST',
-			    url: '/ecard-webapp/user/listConnectCards',
-			    dataType: 'json', 
-				 contentType: 'application/json',
-				 mimeType: 'application/json',
-			    data: JSON.stringify({ 
-			        'email':email,
-			        'companyName':companyName,
-			        'addressFull':addressFull,
-			        'departmentName':departmentName,
-			        'positionName':positionName,
-			        'telNumberCompany':telNumberCompany,
-			        'groupCompanyId':groupCompanyId,
-			        'firstName':firstName
-			    }),
-			    success: function(cards){
-			    	$("#tbl-connect-cards >tbody").remove();
-			    	$.each( cards, function( key, data ) {
-			    		$("#tbl-connect-cards").append(setNewConnectCard(data.cardId,data.email,data.name,data.companyName,data.addressFull,data.departmentName,data.positionName,data.telNumberCompany,data.owner,data.contactDateString,data.image));
-			    		getImageFromSCP(data.image);
-			    	});
-			    	loadDataComplete();
-			    	return false;
-			    }
-		});
+		sendAjaxListConnectCards(email,companyName,addressFull,departmentName,positionName,telNumberCompany,groupCompanyId,firstName);
 	});
 	
 	$(".btn.btn-primary").click(function(){
@@ -459,7 +478,7 @@ $(document).ready(function() {
 	})
 	dataTables = $('#tbl-cards').dataTable( {
 		"fnDrawCallback" : function() {
-			loadDataComplete();
+			loadICheck();
 		},
 		"dom" : '<<t>ip>',
 		"iDisplayLength" : 10,
@@ -575,7 +594,29 @@ $(document).ready(function() {
 	<div class="box-1" style="width: 1200px;">
 		<div class="title-box-1">名刺の最新化（名寄せ）</div>
 		<div class="content-box-1" style="padding: 0">
-
+			<%-- <c:choose>
+			  <c:when test="${empty overlapSearchDetail}">
+			 	<input type="hidden" class="hid-email" value =""/>
+				<input type="hidden" class="hid-firstName" value =""/>
+				<input type="hidden" class="hid-companyName" value =""/>
+				<input type="hidden" class="hid-addressFull" value =""/>
+				<input type="hidden" class="hid-departmentName" value =""/>
+				<input type="hidden" class="hid-positionName" value =""/>
+				<input type="hidden" class="hid-telNumberCompany" value =""/>
+				<input type="hidden" class="hid-groupCompanyId" value =""/>
+			  </c:when>
+			  <c:otherwise>
+			  <input type="hidden" class="hid-haha" value ="haha"/>
+				 <input type="hidden" class="hid-email" value ="${overlapSearchDetail.cards.email}"/>
+				<input type="hidden" class="hid-firstName" value ="${overlapSearchDetail.cards.firstName}"/>
+				<input type="hidden" class="hid-companyName" value ="${overlapSearchDetail.cards.companyName}"/>
+				<input type="hidden" class="hid-addressFull" value ="${overlapSearchDetail.cards.addressFull}"/>
+				<input type="hidden" class="hid-departmentName" value ="${overlapSearchDetail.cards.departmentName}"/>
+				<input type="hidden" class="hid-positionName" value ="${overlapSearchDetail.cards.positionName}"/>
+				<input type="hidden" class="hid-telNumberCompany" value ="${overlapSearchDetail.cards.telNumberCompany}"/>
+				<input type="hidden" class="hid-groupCompanyId" value ="${overlapSearchDetail.cards.groupCompanyId}"/>
+			  </c:otherwise>
+			</c:choose> --%>
 			<div class="row bg-white box-shadow  padding-top-bottom"
 				style="margin-left: 0; margin-right: 0">
 
