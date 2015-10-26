@@ -754,7 +754,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	public List<com.ecard.core.vo.CardInfo> getListCardSearchAll(String owner, String searchText, String name,
 			String position, String department, String company, int pageNumber, int groupCompanyId) {
 
-        String sqlStr = "SELECT c.* FROM card_info c WHERE c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 ";
+        String sqlStr = "SELECT c.* FROM card_info c WHERE c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 AND c.newest_card_flg = 1 ";
         
         if (groupCompanyId == 1 || groupCompanyId ==2 || groupCompanyId ==3 || groupCompanyId == 4 || groupCompanyId == 5 ){
              sqlStr += " AND (c.group_company_id IN(1,2,3,4,5) OR (c.group_company_id NOT IN(1,2,3,4,5) AND c.contact_date >= '"+ this.complianceDate +"')) ";
