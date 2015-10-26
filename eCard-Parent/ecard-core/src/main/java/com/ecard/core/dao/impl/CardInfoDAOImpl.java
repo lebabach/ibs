@@ -971,7 +971,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			  query.setParameter("valueSearch", valueSearch);
 			}
 		}
-		query.setFirstResult(page).setMaxResults(this.maxResult);
+		query.setFirstResult(page*this.maxResult).setMaxResults(this.maxResult);
 
 		List<Object[]> listObj = query.getResultList();
 		List<CardInfoUserVo> lstcardInfoUserVo = new ArrayList<>();
