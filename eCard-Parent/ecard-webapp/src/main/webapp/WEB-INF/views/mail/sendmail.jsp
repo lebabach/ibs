@@ -19,10 +19,14 @@ function validateFrom(){
 	if(tileMail==""){
 		$('.titleMail').css("border","1px solid red");
 		chechValidate = false;
+	}else{
+		$('.titleMail').css("border","1px solid #e5e6e7");
 	}
 	if(contentMail==""){
 		$('.contentMail').css("border","1px solid red");
 		chechValidate = false;
+	}else{
+		$('.contentMail').css("border","1px solid #e5e6e7");
 	}
 	return chechValidate;
 }
@@ -301,16 +305,17 @@ $(document).ready(function() {
 	     
 	     $('.btnSend').on('click', function() {
 	    	    if($("input[name=sendType]").val() == ""){
-	    	    	alert("タイプの送信を選択してください");
+	    	    	 BootstrapDialog.show({
+	    	             title: '警告',
+	    	             message: 'タイプの送信を選択してください'
+	    	        });
+	    	    	//alert("タイプの送信を選択してください");
 					return false;
 	    	    }
 				var sendType =parseInt($("input[name=sendType]").val());
 				var companyId =parseInt($("input[name=companyId]").val());
 				var tileMail = $(".titleMail").val();
 				var contentMail =$('.contentMail').val();
-				if(!validateFrom()){
-					return false;
-				}
 				var userId = "";
 				$('#paging1 tbody').find('input[type=checkbox]').each(function(){
 					userId = userId + "," + $(this).val();
@@ -320,7 +325,11 @@ $(document).ready(function() {
 					user_send_to = 0;
 				}else if(sendType == 2){
 					if(parseInt(companyId) == 0){
-						alert("<fmt:message key='msg.choose.company.group'/>");
+						 BootstrapDialog.show({
+		    	             title: '警告',
+		    	             message: "<fmt:message key='msg.choose.company.group'/>"
+		    	        });
+						//alert("<fmt:message key='msg.choose.company.group'/>");
 						return false;
 					}
 					user_send_to = companyId;
@@ -334,7 +343,9 @@ $(document).ready(function() {
 					}
 					user_send_to = userId;
 				}
-				
+				if(!validateFrom()){
+					return false;
+				}
 				$.ajax({
 					type: 'POST',
 					url:"<c:url value='/mails/sendmailcontact'/>",
@@ -344,6 +355,10 @@ $(document).ready(function() {
 				    	 //document.location.href="<c:url value='/mails/displayMail'/>";
 				    	$(".titleMail").val(" ");
 				    	$('.contentMail').val(" ");
+				    	 BootstrapDialog.show({
+		    	             title: '警告',
+		    	             message: "メールを送信しました"
+		    	        });
 				    }else{
 				    	
 				    }
