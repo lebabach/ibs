@@ -457,7 +457,7 @@ public class CardInfoController extends RestExceptionHandler {
         try {        	
             AutoLogin autoLogin = userInfoService.findByToken(token);
             Integer userId = autoLogin.getUserInfo().getUserId();
-            //UserInfo userInfo = userInfoService.getUserInfoByUserId(userId);
+            UserInfo userInfo = userInfoService.getUserInfoByUserId(userId);
             //List<CardInfoConnectUser> cardInfo = cardInfoService.listConnectUser(userId, recentFlg);
             List<CardInfoConnectUser> cardInfo = cardInfoService.listConnectUser(userId, recentFlg, page);
             

@@ -45,11 +45,11 @@ public class PossessionCardServiceImpl implements PossessionCardService{
     
     public int deletePossessionCard(Integer userId, Integer cardId){
         int finalResult = 0;
-        int result = posCardDAO.deletePossessionCard(userId, cardId);
-        if(result == 1){
+//        int result = posCardDAO.deletePossessionCard(userId, cardId);
+        //if(result == 1){
             if(cardInfoDAO.updateCardDeleted(cardId) == 1)
                 finalResult = 1;
-        }
+        //}
         return finalResult;
     }
     
