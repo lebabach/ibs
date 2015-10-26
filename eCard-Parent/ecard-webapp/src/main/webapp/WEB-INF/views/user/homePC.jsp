@@ -510,10 +510,10 @@
     	  /* console.log("Scroll totalCardInfo = "+totalCardInfo);
     	  console.log("Scroll CurrentNumber = "+ currentNumberCard); */
     	  
-    	  if(currentNumberCard < parseInt(totalCardInfo)){
+    	  
     		   
 	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
-	    		   
+	    		   if(currentNumberCard < parseInt(totalCardInfo)){
 	    		   if(typeLoading == 2 && scrollAllow == 1 && (parseInt($('#sort-card-cnd').val()) == 1 || parseInt($('#sort-card-cnd').val()) == 2 
 	    				   || parseInt($('#sort-card-cnd').val()) == 5 || parseInt($('#sort-card-cnd').val()) == 6)){
 	    			// Load more card
@@ -528,7 +528,8 @@
 		     		   if(isLoading != 0){    			       			   
 		     			   return false;
 		     		   }
-		     		  
+		     		   
+		     		   console.log("PAGE = "+ id_manager);
 		     			$.xhrPool.abortAll();
 		    		    $.ajax({
 		 	    			type: 'POST',
@@ -569,6 +570,7 @@
 		 	    				
 		 	    			});
 	    		   	}
+	    	   }
 	    	    	// Call ajax here	
 	    	    	if($('#titleOfSearch').length){
 	    	    		//search
@@ -652,7 +654,7 @@
 	    	            }
 	    	    	}
 	    	    } 
-    	  }
+    	  
     	});
 
  $(document).ready(function(){
@@ -684,6 +686,7 @@
         var typeSort = $("#sort-card-cnd option:selected").val();
        	var typeSearch = $("#selectSortBox option:selected").val();
        	var page = 0;
+       	id_manager = 0;
        	isLoading = 0;
        	if(typeSort == 5){
        		strDate = strDate.slice(0,4)+"/"+strDate.slice(4,strDate.length+1);	
@@ -693,7 +696,7 @@
           $.ajax({
    			type: 'POST',
    			url: 'search',
-   			data: 'page=' +page + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch + "&valueSearch=" + strDate
+   			data: 'page=' + id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch + "&valueSearch=" + strDate
    		  }).done(function(resp, status, xhr) {
    			   var listGroupItem = "";
    			   totalCardInfo = resp.recordsTotal;
@@ -725,6 +728,7 @@
    				self.append(listGroupItem);
    				getImageSCP();
    				scrollAllow = 1;
+   				id_manager++;
    				$("#loading-copy").hide();
    			}).fail(function(xhr, status, err) {
    				$("#loading-copy").hide();

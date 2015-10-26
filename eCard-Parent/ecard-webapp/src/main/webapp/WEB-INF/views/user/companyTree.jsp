@@ -275,6 +275,10 @@ margin: 20px auto 30px auto;
  }
 </style>
 
+<div id="loading-copy" style="display: none; z-index: 1000; position: fixed;top: 50%;left: 50%;margin-top: -100px;margin-left: -100px;">
+	<img src="<c:url value='/assets/img/loading-card.gif'/>" />
+</div>
+
 <div class="div-list">  
    	<div class="box-1">
     	<div class="title-box-1">顧客組織一覧</div>
@@ -326,7 +330,7 @@ $(document).ready(function(){
     	var cardId = id.split('_');
     	var deptName = $("#"+this.id).find("input[name="+this.id+"]").val();
         if(deptName == 'undefined'){
-	   deptName = "";
+	   		deptName = "";
         }
     	var compName = $("#"+this.id).parent().find('.click').find('input[name=comp_'+cardId[1]+']').val();
     	searchCardInfo(deptName, compName, this.id);
@@ -345,8 +349,9 @@ $(document).ready(function(){
 			deptName = "";
 		}
 		var compName = $(".li-3").find("input[name=c_comp_"+this.id+"]").val();
+		var name = $(".li-3").find("input[name=c_name_"+this.id+"]").val();
 		//console.log("deptName :"+deptName+" compName : "+compName);
-    	window.location.href = "<c:url value='/user/companyTree/list' />?compName="+compName+"&deptName="+deptName;
+    	window.location.href = "<c:url value='/user/companyTree/list' />?compName="+compName+"&deptName="+deptName+"&name="+name;
     });
 	
 });
@@ -363,6 +368,8 @@ $(window).load(function() {
 });
 
 function searchCompanyTree(){
+	$("#loading-copy").show();
+	
 	var json = {"companyName" : $("input[name=companyName]").val()};
 	$.ajax({
     	url: "<c:url value='/user/searchCompany' />",
@@ -374,6 +381,8 @@ function searchCompanyTree(){
     		xhr.setRequestHeader("Content-Type", "application/json");
     	},
     	success: function(response) {
+    		$("#loading-copy").hide();
+    		
     		//console.log(JSON.stringify(response));
     		var respHTML = "<ul class='ul-1'>";
        		$.each(response, function(index, value){
@@ -393,12 +402,15 @@ function searchCompanyTree(){
        		//console.log($.cookie("respHTML"));
     	},
     	error: function(xhr, status, error){
-    		console.log("Error :"+ error);
+    		//console.log("Error :"+ error);
+    		$("#loading-copy").hide();
 	  	}
     });
 }
 
 function searchDepartmentTree(companyName, id){
+	$("#loading-copy").show();
+	
 	var compName = $("input[name=companyName_"+id+"]").val();
 	var json = {"companyName" : companyName};
 	$.ajax({
@@ -411,6 +423,8 @@ function searchDepartmentTree(companyName, id){
     		xhr.setRequestHeader("Content-Type", "application/json");
     	},
     	success: function(response) {
+    		$("#loading-copy").hide();
+    		
        		//console.log(JSON.stringify(response));
        		var respHTML = "<ul class='ul-2'>";
        		$.each(response, function(index, value){
@@ -433,11 +447,14 @@ function searchDepartmentTree(companyName, id){
     	},
     	error: function(xhr, status, error){
     		console.log("Error :"+ xhr.responseText);
+    		$("#loading-copy").hide();
 	  	}
     });
 }
 
 function searchCardInfo(deptName, compName, id){
+	$("#loading-copy").show();
+	
 	var json = {"companyName" : compName, "departmentName" : deptName};
 	$.ajax({
     	url: "<c:url value='/user/searchCardInfo' />",
@@ -449,6 +466,7 @@ function searchCardInfo(deptName, compName, id){
     		xhr.setRequestHeader("Content-Type", "application/json");
     	},
     	success: function(response) {
+    		$("#loading-copy").hide();
        		console.log(JSON.stringify(response));
        		var respHTML = "<ul style='display: inline-block;' class='ul-3'>";
        		$.each(response, function(index, value){
@@ -457,6 +475,7 @@ function searchCardInfo(deptName, compName, id){
 	       						+ value["companyName"] +"("+ value["count"] +")</a>"
 	       						+"<input value='"+ deptName +"' name='c_dep_"+ value["cardId"] +"' type='hidden'>"
 	       						+ "<input value='"+ compName +"' name='c_comp_"+ value["cardId"] +"' type='hidden'>"
+	       						+"<input value='"+ value["companyName"] +"' name='c_name_"+ value["cardId"] +"' type='hidden'>"
 	       						+ "</li>";
        			}
        			else{
@@ -472,6 +491,7 @@ function searchCardInfo(deptName, compName, id){
     	},
     	error: function(xhr, status, error){
     		console.log("Error :"+ xhr.responseText);
+    		$("#loading-copy").hide();
 	  	}
     });
 }
