@@ -419,7 +419,15 @@
 						          </div>          
 						        </div>
 					        </c:forEach>						      
-				     	</c:forEach>	       			
+				     	</c:forEach>
+				     	<c:if test="${lstCardInfoPCVo.size() < totalCardInfo}">
+				     		<div class="list-group-item pointer show-content" style="text-align: center;">
+					      	 	<a id="clickToLoadMore"  style="color: red;"> 次の10件を表示</a>
+					      	</div>
+				     	</c:if>
+			     		
+				     	
+      			
 			        </c:if>
 			        <c:if test="${loopCount.count != 1}">
 			       		<div class="ul-left-li list-group-item-title ">
@@ -429,7 +437,7 @@
 			       		</div>
 		       		</c:if>
 		       	</div>       	
-	      	</c:forEach>
+	      	</c:forEach>	      	
 	     </c:when>
 	    <c:otherwise>
 				<input class="hidden" id="hid-freeText" name="hid-freeText"
@@ -513,7 +521,7 @@
     	  
     		   
 	    	   if($(window).scrollTop() + $(window).height()  >= ($(document).height())) {
-	    		   if(currentNumberCard < parseInt(totalCardInfo)){
+	    		   /* if(currentNumberCard < parseInt(totalCardInfo)){
 	    		   if(typeLoading == 2 && scrollAllow == 1 && (parseInt($('#sort-card-cnd').val()) == 1 || parseInt($('#sort-card-cnd').val()) == 2 
 	    				   || parseInt($('#sort-card-cnd').val()) == 5 || parseInt($('#sort-card-cnd').val()) == 6)){
 	    			// Load more card
@@ -570,7 +578,7 @@
 		 	    				
 		 	    			});
 	    		   	}
-	    	   }
+	    	   } */
 	    	    	// Call ajax here	
 	    	    	if($('#titleOfSearch').length){
 	    	    		//search
@@ -680,7 +688,9 @@
         }
         if(clickMySelf == 1){
         	return false;
-        }        
+        }
+        $("#clickToLoadMore").parent().remove();
+        
        	var self = $(this).parent();        	
         var strDate = $(this).parent().attr("id");
         var typeSort = $("#sort-card-cnd option:selected").val();
@@ -726,6 +736,10 @@
    					 });
    				});
    				self.append(listGroupItem);
+   				if(totalCardInfo > 10){
+   					appendLoadMore(self);	
+   				}
+   				
    				getImageSCP();
    				scrollAllow = 1;
    				id_manager++;
@@ -1027,6 +1041,7 @@
 	       	var valueSearch = "";
 	       	id_manager = 0;
 	       	isLoading = 0;
+	       	
 	       	$("#loading-copy").show();
 	          $.ajax({
 				type: 'POST',
@@ -1045,9 +1060,7 @@
 						 nameShow = "（タグ設定なし)"; */
 					 } else if (typeSort == 1 ){
 						nameShow = changeAphabetToHigrana(value.nameSort);		 
-					 }
-					 
-					 else {
+					 } else {
 						 nameShow = value.nameSort;
 					 }
 					 
@@ -1098,7 +1111,9 @@
 						 
 					 }
 				 });
-	          	 
+				if (totalCardInfo > 10){
+   					appendLoadMore(self);
+   				}
 				id_manager++;
 				$("#loading-copy").hide();
 			}).fail(function(xhr, status, err) {
@@ -1480,12 +1495,10 @@
 	   		$(".error_common").text("");
 	   	}
 	   	
-	 	$(document).on('click', '.business_card_book .list-group-item', function() {
+	 	$(document).on('click', '.business_card_book .list-group-item', function(e) {
 	 		var cardIdStr = $(this).find('input[name=bla]').val();
-	 		if(cardIdStr == undefined){
-	 			cardIdStr = $(this).find('input[name=cardId]').val();
-	 		}
-	 		if(cardIdStr != "none"){
+	 		
+	 		if(cardIdStr != "none" &&  cardIdStr != undefined){
         	    cardId = parseInt(cardIdStr);
                  window.location.href = '<c:url value="/user/card/details/'+cardId+'"/>';
 	 		}
@@ -1847,6 +1860,71 @@
        		deleteTag(tagId);
          });
 	
+	 	
+	 	$(document).on("click", "#clickToLoadMore", function(e){
+	 		var currentNumberCard = $('.list-group .active').parent().find('.row-new').length;
+	    	var self = $('.list-group .active').parent();
+	 		
+	 		var typeSort = $('#sort-card-cnd').val();
+   		    var typeSearch = $("#selectSortBox option:selected").val();
+   		    var strDate = self.attr("id");
+   		    if(typeSort == 5){
+            	strDate = strDate.slice(0,4)+"/"+strDate.slice(4,strDate.length+1);	
+            }
+   		   
+   		   if(isLoading != 0){    			       			   
+   			   return false;
+   		   }
+   			$("#loading-copy").show();
+   			$("#clickToLoadMore").parent().remove();
+   		   console.log("PAGE = "+ id_manager);
+   			$.xhrPool.abortAll();
+  		    $.ajax({
+	    			type: 'POST',
+	    			url: 'search',
+	    			data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch + "&valueSearch=" + strDate
+	    		  }).done(function(resp, status, xhr) {
+	    			   var listGroupItem = "";
+	    			   totalCardInfo = resp.recordsTotal;
+	    			   console.log("TotalCardInfo = "+ totalCardInfo);
+	    				$.each( resp.data, function( key, value ) {
+	    					 $.each( value.lstCardInfo, function (k,v) {
+	    						 listGroupItem += '<div class="list-group-item pointer show-content">'
+	    				    					+'<div class="row row-new">'
+	    				    					+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
+	    				    					+    '<input type="checkbox" value='+v.cardId+' class="i-checks" name="bla" style="position: absolute; opacity: 0;">'
+	    				    					+ 		'<ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>'
+	    				    					+	 '</div></div>'
+	    				    					+	'<div class="col-md-5">'
+	    				    					+		'<div class="col-xs-11 mg-top">'
+	    				    					+ 			'<p class="name">'+ v.lastName + ' '+v.firstName +'</p>'
+	    				    					+			'<p class="livepass">'+v.companyName+'</p>'
+	    				    					+			'<p class="department_and_position">'+v.departmentName+' '+v.positionName+'</p>'
+	    				    					+			'<p class="num">'+v.telNumberCompany+'</p>'
+	    				    					+			'<p class="mail"><a href="#">'+v.email+'</a></p>'
+	    				    					+ '</div></div>'
+	    				    					+	'<div class="col-md-6">'
+	    				    					+	'<div class="col-xs-5" style=" display: table;"></div>'	
+	    				    					+	'<div class="col-xs-7">'								
+	    				    					+	'<img src="<c:url value='/assets/img/loading.gif'/>" class=" lazy img-responsive img-thumb pull-right" name="'+v.imageFile+'" alt="Responsive image">'	
+	    				    					+   '<input class="hidden" name="fileImageName" value='+v.imageFile+'>'
+	    				    					+	'</div> </div> </div> </div>';
+	    					 });
+	    				});
+	    				self.append(listGroupItem);
+	    				if (currentNumberCard < totalCardInfo){
+	    					appendLoadMore(self);
+	    				}
+	    				
+	    				getImageSCP();
+	    				id_manager++;
+	    				$("#loading-copy").hide();
+	    			}).fail(function(xhr, status, err) {
+	    				$("#loading-copy").hide();
+	    			});
+	 		
+	 		
+	 	});
 	   	function resetFreeText() {
 	   		$("#freeText").text("");
 	   		$("#freeText").val("");
@@ -2274,6 +2352,13 @@
 			}
 		}
 		
+		function appendLoadMore(self){
+			self.append(
+				'<div class="list-group-item pointer show-content" style="text-align: center;">'
+		      	+' 	<a id="clickToLoadMore" style="color: red;"> 次の10件を表示</a>'
+		      	+'</div>'
+			);
+		}
 
     </script>
 
