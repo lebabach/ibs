@@ -1,11 +1,17 @@
 package com.ecard.core.batch.util;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +35,9 @@ public class UploadLostImageUtil {
     private static final String directoryFrom = "/data/backup/lost_image";
     private static final String directoryBackup = "/data/photo/card";
     
+    @Value("${sftp.hostname}")
+    private String sftpHostName;
+    
     public UploadLostImageUtil(){}
     
     public UploadLostImageUtil(String scpHostName, String scpUser, String scpPassword){
@@ -39,47 +48,48 @@ public class UploadLostImageUtil {
     
 	public void uploadLostImageFile() throws JSchException, SftpException{
 		//String directoryTo = "ssh://"+ BatchConstants.scpUserName +":"+ BatchConstants.scpPassword +"@"+ BatchConstants.scpHostName + directoryBackup;
-		
+		System.out.println("SFTP connection, scpUser="+this.scpUser+", scpHost ="+this.scpHostName);
+
+	    File dir = new File(directoryFrom);
+	    File[] files = dir.listFiles();
+	    System.out.println("Number of files = "+files.length + ", folder of Local = "+ directoryFrom);
+	    for (int i = 0; i < files.length; i++) {
+	        File file = files[i];
+	        uploadFile(file);
+	        System.out.println("Delete File Name= "+ file.getName() + ", file path = "+ file.getAbsolutePath());
+    		if(file.exists()){
+    			System.out.println("Delete file success");
+    			file.delete();
+    		} else {
+    			System.out.println("Delete file UN success");
+    		}
+	    }
+        System.out.println("Upload lost card image successfull");
+	}
+	
+	public void uploadFile(File file) throws JSchException, SftpException {
 		java.util.Properties config = new java.util.Properties();
         config.put("StrictHostKeyChecking", "no");
-
-        JSch ssh = new JSch();
+		JSch ssh = new JSch();
         Session session = ssh.getSession(this.scpUser, this.scpHostName, 22);
         session.setConfig(config);
         session.setPassword(this.scpPassword);
         session.connect();
-
+        System.out.println("folder of SCP = "+ directoryBackup);
         Channel channel = session.openChannel("sftp");
         channel.connect();
         ChannelSftp sftp = (ChannelSftp) channel;
-        sftp.cd(directoryFrom);
         
-        @SuppressWarnings("unchecked")
-		Vector<LsEntry> files = sftp.ls("*");
-        
-        System.out.printf("Found %d files in dir %s%n", files.size(), directoryFrom);
-        //ArrayList<String> list = new ArrayList<String>();
-        for (LsEntry entry : files) {
-            if(entry.getFilename().toLowerCase().endsWith(".jpg")) {
-                //list.add(entry.getFilename());
-            	File file = new File(directoryFrom+"/"+entry.getFilename());
-            	try (FileInputStream fis = new FileInputStream(file)) {
-            		sftp.cd(directoryBackup);
-            		sftp.put(fis, directoryBackup+"/"+entry.getFilename());
-            		
-            		if(file.exists())
-            			file.delete();
-            	} catch (FileNotFoundException e) {
-            		logger.debug("FileNotFoundException : "+e.getMessage(), UploadLostImageUtil.class);
-				} catch (IOException e) {
-					logger.debug("IOException : "+e.getMessage(), UploadLostImageUtil.class);
-				}
-            }
-        }
-        System.out.println("Upload lost card image successfull");
-        logger.info("Upload lost card image successfull");
-        
-        channel.disconnect();
-        session.disconnect();
+        try (FileInputStream fis = new FileInputStream(file)) {
+    		sftp.cd(directoryBackup);
+    		sftp.put(fis, directoryBackup+"/"+file.getName());
+    		    			
+    	} catch (FileNotFoundException e) {
+    		logger.debug("FileNotFoundException : "+e.getMessage(), UploadLostImageUtil.class);
+		} catch (IOException e) {
+			logger.debug("IOException : "+e.getMessage(), UploadLostImageUtil.class);
+		}
 	}
+	
+	
 }
