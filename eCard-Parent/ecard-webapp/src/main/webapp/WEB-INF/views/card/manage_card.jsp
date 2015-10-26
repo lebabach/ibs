@@ -227,7 +227,7 @@ function loadDataComplete() {
 						
 						if(criteria =="" ||criteria == null || typeof criteria === 'undefined' || criteria == 'undefined'){
 							criteria = $('#criteriaSearch').val();
-							if(typeof criteria === 'undefined'){
+							if(typeof criteria === 'undefined' || criteria == 'undefined' ){
 								criteria="";
 							}
 						}else{
