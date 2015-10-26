@@ -1094,12 +1094,7 @@
 						 
 					 }
 				 });
-	          	 if(resp.data.length == 0){
-	          		BootstrapDialog.show({
-	       				title: '<fmt:message key="popup.title.info" />',
-	      	             	message: '<fmt:message key="add.tag.failed" />'
-	       	      		});
-	          	 }
+	          	 
 				id_manager++;
 				$("#loading-copy").hide();
 			}).fail(function(xhr, status, err) {
