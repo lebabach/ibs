@@ -401,17 +401,7 @@ $(document).ready(function() {
 		autoclose : true,
 		calendarWeeks : true
 
-	}).datepicker("setDate", "0");;
-	//Auto convert kana
-	$.fn.autoKana("#lastname", "#lastnamekana", {
-		katakana : true
-	});
-	$.fn.autoKana("#fistname", "#firstnamekana", {
-		katakana : true
-	});
-	$.fn.autoKana("#companyname", "#companyNameKanaId", {
-		katakana : true
-	});
+	}).datepicker("setDate", "0");
 	
 	
 });
