@@ -461,6 +461,7 @@
     var id_manager = 1;
     var totalCardInfo = '<c:out value="${totalCardInfo}"/>';
     var typeLoading = 0;
+    var page = 1;
     var searchDetail ='<c:out value="${searchDetail}" />';
     var arrayHirgana = ["ア","イ","ウ","エ","オ","カ","ガ","キ","ギ","ク","グ","ケ","ゲ","コ","ゴ","サ","ザ","シ","ジ","ス","ズ","セ","ゼ","ソ","ゾ",
                         "タ","ダ","チ","ヂ","ツ","ヅ","テ","デ","ト","ド","ナ","ニ","ヌ","ネ","ノ","ハ","バ","パ","ヒ","ビ","ピ","フ","ブ","プ","ヘ",
@@ -502,6 +503,7 @@
       
       var scrollAllow = 1;
       var isLoading = 0;
+      
       $(window).scroll(function() {     	  
     	  var currentNumberCard = $('.list-group .active').parent().find('.row-new').length;
     	  var self = $('.list-group .active').parent();
@@ -603,7 +605,7 @@
 		       			    }
 		       			});
 	    	    	}
-	    	    	if(typeLoading == 3 && (parseInt($('#selectSortBox').val()) == 4 || parseInt($('#selectSortBox').val()) == 5 )){
+	    	    	if( isLoading == 0 &&typeLoading == 3 && (parseInt($('#selectSortBox').val()) == 4 || parseInt($('#selectSortBox').val()) == 5 )){
 	    	    		var recentFlg =0;
 	    	    		var total = 0;
 	    	    		if(parseInt($('#selectSortBox').val()) == 4){
@@ -618,7 +620,7 @@
 			    	    		 $.ajax({
 			     					type: 'POST',
 			     					url: 'listConnectUser',
-			     					data: 'page=' + (++id_manager) + "&recentFlg=" +recentFlg
+			     					data: 'page=' + page + "&recentFlg=" +recentFlg
 			     				}).done(function(resp, status, xhr) { 					
 			     					$.each( resp.cardList, function( k, v ) {
 			     						 $(".business_card_book .list-group").append('<div class="list-group-item pointer show-content">'
@@ -643,7 +645,7 @@
 			     								+	'</div> </div> </div> </div>');
 			     			 					getImageFromSCP(v.imageFile);
 			     					});
-			     					
+			     					page++;
 			     				}).fail(function(xhr, status, err) {
 			     					console.log('BBB='+err);
 			     				}); 
@@ -930,9 +932,11 @@
 					console.log('BBB='+err);
 				});  
          }else if(parseInt(typeSort) == 4){
+        	 isLoading = 0;
         	 $("#sort_cnd").hide();
         	 $("#bulk_tag").show();
         	 $("#deleteTag").show();
+        	  page = 1;
         		$.ajax({
  					type: 'POST',
  					url: 'listConnectUser',
@@ -971,6 +975,8 @@
         	 $("#sort_cnd").hide();
         	 $("#bulk_tag").show();
         	 $("#deleteTag").show();
+        	 isLoading = 0;
+        	 page = 1;
         		$.ajax({
  					type: 'POST',
  					url: 'listConnectUser',
@@ -1031,8 +1037,8 @@
 				 $.each( resp.data, function( key, value ) {
 					 if(typeSort == 5) {
 						 nameShow = value.nameSort.replace("/","年")+"月";
-					 } else if(typeSort == 6 && value.nameSort=="cardNoTag") {
-						 nameShow = "（タグ設定なし)";
+					 /* } else if(typeSort == 6 && value.nameSort=="cardNoTag") {
+						 nameShow = "（タグ設定なし)"; */
 					 } else if (typeSort == 1 ){
 						nameShow = changeAphabetToHigrana(value.nameSort);		 
 					 }
@@ -1088,6 +1094,12 @@
 						 
 					 }
 				 });
+	          	 if(resp.data.length == 0){
+	          		BootstrapDialog.show({
+	       				title: '<fmt:message key="popup.title.info" />',
+	      	             	message: '<fmt:message key="add.tag.failed" />'
+	       	      		});
+	          	 }
 				id_manager++;
 				$("#loading-copy").hide();
 			}).fail(function(xhr, status, err) {
@@ -1216,6 +1228,7 @@
        
           
           $(".modal-content .btn-lg").click(function() {
+        	  
              	resetValidationForm();
        			if (!checkValidationFormSearch()) {
        				return false;
@@ -1231,8 +1244,7 @@
        			if($("#parameterFlg").val()==0){
        				owner="";	
        	        }
-       	   		$(".modal-header button").click();
-       	   		
+       	   		$(".modal-header button").click();       	   		
        	   		ListSearch(freeText,owner,company,department,position,name,parameterFlg);
               });
           
@@ -1276,7 +1288,7 @@
  
       
       function ListSearch(freeText,owner,company,department,position,name,parameterFlg){
-    	  	
+		 
  	   		id_manager=0;
  			$.ajax({
  			    type: 'POST',
