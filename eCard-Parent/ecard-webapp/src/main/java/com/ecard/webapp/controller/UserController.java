@@ -1862,12 +1862,12 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "companyTree/list")
-	public ModelAndView listCardByName(@RequestParam String compName, @RequestParam String deptName, HttpServletRequest request) {
+	public ModelAndView listCardByName(@RequestParam String compName, @RequestParam String deptName, @RequestParam String name, HttpServletRequest request) {
 		logger.debug("listCardByName", UserController.class);
 
 		ModelAndView modelAndView = new ModelAndView();
 		try{
-			List<CardInfo> cardList = cardInfoService.searchCardInfoByName(compName, deptName);
+			List<CardInfo> cardList = cardInfoService.searchCardInfoByName(compName, deptName, name);
 			
 			if(cardList.size() > 0){
 				modelAndView.addObject("cardInfoList", cardList);

@@ -349,8 +349,9 @@ $(document).ready(function(){
 			deptName = "";
 		}
 		var compName = $(".li-3").find("input[name=c_comp_"+this.id+"]").val();
+		var name = $(".li-3").find("input[name=c_name_"+this.id+"]").val();
 		//console.log("deptName :"+deptName+" compName : "+compName);
-    	window.location.href = "<c:url value='/user/companyTree/list' />?compName="+compName+"&deptName="+deptName;
+    	window.location.href = "<c:url value='/user/companyTree/list' />?compName="+compName+"&deptName="+deptName+"&name="+name;
     });
 	
 });
@@ -466,7 +467,7 @@ function searchCardInfo(deptName, compName, id){
     	},
     	success: function(response) {
     		$("#loading-copy").hide();
-       		//console.log(JSON.stringify(response));
+       		console.log(JSON.stringify(response));
        		var respHTML = "<ul style='display: inline-block;' class='ul-3'>";
        		$.each(response, function(index, value){
        			if(value["companyName"] != "" && value["count"] != 0){
@@ -474,6 +475,7 @@ function searchCardInfo(deptName, compName, id){
 	       						+ value["companyName"] +"("+ value["count"] +")</a>"
 	       						+"<input value='"+ deptName +"' name='c_dep_"+ value["cardId"] +"' type='hidden'>"
 	       						+ "<input value='"+ compName +"' name='c_comp_"+ value["cardId"] +"' type='hidden'>"
+	       						+"<input value='"+ value["companyName"] +"' name='c_name_"+ value["cardId"] +"' type='hidden'>"
 	       						+ "</li>";
        			}
        			else{

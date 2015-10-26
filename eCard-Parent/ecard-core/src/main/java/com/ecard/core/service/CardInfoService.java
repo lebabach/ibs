@@ -157,7 +157,7 @@ public interface CardInfoService {
    
    public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName);
    
-   public List<CardInfo> searchCardInfoByName(String companyName, String departmentName);
+   public List<CardInfo> searchCardInfoByName(String companyName, String departmentName, String name);
    
    public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card);
    
