@@ -126,7 +126,7 @@ public class ImportCsvDataServiceImpl implements ImportCsvDataService {
 	}
 	
 	@Override
-	public int importListOperatorInfo(List<UserInfo> userInfoList) {
+	public List<UserInfo> importListOperatorInfo(List<UserInfo> userInfoList) {
 		int batchSize = Integer.parseInt(this.importCsvBatchSize);
 		// to synchronize data with database and prevent OutOfMemory
 		// the batch size should less than or equals 100
@@ -137,8 +137,8 @@ public class ImportCsvDataServiceImpl implements ImportCsvDataService {
 		int totalRecords = userInfoList.size();
 	    int startIndex = 0;
 	    int lastIndex;
-	    int successCount = 0;
 	    
+	    List<UserInfo> importSuccessList = new ArrayList<UserInfo>();
 	    if (batchSize > 1){	
 		    // import data with batchSize record for one time
 		    for (int i = 0; i < ((float) totalRecords / batchSize); i++) {
@@ -150,8 +150,9 @@ public class ImportCsvDataServiceImpl implements ImportCsvDataService {
 				
 				List<UserInfo> subUserInfoList = userInfoList.subList(startIndex, lastIndex);				
 				try {
-					int subSuccessCount = importCsvDataDAO.bulkInsertOperatorInfo(subUserInfoList);
-					successCount += subSuccessCount;
+					importCsvDataDAO.bulkInsertOperatorInfo(subUserInfoList);
+					importSuccessList.addAll(subUserInfoList);
+					
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -159,13 +160,14 @@ public class ImportCsvDataServiceImpl implements ImportCsvDataService {
 	    } else {
 	    	for (int i = 0; i < totalRecords; i++) {
 	    		try {
-					int subSuccessCount = importCsvDataDAO.bulkInsertOperatorInfo(Arrays.asList(userInfoList.get(i)));
-					successCount += subSuccessCount;
+	    			List<UserInfo> subUserInfoList = Arrays.asList(userInfoList.get(i));
+					importCsvDataDAO.bulkInsertOperatorInfo(subUserInfoList);
+					importSuccessList.addAll(subUserInfoList);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 	    	}
 	    }
-		return successCount;
+		return importSuccessList;
 	}
 }

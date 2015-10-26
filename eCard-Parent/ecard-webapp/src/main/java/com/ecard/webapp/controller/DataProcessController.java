@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
+import org.thymeleaf.context.Context;
 
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.CardTag;
@@ -54,6 +56,7 @@ import com.ecard.core.model.UserTag;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.CardTagService;
 import com.ecard.core.service.DataIndexService;
+import com.ecard.core.service.EmailService;
 import com.ecard.core.service.GroupCompanyInfoService;
 import com.ecard.core.service.ImportCsvDataService;
 import com.ecard.core.service.MasterService;
@@ -74,6 +77,9 @@ import com.ecard.webapp.vo.UserInfoFromCSV;
 @RequestMapping("/data/*")
 public class DataProcessController {
     private static final Logger logger = LoggerFactory.getLogger(DataProcessController.class);
+    private String[] values = new String[] {"application/vnd.ms-excel","application/excel","application/vnd.ms-excel","application/csv", "application/vnd.msexcel" , "application/force-download",
+			"application/octet-stream","application/txt",
+			"text/csv","text/comma-separated-values", "text/csv", "text/plain","text/anytext"};
     
     @Autowired
     ImportCsvDataService importCsvDataService;
@@ -98,6 +104,9 @@ public class DataProcessController {
     
     @Autowired
     MasterService masterService;
+    
+    @Autowired
+    EmailService emailService;
     
     @Value("${scp.hostname}")
     private String scpHostName;
@@ -146,17 +155,18 @@ public class DataProcessController {
                     "ownerOtherUser", "reserve1", "reserve2", "reserve3", "useStopFlg", "connectZapier",
                     "position" };
         
-		if (!file.getContentType().equals("application/vnd.ms-excel") && !file.getContentType().equals("text/csv")) {
+
+		if(!Arrays.asList(values).contains(file.getContentType())){
 			return new ModelAndView("redirect:importCardCSV", "error", "formatCSV");
 		}
-		Integer groupCompanyId = Integer.parseInt(request.getParameter("groupCompanyId").toString());
-		GroupCompanyInfo groupCompanyInfo = groupCompnayInfoService.getCompanyById(groupCompanyId);
-		int recordCnt = 0;
-                
 		if (file.isEmpty()){
 			return new ModelAndView("redirect:importCardCSV", "error", "Error");
 		}
-			
+		
+		Integer groupCompanyId = Integer.parseInt(request.getParameter("groupCompanyId").toString());
+		GroupCompanyInfo groupCompanyInfo = groupCompnayInfoService.getCompanyById(groupCompanyId);
+		int recordCnt = 0;
+
 		try {
 			UserInfoFromCSV userInfoFromCSV = new UserInfoFromCSV();
 			List<UserInfoFromCSV> listUserInfoCSV;
@@ -250,13 +260,21 @@ public class DataProcessController {
 
 	@RequestMapping(value = "/uploadOperatorCSV", method = RequestMethod.POST)
     public  ModelAndView uploadOperatorCSV( @RequestParam("file") MultipartFile file, HttpServletRequest request) {
-		if (!file.getContentType().equals("application/vnd.ms-excel") && !file.getContentType().equals("text/csv")) {
+		ModelAndView modelAndView = new ModelAndView();
+		List<GroupCompanyInfo> listGroupCompany = groupCompnayInfoService.getListCompany();
+		List<UserInfo> listUserInfo = userInfoService.getAllUserInfo();
+		int recordCnt = 0;
+		int recordEmpty = 0;
+		int recordSuccess = 0;
+		int recordError = 0;
+		
+		if(!Arrays.asList(values).contains(file.getContentType())){
 			return new ModelAndView("redirect:importOperatorByCSV", "error", "formatCSV");
 		}
 		if (file.isEmpty()){
 			return new ModelAndView("redirect:importOperatorByCSV", "error", "Error");
 		}
-		int recordCnt = 0;
+				
 		Integer groupCompanyId = Integer.parseInt(request.getParameter("groupCompanyId").toString());
 		GroupCompanyInfo groupCompanyInfo =  groupCompnayInfoService.getCompanyById(groupCompanyId);
 		try {
@@ -280,7 +298,9 @@ public class DataProcessController {
 
 			for (OperatorInfoFromCSV listUser : listUserInfoCSV) {
 				recordCnt++;
-				if (listUser.getEmail() != null && userInfoService.checkEmailExist(listUser.getEmail())) {
+				
+				if (listUser.getEmail() == null || userInfoService.checkEmailExist(listUser.getEmail())) {
+					recordEmpty++;
 					System.out.println("uploadCardCsv err=checkEmailExist line=" + recordCnt);
 					continue;
 				}
@@ -294,10 +314,27 @@ public class DataProcessController {
 				userInfo.setLastNameKana(listUser.getLastNameKana());
 				userInfo.setFirstNameKana(listUser.getFirstNameKana());
 								
-				// userInfo.setUseDate(listUser.getUseDate());				
-				userInfo.setUseDate(new SimpleDateFormat("yyyy/MM/dd").parse(listUser.getUseDate()));
+				try {
+					userInfo.setUseDate(new SimpleDateFormat("yyyy/MM/dd").parse(listUser.getUseDate()));
+				} catch (ParseException ex) {
+					ex.printStackTrace();
+					recordError++;						
+					continue;
+				}
 				
-				userInfo.setEndDate(new SimpleDateFormat("yyyy/MM/dd").parse(listUser.getEndDate()));
+				if (StringUtils.isNotBlank(listUser.getEndDate())){
+					try {
+						userInfo.setEndDate(new SimpleDateFormat("yyyy/MM/dd").parse(listUser.getEndDate()));
+					} catch (ParseException ex) {
+						ex.printStackTrace();
+						recordError++;						
+						continue;
+					}
+				} else {
+					userInfo.setEndDate(new SimpleDateFormat("yyyy/MM/dd").parse("2030/12/31"));
+				}
+				
+				
 				
 				String password = new BigInteger(130, new SecureRandom()).toString(32);
 				userInfo.setPassword(new BCryptPasswordEncoder().encode(password));
@@ -332,14 +369,27 @@ public class DataProcessController {
 				userInfo.setDeleteFlg(0);
 				userInfoList.add(userInfo);
 			}
-			if(CollectionUtils.isNotEmpty(userInfoList)){
-				importCsvDataService.importListOperatorInfo(userInfoList);
+			if(CollectionUtils.isNotEmpty(userInfoList)){				
+    			List<UserInfo> subUserInfoList = importCsvDataService.importListOperatorInfo(userInfoList);
+    			recordSuccess = subUserInfoList.size();
+                recordError += recordCnt - recordSuccess - recordEmpty;
+             // send mail function here
+    			sendMailResgisterOperator(subUserInfoList);
 			}
-			return new ModelAndView("redirect:/operators/list");
+			
+			modelAndView.addObject("recordSuccess", recordSuccess);
+			modelAndView.addObject("recordError", recordError);
+			modelAndView.addObject("recordEmpty", recordEmpty);
+			modelAndView.addObject("msgImportSuccess", this.csvImportSuccess);
+			modelAndView.setViewName("importOperatorByCSV");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ModelAndView("redirect:importOperatorByCSV", "status", "Error");
+			return new ModelAndView("redirect:importOperatorByCSV", "error", "ErrorSystem");
 		}
+		modelAndView.addObject("listUserInfo", listUserInfo);
+		modelAndView.addObject("listGroupCompany", listGroupCompany);
+		return modelAndView;
     }
 	
     @RequestMapping("importCardCSV") 
@@ -371,13 +421,10 @@ public class DataProcessController {
 		//int recordCnt = 0;
 		//String errorLineNo = "";
 		
-		String[] VALUES = new String[] {"application/vnd.ms-excel","application/excel","application/vnd.ms-excel","application/csv", "application/vnd.msexcel" , "application/force-download",
-										"application/octet-stream","application/txt",
-										"text/csv","text/comma-separated-values", "text/csv", "text/plain","text/anytext"};
 		/*if (!file.getContentType().equals("application/vnd.ms-excel") && !file.getContentType().equals("application/excel") && !file.getContentType().equals("application/vnd.ms-excel") 
 				&& !file.getContentType().equals("application/vnd.msexcel") && !file.getContentType().equals("application/force-download")  && !file.getContentType().equals("application/csv") 
 				&& !file.getContentType().equals("text/csv") && !file.getContentType().equals("text/comma-separated-values") && !file.getContentType().equals("text/anytext") ) {*/
-		if(!Arrays.asList(VALUES).contains(file.getContentType())){
+		if(!Arrays.asList(values).contains(file.getContentType())){
 			return new ModelAndView("redirect:importCardCSV", "error", "formatCSV");
 		}
 		if (file.isEmpty()){
@@ -793,6 +840,19 @@ public class DataProcessController {
 			break;
 		}
     	return flg;
+    }
+    
+    private void sendMailResgisterOperator(List<UserInfo> listUserInfo){
+    	for(UserInfo userInfo : listUserInfo){
+    		Context ctx = new Context();
+			ctx.setVariable("password", userInfo.getPassword());
+			ctx.setVariable("recipientEmail", userInfo.getEmail());
+			try {
+				emailService.sendMail(CommonConstants.USER_FROM_MAIL, userInfo.getEmail() ,CommonConstants.TITLE_RECOVERPASS_MAIL, ctx, "newpassword");
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
+    	}
     }
     
     private int getRoleIdByPermissionType(List<Roles> listRoles, String permissionType){
