@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -198,6 +200,9 @@ public class UserController {
 	@Value("${saleforce.url}")
 	private String saleForceUrl;
 	
+	@Value("${ip.address.lan}")
+	private String ipAddressLan;
+	
 	@Autowired
 	SettingsInfoService settingsInfoService;
 
@@ -355,6 +360,25 @@ public class UserController {
 
 	@RequestMapping("download")
 	public ModelAndView DownloadCSV(HttpServletRequest request) {
+		int block = 1;
+	    try {
+	    	InetAddress inetAddress;
+			inetAddress = InetAddress.getLocalHost();
+
+		    String serverAddress = inetAddress.getHostAddress().toString();
+		    if(serverAddress.equals(this.ipAddressLan)){
+		    	block = 1;
+		    } else {
+		    	block = 2;
+		    }
+		} catch (UnknownHostException e1) {
+			
+			e1.printStackTrace();
+		}
+	    if(block == 2){
+	    	return new ModelAndView("redirect:/user/home");
+	    }
+	    
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
