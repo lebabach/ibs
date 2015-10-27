@@ -15,6 +15,9 @@
 	<input type="text" name="recordSuccess" id="recordSuccess" class="hidden" value="${recordSuccess}"> 
 	<input type="text" name="recordError" id="recordError" class="hidden" value="${recordError}"> 
 	<input type="text" name="recordEmpty" id="recordEmpty" class="hidden" value="${recordEmpty}">
+	<input type="text" name="recordConflict" id="recordConflict" class="hidden" value="${recordConflict}">
+	<input type="text" name="errorLineNo" id="errorLineNo" class="hidden" value="${errorLineNo}">
+	<input type="text" name="existLineNo" id="existLineNo" class="hidden" value="${existLineNo}">
 
         <!-- CENTER SIDE -->
  <div id="center-side" class="col-sm-12">
@@ -44,6 +47,7 @@
 					<p style="color: red;" class="mesage_record recordSuccess"></p>
 					<p style="color: red;" class="mesage_record recordError"></p>
 					<p style="color: red;" class="mesage_record recordEmpty"></p>
+					<p style="color: red;" class="mesage_record recordConflict"></p>
 				</div>
              <div class="col-md-12 col-xs-offset-5">
              	<form class="form-horizontal" role="form" id="upload" action = "/ecard-webapp/data/uploadOperatorCSV" enctype="multipart/form-data" method="post">
@@ -69,6 +73,8 @@
              </div>
              <div class="row" style="text-align: center;margin: 25px;">
              	<p class="mesage_error error_exception"></p>
+             	<p style="color: red;" class="mesage_error show_error_line"></p>
+             	<p style="color: red;" class="mesage_error show_exist_line"></p>
              </div>
          </div>
      </div>
@@ -121,16 +127,27 @@
 	  var recordSuccess = $('input[name=recordSuccess]').val();
 	  var recordError = $('input[name=recordError]').val();
 	  var recordEmpty = $('input[name=recordEmpty]').val();
-	  	/* var errorLineNo = $('input[name=errorLineNo]').val(); */
+	  var recordConflict = $('input[name=recordConflict]').val();
+	  
+	  var errorLineNo = $('input[name=errorLineNo]').val();
+	  var existLineNo = $('input[name=existLineNo]').val();
 	  if (recordSuccess != 0 || recordError != 0 || recordEmpty != 0){
-	  		$(".recordSuccess").text("Number of success record : "+recordSuccess);
-	  		$(".recordError").text("Number of error record : "+recordError);
-	  		$(".recordEmpty").text("Number of empty record : "+recordEmpty);
-	  		/* $(".errorLineNo").html(errorLineNo); */
-	          $(".mesage_record").css("display","block");
-	          /* $("#showLog").css("display","block"); */
-	          
+	  		$(".recordSuccess").text("<fmt:message key='import.msg.success'/> : " +recordSuccess);
+	  		$(".recordError").text("<fmt:message key='import.msg.error'/> : "+recordError);
+	  		$(".recordEmpty").text("<fmt:message key='import.msg.empty'/> : "+recordEmpty);
+	  		$(".recordConflict").text("<fmt:message key='import.msg.conflict'/> : "+recordConflict);
+	  			if(errorLineNo.trim()!=""){
+	  				$(".show_error_line").text("<fmt:message key='import.msg.log.error'/> : "+errorLineNo);		
+	  			}
+	  			if(existLineNo.trim() != ""){
+	  				$(".show_exist_line").text("<fmt:message key='import.msg.log.conflict'/> : "+existLineNo);		
+	  			}
+	  		
+	  		
+	  		$(".mesage_error").css("display","block");
+	        $(".mesage_record").css("display","block");
 	  }
+	  
 	  var error = getUrlParameter('error');
 	  if(error == "formatCSV"){
 		  $(".error_exception").text("CSV形式が正しくないため、データの取り込みは行われませんでした。");
@@ -138,11 +155,11 @@
 	  }
 	  
 	  if(error == "insertData"){
-		  $(".error_exception").text("取り込みできなかったデータがあります。出力されたCSVをご確認ください");
+		  $(".error_exception").text("取り込みできなかったデータがあります。出力されたCSVをご確認ください。");
           $(".mesage_error").css("display","block");
 	  }
 	  
-	  if(error == "Error"){
+	  if(error == "ErrorSystem"){
 		  $(".error_exception").text("データ登録中に内部エラーが発生しました。  管理者に問い合わせてください。");
           $(".mesage_error").css("display","block");
 	  }

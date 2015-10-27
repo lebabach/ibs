@@ -9,6 +9,7 @@ import java.io.StringWriter;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -454,16 +456,18 @@ public class CardController {
 			}
 			
 			Long sameCardInfoByOwner = cardInfoService.countSameCardInfoByOwner(cardInfo);
+			System.out.println("======================= PUSH NOTIFICATION COUNT ============== :"+userInfo.getName());
 			if(sameCardInfoByOwner <= 0){
 				// Push to other users				
 				List<PairUtil<Integer,Integer>> pairListOwner = cardInfoService.getListUserPushToByCard(cardInfo);
 //				List<PairUtil<Integer,Integer>> pairList = new ArrayList<PairUtil<Integer,Integer>>();
 //				List<Integer> listOwnerId = cardInfoService.getListUserPushToByCard(cardInfo);
 				UserInfo noticeUser = new UserInfo();
-				for (PairUtil<Integer,Integer> listOwner : pairListOwner) {
-					if(listUserInfo.stream().filter(u-> u.getUserId() == listOwner.getL()).collect(Collectors.toList()).size()<=0){
+				
+				for (PairUtil<Integer,Integer> listOwner : pairListOwner) {	
+					if(CollectionUtils.isEmpty(listUserInfo.stream().filter(u-> u.getUserId().intValue() == listOwner.getL().intValue()).collect(Collectors.toList()))){
 						continue;
-					}				
+					}
 					System.out.println("UserId = "+listOwner + " ======================= PUSH NOTIFICATION TO OTHER USERS ============== :"+userInfo.getName());				
 					String strPushFROM = cardInfo.getName() + " さんの名刺を通して、" + userInfo.getName() + " さんと繋がりました。";
 					pushNoticeConnectUser(listOwner.getL(), listOwner.getR(),strPushFROM, 2);
@@ -483,10 +487,11 @@ public class CardController {
 				List<Integer> listOwnerId = cardInfoService.getListUserPushFromByCard(cardInfo);
 				noticeUser = new UserInfo();
 				for (Integer listOwner : listOwnerId) {
-					if(listUserInfo.stream().filter(u-> u.getUserId() == listOwner).collect(Collectors.toList()).size()<=0){
+					if(CollectionUtils.isEmpty(listUserInfo.stream().filter(u-> u.getUserId().intValue() == listOwner.intValue()).collect(Collectors.toList()))){
 						continue;
-					}				
-					UserInfo userInfoPush = listUserInfo.stream().filter(u-> u.getUserId() == listOwner).findFirst().get();
+					}
+									
+					UserInfo userInfoPush = listUserInfo.stream().filter(u-> u.getUserId().intValue() == listOwner.intValue()).findFirst().get();
 					System.out.println("======================= PUSH NOTIFICATION TO ME ============== :"+userInfoPush.getName());
 					String strPushTO =  cardInfo.getName() + " さんの名刺を通して、" + userInfoPush.getName() + " さんと繋がりました。";								
 					pushNoticeConnectUser(userInfo.getUserId(), cardInfo.getCardId(),strPushTO, 2);

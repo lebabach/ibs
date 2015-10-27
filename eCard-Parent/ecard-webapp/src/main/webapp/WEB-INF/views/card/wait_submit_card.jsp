@@ -160,18 +160,6 @@ $(document).ready(function(){
 							</div>
 							<div class="col-sm-12">
 								<div class="float-left">
-									<h4>電話番号(直通)</h4>
-								</div>
-								<div class="float-right float-right-content">
-									<p class="confirm">
-										<c:out value="${cardInfoWithRoteVO.cardInfo.telNumberDirect}" />
-									</p>
-									<input type="hidden" name="telNumberDirect"
-										value="${cardInfoWithRoteVO.cardInfo.telNumberDirect}">
-								</div>
-							</div>
-							<div class="col-sm-12">
-								<div class="float-left">
 									<h4>携帯電話番号</h4>
 								</div>
 								<div class="float-right float-right-content">
