@@ -1533,7 +1533,6 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		        		" old_card_flg = 0"+
 		        		" AND delete_flg = 0"+
 		        		" AND approval_status = 1"+
-		        		" AND newest_card_flg = 1"+
 		        		" AND ("+
 		        		"         (address_full <> '"+card.getAddressFull()+"')"+
 		        		"      OR (tel_number_company <> '"+card.getTelNumberCompany()+"')"+
