@@ -1057,7 +1057,7 @@ label.error {
 								</dt>
 								<dd class="address-hide" style="display: none">
 									<div class="ipt_txt front_email">
-										<a href="http://maps.google.com/maps?q=<c:out value="${ cardInfo.address1 }"></c:out> <c:out value="${ cardInfo.address2 }"></c:out> <c:out value="${ cardInfo.address3 }"></c:out> <c:out value="${ cardInfo.address4 }"></c:out>" target="_blank">
+										<a href="#" target="_blank" id="linkMap" onclick="gotoMap();">
 											<c:out value="${ cardInfo.address1 }"></c:out> 
 											<c:out value="${ cardInfo.address2 }"></c:out> 
 											<c:out value="${ cardInfo.address3 }"></c:out> 
@@ -2103,6 +2103,12 @@ label.error {
     	      	});
 		  	}
         });	
+	}
+	
+	function gotoMap(){
+		var address = 'http://maps.google.com/maps?q=<c:out value="${ cardInfo.address1 }"></c:out> <c:out value="${ cardInfo.address2 }"></c:out> <c:out value="${ cardInfo.address3 }"></c:out> <c:out value="${ cardInfo.address4 }"></c:out>';
+		var uri = encodeURI(address);
+		window.location.href = uri;
 	}
    </script>
    
