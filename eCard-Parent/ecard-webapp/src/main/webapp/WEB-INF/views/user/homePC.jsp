@@ -1111,8 +1111,9 @@
 						 
 					 }
 				 });
+										
 				if (totalCardInfo > 10){
-   					appendLoadMore(self);
+   					appendLoadMore($('.list-group .active').parent());
    				}
 				id_manager++;
 				$("#loading-copy").hide();
@@ -1862,7 +1863,7 @@
 	
 	 	
 	 	$(document).on("click", "#clickToLoadMore", function(e){
-	 		var currentNumberCard = $('.list-group .active').parent().find('.row-new').length;
+	 		
 	    	var self = $('.list-group .active').parent();
 	 		
 	 		var typeSort = $('#sort-card-cnd').val();
@@ -1885,8 +1886,7 @@
 	    			data: 'page=' +id_manager + "&typeSort=" +typeSort + "&typeSearch=" + typeSearch + "&valueSearch=" + strDate
 	    		  }).done(function(resp, status, xhr) {
 	    			   var listGroupItem = "";
-	    			   totalCardInfo = resp.recordsTotal;
-	    			   console.log("TotalCardInfo = "+ totalCardInfo);
+	    			   totalCardInfo = resp.recordsTotal;	    			   
 	    				$.each( resp.data, function( key, value ) {
 	    					 $.each( value.lstCardInfo, function (k,v) {
 	    						 listGroupItem += '<div class="list-group-item pointer show-content">'
@@ -1912,6 +1912,7 @@
 	    					 });
 	    				});
 	    				self.append(listGroupItem);
+	    				var currentNumberCard = $('.list-group .active').parent().find('.row-new').length;
 	    				if (currentNumberCard < totalCardInfo){
 	    					appendLoadMore(self);
 	    				}
