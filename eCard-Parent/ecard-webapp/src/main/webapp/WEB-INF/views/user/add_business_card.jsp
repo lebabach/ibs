@@ -376,6 +376,9 @@ function getContactDate(){
 
 
 $(document).ready(function() {
+	$("#zipcode").blur(function(){
+		$("#zipcode").val($("#zipcode").val().replace("-", ""));
+	});
 	//get address code 
 	$("#zipcode").change(function(){
 	  	  //does some stuff;
@@ -487,6 +490,7 @@ $(document).ready(function() {
 					<label class="l-a-b"><fmt:message key='edit.card.zipcode' /><span>*</span></label> 
 					<input class="input-a-b p-postal-code" name="zipCode" id="zipcode">
 						<p class="mesage_error error_zipcode"></p>
+						
 						<span class="p-country-name" style="display: none;">Japan</span>
 
 										<input type="text" class="p-region" readonly="" id="p-region"
@@ -497,6 +501,11 @@ $(document).ready(function() {
 										<input type="text"
 											class="p-street-address p-extended-address"
 											id="extended-address" style="display: none;">
+				</fieldset>
+				<fieldset style="text-align: left;">
+					<label class="l-a-b"></label> 
+					<span><fmt:message key='card.detail.zipCode.comment' /></span>
+					
 				</fieldset>
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='card.detail.addressFull' /></label>
