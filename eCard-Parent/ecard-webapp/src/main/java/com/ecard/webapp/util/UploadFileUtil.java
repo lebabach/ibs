@@ -427,7 +427,7 @@ public class UploadFileUtil {
 	    return image;
 	}
     
-    private static boolean writeImage(String data, String fileName, String scpHostName, String scpUser, String scpPassword) throws IOException{
+    public static boolean writeImage(String data, String fileName, String scpHostName, String scpUser, String scpPassword) throws IOException{
         try {
         	conn = new Connection(scpHostName);
             conn.connect();

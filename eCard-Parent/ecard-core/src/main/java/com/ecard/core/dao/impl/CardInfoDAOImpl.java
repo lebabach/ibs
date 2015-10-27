@@ -447,7 +447,29 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 
 		return cardInfo;
 	}
-
+	
+	
+	public CardInfo registerCardImageOfOverLap(CardInfo cardInfo) {
+		if(cardInfo.getCardId()!=null){
+			System.out.println("=====before========registerCardImageOfOverLap============"+cardInfo.getCardId().intValue());
+		}else{
+			System.out.println("=====before========registerCardImageOfOverLap=====no id=======");
+		}
+		try{
+			getEntityManager().persist(cardInfo);
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println("registerCardImageOfOverLap===========================fail");
+		}
+		
+		if(cardInfo.getCardId()!=null){
+			System.out.println("=====before========registerCardImageOfOverLap============"+cardInfo.getCardId().intValue());
+		}else{
+			System.out.println("=====before========registerCardImageOfOverLap=====no id=======");
+		}
+		return cardInfo;
+	}
+	
 	public int deleteCardInfo(Integer cardId) {
 		Validate.notNull(cardId, "CardId is not null");
 		Query query = getEntityManager().createQuery(
@@ -1533,6 +1555,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		        		" old_card_flg = 0"+
 		        		" AND delete_flg = 0"+
 		        		" AND approval_status = 1"+
+		        		" AND card_id  <> "+card.getCardId().intValue()+
 		        		" AND ("+
 		        		"         (address_full <> '"+card.getAddressFull()+"')"+
 		        		"      OR (tel_number_company <> '"+card.getTelNumberCompany()+"')"+

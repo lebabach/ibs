@@ -95,9 +95,12 @@ import com.ecard.core.service.OldCardService;
 import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.SearchInfoService;
 import com.ecard.core.service.SettingsInfoService;
+import com.ecard.core.service.UserCardMemoService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.UserTagService;
 import com.ecard.core.service.converter.CardInfoConverter;
+import com.ecard.core.service.impl.ContactHistoryServiceImpl;
+import com.ecard.core.service.impl.UserCardMemoServiceImpl;
 import com.ecard.core.vo.CardAndUserTag;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
@@ -217,6 +220,10 @@ public class UserController {
 	
 	@Autowired
 	OldCardService oldCardService;
+	
+	@Autowired
+	UserCardMemoService userCardMemoService;
+	
 
 	@RequestMapping("home")
 	public ModelAndView home(HttpServletRequest request) {
@@ -1761,14 +1768,39 @@ public class UserController {
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		UserInfo user = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
 		CardInfo cardOwner=cardInfoService.getCardInfoDetail(cardid2);
+		CardInfo card1=cardInfoService.getCardInfoDetail(cardid1);
+		CardInfo card2=cardInfoService.getCardInfoDetail(cardid2);
 		/*return cardInfoService.handleConnectCards(cardid1, cardid2, ecardUser.getUserId(),
 				StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));*/
 		try{
-			int card_id=cardInfoService.connectCards(cardid1, cardid2, ecardUser.getUserId(), StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
+			int ownerUserId=card2.getCardOwnerId();
+			String ownerName=card2.getCardOwnerName();
+			int  ownerGroupCompanyId=card2.getGroupCompanyId();
+			card1.setOldCardFlg(1);
+			cardInfoService.updateCardInfoNotCreateIndex(card1);
+			
+			//int card_id=cardInfoService.connectCards(cardid1, cardid2, ecardUser.getUserId(), StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
+			System.out.println("connectCards =============successfull==");
+			System.out.println("=====================================connectCards =============successfull======================userid: "+ecardUser.getUserId().intValue()+" getCardOwnerId: "+cardOwner.getCardOwnerId().intValue());
 			if(cardOwner.getCardOwnerId().intValue()!=ecardUser.getUserId().intValue()){
+				card2.setCardOwnerId( ecardUser.getUserId());
+				card2.setCardOwnerName( StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
+				card2.setGroupCompanyId(card1.getGroupCompanyId());
+				CardInfo newCard= cardInfoService.registerCardImageOverLapOfAdmin(setCardInfo(card2));
+				
+				card2.setCardOwnerId(ownerUserId);
+				card2.setCardOwnerName(ownerName);
+				card2.setGroupCompanyId(ownerGroupCompanyId);
+				System.out.println("=====================================before: updateCardInfoNotCreateIndex===================================");
+				cardInfoService.updateCardInfoNotCreateIndex(card2);
+				System.out.println("=====================================after: updateCardInfoNotCreateIndex===================================: "+newCard.getCardId());
+				CopyImage copy=new CopyImage(card2.getImageFile(),newCard.getImageFile());
+				copy.start();
+				
+				
 				OldCard oldcard=new OldCard();
 				CardInfo newCardInfo=new CardInfo();
-				newCardInfo.setCardId(card_id);
+				newCardInfo.setCardId(newCard.getCardId());
 				oldcard.setCardInfo(newCardInfo);
 				
 				OldCardId oldCardId=new OldCardId();
@@ -1780,16 +1812,19 @@ public class UserController {
 				System.out.println("=====================================before: owner insertOldCard===================================");
 				oldcard=oldCardService.insertOldCard(oldcard);
 				System.out.println("=====================================after: owner insertOldCard===================================");
-				oldCardService.updateCardIdWithOldCard(cardOwner.getCardId(), cardid1);
+				oldCardService.updateCardIdWithOldCard(newCard.getCardId(), cardid1);
 				System.out.println("=====================================after:owner updateCardIdWithOldCard===================================");
 			}else{
+				userCardMemoService.updateUserCardMemo(cardid1, ecardUser.getUserId().intValue(), cardid2);
+				contactHistoryService.updateContactHistory(cardid1, ecardUser.getUserId().intValue(), cardid2);
+				
 				OldCard oldcard=new OldCard();
 				
 				CardInfo cardInfor=new CardInfo();
-				cardInfor.setCardId(card_id);
+				cardInfor.setCardId(cardid2);
 				
 				OldCardId oldCardId=new OldCardId();
-				oldCardId.setCardId(card_id);
+				oldCardId.setCardId(cardid2);
 				oldCardId.setCardOwnerId(ecardUser.getUserId());
 				oldCardId.setSeq(0);
 				oldCardId.setOldCardId(cardid1);
@@ -2074,5 +2109,102 @@ public class UserController {
 		
 		//listUpdate=UploadFileUtil.getImageFileFromSCPForNotification(listUpdate, scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
         return listUpdate;
+	}
+	private CardInfo setCardInfo(CardInfo card){
+		CardInfo newcard=new CardInfo();
+		newcard.setCompanyInfo(card.getCompanyInfo());
+		newcard.setCardType(card.getCardType());
+	     newcard.setImageFile(card.getImageFile());
+	     newcard.setCardBackImgFile(card.getCardBackImgFile());
+	     newcard.setCompanyName(card.getCompanyName());
+	     newcard.setCompanyNameKana(card.getCompanyNameKana());
+	     newcard.setDepartmentName(card.getDepartmentName());
+	     newcard.setPositionName(card.getPositionName());
+	     newcard.setName(card.getName());
+	     newcard.setLastName(card.getLastName());
+	     newcard.setFirstName(card.getFirstName());
+	     newcard.setNameKana(card.getNameKana());
+	     newcard.setLastNameKana(card.getLastNameKana());
+	     newcard.setFirstNameKana(card.getFirstNameKana());
+	     newcard.setEmail(card.getEmail());
+	     newcard.setZipCode(card.getZipCode());
+	     newcard.setAddressFull(card.getAddressFull());
+	     newcard.setAddress1(card.getAddress1());
+	     newcard.setAddress2(card.getAddress2());
+	     newcard.setAddress3(card.getAddress3());
+	     newcard.setAddress4(card.getAddress4());
+	     newcard.setTelNumberCompany(card.getTelNumberCompany());
+	     newcard.setTelNumberDepartment(card.getTelNumberDepartment());
+	     
+	     
+	     newcard.setTelNumberDirect(card.getTelNumberDirect());
+	     newcard.setFaxNumber(card.getFaxNumber());
+	     newcard.setMobileNumber(card.getMobileNumber());
+	     newcard.setCompanyUrl(card.getCompanyUrl());
+	     newcard.setSubAddressFull(card.getSubAddressFull());
+	     newcard.setSubZipCode(card.getSubZipCode());
+	     newcard.setSubAddress1(card.getSubAddress1());
+	     newcard.setSubAddress2(card.getSubAddress2());
+	     newcard.setSubAddress3(card.getSubAddress3());
+	     newcard.setSubAddress4(card.getSubAddress4());
+	     
+	     newcard.setSubTelNumberCompany(card.getSubTelNumberCompany());
+	     newcard.setSubTelNumberDepartment(card.getSubTelNumberDepartment());
+	     newcard.setSubTelNumberDirect(card.getSubTelNumberDirect());
+	     newcard.setSubFaxNumber(card.getSubFaxNumber());
+	     newcard.setFileOutputFlg(card.getFileOutputFlg());
+	     newcard.setHandMemo(card.getHandMemo());
+	     newcard.setAutoMemo(card.getAutoMemo());
+	     newcard.setMemo1(card.getMemo1());
+	     newcard.setMemo2(card.getMemo2());
+	     newcard.setMemo1(card.getMemo1());
+	     
+	     
+	     newcard.setCardOwnerId(card.getCardOwnerId());
+	     newcard.setPublishStatus(card.getPublishStatus());
+	     newcard.setApprovalStatus(card.getApprovalStatus());
+	     newcard.setOldCardFlg(card.getOldCardFlg());
+	     newcard.setCreateDate(card.getCreateDate());
+	     newcard.setUpdateDate(card.getUpdateDate());
+	     newcard.setOperaterId(card.getOperaterId());
+	     newcard.setDeletDate(card.getDeletDate());
+	     newcard.setDeleteFlg(card.getDeleteFlg());
+	     newcard.setCardOwnerName(card.getCardOwnerName());
+	     newcard.setGroupCompanyId(card.getGroupCompanyId());
+	     newcard.setNewestCardFlg(card.getNewestCardFlg());
+	     newcard.setContactDate(card.getContactDate());
+	     newcard.setCardIndexNo(card.getCardIndexNo());
+	     
+	     newcard.setSubMobileNumber(card.getSubMobileNumber());
+	     newcard.setSubEmail(card.getSubEmail());
+	     newcard.setSubCompanyUrl(card.getSubCompanyUrl());
+	     newcard.setImportanceLevel(card.getImportanceLevel());
+	     newcard.setIsEditting(card.getIsEditting());
+	     newcard.setDateEditting(card.getDateEditting());
+	     return newcard;
+	}
+	
+	class CopyImage extends Thread {
+		private String oldImage;
+		private String newImage;
+
+		public CopyImage(String oldImage,String newImage) {
+			this.oldImage=oldImage;
+			this.newImage=newImage;
+		}
+
+		public void run() {
+			System.out.println("===============================card2: "+oldImage+" new card"+newImage);
+			String oldImageData=UploadFileUtil.getImageFileFromSCP(oldImage, scpHostName, scpUser, scpPassword,Integer.parseInt(scpPort));
+			//System.out.println("===================================oldImageData: "+oldImageData);
+			try {
+				UploadFileUtil.writeImage(oldImageData, newImage, scpHostName, scpUser, scpPassword);
+				System.out.println("=====================================Copy image OK===================================");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("=====================================can not upload image connect card===================================");
+			}
+		}
 	}
 }

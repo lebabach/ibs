@@ -343,7 +343,6 @@ td {
 var dataTables;
 function loadDataComplete() {
 		loadICheck();
-		debugger;
 		var email=$(".hid-email").val();
 		var firstName=$(".hid-firstName").val();
 		var companyName=$(".hid-companyName").val();
@@ -364,7 +363,8 @@ function loadICheck() {
 	});
 }
 
-function sendAjaxListConnectCards(email,companyName,addressFull,departmentName,positionName,telNumberCompany,groupCompanyId,firstName){
+function sendAjaxListConnectCards(email,companyName,addressFull,departmentName,positionName,telNumberCompany,groupCompanyId,firstName,cardId){
+	debugger;
 	$.ajax({
 	    type: 'POST',
 	    url: '/ecard-webapp/user/listConnectCards',
@@ -379,7 +379,8 @@ function sendAjaxListConnectCards(email,companyName,addressFull,departmentName,p
 	        'positionName':positionName,
 	        'telNumberCompany':telNumberCompany,
 	        'groupCompanyId':groupCompanyId,
-	        'firstName':firstName
+	        'firstName':firstName,
+	        'cardId':cardId
 	    }),
 	    success: function(cards){
 	    	$("#tbl-connect-cards >tbody").remove();
@@ -415,7 +416,7 @@ function setNewConnectCard(cardId,email,name,companyName,addressFull,departmentN
 	+'<td>'+name+'<br><br>'+companyName+'<br>'+email+'</td>'
 	+'<td ><a href="/ecard-webapp/user/card/details/'+cardId+'" ><img name="'+image+'" alt="image" src="<c:url value="/assets/img/loading.gif"/>" style="width: 100%"></a></td>'
 	+'<td>'+addressFull+'<br><br>'+telNumberCompany+'</td>'
-	+'<td>'+positionName+'<br><br>'+departmentName+'</td>'
+	+'<td>'+departmentName+'<br><br>'+positionName+'</td>'
 	+'<td>'+contactDate+'<br><br>'+owner+'</td>'
 	+'</tr>'
 	return modal;
@@ -445,7 +446,7 @@ function getImageFromSCP(fileImageName){
 
 $(document).ready(function() {
 	$(document).on('ifClicked', '#tbl-cards .iradio_square-green_combo .iradio_square-green', function(event){
-		var cardId=$(this).attr("id");
+		var cardId=$(this).parent().attr("id");
 		var email=$(this).closest( "tr" ).find(".email").val();
 		var firstName=$(this).closest( "tr" ).find(".name").val();
 		var companyName=$(this).closest( "tr" ).find(".companyName").val();
@@ -454,7 +455,8 @@ $(document).ready(function() {
 		var positionName=$(this).closest( "tr" ).find(".positionName").val();
 		var telNumberCompany=$(this).closest( "tr" ).find(".telNumberCompany").val();
 		var groupCompanyId=$(this).closest( "tr" ).find(".groupCompanyId").val(); 
-		sendAjaxListConnectCards(email,companyName,addressFull,departmentName,positionName,telNumberCompany,groupCompanyId,firstName);
+		
+		sendAjaxListConnectCards(email,companyName,addressFull,departmentName,positionName,telNumberCompany,groupCompanyId,firstName,cardId);
 	});
 	
 	$(".btn.btn-primary").click(function(){

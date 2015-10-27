@@ -28,4 +28,12 @@ public class ContactHistoryServiceImpl implements ContactHistoryService {
 	public int deleteContactHistory(Integer contactHistoryId){
 		return contactHistoryDAO.deleteContactHistory(contactHistoryId);
 	}
+
+	@Override
+	public boolean updateContactHistory(int cardId1, int userId, int cardId2) {
+		// TODO Auto-generated method stub
+		contactHistoryDAO.updateContactHistory(cardId1, userId, cardId2);
+		return false;
+	}
+	
 }

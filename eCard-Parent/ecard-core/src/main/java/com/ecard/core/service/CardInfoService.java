@@ -181,4 +181,5 @@ public List<NotificationList> getImagesBy(List<Integer> cardIds);
 
    public int connectCards(int cardid1,int cardid2, int currentUserId, String name);
    public CardInfo registerCardImageManualPCAdmin(CardInfo cardInfo);
+   public void updateCardInfoNotCreateIndex (CardInfo cardInfo);
 }

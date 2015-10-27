@@ -199,6 +199,7 @@ public class CardInfoServiceImpl implements CardInfoService {
         return cardInfoDAO.registerCardImage(cardInfo);
     }
     
+    
     public CardInfo registerCardImageOverLapOfAdmin(CardInfo cardInfo) {
     	//String indexId=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Scanner);
     	String indexId=dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, 
@@ -207,7 +208,7 @@ public class CardInfoServiceImpl implements CardInfoService {
     	if(!StringUtils.isEmpty(indexId)){
 			cardInfo.setImageFile(DataIndexUtil.getIndexNoOfImageBy(TableTypeEnum.ImageInfor, indexId)+".jpg");
 		}
-        return cardInfoDAO.registerCardImage(cardInfo);
+        return cardInfoDAO.registerCardImageOfOverLap(cardInfo);
     }
     
     public CardInfo registerCardImageManualPCAdmin(CardInfo cardInfo) {
@@ -637,7 +638,9 @@ public class CardInfoServiceImpl implements CardInfoService {
 		}
 
 		public void run() {
+			System.out.println("===============================card2: "+oldImage+" new card"+newImage);
 			String oldImageData=UploadFileUtil.getImageFileFromSCP(oldImage, scpHostName, scpUser, scpPassword,Integer.parseInt(scpPort));
+			//System.out.println("===================================oldImageData: "+oldImageData);
 			try {
 				UploadFileUtil.writeImage(oldImageData, newImage, scpHostName, scpUser, scpPassword);
 				System.out.println("=====================================Copy image OK===================================");
@@ -649,7 +652,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 		}
 	}
 	
-	@Transactional
+
 	public int connectCards(int cardid1,int cardid2, int currentUserId, String name){
 		int newCard_id=0;
 		try{
@@ -707,6 +710,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 			System.out.println("=====================================can not connectCards error===================================");
 			return 0;
 		}
+		System.out.println("return newCard_id============="+newCard_id);
 		return newCard_id;
 	}
 }
