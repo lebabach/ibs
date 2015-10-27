@@ -561,6 +561,8 @@ history.pushState(null, null, null);
 						</c:when>
 						<c:when test="${pageContext.request.isUserInRole('ROLE_LEADER')}">
 							<a id="approvalSave" class="ch-edit float-right-button">承認</a>
+							<a id="tempSave" class="ch-edit float-right-button">一時保存</a>
+							<a id="saveTempStatus4" class="ch-edit float-right-button">承認申請</a>
 							<a id="moveFix" class="ch-edit float-right-button">修正依頼</a>
 							<a id="backToManage" class="ch-edit float-right-button">戻る</a>
 						</c:when>

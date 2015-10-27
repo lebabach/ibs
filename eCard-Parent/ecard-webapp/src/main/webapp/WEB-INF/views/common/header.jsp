@@ -10,6 +10,13 @@ $(document).on('click','a.btn_back_home',function() {
 	sessionStorage.removeItem('userSearchOperator');
 	sessionStorage.removeItem('criteriaSearchOperator');
 });
+
+$(document).on('click','a.log-out',function() {
+	localStorage.removeItem('DataTables_listCard_/ecard-webapp/cards/list');
+	sessionStorage.removeItem('statusSearchOperator');
+	sessionStorage.removeItem('userSearchOperator');
+	sessionStorage.removeItem('criteriaSearchOperator');
+});
 </script>
 <div class="row border-bottom">
 
@@ -119,7 +126,7 @@ $(document).on('click','a.btn_back_home',function() {
 				</ul></li>
 
 
-			<li><a href="<c:url value='/j_spring_security_logout'/>"> <i
+			<li><a class= "log-out" href="<c:url value='/j_spring_security_logout'/>"> <i
 					class="fa fa-sign-out"></i> ログアウト
 			</a></li>
 		</ul>
