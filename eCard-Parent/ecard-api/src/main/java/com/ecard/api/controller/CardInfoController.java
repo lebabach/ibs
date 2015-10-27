@@ -279,8 +279,8 @@ public class CardInfoController extends RestExceptionHandler {
             Integer userId = autoLogin.getUserInfo().getUserId();
             UserInfo userInfo = userInfoService.getUserInfoByUserId(userId);
             //Check possesionCard
-            List<PossessionCard> listPosCard = possessionCardService.getListPossessionCardById(userId, cardInfo.getCardId());
-            if(listPosCard.size() > 0) {
+            //List<PossessionCard> listPosCard = possessionCardService.getListPossessionCardById(userId, cardInfo.getCardId());
+            //if(listPosCard.size() > 0) {
                 SchemaContextHolder.setSchemaType(SchemaType.MANAGER);
                 
                 String name = cardInfo.getLastName();
@@ -348,10 +348,10 @@ public class CardInfoController extends RestExceptionHandler {
                     userNotifyService.createUserNotify(userNotification);*/
                     statusInfo = new StatusInfo(Constants.SUCCESS, Constants.STATUS_200, this.msgRegisterCardSuccess, token);
                 }
-            }
-            else{
-            	statusInfo = new StatusInfo(Constants.ERROR, Constants.SERVER_ERROR, this.msgRegisterCardFailed, token);
-            }
+            //}
+            //else{
+            	//statusInfo = new StatusInfo(Constants.ERROR, Constants.SERVER_ERROR, this.msgRegisterCardFailed, token);
+            //}
         }
         catch(Exception ex){
         	statusInfo = new StatusInfo(Constants.ERROR, Constants.SERVER_ERROR, ex.getMessage(), token);

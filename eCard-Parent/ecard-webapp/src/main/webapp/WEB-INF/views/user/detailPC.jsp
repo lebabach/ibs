@@ -658,6 +658,9 @@ a {
                       }
 					  #modal-example2 .dropdown-menu{z-index:100000 !important;}
 					  .datepicker{z-index:10000000 !important;}
+					  #old_card_body a, #old_card_body tr{
+					  	cursor: pointer;
+					  }
                     </style>
                     <div class="panel-body" id="contact-hist-body">
                         <c:if test="${ not empty contactHistoryList }">
@@ -697,6 +700,14 @@ a {
 				</c:if>
 				
 				<c:if test="${ not empty listOldCard }">
+				<script type="text/javascript">
+					$(document).ready(function(){
+						$(".oldCard").click(function(){
+							//console.log(this.id);
+							window.location.href = "<c:url value='/user/card/details/'/>"+this.id;
+						});
+					})
+				</script>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h5>名刺履歴</h5>
@@ -704,24 +715,21 @@ a {
 					<div class="panel-body" id="old_card_body">
 						<c:if test="${ not empty listOldCard }">
 							<c:forEach var="oldCardList" items="${listOldCard}" varStatus="loop">
-							<div class="career_section selected" style="border-bottom:0px;">
+							<div class="career_section selected oldCard" style="border-bottom:0px;" id="${ oldCardList.cardId }">
 								<div class="career_date " style="font-weight: bold !important;">
-									<a href="<c:url value='/user/card/details/${ oldCardList.cardId }'/>">
-										<fmt:formatDate value='${ oldCardList.contactDate }' pattern="yyyy年MM月dd日"/>
-									</a>
+									<fmt:formatDate value='${ oldCardList.contactDate }' pattern="yyyy年MM月dd日"/>
 								</div>
 								<div>
 									<table class="table">
 										<tbody>
 											<tr id="rowData">
 												<td>
-													<p><a href="<c:url value='/user/card/details/${ oldCardList.cardId }'/>">
-													<c:out value="${ oldCardList.companyName }"></c:out></a> </p>
+													<p>
+													<c:out value="${ oldCardList.companyName }"></c:out></p>
 													<p></p>
-													<p><a href="<c:url value='/user/card/details/${ oldCardList.cardId }'/>">
-													<c:out value="${ oldCardList.departmentName }"></c:out></a></p>
+													<p>
+													<c:out value="${ oldCardList.departmentName }"></c:out></p>
 												</td>
-	
 											</tr>
 										</tbody>
 									</table>
@@ -1057,7 +1065,7 @@ label.error {
 								</dt>
 								<dd class="address-hide" style="display: none">
 									<div class="ipt_txt front_email">
-										<a href="http://maps.google.com/maps?q=<c:out value="${ cardInfo.address1 }"></c:out> <c:out value="${ cardInfo.address2 }"></c:out> <c:out value="${ cardInfo.address3 }"></c:out> <c:out value="${ cardInfo.address4 }"></c:out>" target="_blank">
+										<a href="#" target="_blank" id="linkMap" onclick="gotoMap();">
 											<c:out value="${ cardInfo.address1 }"></c:out> 
 											<c:out value="${ cardInfo.address2 }"></c:out> 
 											<c:out value="${ cardInfo.address3 }"></c:out> 
@@ -2103,6 +2111,12 @@ label.error {
     	      	});
 		  	}
         });	
+	}
+	
+	function gotoMap(){
+		var address = 'http://maps.google.com/maps?q=<c:out value="${ cardInfo.address1 }"></c:out> <c:out value="${ cardInfo.address2 }"></c:out> <c:out value="${ cardInfo.address3 }"></c:out> <c:out value="${ cardInfo.address4 }"></c:out>';
+		var uri = encodeURI(address);
+		window.location.href = uri;
 	}
    </script>
    

@@ -248,7 +248,7 @@
             <nav class="navbar navbar-static-top nav-menu-left" role="navigation">   
                 <ul class="nav navbar-top-links">
                      <li style="position: relative; text-align:left">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="personal_cards.html" style="position: relative;padding:0;min-height:auto; font-size:12px;">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#" style="position: relative;padding:0;min-height:auto; font-size:12px;">
                           <span style="position: absolute;width: 110px;display: inline-block;left: 0;">
                             <img src="<c:url value='/assets/img/icon-menu.png'/>" width="42px;">メニュー
                           </span>

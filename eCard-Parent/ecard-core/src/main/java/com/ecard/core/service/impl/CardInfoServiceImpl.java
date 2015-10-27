@@ -201,7 +201,8 @@ public class CardInfoServiceImpl implements CardInfoService {
     
     public CardInfo registerCardImageManualPCOfAdmin(CardInfo cardInfo) {
     	//String indexId=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Scanner);
-    	String indexId=dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.ManualPC,cardInfo.getCardIndexNo());
+    	String indexId=dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, 
+    			TableTypeEnum.CardInfor,PropertyCodeEnum.findByName(cardInfo.getCardIndexNo().substring(cardInfo.getCardIndexNo().length() - 1)),null);
     	cardInfo.setCardIndexNo(indexId);
     	if(!StringUtils.isEmpty(indexId)){
 			cardInfo.setImageFile(DataIndexUtil.getIndexNoOfImageBy(TableTypeEnum.ImageInfor, indexId)+".jpg");
@@ -449,7 +450,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 			String ownerName=card2.getCardOwnerName();
 			int  ownerGroupCompanyId=card2.getGroupCompanyId();
 			card1.setOldCardFlg(1);
-			this.updateCardInfoAdmin(card1);
+			this.updateCardInfoNotCreateIndex(card1);
 			if(ownerUserId!=currentUserId){
 				card2.setCardOwnerId(currentUserId);
 				card2.setCardOwnerName(name);
@@ -649,7 +650,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 			String ownerName=card2.getCardOwnerName();
 			int  ownerGroupCompanyId=card2.getGroupCompanyId();
 			card1.setOldCardFlg(1);
-			this.updateCardInfoAdmin(card1);
+			this.updateCardInfoNotCreateIndex(card1);
 			if(ownerUserId!=currentUserId){
 				card2.setCardOwnerId(currentUserId);
 				card2.setCardOwnerName(name);

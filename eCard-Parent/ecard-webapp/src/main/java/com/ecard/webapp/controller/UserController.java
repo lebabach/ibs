@@ -1678,18 +1678,18 @@ public class UserController {
 		dataTableResponse.setRecordsTotal(totalRecord.longValue());
 		dataTableResponse.setRecordsFiltered(totalRecord.longValue());
 		dataTableResponse.setData(cards);
-		HttpSession session= request.getSession();
+		//HttpSession session= request.getSession();
 		//back from detail PC
 		/*if(!criteriaSearch.equals("")){
 			
 			OverlapSearchDetail overlapSearchDetail=(OverlapSearchDetail)session.getAttribute("overlapSearchDetail");
-			if(overlapSearchDetail.isDetail()==false){
+			//if(overlapSearchDetail.isDetail()==false){
 				
 				overlapSearchDetail.setSearch(criteriaSearch);
 				overlapSearchDetail.setCards(null);
 				overlapSearchDetail.setDetail(false);
 				session.setAttribute("overlapSearchDetail", overlapSearchDetail);	
-			}
+			//}
 				
 		}else{
 			OverlapSearchDetail overlapSD=new OverlapSearchDetail();
@@ -1745,9 +1745,8 @@ public class UserController {
 			OverlapSearchDetail overlapSearchDetail=(OverlapSearchDetail)session.getAttribute("overlapSearchDetail");
 			overlapSearchDetail.setCards(cardInfo);
 			session.setAttribute("overlapSearchDetail", overlapSearchDetail);
-        }
+        }*/
 		
-		session.setAttribute("overlapSearchDetail", userSearchVO);*/
 
 		return ownerCards;
 	}

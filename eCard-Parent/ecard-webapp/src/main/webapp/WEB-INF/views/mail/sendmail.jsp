@@ -356,7 +356,7 @@ $(document).ready(function() {
 				    	$(".titleMail").val(" ");
 				    	$('.contentMail').val(" ");
 				    	 BootstrapDialog.show({
-		    	             title: '警告',
+		    	             title: '成功',
 		    	             message: "メールを送信しました"
 		    	        });
 				    }else{

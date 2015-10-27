@@ -37,4 +37,8 @@ public interface DataIndexDAO extends IGenericDao<DataIndex> {
 
 	public String insertOrUpdateDataIndexBy(IndexTypeEnum indexType, ActionTypeEnum actionType, TableTypeEnum tableType,
 			PropertyCodeEnum propertyCode, String IndexNo);
+	public String updateDataIndexPCOBy(IndexTypeEnum indexType, ActionTypeEnum actionType, TableTypeEnum tableType,
+			PropertyCodeEnum propertyCode, String IndexNo);
+	
+	public DataIndex getDataIndexById(int indexType);
 }
