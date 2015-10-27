@@ -139,6 +139,7 @@ a {
 <style>
 .card{
 	background-color: red !important;
+	padding : 10px 3px 10px 10px !important;
 }
 </style>
 </c:if>
@@ -171,17 +172,17 @@ a {
 					<div class="card_img">
 						<c:if test="${empty imageFile}">
 							<a href="#" title="Image from Unsplash" data-target="#myModal"
-							id="popup"> <img id="imageresource" width="330" height="190"
-							src='<c:url value="/assets/img/card_08.png"></c:url>' style="border: 1px solid #b1b1b1;"></a>	
+							id="popup"> <img id="imageresource"
+							src='<c:url value="/assets/img/card_08.png"></c:url>' style="border: 1px solid #b1b1b1; max-width: 330px; max-height: 190px;"></a>	
 						</c:if>
 						<c:if test="${not empty imageFile}">
 							<a href="#" title="Image from Unsplash" data-target="#myModal"
-							id="popup"> <img id="imageresource" width="330" height="190"
-							src="data:image/png;base64,${imageFile}" style="border: 1px solid #b1b1b1;"></a>	
+							id="popup"> <img id="imageresource"
+							src="data:image/png;base64,${imageFile}" style="border: 1px solid #b1b1b1; max-width: 330px; max-height: 190px;"></a>	
 						</c:if>
 					</div>
 					<c:if test="${ isExpried == true }">
-						<div style="color:#fff; width:330px; margin-top:5px"><fmt:message key="msg.card.disabled" /></div>
+						<div style="color:#fff; width:100%; margin-top:5px"><fmt:message key="msg.card.disabled" /></div>
 					</c:if>
 				</div>
 			</div>
