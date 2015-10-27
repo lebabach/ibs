@@ -199,10 +199,20 @@ public class CardInfoServiceImpl implements CardInfoService {
         return cardInfoDAO.registerCardImage(cardInfo);
     }
     
-    public CardInfo registerCardImageManualPCOfAdmin(CardInfo cardInfo) {
+    public CardInfo registerCardImageOverLapOfAdmin(CardInfo cardInfo) {
     	//String indexId=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Scanner);
     	String indexId=dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, 
     			TableTypeEnum.CardInfor,PropertyCodeEnum.findByName(cardInfo.getCardIndexNo().substring(cardInfo.getCardIndexNo().length() - 1)),null);
+    	cardInfo.setCardIndexNo(indexId);
+    	if(!StringUtils.isEmpty(indexId)){
+			cardInfo.setImageFile(DataIndexUtil.getIndexNoOfImageBy(TableTypeEnum.ImageInfor, indexId)+".jpg");
+		}
+        return cardInfoDAO.registerCardImage(cardInfo);
+    }
+    
+    public CardInfo registerCardImageManualPCAdmin(CardInfo cardInfo) {
+    	//String indexId=dataIndexIdDAO.insertDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.Scanner);
+    	String indexId=dataIndexDAO.insertOrUpdateDataIndexBy(IndexTypeEnum.CardInfor, ActionTypeEnum.Insert, TableTypeEnum.CardInfor, PropertyCodeEnum.ManualPC,cardInfo.getCardIndexNo());
     	cardInfo.setCardIndexNo(indexId);
     	if(!StringUtils.isEmpty(indexId)){
 			cardInfo.setImageFile(DataIndexUtil.getIndexNoOfImageBy(TableTypeEnum.ImageInfor, indexId)+".jpg");
@@ -435,8 +445,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 		return cardInfoDAO.getAllTagUser(userId);
 	}
 	
-	public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card){
-		return cardInfoDAO.getListConnectCards(card);
+	public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card, int currentUserId){
+		return cardInfoDAO.getListConnectCards(card,currentUserId);
 	}
 	
 	@Transactional
@@ -455,7 +465,7 @@ public class CardInfoServiceImpl implements CardInfoService {
 				card2.setCardOwnerId(currentUserId);
 				card2.setCardOwnerName(name);
 				card2.setGroupCompanyId(card1.getGroupCompanyId());
-				CardInfo newCard= this.registerCardImageManualPCOfAdmin(setCardInfo(card2));
+				CardInfo newCard= this.registerCardImageOverLapOfAdmin(setCardInfo(card2));
 				/*OldCard oldcard=new OldCard();
 				oldcard.setCardInfo(newCard);
 				
@@ -655,9 +665,9 @@ public class CardInfoServiceImpl implements CardInfoService {
 				card2.setCardOwnerId(currentUserId);
 				card2.setCardOwnerName(name);
 				card2.setGroupCompanyId(card1.getGroupCompanyId());
-				System.out.println("=====================================before: registerCardImageManualPCOfAdmin===================================");
-				CardInfo newCard= this.registerCardImageManualPCOfAdmin(setCardInfo(card2));
-				System.out.println("=====================================after: registerCardImageManualPCOfAdmin===================================: "+newCard.getCardId());
+				System.out.println("=====================================before: registerCardImageOverLapOfAdmin===================================");
+				CardInfo newCard= this.registerCardImageOverLapOfAdmin(setCardInfo(card2));
+				System.out.println("=====================================after: registerCardImageOverLapOfAdmin===================================: "+newCard.getCardId());
 				/*oldCardDAO.insertOldCard(newCard.getCardId(), card1.getCardId(), currentUserId, 0);
 				oldCardDAO.updateCardIdWithOldCard(newCard.getCardId(),cardid1);*/
 				newCard_id=newCard.getCardId();

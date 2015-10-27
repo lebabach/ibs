@@ -64,7 +64,7 @@ public interface CardInfoService {
    
    public CardInfo registerCardImage(CardInfo cardInfo);
    public CardInfo registerCardImageOfAdmin(CardInfo cardInfo);
-   public CardInfo registerCardImageManualPCOfAdmin(CardInfo cardInfo);
+   public CardInfo registerCardImageOverLapOfAdmin(CardInfo cardInfo);
    
    public int deleteCardInfo(Integer cardId);
    
@@ -159,7 +159,7 @@ public interface CardInfoService {
    
    public List<CardInfo> searchCardInfoByName(String companyName, String departmentName, String name);
    
-   public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card);
+   public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card, int currentUserId);
    
    public boolean handleConnectCards(int cardid1,int cardid2, int currentUserId, String name);
    public BigInteger countListCardAllocationUser(int userId,int tagId);
@@ -180,4 +180,5 @@ public BigInteger totalListConnectUser(Integer userId, Integer recentFlg);
 public List<NotificationList> getImagesBy(List<Integer> cardIds);
 
    public int connectCards(int cardid1,int cardid2, int currentUserId, String name);
+   public CardInfo registerCardImageManualPCAdmin(CardInfo cardInfo);
 }

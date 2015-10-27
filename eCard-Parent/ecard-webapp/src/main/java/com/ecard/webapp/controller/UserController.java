@@ -1582,7 +1582,7 @@ public class UserController {
 		cardInfo.setNameKana(StringUtilsHelper.mergerStringEitherAWord(cardInfo.getLastNameKana(),
 				cardInfo.getFirstNameKana(), " "));
 
-		CardInfo cardInfoObject = cardInfoService.registerCardImageManualPCOfAdmin(cardInfo);
+		CardInfo cardInfoObject = cardInfoService.registerCardImageManualPCAdmin(cardInfo);
 
 		PossessionCardId possessionCardId = new PossessionCardId();
 		possessionCardId.setCardId(cardInfoObject.getCardId());
@@ -1706,7 +1706,9 @@ public class UserController {
 			HttpSession session) {
 		List<OwnerCards> ownerCards = new ArrayList<OwnerCards>();
 		OwnerCards ownerCard = null;
-		List<com.ecard.core.vo.CardInfo> cards = cardInfoService.getListConnectCards(cardInfo);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		List<com.ecard.core.vo.CardInfo> cards = cardInfoService.getListConnectCards(cardInfo,ecardUser.getUserId());
 		if (!CollectionUtils.isEmpty(cards)) {
 			List<Integer> userIds = cards.stream().map(x -> x.getCardOwnerId()).collect(Collectors.toList());
 

@@ -1527,7 +1527,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		return cardInfoList;
 	}
 	
-	public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card) {
+	public List<com.ecard.core.vo.CardInfo> getListConnectCards(com.ecard.core.vo.CardInfo card,int currentUserId) {
         String sqlStr = "SELECT * FROM card_info"+
 		        		" WHERE"+
 		        		" old_card_flg = 0"+
@@ -1539,6 +1539,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		        		"      OR (tel_number_company <> '"+card.getTelNumberCompany()+"')"+
 		        		"      OR (department_name <> '"+card.getDepartmentName()+"')"+
 		        		"      OR (position_name <> '"+card.getPositionName()+"')"+
+		        		"      OR (card_owner_id = "+currentUserId+")"+
 		        		")";
         if (card.getGroupCompanyId() == 1 || card.getGroupCompanyId() ==2 || card.getGroupCompanyId() ==3 || card.getGroupCompanyId() == 4 || card.getGroupCompanyId() == 5 ){
             sqlStr += "AND ((email = '"+card.getEmail()+"' AND email <> '') OR (name = '"+card.getFirstName()+"' AND company_name =  '"+card.getCompanyName()+"')) " 
