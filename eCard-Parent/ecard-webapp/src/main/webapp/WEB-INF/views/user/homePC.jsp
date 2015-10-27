@@ -301,8 +301,8 @@
               <option value="1" >最近取り込んだ名刺</option>
               <option value="2" >最近見た名刺</option>
               <option value="3" >データ入力待ち</option>
-              <option value="4" >繋がっている名刺</option>
-              <option value="5" >最近繋がった名刺</option>
+             <!--  <option value="4" >繋がっている名刺</option>
+              <option value="5" >最近繋がった名刺</option> -->
             </select>
           </div>
           <input type ="hidden" name= "totalCardConnect"  value = "">

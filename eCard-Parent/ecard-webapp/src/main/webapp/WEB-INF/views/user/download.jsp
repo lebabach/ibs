@@ -3,6 +3,7 @@
 	pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+            
 <style type="text/css">
 body{
 	 color: #666;
@@ -437,8 +438,8 @@ body{
                 <p id="titleMsg" class="p-box-1 p-box-1-blue" style="display: none">
 					ダウンロードファイルの作成を行います。しばらくお待ちください。	
 				</p>
-                  
-                <div class="box-3">
+                
+                <div class="box-3">                	
                     <a id="1"  class="export">自分の名刺をダウンロード</a>
                     <c:if test="${roleAdminId == 7}">
                     	<a id="2" class="export">自社の名刺をダウンロード</a>

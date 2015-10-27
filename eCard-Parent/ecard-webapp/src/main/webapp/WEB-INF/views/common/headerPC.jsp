@@ -4,6 +4,38 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@ page import="com.ecard.webapp.security.EcardUser"%>
+<%@ page import="java.net.*" %>
+<%@ page import="java.util.ResourceBundle" %>  
+
+<%
+	String serverAddress, ipAddressConfigGobal, ipAddressConfigLocal, localHost;
+	Integer showDownload;
+	showDownload = 1;
+	localHost = "error";
+	serverAddress = "error";
+	ipAddressConfigGobal = "error";
+	ipAddressConfigLocal = "error";
+	try {
+		ResourceBundle resource = ResourceBundle.getBundle("message");
+		ipAddressConfigLocal = resource.getString("ip.address.lan");
+		ipAddressConfigGobal = resource.getString("ip.address.global");
+	    InetAddress inetAddress;
+	    inetAddress = InetAddress.getLocalHost();
+	    
+	    serverAddress = inetAddress.getHostAddress().toString();
+	    
+	    if(serverAddress.equals(ipAddressConfigLocal)){
+	    	showDownload = 1;
+	    } else {
+	    	showDownload = 2;
+	    }
+	
+	    
+	} catch (UnknownHostException e) {
+	
+	    e.printStackTrace();
+	}
+%>
 <style>
 .btn-lg {
 	padding: 2px 16px !important;
@@ -227,7 +259,9 @@
                           <li><a href="<c:url value='/user/addBusinessCard' />">名刺データ作成</a></li>
                           <li><a href="<c:url value='/user/companyTree' />">顧客組織一覧</a></li>
                           <li><a href="<c:url value='/user/overlapcards' />">名刺の最新化（名寄せ）</a></li>
-                          <li><a href="<c:url value='/user/download' />">自分の名刺ダウンロード</a></li>                          
+                          <% if(showDownload == 1){ %>
+                			<li><a href="<c:url value='/user/download' />">自分の名刺ダウンロード</a></li>
+               			  <% } %>
                           <li class="divider"></li>
                           <li><a href="<c:url value='/user/faq' />">FAQ</a></li>                          
                           <li><a href="<c:url value='/user/contact' />">ご意見・不具合の連絡</a></li>
