@@ -311,4 +311,22 @@ public class DataIndexDAOImpl extends GenericDao<DataIndex>implements DataIndexD
 		query.setLockMode(LockModeType.PESSIMISTIC_WRITE);
 		return (DataIndex) getOrNull(query);	
 	}
+	
+	@Transactional
+	public String updateDataIndexPCOBy(IndexTypeEnum indexType, ActionTypeEnum actionType, TableTypeEnum tableType,
+			PropertyCodeEnum propertyCode, String IndexNo) {
+		String formatIdAfterGenerating = StringUtils.EMPTY;
+		DataIndex dataIndex = this.getDataIndexById(indexType.getStatusCode());
+		
+		if (dataIndex!= null) {
+				formatIdAfterGenerating = DataIndexUtil.generateFormatIdWith(tableType,
+						DataIndexUtil.getSequenceCodeFrom(IndexNo), DataIndexUtil.getPropertyCodeFrom(IndexNo),
+						PropertyCodeEnum.findByName(IndexNo.substring(IndexNo.length() - 1)), actionType,
+						DataIndexUtil.getDateFrom(IndexNo, propertyCode, actionType), IndexNo);
+				this.updateDataIndex(indexType,formatIdAfterGenerating);
+			
+
+		} 
+		return formatIdAfterGenerating;
+	}
 }
