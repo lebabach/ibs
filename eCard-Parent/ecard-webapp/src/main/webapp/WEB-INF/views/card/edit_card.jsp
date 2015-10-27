@@ -500,6 +500,10 @@ history.pushState(null, null, null);
 						$.fn.autoKana("#companyname", "#companyNameKanaId", {
 							katakana : true
 						});
+						
+						$("#zipcode").blur(function(){
+							$("#zipcode").val($("#zipcode").val().replace("-", ""));
+						});
 
 					});
 </script>
@@ -831,9 +835,7 @@ history.pushState(null, null, null);
 											<input name="zipCode" type="text" value="${cardInfo.zipCode}"
 												class="form-control p-postal-code" id="zipcode"
 												placeholder="" style="width: 322px">
-											<!-- <a
-												style="position: absolute; left: 198px; top: 0px; width: 150px; height: 32px;"
-												class="ch-address btn_address">郵便番号から住所を入力</a> -->
+											 <p><fmt:message key='card.detail.zipCode.comment' /></p> 
 										</div>
 										<p class="mesage_error error_zipcode"></p>
 
