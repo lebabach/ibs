@@ -392,7 +392,7 @@ public class CardController {
 			// bach.le https://livepass.backlog.jp/view/MEISHI-575
 			if(!"".equals(cardInfo.getAddressFull().trim())){
 				List<String> listAddress = new ArrayList<String>(Arrays.asList(cardInfo.getAddressFull().trim().split(" ")));
-				if(listAddress.size() ==3){
+				if(listAddress.size() ==3 || listAddress.size() ==4){
 					cardInfo.setAddress1(listAddress.get(0) != null ? listAddress.get(0) : "");
 					cardInfo.setAddress2(listAddress.get(1) != null ? listAddress.get(1) : "");
 					cardInfo.setAddress3(listAddress.get(2) != null ? listAddress.get(2) : "");
