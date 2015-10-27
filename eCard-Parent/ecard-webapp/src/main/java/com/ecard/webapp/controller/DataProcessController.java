@@ -267,7 +267,9 @@ public class DataProcessController {
 		int recordEmpty = 0;
 		int recordSuccess = 0;
 		int recordError = 0;
-		
+		int recordConflict = 0;
+		String errorLineNo = " ";
+		String existLineNo = " ";
 		if(!Arrays.asList(values).contains(file.getContentType())){
 			return new ModelAndView("redirect:importOperatorByCSV", "error", "formatCSV");
 		}
@@ -299,12 +301,18 @@ public class DataProcessController {
 			for (OperatorInfoFromCSV listUser : listUserInfoCSV) {
 				recordCnt++;
 				
-				if (listUser.getEmail() == null || userInfoService.checkEmailExist(listUser.getEmail())) {
+				if (listUser.getEmail() == null) {
 					recordEmpty++;
-					System.out.println("uploadCardCsv err=checkEmailExist line=" + recordCnt);
+					errorLineNo += recordCnt + ",";
 					continue;
 				}
 
+				if (userInfoService.checkEmailExist(listUser.getEmail())) {
+					recordConflict++;
+					existLineNo += recordCnt + ",";
+					continue;
+				}
+				
 				UserInfo userInfo = new UserInfo();
 				userInfo.setEmail(listUser.getEmail());				
 				userInfo.setDepartmentName(listUser.getDepartment());
@@ -318,7 +326,8 @@ public class DataProcessController {
 					userInfo.setUseDate(new SimpleDateFormat("yyyy/MM/dd").parse(listUser.getUseDate()));
 				} catch (ParseException ex) {
 					ex.printStackTrace();
-					recordError++;						
+					recordError++;
+					errorLineNo += recordCnt + ",";
 					continue;
 				}
 				
@@ -327,7 +336,8 @@ public class DataProcessController {
 						userInfo.setEndDate(new SimpleDateFormat("yyyy/MM/dd").parse(listUser.getEndDate()));
 					} catch (ParseException ex) {
 						ex.printStackTrace();
-						recordError++;						
+						recordError++;
+						errorLineNo += recordCnt + ",";
 						continue;
 					}
 				} else {
@@ -372,14 +382,20 @@ public class DataProcessController {
 			if(CollectionUtils.isNotEmpty(userInfoList)){				
     			List<UserInfo> subUserInfoList = importCsvDataService.importListOperatorInfo(userInfoList);
     			recordSuccess = subUserInfoList.size();
-                recordError += recordCnt - recordSuccess - recordEmpty;
+                recordError = recordCnt - recordSuccess - recordEmpty - recordConflict;
              // send mail function here
-    			sendMailResgisterOperator(subUserInfoList);
+    			//sendMailResgisterOperator(subUserInfoList);
 			}
 			
 			modelAndView.addObject("recordSuccess", recordSuccess);
 			modelAndView.addObject("recordError", recordError);
 			modelAndView.addObject("recordEmpty", recordEmpty);
+			modelAndView.addObject("recordConflict", recordConflict);
+			errorLineNo = errorLineNo.substring(0, errorLineNo.length() - 1);
+			modelAndView.addObject("errorLineNo", errorLineNo);
+			existLineNo = existLineNo.substring(0, existLineNo.length() - 1);
+			modelAndView.addObject("existLineNo", existLineNo);
+			
 			modelAndView.addObject("msgImportSuccess", this.csvImportSuccess);
 			modelAndView.setViewName("importOperatorByCSV");
 			
@@ -700,7 +716,7 @@ public class DataProcessController {
     
     private static CellProcessor[] getProcessorsOperator(){
         return new CellProcessor[] {
-            new NotNull(), // email
+            null, // email
             null, // department
             null, // position
             null, // lastName

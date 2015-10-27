@@ -173,9 +173,9 @@
     	var recordEmpty = $('input[name=recordEmpty]').val();
     	/* var errorLineNo = $('input[name=errorLineNo]').val(); */
     	if (recordSuccess != 0 || recordError != 0 || recordEmpty != 0){
-    		$(".recordSuccess").text("Number of success record : "+recordSuccess);
-    		$(".recordError").text("Number of error record : "+recordError);
-    		$(".recordEmpty").text("Number of empty record : "+recordEmpty);
+    		$(".recordSuccess").text("<fmt:message key='import.msg.success'/> : " +recordSuccess);
+	  		$(".recordError").text("<fmt:message key='import.msg.error'/> : "+recordError);
+	  		$(".recordEmpty").text("<fmt:message key='import.msg.empty'/> : "+recordEmpty);
     		/* $(".errorLineNo").html(errorLineNo); */
             $(".mesage_record").css("display","block");
             /* $("#showLog").css("display","block"); */
