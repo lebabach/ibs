@@ -1763,4 +1763,17 @@ public BigInteger totalListConnectUser(Integer userId, Integer recentFlg) {
         }
 		return result;
 	}
+
+	@Override
+	public BigInteger totalListCardRecent(Integer userId) {
+		String sqlStr = "SELECT count(*) FROM card_info WHERE old_card_flg = 0 " +
+                " AND approval_status = 1 " +
+                " AND delete_flg = 0 " +
+                " AND create_date >= (NOW() - INTERVAL 1 WEEK) " +
+                " AND card_owner_id = :userId " ;
+
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		query.setParameter("userId", userId);
+        return (BigInteger)getOrNull(query);
+	}
 }

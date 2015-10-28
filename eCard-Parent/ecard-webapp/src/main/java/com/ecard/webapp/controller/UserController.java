@@ -272,7 +272,7 @@ public class UserController {
 		modelAndView.setViewName("homePC");
 		modelAndView.addObject("lstNameSort",lstNameSort);
 		modelAndView.addObject("lstCardInfoPCVo", lstCardInfoPCVo);
-		modelAndView.addObject("totalCardInfo", listTotalCardInfo);
+		modelAndView.addObject("totalCardInfo", listTotalCardInfo.intValue());
 		modelAndView.addObject("listTagGroup", listTagGroup);
 		return modelAndView;
 
@@ -838,7 +838,8 @@ public class UserController {
 				departmentName = departmentName.substring(0, 255);
 			}
 
-			String password = cardInfo.getLogin_pass() + CommonConstants.tokenAuthen;
+			//String password = cardInfo.getLogin_pass() + CommonConstants.tokenAuthen;
+			String password = cardInfo.getLogin_pass();
 			
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 			map.add("lastname", lastName);
@@ -2001,11 +2002,11 @@ public class UserController {
 
 	@RequestMapping(value = "getListPossesionCardRecent", method = RequestMethod.POST)
 	@ResponseBody
-    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(HttpServletRequest request) {
+    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent( @RequestParam(required = false) Integer page,HttpServletRequest request) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		List<com.ecard.core.vo.CardInfo> lstCardInfo = null;
-		lstCardInfo = cardInfoService.getListPossesionCardRecent(ecardUser.getUserId());
+		lstCardInfo = cardInfoService.getListPossesionCardRecentPaging(ecardUser.getUserId(),page);
 	  return lstCardInfo;
 	}
 	
@@ -2107,6 +2108,15 @@ public class UserController {
 		
 		//listUpdate=UploadFileUtil.getImageFileFromSCPForNotification(listUpdate, scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
         return listUpdate;
+	}
+	
+	@RequestMapping(value = "totalRecent", method = RequestMethod.POST)
+	@ResponseBody
+    public int totalRecent(HttpServletRequest request) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		BigInteger total = cardInfoService.totalListCardRecent(ecardUser.getUserId());    
+        return total.intValue();
 	}
 	private CardInfo setCardInfo(CardInfo card){
 		CardInfo newcard=new CardInfo();
