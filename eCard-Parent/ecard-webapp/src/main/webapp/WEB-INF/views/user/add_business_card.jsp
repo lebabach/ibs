@@ -289,6 +289,8 @@ function checkValidationForm() {
 	var firstnamekana = $("#firstnamekana").val();
 	var lastnamekana  = $("#lastnamekana").val();
 	var companyNameKanaId = $('#companyNameKanaId').val();
+	var faxnumber = $('#faxnumber').val();
+	
 	if (firstname == "") {
 		$(".error_firstname").text(
 				"<fmt:message key='edit.card.validate'/>");
@@ -341,6 +343,38 @@ function checkValidationForm() {
 		checkValidation = false;
 		$(".mesage_error").css("display", "block");
 	}
+	var customPhone=/^[0-9-+()]+$/;
+	if (faxnumber!="" && !(customPhone.test(faxnumber))) {
+		$(".error_faxnumber").text(
+			"<fmt:message key='edit.card.format.phone'/>");
+		checkValidation = false;
+		$(".mesage_error").css("display", "block");
+	}
+	if (telcompany!="" && !(customPhone.test(telcompany))) {
+		$(".error_telcompany").text(
+			"<fmt:message key='edit.card.format.phone'/>");
+		checkValidation = false;
+		$(".mesage_error").css("display", "block");
+	}
+	if (teldepartment!="" && !(customPhone.test(teldepartment))) {
+		$(".error_teldepartment").text(
+			"<fmt:message key='edit.card.format.phone'/>");
+		checkValidation = false;
+		$(".mesage_error").css("display", "block");
+	}
+	if (mobilenumber!="" && !(customPhone.test(mobilenumber))) {
+		$(".error_mobilenumber").text(
+			"<fmt:message key='edit.card.format.phone'/>");
+		checkValidation = false;
+		$(".mesage_error").css("display", "block");
+	}
+	if (zipcode!="" && !(customPhone.test(zipcode))) {
+		$(".error_zipcode").text(
+			"<fmt:message key='edit.card.format.phone'/>");
+		checkValidation = false;
+		$(".mesage_error").css("display", "block");
+	}
+	
 	return checkValidation;
 }
 function resetValidationForm() {
@@ -355,6 +389,10 @@ function resetValidationForm() {
 	$(".error_zipcode").text("");
     $(".error_email").text("");
 	$(".error_companyNameKana").text("");
+	$(".error_telcompany").text("");
+	$(".error_teldepartment").text("");
+	$(".error_mobilenumber").text("");
+	$(".error_faxnumber").text("");
 }
 
 function removerDate() {
@@ -450,14 +488,17 @@ $(document).ready(function() {
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.teletephonenumber2' /></label> <input value=""
 						class="input-a-b" name="telNumberDepartment" id="teldepartment">
+						<p class="mesage_error error_teldepartment"></p>
 				</fieldset>
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.mobilenumber' /></label> <input value=""
 						class="input-a-b" name="mobileNumber" id="mobilenumber">
+						<p class="mesage_error error_mobilenumber"></p>
 				</fieldset>
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.faxnumber' /></label> <input value=""
-						class="input-a-b" name="faxNumber" id="exampleInputName2">
+						class="input-a-b" name="faxNumber" id="faxnumber">
+						<p class="mesage_error error_faxnumber"></p>
 				</fieldset>
 				 <fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.email' /><span>*</span></label> <input
