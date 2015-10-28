@@ -133,13 +133,18 @@ a {
 .career_date a, #rowData a{
     color: #676a6c;
 }
+
+.name1{
+	margin: 10px 0 0 21px !important;
+	width: 25%;
+}
 </style>
 
 <c:if test="${not empty isExpried and isExpried == true}">
 <style>
 .card{
 	background-color: red !important;
-	padding : 10px 3px 10px 10px !important;
+	padding : 8px 3px 10px 10px !important;
 }
 </style>
 </c:if>
@@ -156,14 +161,15 @@ a {
 						src="<c:url value='/assets/img/mt.png'/>">戻る</span></a>
 			</div>
 			<div class="abs">
+				<div style="padding:10px;">名刺所有者</div>
+				
 				<div class="name1">
 					<dt style="font-size: 20px;">
-						<b><c:out value="${cardInfo.cardOwnerName}" /></b>
+						<b><c:out value="${userInfoDetail.name}" /></b>
 					</dt>
-					<dd style="font-size: 15px;">
-						<c:out value="${cardInfo.companyName}" />
-					</dd>
-
+					<p style="font-size: 15px; word-wrap: break-word;">
+						<c:out value="${userInfoDetail.companyName}" />
+					</p>
 				</div>
 				<!-- <ul class="icon">
                    <li class="ic_ml"><span><span class="none">Eight Link</span></span></li>

@@ -53,7 +53,7 @@ public class BatchProcessCardTasklet implements Tasklet{
             cardImage.writeCardImage(cardInfoList);
             
             //Update card_type = 0
-            cardInfoService.updateCardType();
+            //cardInfoService.updateCardType();
             cardInfoService.updateCardInfoNoIndex(cardInfoList);
             System.out.println("Success.......");
     	}

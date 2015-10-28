@@ -55,6 +55,7 @@ import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
 import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.TagUser;
+import com.ecard.core.vo.UserInfoVo;
 
 /**
  *
@@ -718,5 +719,9 @@ public class CardInfoServiceImpl implements CardInfoService {
 	public BigInteger totalListCardRecent(Integer userId) {
 		// TODO Auto-generated method stub
 		return cardInfoDAO.totalListCardRecent(userId);
+	}
+	
+	public UserInfoVo getUserInfoByCardId(Integer cardId){
+		return cardInfoDAO.getUserInfoByCardId(cardId);
 	}
 }

@@ -23,7 +23,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -99,8 +98,6 @@ import com.ecard.core.service.UserCardMemoService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.UserTagService;
 import com.ecard.core.service.converter.CardInfoConverter;
-import com.ecard.core.service.impl.ContactHistoryServiceImpl;
-import com.ecard.core.service.impl.UserCardMemoServiceImpl;
 import com.ecard.core.vo.CardAndUserTag;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
@@ -129,7 +126,6 @@ import com.ecard.webapp.vo.DataPagingJsonVO;
 import com.ecard.webapp.vo.ListCardDelete;
 import com.ecard.webapp.vo.ObjectCards;
 import com.ecard.webapp.vo.ObjectListSearchUsers;
-import com.ecard.webapp.vo.OverlapSearchDetail;
 import com.ecard.webapp.vo.OwnerCards;
 import com.ecard.webapp.vo.TagUserHome;
 import com.ecard.webapp.vo.UserInfoVO;
@@ -256,7 +252,7 @@ public class UserController {
 					CardInfoPCVo cardInfoPCVo;
 					try {
 						if (cardInfoDisp.size() > 0) {
-							cardInfoPCVo = new CardInfoPCVo(lstNameSort.get(0), CardInfoConverter.convertCardInforList(cardInfoDisp));
+							cardInfoPCVo = new CardInfoPCVo(lstNameSort.get(0), CardInfoConverter.convertCardInforList(cardInfoDisp),listTagGroup);
 							lstCardInfoPCVo.add(cardInfoPCVo);
 						}
 					} catch (IllegalAccessException e) {
@@ -295,14 +291,31 @@ public class UserController {
 		List<String> lstNameSort = null;		
 		List<CardInfoUserVo> lstCardInfo = null;
 		Long listTotalCardInfo = new Long(0);
+		List<TagGroup> listTagGroup = null;
+		String tagId = null;
 		// Search all
 		// 
 		if(searchType == 0) {
-			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), typeSort);			
+			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), typeSort);		
+			listTagGroup = getCardTag();
+			if(typeSort == SearchConditions.TAG.getValue() ){
+				for(TagGroup tag : listTagGroup ){
+					if(tag.getTagName().toString().trim().equals(lstNameSort.get(0).trim())){
+						tagId = tag.getTagId().toString();
+						break;
+					}
+				}
+			}
 			if(lstNameSort.size() > 0) {
-				if(valueSearch == "" || valueSearch == null){					
-					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).trim(), page);
-					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort,lstNameSort.get(0).trim());
+				if(valueSearch == "" || valueSearch == null){	
+					if(typeSort == SearchConditions.TAG.getValue() ){
+						lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, tagId, page);
+						listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort,tagId);
+					}else{
+						lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).trim(), page);
+						listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort,lstNameSort.get(0).trim());
+					}
+					
 				} else {
 					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, valueSearch, page);
 					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort, valueSearch);
@@ -346,7 +359,7 @@ public class UserController {
 				CardInfoPCVo cardInfoPCVo;
 				try {
 						if (cardInfoDisp.size() > 0) {
-							cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp));
+							cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp),listTagGroup);
 							cardInfoSearchResponses.add(cardInfoPCVo);				
 							check = 1;
 						}
@@ -359,7 +372,7 @@ public class UserController {
 			} else {
 				CardInfoPCVo cardInfoPCVo;
 				try {
-						cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp));
+						cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp),listTagGroup);
 						cardInfoSearchResponses.add(cardInfoPCVo);	
 					
 				} catch (IllegalAccessException e) {
@@ -651,6 +664,13 @@ public class UserController {
 					scpPassword, Integer.parseInt(scpPort));
 			//cardInfo.setImageFile(fileNameFromSCP);
 			modelAndView.addObject("imageFile", fileNameFromSCP);
+			
+			//Get user infor
+			UserInfoVo userInfoDetail = cardInfoService.getUserInfoByCardId(id);
+			if(userInfoDetail != null){
+				modelAndView.addObject("userInfoDetail", userInfoDetail);
+			}
+			
 			// List card connected
 			cardList = cardInfoService.listCardConnect(cardInfo.getCardOwnerId(), cardInfo.getGroupCompanyId(),
 					cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());

@@ -979,7 +979,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				sqlStr = "SELECT ut.tagName AS groupDate, c FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
 						+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 						+" AND (ut.tagName is not null AND ut.tagName <> '') "
-						+" AND ut.tagName = :valueSearch ORDER BY ut.tagId ASC ";
+						+" AND ut.tagId = :valueSearch ORDER BY ut.tagId ASC ";
 			}
 			
 		} else {
@@ -996,6 +996,8 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
 			else 
 				query.setParameter("valueSearch", valueSearch );
+		}else if(sortType == SearchConditions.TAG.getValue()){
+			query.setParameter("valueSearch",Integer.parseInt(valueSearch));
 		} else {
 			if(!valueSearch.equals("cardNoTag")){
 			  query.setParameter("valueSearch", valueSearch);
@@ -1337,7 +1339,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				sqlStr = "SELECT COUNT(*) FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
 						+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 						+" AND (ut.tagName is not null AND ut.tagName <> '') "
-						+" AND ut.tagName = :valueSearch";
+						+" AND ut.tagId = :valueSearch";
 			}
 			
 		} else {
@@ -1353,7 +1355,9 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			if(!valueSearch.equals("") && !valueSearch.equals(null))
 				query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
 			else 
-				query.setParameter("valueSearch", valueSearch );
+				query.setParameter("valueSearch", valueSearch);
+		}else if (typeSort == SearchConditions.TAG.getValue()){
+			query.setParameter("valueSearch",Integer.parseInt(valueSearch) );
 		} else {
 			if(!valueSearch.equals("cardNoTag")){
 			  query.setParameter("valueSearch", valueSearch);
@@ -1785,5 +1789,21 @@ public BigInteger totalListConnectUser(Integer userId, Integer recentFlg) {
 		Query query = getEntityManager().createNativeQuery(sqlStr);
 		query.setParameter("userId", userId);
         return (BigInteger)getOrNull(query);
+	}
+	
+	public UserInfoVo getUserInfoByCardId(Integer cardId){
+		String sqlStr = "SELECT u.name, u.company_name FROM user_info u " 
+					+ "INNER JOIN card_info c ON u.user_id = c.card_owner_id WHERE c.card_id = :cardId "
+					+ "GROUP BY c.name";
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		query.setParameter("cardId", cardId);
+		
+		List<Object[]> listObj = query.getResultList();
+        List<UserInfoVo> listUserInfo = new ArrayList<>();
+        for(Object[] object : listObj){
+        	UserInfoVo  userInfoVo = new UserInfoVo((String)object[0], (String)object[1]);
+        	listUserInfo.add(userInfoVo);
+        }
+        return listUserInfo.get(0);
 	}
 }

@@ -3,6 +3,9 @@
  */
 package com.ecard.core.dao;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.PrusalHistory;
@@ -16,9 +19,7 @@ import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
 import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.TagUser;
-
-import java.math.BigInteger;
-import java.util.List;
+import com.ecard.core.vo.UserInfoVo;
 
 /**
  *
@@ -178,4 +179,6 @@ public interface CardInfoDAO extends IGenericDao{
    public List<NotificationList> getImagesBy(List<Integer> cardIds) ;
    public CardInfo registerCardImageOfOverLap(CardInfo cardInfo);
    public BigInteger totalListCardRecent(Integer userId);
+   
+   public UserInfoVo getUserInfoByCardId(Integer cardId);
 }
