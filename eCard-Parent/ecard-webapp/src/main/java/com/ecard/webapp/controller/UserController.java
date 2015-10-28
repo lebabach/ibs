@@ -142,16 +142,12 @@ public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	private String[] header = { "cardIndexNo", "companyName", "companyNameKana", "departmentName", "positionName", "lastName",
 			"firstName", "lastNameKana", "firstNameKana", "email", "zipCode", "addressFull", "address1", "address2",
-			"address3", "telNumberCompany", "telNumberDepartment", "telNumberDirect", "faxNumber", "mobileNumber",
-			"companyUrl", "subAddressFull", "subZipCode", "subAddress1", "subAddress2", "subAddress3",
-			"subTelNumberCompany", "subTelNumberDepartment", "subTelNumberDirect", "subFaxNumber",
-			"createDate", "updateDate", "contactDate" };
+			"address3", "telNumberCompany", "telNumberDepartment", "faxNumber", "mobileNumber",
+			"companyUrl", "contactDate" };
 	private String[] headerJapanse = { "名刺採番", "会社名", "会社名カナ", "部署名", "役職名", "氏名（姓）",
 			"氏名（名）", "氏名（姓）カナ", "氏名（名）カナ", "メール", "郵便番号", "住所", "住所１", "住所２",
-			"住所３", "電話番号１", "電話番号２ ", "telNumberDirect", "FAX番号", "携帯電話番号",
-			"会社URL", "subAddressFull", "subZipCode", "subAddress1", "subAddress2", "subAddress3",
-			"subTelNumberCompany", "subTelNumberDepartment", "subTelNumberDirect", "subFaxNumber",
-			"createDate", "updateDate", "名刺交換日" };
+			"住所３", "電話番号１", "電話番号２ ", "FAX番号", "携帯電話番号",
+			"会社URL", "名刺交換日" };
 	@Autowired
 	UserInfoService userInfoService;
 
