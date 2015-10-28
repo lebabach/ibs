@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -308,8 +309,9 @@ public class DataProcessController {
 					errorLineNo += recordCnt + ",";
 					continue;
 				}
-
-				if (userInfoService.checkEmailExist(listUser.getEmail())) {
+				int count = listUserInfo.stream().filter(u->u.getEmail().equals(listUser.getEmail())).collect(Collectors.toList()).size();
+				if (count >= 1) {
+					System.out.println("=======uploadOperatorCSV:===========Email exist size = "+ count);
 					recordConflict++;
 					existLineNo += recordCnt + ",";
 					continue;
@@ -388,7 +390,7 @@ public class DataProcessController {
                 recordError = recordCnt - recordSuccess - recordConflict;
                 System.out.println("=======uploadOperatorCSV:===========recordSuccess size = "+ recordSuccess);
              // send mail function here
-    			sendMailResgisterOperator(subUserInfoList);
+    			//sendMailResgisterOperator(subUserInfoList);
     			System.out.println("=======uploadOperatorCSV:===========send Mail size = ");
 			}
 			System.out.println("=======uploadOperatorCSV:===========return model ");
@@ -410,6 +412,7 @@ public class DataProcessController {
 		}
 		modelAndView.addObject("listUserInfo", listUserInfo);
 		modelAndView.addObject("listGroupCompany", listGroupCompany);
+		modelAndView.setViewName("importOperatorByCSV");
 		return modelAndView;
     }
 	
