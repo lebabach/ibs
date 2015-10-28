@@ -945,7 +945,7 @@ label.error {
                     }, "<fmt:message key="valid.URL" />");
                     
                     $.validator.addMethod('customphone', function (value, element) {
-                        return this.optional(element) || /\(?([0-9])\)?([ .-]?)([0-9])\2([0-9])/.test(value);
+                        return this.optional(element) || /^[0-9-+()]+$/.test(value);
                     }, "<fmt:message key="valid.phoneNumber" />");
                     
                 </script>
@@ -1054,7 +1054,7 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.zipCode}" name="zipCode" id="zipCode" readonly="readonly" minlength="7" maxlength="7">
+										value="${cardInfo.zipCode}" name="zipCode" id="zipCode" readonly="readonly">
 								</dd>
 							</dl>
 						</div>
