@@ -364,7 +364,6 @@ function loadICheck() {
 }
 
 function sendAjaxListConnectCards(email,companyName,addressFull,departmentName,positionName,telNumberCompany,groupCompanyId,firstName,cardId){
-	debugger;
 	$.ajax({
 	    type: 'POST',
 	    url: '/ecard-webapp/user/listConnectCards',
@@ -444,6 +443,23 @@ function getImageFromSCP(fileImageName){
     });						
 }
 
+$(function() {
+    $.xhrPool = [];
+    $.xhrPool.abortAll = function() {
+        $(this).each(function(i, jqXHR) {   //  cycle through list of recorded connection
+            jqXHR.abort();  //  aborts connection
+            $.xhrPool.splice(i, 1); //  removes from list by index
+        });
+    }
+    $.ajaxSetup({
+        beforeSend: function(jqXHR) { $.xhrPool.push(jqXHR); }, //  annd connection to list
+        complete: function(jqXHR) {
+            var i = $.xhrPool.indexOf(jqXHR);   //  get index for current connection completed
+            if (i > -1) $.xhrPool.splice(i, 1); //  removes from list by index
+        }
+    });
+})
+
 $(document).ready(function() {
 	$(document).on('ifClicked', '#tbl-cards .iradio_square-green_combo .iradio_square-green', function(event){
 		var cardId=$(this).parent().attr("id");
@@ -455,12 +471,13 @@ $(document).ready(function() {
 		var positionName=$(this).closest( "tr" ).find(".positionName").val();
 		var telNumberCompany=$(this).closest( "tr" ).find(".telNumberCompany").val();
 		var groupCompanyId=$(this).closest( "tr" ).find(".groupCompanyId").val(); 
-		
+		$.xhrPool.abortAll();
 		sendAjaxListConnectCards(email,companyName,addressFull,departmentName,positionName,telNumberCompany,groupCompanyId,firstName,cardId);
 	});
 	
 	$(".btn.btn-primary").click(function(){
 		if(!($('#tbl-cards input[name=bla]:checked').val()==undefined || $('#tbl-connect-cards input[name=bla1]:checked').val()==undefined)){
+			$.xhrPool.abortAll();
 			var cardid1=$('#tbl-cards input[name=bla]:checked').val();
 			var cardid2=$('#tbl-connect-cards input[name=bla1]:checked').val();
 			$("#loading-copy").show();
@@ -583,9 +600,11 @@ $(document).ready(function() {
 	});
 	
 	$("#btnSearch").click(function(){
+		$.xhrPool.abortAll();
+		$("#tbl-connect-cards >tbody").remove();
 		var dataTableSearch = $('#tbl-cards').dataTable();
 		dataTableSearch.fnFilter();
-		$("#tbl-connect-cards >tbody").remove();
+		
 	})
 	
 });
