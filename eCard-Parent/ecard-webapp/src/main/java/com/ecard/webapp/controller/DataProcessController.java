@@ -260,6 +260,7 @@ public class DataProcessController {
 
 	@RequestMapping(value = "/uploadOperatorCSV", method = RequestMethod.POST)
     public  ModelAndView uploadOperatorCSV( @RequestParam("file") MultipartFile file, HttpServletRequest request) {
+		System.out.println("=======uploadOperatorCSV:===========");
 		ModelAndView modelAndView = new ModelAndView();
 		List<GroupCompanyInfo> listGroupCompany = groupCompnayInfoService.getListCompany();
 		List<UserInfo> listUserInfo = userInfoService.getAllUserInfo();
@@ -279,8 +280,9 @@ public class DataProcessController {
 				
 		Integer groupCompanyId = Integer.parseInt(request.getParameter("groupCompanyId").toString());
 		GroupCompanyInfo groupCompanyInfo =  groupCompnayInfoService.getCompanyById(groupCompanyId);
-		try {
-			InputStreamReader inputStreamReader = new InputStreamReader(file.getInputStream());
+		System.out.println("=======uploadOperatorCSV:===========gorupCompanyId = "+ groupCompanyId);
+		try {			
+			InputStreamReader inputStreamReader = new InputStreamReader(file.getInputStream (), "UTF-8");			
 			OperatorInfoFromCSV operatorInfoFromCSV = new OperatorInfoFromCSV();
 			List<UserInfo> userInfoList = new ArrayList<UserInfo>();
 			List<OperatorInfoFromCSV> listUserInfoCSV;
@@ -297,7 +299,7 @@ public class DataProcessController {
 				e.printStackTrace();
 				return new ModelAndView("redirect:importOperatorByCSV", "error", "insertData");
 			}
-
+			System.out.println("=======uploadOperatorCSV:===========listUserInfoCSV size = "+ listUserInfoCSV.size());
 			for (OperatorInfoFromCSV listUser : listUserInfoCSV) {
 				recordCnt++;
 				
@@ -379,14 +381,17 @@ public class DataProcessController {
 				userInfo.setDeleteFlg(0);
 				userInfoList.add(userInfo);
 			}
+			System.out.println("=======uploadOperatorCSV:after===========userInfoList size = "+ userInfoList.size());
 			if(CollectionUtils.isNotEmpty(userInfoList)){				
     			List<UserInfo> subUserInfoList = importCsvDataService.importListOperatorInfo(userInfoList);
     			recordSuccess = subUserInfoList.size();
                 recordError = recordCnt - recordSuccess - recordConflict;
+                System.out.println("=======uploadOperatorCSV:===========recordSuccess size = "+ recordSuccess);
              // send mail function here
     			sendMailResgisterOperator(subUserInfoList);
+    			System.out.println("=======uploadOperatorCSV:===========send Mail size = ");
 			}
-			
+			System.out.println("=======uploadOperatorCSV:===========return model ");
 			modelAndView.addObject("recordSuccess", recordSuccess);
 			modelAndView.addObject("recordError", recordError);
 			modelAndView.addObject("recordEmpty", recordEmpty);
@@ -864,8 +869,10 @@ public class DataProcessController {
 			ctx.setVariable("password", userInfo.getPassword());
 			ctx.setVariable("recipientEmail", userInfo.getEmail());
 			try {
+				System.out.println("=======sendMailResgisterOperator:===========");
 				emailService.sendMail(CommonConstants.USER_FROM_MAIL, userInfo.getEmail() ,CommonConstants.TITLE_RECOVERPASS_MAIL, ctx, "newpassword");
 			} catch (MessagingException e) {
+				System.out.println("=======sendMailResgisterOperator:===========ERR");
 				e.printStackTrace();
 			}
     	}
