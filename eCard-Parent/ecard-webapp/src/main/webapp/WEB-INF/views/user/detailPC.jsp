@@ -392,7 +392,26 @@ a {
 							}
 							
 						}
-						
+						function checkValidationForm() {
+							var checkValidation = true;
+							var email = $("#email").val();
+							var validationMail=/^([\w-]+(?:\.[\w-]+)*)[@＠]+((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+							if (email == "") {
+								$("#requireEmail").text(
+										"Emailを入力してください");
+								checkValidation = false;
+								$("#requireEmail").css("display", "block");
+							}else if (!(validationMail.test(email))) {
+								$("#requireEmail").text(
+								"Email が正しくありません");
+								checkValidation = false;
+								$("#requireEmail").css("display", "block");
+							}
+							return checkValidation;
+						}
+						function resetValidationForm() {
+							$("#requireEmail").text("");
+						}
                           $(document).ready(function(){
                         	$("#lblContactDate").show();
                    	   	    $("#frmEditContactDate input[name=contactDate]").hide();
@@ -814,7 +833,9 @@ label.error {
                         $("#email").hide();
                         $(".companyUrl-hide").show();
                         $("#companyURL").hide();
-                        
+                        $("#email").blur(function(){
+                        	resetValidationForm();
+                        });
                     	$(".address-hide").show();
                     	$("#address").hide();	
                     
@@ -880,6 +901,10 @@ label.error {
                     			    zipCode : {
                     			    	required: false,
                     			    	customphone: true
+                    			    },
+                    			    email : {
+                    			    	required: false,
+                    			    	email: false
                     			    }
                     			},
                     			messages: {
@@ -907,6 +932,9 @@ label.error {
                             
                             $(".input-submit").click(function(){
                           		if($("#editForm").valid()){
+                          			if(!checkValidationForm()){
+                          				return false;
+                          			}
                            			$(".input-new-1").removeClass("input-new-1-ac");
                                     $('.p-fomr2').hide();
                                     $('.div-pen').removeClass('div-pen-ac') 
@@ -925,19 +953,7 @@ label.error {
                            		}
                             });
                             
-                            $("#email").blur(function(){
-                            	$("#editForm #email-error").hide();
-                            	var emailAddress = $("#email").val();
-                            	if(!isValidEmailAddress(emailAddress)){
-                            		$("#requireEmail").hide();
-                            		$("#formatEmail").show();
-                            	}
-                            	
-                            	if(emailAddress == ""){
-                            		$("#requireEmail").show();
-                            		$("#formatEmail").hide();
-                            	}
-                            });
+                           
                     });
                     
                     function validateURL(value){
@@ -956,11 +972,11 @@ label.error {
                     }, "<fmt:message key="valid.phoneNumber" />");
                     
                     $.validator.addMethod('customEmail', function (value, element) {
-                        return this.optional(element) || /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i.test(value);
+                        return this.optional(element) || /^([\w-]+(?:\.[\w-]+)*)＠((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i.test(value);
                     });
                     
                     function isValidEmailAddress(emailAddress) {
-                	    var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+                	    var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))[@][＠]((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
                 	    return pattern.test(emailAddress);
                 	};
                 </script>
@@ -1032,7 +1048,7 @@ label.error {
 									</div>
 									<input type="email" class="ipt_txt front_full_name input-new-1"
 										value="${cardInfo.email}" name="email" id="email">
-									<p style="color: red; display:none; padding-left: 15px;" id="requireEmail"><fmt:message key="valid.email" /></p>
+									<p style="color: #CC5965; font-weight:bold;display:none; padding-left: 15px;" id="requireEmail"><fmt:message key="valid.email" /></p>
 									<p style="color: red; display: none; padding-left: 15px;" id="formatEmail"><fmt:message key="valid.email.format" /></p>
 								</dd>
 							</dl>
