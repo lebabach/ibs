@@ -384,7 +384,7 @@ public class DataProcessController {
     			recordSuccess = subUserInfoList.size();
                 recordError = recordCnt - recordSuccess - recordConflict;
              // send mail function here
-    			//sendMailResgisterOperator(subUserInfoList);
+    			sendMailResgisterOperator(subUserInfoList);
 			}
 			
 			modelAndView.addObject("recordSuccess", recordSuccess);
