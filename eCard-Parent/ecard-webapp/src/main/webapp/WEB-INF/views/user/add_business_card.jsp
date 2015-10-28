@@ -343,7 +343,7 @@ function checkValidationForm() {
 		checkValidation = false;
 		$(".mesage_error").css("display", "block");
 	}
-	var customPhone=/^[0-9-+()]+$/;
+	var customPhone=/^[0-9-+()●]+$/;
 	if (faxnumber!="" && !(customPhone.test(faxnumber))) {
 		$(".error_faxnumber").text(
 			"<fmt:message key='edit.card.format.phone'/>");
