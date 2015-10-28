@@ -203,11 +203,11 @@ history.pushState(null, null, null);
 			checkValidation = false;
 			$(".mesage_error").css("display", "block");
 		}
-		if(zipcode.length < 7){
+		/* if(zipcode.length < 7){
 			$(".error_zipcode").text("半角英数字で７文字を入力してください");
 			$(".mesage_error").css("display", "block");
 			checkValidation = false;
-		}
+		} */
 
 		if (!(customPhone.test(zipcode))) {
 			$(".error_zipcode").text("<fmt:message key='valid.zipcode.fullsize'/> ");
@@ -861,7 +861,7 @@ history.pushState(null, null, null);
 											style="position: relative; margin: 0 auto; width: auto">
 											<input name="zipCode" type="text" value="${cardInfo.zipCode}"
 												class="form-control p-postal-code" id="zipcode"
-												placeholder=""  maxlength="7"  style="width: 322px">
+												placeholder=""  style="width: 322px">
 											<!-- <a
 												style="position: absolute; left: 198px; top: 0px; width: 150px; height: 32px;"
 												class="ch-address btn_address">郵便番号から住所を入力</a> -->
