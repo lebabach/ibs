@@ -335,7 +335,7 @@ function setNotify(image,content,date,card_id,notifyType,id,read_flg){
 function setNotifies(notifies){
 	
 	$.each(notifies, function( key, notify ) {
-		$("#notification").append(setNotify(notify.image,notify.notify_message,notify.notice_date,notify.card_id,notify.notice_type,notify.notice_id,notify.read_flg));
+		$("#notification").append(setNotify(notify.image,notify.notify_message,notify.notice_date_local,notify.card_id,notify.notice_type,notify.notice_id,notify.read_flg));
 		getImageFromSCP(notify.image);
 	});
 }

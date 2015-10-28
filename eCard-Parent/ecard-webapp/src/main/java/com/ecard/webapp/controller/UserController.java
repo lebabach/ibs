@@ -2084,21 +2084,16 @@ public class UserController {
 			listUpdate = notificationInfoService.getListNotificationPaging(ecardUser.getUserId(),page);
 			if(!CollectionUtils.isEmpty(listUpdate)){
 				List<Integer> cardIds=listUpdate.stream().map(x->x.getCard_id()).collect(Collectors.toList());
-				System.out.println("================================before cardids========================");
 				if(!CollectionUtils.isEmpty(cardIds)){
-					System.out.println("================================has cardids========================");
 					List<NotificationList> notifies= cardInfoService.getImagesBy(cardIds);
 					listUpdate.forEach(n->{
-						System.out.println("================================cardid: "+n.getCard_id().intValue()+"========================");
 						List<NotificationList> matchImage=notifies.stream().filter(x->x.getCard_id().intValue()==n.getCard_id().intValue()).collect(Collectors.toList());
 						if(CollectionUtils.isEmpty(matchImage)){
-							System.out.println("================================No image========================");
 							n.setImage("");	
 						}else{
 							n.setImage(matchImage.stream().findFirst().get().getImage());
-							System.out.println("================================has image========================"+matchImage.stream().findFirst().get().getImage());
 						}
-						
+						n.setNotice_date_local((n.getNotice_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()).toString());
 					});
 				}
 			}
