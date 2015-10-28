@@ -414,9 +414,6 @@ function getContactDate(){
 
 
 $(document).ready(function() {
-	$("#zipcode").blur(function(){
-		$("#zipcode").val($("#zipcode").val().replace("-", ""));
-	});
 	//get address code 
 	$("#zipcode").change(function(){
 	  	  //does some stuff;
