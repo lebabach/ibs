@@ -1076,7 +1076,6 @@
 					 }else if (typeSort == 6 ){
 						 nameShow = value.nameSort;
 						 $.each( value.listTagGroup, function( k, v) {
-							 console.log("TagId: " + v.tagId);
 							 if(v.tagName.trim() == nameShow){
 								 value.nameSort = v.tagId.toString();
 								 return;
@@ -1085,8 +1084,6 @@
 					 } else {
 						 nameShow = value.nameSort;
 					 }
-					 
-					 console.log("nameSort: " + value.nameSort );
 					 if(key == 0){
 						 if(value.nameSort.replace("/","").trim()==""){
 								value.nameSort="NULL";
