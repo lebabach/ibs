@@ -58,8 +58,8 @@ public class HomeDAOImpl extends GenericDao implements HomeDAO{
     
     public Long countPossessionCard(Integer userId) {
         Query query = getEntityManager().createQuery("SELECT count(*) "
-                + "FROM PossessionCard p, CardInfo c "
-                + " WHERE p.id.cardId = c.cardId AND p.id.userId = :userId AND c.approvalStatus = 1  AND c.oldCardFlg = 0");
+                + "FROM CardInfo c "
+                + " WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1  AND c.oldCardFlg = 0 AND c.deleteFlg = 0");
         query.setParameter("userId", userId);
         return (Long)getOrNull(query);
     }

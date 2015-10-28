@@ -342,7 +342,7 @@ public class UserController {
 			if (check == 0) {
 				for (CardInfoUserVo cardInfo : lstCardInfo) {
 					if(typeSort == SearchConditions.NAME.getValue()){
-						if(cardInfo.getSortType() != ""){
+						if(!cardInfo.getSortType().trim().equals("")){
 							if (nameSort.equals(cardInfo.getSortType().toUpperCase().substring(0,1))) {
 								cardInfoDisp.add(cardInfo.getCardInfo());
 							}

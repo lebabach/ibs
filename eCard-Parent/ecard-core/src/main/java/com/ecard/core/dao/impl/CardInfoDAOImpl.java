@@ -960,9 +960,14 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ "AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch ORDER BY c.contactDate DESC";
 			
 		} else if (sortType == SearchConditions.NAME.getValue()) {
-			sqlStr = "SELECT c.nameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
+			sqlStr = "SELECT c.nameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 ";
 					/*+" AND (c.nameKana is not null AND c.nameKana <> '') "*/
-					+ "AND c.nameKana LIKE :valueSearch ORDER BY c.nameKana ASC";
+					
+			if(valueSearch.equals("")){
+				sqlStr += " AND ( c.nameKana LIKE :valueSearch or c.nameKana LIKE ' ' )";
+			}else{
+				sqlStr += " AND c.nameKana LIKE :valueSearch ORDER BY c.nameKana ASC ";
+			}
 			
 		} else if (sortType == SearchConditions.COMPANY.getValue()) {			
 			sqlStr = "SELECT c.companyName AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
@@ -1280,7 +1285,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.companyName is not null AND c.companyName <> '') "
 					//+ "GROUP BY SUBSTR((c.companyNameKana),1,1) ORDER BY c.companyNameKana ASC, c.companyName ASC ";
-					+ "GROUP BY c.companyNameKana ORDER BY c.companyNameKana ASC";
+					+ "GROUP BY c.companyName ORDER BY c.companyNameKana ASC";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
 			sqlStr = "SELECT ut.tagName AS groupDate FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
@@ -1320,9 +1325,17 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ "AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch";
 			
 		} else if (typeSort == SearchConditions.NAME.getValue()) {
-			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
+			
+			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 ";
 					/*+" AND (c.nameKana is not null AND c.nameKana <> '') "*/
-					+ "AND c.nameKana LIKE :valueSearch";
+					
+			if (valueSearch == "")
+			{
+				sqlStr += "AND (c.nameKana = :valueSearch) ";
+			}else
+			{
+				sqlStr += "AND c.nameKana LIKE :valueSearch ";
+			}
 			
 		} else if (typeSort == SearchConditions.COMPANY.getValue()) {			
 			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
