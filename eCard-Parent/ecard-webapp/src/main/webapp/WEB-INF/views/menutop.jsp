@@ -34,7 +34,7 @@
 						<c:forEach var="teamInfo" items="${teamDisInfos}">
 							<div class="item one">
 								<div class="item_head one_1">
-									<p class="wrap_menutop" title="${teamInfo.teamName}">
+									<p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"  title="${teamInfo.teamName}">
 										<c:out value="チーム ${teamInfo.teamName}" />
 									</p>
 								</div>
