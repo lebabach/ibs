@@ -506,50 +506,51 @@ public class CardController {
 					userNotificationTOME.setNotifyMessage(strPushTO);            	
 		        	userInfoService.saveHistoryNotification(userNotificationTOME);				
 				}
-			} else {
-				// Push notification when card change information about address full, department, tel number company, position
-				List<CardInfoNotifyChange> listCardSameInfo = cardInfoService.getListCardInfoNotifyChange(cardInfo);
-				UserInfo noticeUser = new UserInfo();
-				for(CardInfoNotifyChange cardSameInfo : listCardSameInfo){
-					String strPush = cardInfo.getName()+"さん";
-					int isPush = 0;
-					//  {name} さんの住所が{address_full}に、電話番号が{tel_number_company}に、 部署が{department_name}に、役職が{position_name}に変わりました。
-					if(!cardSameInfo.getAddressFull().toLowerCase().trim().equals(cardInfo.getAddressFull().toLowerCase().trim())) {
-						strPush += "の住所が"+cardInfo.getAddressFull() + "に、";
-						isPush = 1;
-					} 
-					if(!cardSameInfo.getTelNumberCompany().toLowerCase().trim().equals(cardInfo.getTelNumberCompany().toLowerCase().trim())) {
-						strPush += "電話番号が "+cardInfo.getTelNumberCompany() + "に、";						
-						isPush = 2;
-					}
-					
-					if(!cardSameInfo.getDepartmentName().toLowerCase().trim().equals(cardInfo.getDepartmentName().toLowerCase().trim())) {
-						strPush += " 部署が"+cardInfo.getDepartmentName() + "に、";
-						isPush = 3;
-					}
-					
-					if(!cardSameInfo.getPositionName().toLowerCase().trim().equals(cardInfo.getPositionName().toLowerCase().trim())) {
-						strPush += "役職が "+cardInfo.getPositionName() + "に、";
-						isPush = 4;
-					}
-					
-					strPush = strPush.substring(0, strPush.length() - 1);
-					strPush += "変わりました。";
-					if(isPush != 0){
-						pushNoticeConnectUser(cardSameInfo.getCardOwnerId(), cardInfo.getCardId(),strPush, 2);
-						UserNotification userNotification = new UserNotification();
-						noticeUser.setUserId(cardSameInfo.getCardOwnerId());
-						userNotification.setUserInfo(noticeUser);
-						userNotification.setCardId(cardInfo.getCardId());
-						userNotification.setNoticeDate(new Date());
-						userNotification.setReadFlg(0);				
-		            	userNotification.setChangeParamType(1);            	
-		            	userNotification.setNoticeType(NoticeType.REGISTRATION_CARD_CHANGE.getValue());
-		            	userNotification.setNotifyMessage(strPush);            	
-		            	userInfoService.saveHistoryNotification(userNotification);
-					}
+			}
+			
+			// Push notification when card change information about address full, department, tel number company, position
+			List<CardInfoNotifyChange> listCardSameInfo = cardInfoService.getListCardInfoNotifyChange(cardInfo);
+			UserInfo noticeUser = new UserInfo();
+			for(CardInfoNotifyChange cardSameInfo : listCardSameInfo){
+				String strPush = cardInfo.getName()+"さん";
+				int isPush = 0;
+				//  {name} さんの住所が{address_full}に、電話番号が{tel_number_company}に、 部署が{department_name}に、役職が{position_name}に変わりました。
+				if(!cardSameInfo.getAddressFull().toLowerCase().trim().equals(cardInfo.getAddressFull().toLowerCase().trim())) {
+					strPush += "の住所が"+cardInfo.getAddressFull() + "に、";
+					isPush = 1;
+				} 
+				if(!cardSameInfo.getTelNumberCompany().toLowerCase().trim().equals(cardInfo.getTelNumberCompany().toLowerCase().trim())) {
+					strPush += "電話番号が "+cardInfo.getTelNumberCompany() + "に、";						
+					isPush = 2;
+				}
+				
+				if(!cardSameInfo.getDepartmentName().toLowerCase().trim().equals(cardInfo.getDepartmentName().toLowerCase().trim())) {
+					strPush += " 部署が"+cardInfo.getDepartmentName() + "に、";
+					isPush = 3;
+				}
+				
+				if(!cardSameInfo.getPositionName().toLowerCase().trim().equals(cardInfo.getPositionName().toLowerCase().trim())) {
+					strPush += "役職が "+cardInfo.getPositionName() + "に、";
+					isPush = 4;
+				}
+				
+				strPush = strPush.substring(0, strPush.length() - 1);
+				strPush += "変わりました。";
+				if(isPush != 0){
+					pushNoticeConnectUser(cardSameInfo.getCardOwnerId(), cardInfo.getCardId(),strPush, 2);
+					UserNotification userNotification = new UserNotification();
+					noticeUser.setUserId(cardSameInfo.getCardOwnerId());
+					userNotification.setUserInfo(noticeUser);
+					userNotification.setCardId(cardInfo.getCardId());
+					userNotification.setNoticeDate(new Date());
+					userNotification.setReadFlg(0);				
+	            	userNotification.setChangeParamType(1);            	
+	            	userNotification.setNoticeType(NoticeType.REGISTRATION_CARD_CHANGE.getValue());
+	            	userNotification.setNotifyMessage(strPush);            	
+	            	userInfoService.saveHistoryNotification(userNotification);
 				}
 			}
+			
 			
 			
 			

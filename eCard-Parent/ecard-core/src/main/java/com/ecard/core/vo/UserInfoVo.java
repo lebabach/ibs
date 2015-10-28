@@ -1,7 +1,6 @@
 package com.ecard.core.vo;
 
 import java.util.Date;
-import java.util.List;
 
 
 public class UserInfoVo {
@@ -52,6 +51,13 @@ public class UserInfoVo {
     private Date deleteDate;
     private Integer deleteFlg;
     private String userIndexNo;
+    
+    public UserInfoVo(){}
+    
+    public UserInfoVo(String name, String companyName){
+    	this.name = name;
+    	this.companyName = companyName;
+    }
    
     public String getUserIndexNo() {
 		return userIndexNo;

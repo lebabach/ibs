@@ -1790,4 +1790,20 @@ public BigInteger totalListConnectUser(Integer userId, Integer recentFlg) {
 		query.setParameter("userId", userId);
         return (BigInteger)getOrNull(query);
 	}
+	
+	public UserInfoVo getUserInfoByCardId(Integer cardId){
+		String sqlStr = "SELECT u.name, u.company_name FROM user_info u " 
+					+ "INNER JOIN card_info c ON u.user_id = c.card_owner_id WHERE c.card_id = :cardId "
+					+ "GROUP BY c.name";
+		Query query = getEntityManager().createNativeQuery(sqlStr);
+		query.setParameter("cardId", cardId);
+		
+		List<Object[]> listObj = query.getResultList();
+        List<UserInfoVo> listUserInfo = new ArrayList<>();
+        for(Object[] object : listObj){
+        	UserInfoVo  userInfoVo = new UserInfoVo((String)object[0], (String)object[1]);
+        	listUserInfo.add(userInfoVo);
+        }
+        return listUserInfo.get(0);
+	}
 }
