@@ -306,6 +306,7 @@
             </select>
           </div>
           <input type ="hidden" name= "totalCardConnect"  value = "">
+          <input type ="hidden" name= "totalCardRecent"  value = "">
           <%-- <div class="col-md-2 m-b-xs setDisplayTerm" style="width:140px;padding-left: 5px !important;">
             <select id="selectTagBox" class="input-sm form-control input-s-sm inline">
               <option value="0" selected>(タグ一覧から)</option>
@@ -615,24 +616,18 @@
 		       			    }
 		       			});
 	    	    	}
-	    	    	if( isLoading == 0 &&typeLoading == 3 && (parseInt($('#selectSortBox').val()) == 4 || parseInt($('#selectSortBox').val()) == 5 )){
-	    	    		var recentFlg =0;
-	    	    		var total = 0;
-	    	    		if(parseInt($('#selectSortBox').val()) == 4){
-	    	    			recentFlg = 0;
-	    	    		}else if (parseInt($('#selectSortBox').val()) == 5){
-	    	    			recentFlg = 1;
-	    	    		}
-                       var total = parseInt($('input[name=totalCardConnect]').val()) ;
+	    	    	if( isLoading == 0 &&typeLoading == 3 && parseInt($('#selectSortBox').val()) == 1 ){
+	    	    	   var total = 0;
+                       var total = parseInt($('input[name=totalCardRecent]').val()) ;
                        
 	    	            if($('.business_card_book .list-group-item').length < total ){
 	    	            	console.log("Total:" + total);
 			    	    		 $.ajax({
 			     					type: 'POST',
-			     					url: 'listConnectUser',
-			     					data: 'page=' + page + "&recentFlg=" +recentFlg
+			     					url: 'getListPossesionCardRecent',
+			     					data: 'page=' + page 
 			     				}).done(function(resp, status, xhr) { 					
-			     					$.each( resp.cardList, function( k, v ) {
+			     					$.each( resp, function( k, v ) {
 			     						 $(".business_card_book .list-group").append('<div class="list-group-item pointer show-content">'
 			     			 					+'<div class="row row-new">'
 			     								+	'<div class="col-md-1 col-xs-1"><div class="icheckbox_square-green">'
@@ -829,7 +824,7 @@
  		}else if (parseInt(typeSort) == 5){
  			recentFlg = 1;
  		}
-         if(parseInt(typeSort) == 4 || parseInt(typeSort) == 5){
+      /*    if(parseInt(typeSort) == 4 || parseInt(typeSort) == 5){
         	  $.ajax({
 					type: 'POST',
 					url: 'totalConnect',
@@ -839,8 +834,17 @@
 				}).fail(function(xhr, status, err) {
 					$('input[name=totalCardConnect]').val(0);
 				});
-         }
- 		
+         } */
+         if(parseInt(typeSort) == 1){
+       	  $.ajax({
+					type: 'POST',
+					url: 'totalRecent'
+				}).done(function(resp, status, xhr) { 					
+					$('input[name=totalCardRecent]').val(resp);
+				}).fail(function(xhr, status, err) {
+					$('input[name=totalCardRecent]').val(0);
+				});
+        }
          if(parseInt(typeSort) == 0){
         	 typeLoading = 2
         	 $("#sort_cnd").show();
@@ -851,9 +855,12 @@
         	 $("#sort_cnd").hide();
         	 $("#bulk_tag").show();
         	 $("#deleteTag").show();
+        	 isLoading = 0;
+        	 page = 1;
         		$.ajax({
  					type: 'POST',
- 					url: 'getListPossesionCardRecent'
+ 					url: 'getListPossesionCardRecent',
+ 					data: 'page=' +0
  				}).done(function(resp, status, xhr) { 					
  					$(".business_card_book").html("");
  					$(".business_card_book").append('<div class="list-group">');

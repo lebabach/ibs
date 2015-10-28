@@ -175,6 +175,7 @@ public interface CardInfoDAO extends IGenericDao{
     
     public void updateListCardInfors(List<CardInfo> cards);
 
-public List<NotificationList> getImagesBy(List<Integer> cardIds) ;
-public CardInfo registerCardImageOfOverLap(CardInfo cardInfo);
+   public List<NotificationList> getImagesBy(List<Integer> cardIds) ;
+   public CardInfo registerCardImageOfOverLap(CardInfo cardInfo);
+   public BigInteger totalListCardRecent(Integer userId);
 }
