@@ -713,4 +713,10 @@ public class CardInfoServiceImpl implements CardInfoService {
 		System.out.println("return newCard_id============="+newCard_id);
 		return newCard_id;
 	}
+
+	@Override
+	public BigInteger totalListCardRecent(Integer userId) {
+		// TODO Auto-generated method stub
+		return cardInfoDAO.totalListCardRecent(userId);
+	}
 }

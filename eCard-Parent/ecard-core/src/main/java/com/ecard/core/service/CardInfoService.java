@@ -171,7 +171,7 @@ public interface CardInfoService {
    public List<com.ecard.core.vo.CardInfo> getListCardHistoryByCardId(Integer cardId);
    
    public List<com.ecard.core.vo.CardInfo> searchCompanyTrees(String searchText);
-public BigInteger totalListConnectUser(Integer userId, Integer recentFlg);
+   public BigInteger totalListConnectUser(Integer userId, Integer recentFlg);
    public Long countSameCardInfoByOwner(CardInfo cardInfo);
    
    public List<CardInfoNotifyChange> getListCardInfoNotifyChange(CardInfo cardInfo);
@@ -182,4 +182,5 @@ public List<NotificationList> getImagesBy(List<Integer> cardIds);
    public int connectCards(int cardid1,int cardid2, int currentUserId, String name);
    public CardInfo registerCardImageManualPCAdmin(CardInfo cardInfo);
    public void updateCardInfoNotCreateIndex (CardInfo cardInfo);
+   public BigInteger totalListCardRecent(Integer userId);
 }

@@ -5,6 +5,7 @@
  */
 package com.ecard.core.vo;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -21,7 +22,17 @@ public class NotificationList {
     private Date notice_date;
     private String image;
     
-    public NotificationList(){}
+    private String notice_date_local;
+    
+	public String getNotice_date_local() {
+		return notice_date_local;
+	}
+
+	public void setNotice_date_local(String notice_date_local) {
+		this.notice_date_local = notice_date_local;
+	}
+
+	public NotificationList(){}
     
     public NotificationList(Integer notice_id,Integer notice_type, Integer card_id,
                             Integer change_param_type, Integer read_flg, Date notice_date, String notify_message

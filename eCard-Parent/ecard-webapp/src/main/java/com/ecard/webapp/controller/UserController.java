@@ -838,7 +838,8 @@ public class UserController {
 				departmentName = departmentName.substring(0, 255);
 			}
 
-			String password = cardInfo.getLogin_pass() + CommonConstants.tokenAuthen;
+			//String password = cardInfo.getLogin_pass() + CommonConstants.tokenAuthen;
+			String password = cardInfo.getLogin_pass();
 			
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 			map.add("lastname", lastName);
@@ -2001,11 +2002,11 @@ public class UserController {
 
 	@RequestMapping(value = "getListPossesionCardRecent", method = RequestMethod.POST)
 	@ResponseBody
-    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent(HttpServletRequest request) {
+    public List<com.ecard.core.vo.CardInfo> getListPossesionCardRecent( @RequestParam(required = false) Integer page,HttpServletRequest request) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
 		List<com.ecard.core.vo.CardInfo> lstCardInfo = null;
-		lstCardInfo = cardInfoService.getListPossesionCardRecent(ecardUser.getUserId());
+		lstCardInfo = cardInfoService.getListPossesionCardRecentPaging(ecardUser.getUserId(),page);
 	  return lstCardInfo;
 	}
 	
@@ -2087,21 +2088,16 @@ public class UserController {
 			listUpdate = notificationInfoService.getListNotificationPaging(ecardUser.getUserId(),page);
 			if(!CollectionUtils.isEmpty(listUpdate)){
 				List<Integer> cardIds=listUpdate.stream().map(x->x.getCard_id()).collect(Collectors.toList());
-				System.out.println("================================before cardids========================");
 				if(!CollectionUtils.isEmpty(cardIds)){
-					System.out.println("================================has cardids========================");
 					List<NotificationList> notifies= cardInfoService.getImagesBy(cardIds);
 					listUpdate.forEach(n->{
-						System.out.println("================================cardid: "+n.getCard_id().intValue()+"========================");
 						List<NotificationList> matchImage=notifies.stream().filter(x->x.getCard_id().intValue()==n.getCard_id().intValue()).collect(Collectors.toList());
 						if(CollectionUtils.isEmpty(matchImage)){
-							System.out.println("================================No image========================");
 							n.setImage("");	
 						}else{
 							n.setImage(matchImage.stream().findFirst().get().getImage());
-							System.out.println("================================has image========================"+matchImage.stream().findFirst().get().getImage());
 						}
-						
+						n.setNotice_date_local((n.getNotice_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()).toString());
 					});
 				}
 			}
@@ -2112,6 +2108,15 @@ public class UserController {
 		
 		//listUpdate=UploadFileUtil.getImageFileFromSCPForNotification(listUpdate, scpHostName, scpUser, scpPassword, Integer.parseInt(scpPort));
         return listUpdate;
+	}
+	
+	@RequestMapping(value = "totalRecent", method = RequestMethod.POST)
+	@ResponseBody
+    public int totalRecent(HttpServletRequest request) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+		BigInteger total = cardInfoService.totalListCardRecent(ecardUser.getUserId());    
+        return total.intValue();
 	}
 	private CardInfo setCardInfo(CardInfo card){
 		CardInfo newcard=new CardInfo();
