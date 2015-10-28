@@ -396,6 +396,7 @@ a {
                           $(document).ready(function(){
                         	$("#lblContactDate").show();
                    	   	    $("#frmEditContactDate input[name=contactDate]").hide();
+	                        
                         	$('.p-date').datepicker({
  	      							language : 'ja',
  	      							todayHighlight : true,
@@ -1218,7 +1219,8 @@ label.error {
    			format : 'yyyy年MMdd日',
    			forceParse : true,
    			autoclose : true,
-   			calendarWeeks : true 
+   			calendarWeeks : true,
+   			endDate: new Date()
        	 });
                            
          $("#saveContactHistory").click(function(){
