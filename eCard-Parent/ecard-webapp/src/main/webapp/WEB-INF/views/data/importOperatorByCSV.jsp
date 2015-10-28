@@ -133,8 +133,7 @@
 	  var existLineNo = $('input[name=existLineNo]').val();
 	  if (recordSuccess != 0 || recordError != 0 || recordEmpty != 0){
 	  		$(".recordSuccess").text("<fmt:message key='import.msg.success'/> : " +recordSuccess);
-	  		$(".recordError").text("<fmt:message key='import.msg.error'/> : "+recordError);
-	  		$(".recordEmpty").text("<fmt:message key='import.msg.empty'/> : "+recordEmpty);
+	  		$(".recordError").text("<fmt:message key='import.msg.error'/> : "+recordError);	  		
 	  		$(".recordConflict").text("<fmt:message key='import.msg.conflict'/> : "+recordConflict);
 	  			if(errorLineNo.trim()!=""){
 	  				$(".show_error_line").text("<fmt:message key='import.msg.log.error'/> : "+errorLineNo);		
