@@ -353,7 +353,11 @@ public class DataProcessController {
 				String password = new BigInteger(130, new SecureRandom()).toString(32);
 				userInfo.setPassword(new BCryptPasswordEncoder().encode(password));
 				// Set roleID and roleAdminID
-				
+				if(listUser.getRoleAdminID() == null || listUser.getSalesforce() == null){
+					recordError++;
+					errorLineNo += recordCnt + ",";
+					continue;
+				}
 				Roles role = new Roles();
 				role.setRoleId(getRoleId(listUser.getRoleID()));
 				userInfo.setRoles(role);
@@ -397,6 +401,7 @@ public class DataProcessController {
 				recordSuccess = 0;
                 recordError = recordCnt - recordSuccess - recordConflict;
 			}
+			
 			System.out.println("=======uploadOperatorCSV:===========return model ");
 			modelAndView.addObject("recordSuccess", recordSuccess);
 			modelAndView.addObject("recordError", recordError);
