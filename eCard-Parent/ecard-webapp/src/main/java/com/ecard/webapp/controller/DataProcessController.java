@@ -302,7 +302,7 @@ public class DataProcessController {
 				recordCnt++;
 				
 				if (listUser.getEmail() == null) {
-					recordEmpty++;
+					//recordEmpty++;
 					errorLineNo += recordCnt + ",";
 					continue;
 				}
@@ -382,9 +382,9 @@ public class DataProcessController {
 			if(CollectionUtils.isNotEmpty(userInfoList)){				
     			List<UserInfo> subUserInfoList = importCsvDataService.importListOperatorInfo(userInfoList);
     			recordSuccess = subUserInfoList.size();
-                recordError = recordCnt - recordSuccess - recordEmpty - recordConflict;
+                recordError = recordCnt - recordSuccess - recordConflict;
              // send mail function here
-    			//sendMailResgisterOperator(subUserInfoList);
+    			sendMailResgisterOperator(subUserInfoList);
 			}
 			
 			modelAndView.addObject("recordSuccess", recordSuccess);

@@ -135,7 +135,8 @@ history.pushState(null, null, null);
 		var addressFull = $("#addressFull").val();
 		var zipcode = $('#zipcode').val();
         var email = $("#email").val();
-
+        var fax = $("input[name=faxNumber]").val();
+		var customPhone=/^[0-9-+()]+$/;
 		var companyNameKanaId = $('#companyNameKanaId').val();
 		if (firstname == "") {
 			$(".error_firstname").text(
@@ -150,12 +151,31 @@ history.pushState(null, null, null);
 			$(".mesage_error").css("display", "block");
 		}
 		if (telcompany == "") {
-			$(".error_telcompany").text(
-					"<fmt:message key='edit.card.validate'/>");
+			$(".error_telcompany").text("<fmt:message key='edit.card.validate'/>");
 			checkValidation = false;
 			$(".mesage_error").css("display", "block");
 		}
+		if (!(customPhone.test(telcompany))) {
+			$(".error_telcompany").text("<fmt:message key='valid.zipcode.fullsize'/> ");
+			$(".mesage_error").css("display", "block");
+			checkValidation = false;
+		}
 		
+		if (teldepartment !="" && !(customPhone.test(teldepartment))) {
+			$(".error_teldepartment").text("<fmt:message key='valid.zipcode.fullsize'/> ");
+			$(".mesage_error").css("display", "block");
+			checkValidation = false;
+		}
+		if (mobilenumber !="" && !(customPhone.test(mobilenumber))) {
+			$(".error_mobilenumber").text("<fmt:message key='valid.zipcode.fullsize'/> ");
+			$(".mesage_error").css("display", "block");
+			checkValidation = false;
+		}
+		if (fax !="" && !(customPhone.test(fax))) {
+			$(".error_faxnumber").text("<fmt:message key='valid.zipcode.fullsize'/> ");
+			$(".mesage_error").css("display", "block");
+			checkValidation = false;
+		}
         if (email == "") {
             $(".error_email").text("<fmt:message key='edit.card.validate'/>");
             checkValidation = false;
@@ -182,6 +202,17 @@ history.pushState(null, null, null);
 			$(".error_zipcode").text("<fmt:message key='edit.card.validate'/>");
 			checkValidation = false;
 			$(".mesage_error").css("display", "block");
+		}
+		/* if(zipcode.length < 7){
+			$(".error_zipcode").text("半角英数字で７文字を入力してください");
+			$(".mesage_error").css("display", "block");
+			checkValidation = false;
+		} */
+
+		if (!(customPhone.test(zipcode))) {
+			$(".error_zipcode").text("<fmt:message key='valid.zipcode.fullsize'/> ");
+			$(".mesage_error").css("display", "block");
+			checkValidation = false;
 		}
 		if (companyNameKanaId == "") {
 			$(".error_companyNameKana").text(
@@ -359,13 +390,9 @@ history.pushState(null, null, null);
 						$(".btn_address")
 								.click(
 										function() {
-											var zipcodeString = $('#zipcode')
-													.val();
-											console.log(zipcodeString
-													.indexOf('-'));
-											if (zipcodeString.indexOf('-') > 1
-													|| zipcodeString
-															.indexOf(' ') > 1) {
+											var zipcodeString = $('#zipcode').val();
+											console.log(zipcodeString.indexOf('-'));
+											if (zipcodeString.indexOf('-') > 1|| zipcodeString.indexOf(' ') > 1) {
 												//$(".error_zipcode").text("<fmt:message key='edit.card.validate.zipcode'/>");			
 												$(".mesage_error").css(
 														"display", "block");
@@ -469,7 +496,7 @@ history.pushState(null, null, null);
 							language : 'ja',
 							todayHighlight : true,
 							keyboardNavigation : false,
-							format : 'yyyy年MMdd日',
+							format : 'yyyy年mm月dd日',
 							forceParse : true,
 							autoclose : true,
 							calendarWeeks : true
@@ -500,12 +527,7 @@ history.pushState(null, null, null);
 						$.fn.autoKana("#companyname", "#companyNameKanaId", {
 							katakana : true
 						});
-						
-						$("#zipcode").blur(function(){
-							$("#zipcode").val($("#zipcode").val().replace("-", ""));
-						});
-
-					});
+	})
 </script>
 <style>
 .col-sm-12 span {
@@ -743,6 +765,7 @@ history.pushState(null, null, null);
 										<input name="faxNumber" type="text"
 											value="${cardInfo.faxNumber}" class="form-control"
 											id="exampleInputName2" placeholder="">
+											<p class="mesage_error error_faxnumber "></p>
 									</div>
 								</div>
 								<div class="col-sm-12">
@@ -836,7 +859,7 @@ history.pushState(null, null, null);
 											style="position: relative; margin: 0 auto; width: auto">
 											<input name="zipCode" type="text" value="${cardInfo.zipCode}"
 												class="form-control p-postal-code" id="zipcode"
-												placeholder="" style="width: 322px">
+												placeholder=""  style="width: 322px">
 											 <p><fmt:message key='card.detail.zipCode.comment' /></p> 
 										</div>
 										<p class="mesage_error error_zipcode"></p>

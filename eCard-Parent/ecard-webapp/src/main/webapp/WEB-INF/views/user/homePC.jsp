@@ -317,7 +317,7 @@
             </select>
           </div>    --%>      
           
-          <div class="col-md-3 m-b-xs setDisplayTerm" id = "bulk_tag" style="width:200px; padding-left: 10px !important;padding-right: 0px !important;">            
+          <div class="col-md-3 m-b-xs setDisplayTerm" id = "bulk_tag" style="width:200px; padding-left: 0px !important;padding-right: 0px !important;">            
             <div class="btn-group" role="group" aria-label="..." style="float:right;">
               <button id="addTag" class="btn btn-primary disabled" type="button" style="height: 30px !important;text-align: center;padding-top: 3px;">選択名刺に一括タグ付け             
                 <i class="fa fa-tag"></i>               
