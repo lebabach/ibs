@@ -966,12 +966,12 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				sqlStr = "SELECT 'cardNoTag' AS groupDate, c FROM CardInfo c"
 						+" WHERE c.cardId NOT IN ( SELECT ct.id.cardId FROM CardTag ct INNER JOIN ct.userTag ut"
 						+ " 						WHERE ut.userInfo.userId = :userId GROUP BY ct.id.cardId)  "
-						+ "AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 ";
+						+ "AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0  ORDER BY ut.tagId ASC";
 			} else {
 				sqlStr = "SELECT ut.tagName AS groupDate, c FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
 						+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 						+" AND (ut.tagName is not null AND ut.tagName <> '') "
-						+" AND ut.tagName = :valueSearch ORDER BY ut.tagName ASC";
+						+" AND ut.tagName = :valueSearch ORDER BY ut.tagId ASC ";
 			}
 			
 		} else {
@@ -1274,7 +1274,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			sqlStr = "SELECT ut.tagName AS groupDate FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
 					+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId  AND c.deleteFlg = 0 AND c.approvalStatus = 1 AND c.oldCardFlg = 0 "
 					+" AND (ut.tagName is not null AND ut.tagName <> '') "
-					+" GROUP BY ut.tagName ORDER BY ut.tagName ASC" ;
+					+" GROUP BY ut.tagName ORDER BY ut.tagId ASC" ;
 					
 			
 		} else {
