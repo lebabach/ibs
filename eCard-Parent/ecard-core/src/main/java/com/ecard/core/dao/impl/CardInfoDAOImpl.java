@@ -949,17 +949,17 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		if (sortType == SearchConditions.CONTACT.getValue()) {
 			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
-					+ "AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch";
+					+ "AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch ORDER BY c.contactDate DESC";
 			
 		} else if (sortType == SearchConditions.NAME.getValue()) {
 			sqlStr = "SELECT c.nameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+" AND (c.nameKana is not null AND c.nameKana <> '') "
-					+ "AND c.nameKana LIKE :valueSearch";
+					+ "AND c.nameKana LIKE :valueSearch ORDER BY c.nameKana ASC";
 			
 		} else if (sortType == SearchConditions.COMPANY.getValue()) {			
 			sqlStr = "SELECT c.companyName AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.companyName is not null AND c.companyName <> '') "
-					+ "AND c.companyName = :valueSearch";
+					+ "AND c.companyName = :valueSearch ORDER BY c.companyNameKana ASC ";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
 			if (valueSearch.equals("cardNoTag")) {
@@ -971,13 +971,13 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				sqlStr = "SELECT ut.tagName AS groupDate, c FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
 						+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 						+" AND (ut.tagName is not null AND ut.tagName <> '') "
-						+" AND ut.tagName = :valueSearch";
+						+" AND ut.tagName = :valueSearch ORDER BY ut.tagName ASC";
 			}
 			
 		} else {
 			sqlStr = "SELECT DATE_FORMAT(c.contactDate,'%Y/%m') AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.contactDate is not null AND c.contactDate <> '') "
-					+ " AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch";
+					+ " AND date_format(date(c.contactDate),'%Y/%m') = :valueSearch ORDER BY c.contactDate DESC";
 		}
 		
 		Query query = getEntityManager().createQuery(sqlStr);

@@ -440,7 +440,7 @@ body{
 				</p>
                 
                 <div class="box-3">                	
-                    <a id="1"  class="export">自分の名刺をダウンロード</a>
+                    <a id="1"  class="export">名刺ダウンロード</a>
                     <c:if test="${roleAdminId == 7}">
                     	<a id="2" class="export">自社の名刺をダウンロード</a>
                     	<a id="3" class="export">グループ名刺をダウンロード</a>
