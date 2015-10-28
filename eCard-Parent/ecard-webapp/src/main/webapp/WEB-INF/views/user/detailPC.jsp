@@ -865,10 +865,6 @@ label.error {
                     					required: true,
                     					email: true
                     				},
-                    				telNumberDirect : {
-                    			    	required: false,
-                    			    	customphone: true
-                    			    },
                     			    telNumberDepartment : {
                     			    	required: false,
                     			    	customphone: true
@@ -898,7 +894,6 @@ label.error {
                             		fisrtNameKana: "<fmt:message key="valid.nameKana" />",
                             		lastNameKana: "<fmt:message key="valid.nameKana" />",
                     				email: "<fmt:message key="valid.email" />",
-                    				telNumberDirect: "<fmt:message key="valid.phoneNumber" />",
                     				telNumberDepartment: "<fmt:message key="valid.phoneNumber" />",
                     				telNumberCompany: "<fmt:message key="valid.phoneNumber" />",
                     				mobileNumber: "<fmt:message key="valid.phoneNumber" />"
@@ -1031,8 +1026,6 @@ label.error {
 										alt="会社電話">
 								</dt>
 								<dd>
-									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberDirect}" name="telNumberDirect" id="telNumberDirect"  readonly="readonly"/> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
 										value="${cardInfo.telNumberDepartment}" name="telNumberDepartment" id="telNumberDepartment"  readonly="readonly"/> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
@@ -2080,7 +2073,7 @@ label.error {
 		var lastNameKana = $("input[name=lastNameKana]").val();
 		var firstNameKana = $("input[name=firstNameKana]").val();
 		var email = $("input[name=email]").val();
-		var telNumberDirect = $("input[name=telNumberDirect]").val();
+		var telNumberCompany = $("input[name=telNumberCompany]").val();
 		var telNumberDepartment = $("input[name=telNumberDepartment]").val();		
 		var mobileNumber = $("input[name=mobileNumber]").val();		
 		var faxNumber = $("input[name=faxNumber]").val();
@@ -2091,7 +2084,7 @@ label.error {
 					"approvalStatus" : approvalStatus, "publishStatus" : publishStatus, "contactDate" : dateTime, "address1" : address1,
 					"address2" : address2, "address3" : address3, "address4" : address4, "companyName" : companyName,
 					"companyNameKana" : companyNameKana, "departmentName" : departmentName, "positionName" : positionName, "lastNameKana" : lastNameKana,
-					"firstNameKana" : firstNameKana, "email" : email, "telNumberDirect" : telNumberDirect, "telNumberDepartment" : telNumberDepartment,
+					"firstNameKana" : firstNameKana, "email" : email, "telNumberCompany" : telNumberCompany, "telNumberDepartment" : telNumberDepartment,
 					"mobileNumber" : mobileNumber, "faxNumber" : faxNumber, "zipCode" : zipCode, "companyUrl" : companyUrl, "lastName":lastName, "firstName":firstName
 					 };
 		$.ajax({
