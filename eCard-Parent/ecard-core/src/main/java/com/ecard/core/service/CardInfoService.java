@@ -16,6 +16,7 @@ import com.ecard.core.vo.CompanyCardListCount;
 import com.ecard.core.vo.CompanyCardModel;
 import com.ecard.core.vo.NotificationList;
 import com.ecard.core.vo.TagUser;
+import com.ecard.core.vo.UserInfoVo;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -183,4 +184,6 @@ public List<NotificationList> getImagesBy(List<Integer> cardIds);
    public CardInfo registerCardImageManualPCAdmin(CardInfo cardInfo);
    public void updateCardInfoNotCreateIndex (CardInfo cardInfo);
    public BigInteger totalListCardRecent(Integer userId);
+   
+   public UserInfoVo getUserInfoByCardId(Integer cardId);
 }
