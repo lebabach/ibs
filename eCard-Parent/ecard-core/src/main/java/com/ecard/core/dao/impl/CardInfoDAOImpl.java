@@ -115,17 +115,22 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		if (permissionType.equals(StringUtils.lowerCase(PermissionType.getEnumNameForValue(1)))) {
 			query = getEntityManager().createNativeQuery("SELECT "
 					+ "c.card_id AS cardId, c.company_id AS companyId, c.company_name AS companyName, c.company_name_kana AS companyNameKana, COUNT(c.card_id) AS cardCnt "
-					+ "FROM possession_card po LEFT JOIN card_info AS c " + "ON po.card_id = c.card_Id "
-					+ "WHERE po.user_id = :userId AND c.approval_status = 1 AND c.old_card_flg = 0 AND c.contact_date IN (select c.contact_date from card_info c "
+					+ "FROM card_info AS c "
+					+ "WHERE c.card_owner_id = :userId AND c.approval_status = 1 AND c.old_card_flg = 0 AND c.contact_date IN (select c.contact_date from card_info c "
 					+ "where contact_date  = " + "(select max(contact_date) from card_info where contact_date >= '"
-					+ this.complianceDate + "')) AND c.delete_flg != 1 " + "GROUP BY c.company_id "
-					+ "ORDER BY companyNameKana DESC");
+					+ this.complianceDate + "')) AND c.delete_flg != 1 GROUP BY c.company_id "
+					+ "ORDER BY companyNameKana ASC");
 		} else {
-			query = getEntityManager().createNativeQuery(
+			/*query = getEntityManager().createNativeQuery(
 					"SELECT c.card_id AS cardId, c.company_id AS companyId, c.company_name AS companyName, c.company_name_kana AS companyNameKana, COUNT(c.card_id) AS cardCnt "
 							+ "FROM possession_card po LEFT JOIN card_info AS c " + "ON po.card_id = c.card_Id "
 							+ "WHERE po.user_id = :userId AND c.approval_status = 1 AND c.delete_flg != 1 AND c.old_card_flg = 0 "
-							+ "GROUP BY c.company_name " + "ORDER BY c.company_name_kana DESC");
+							+ "GROUP BY c.company_name " + "ORDER BY c.company_name_kana DESC");*/
+			query = getEntityManager().createNativeQuery(
+					"SELECT c.card_id AS cardId, c.company_id AS companyId, c.company_name AS companyName, c.company_name_kana AS companyNameKana, COUNT(c.card_id) AS cardCnt "
+							+ "FROM card_info AS c "
+							+ "WHERE c.card_owner_id = :userId AND c.approval_status = 1 AND c.delete_flg != 1 AND c.old_card_flg = 0 "
+							+ "GROUP BY c.company_name ORDER BY c.company_name_kana ASC");
 		}
 
 		query.setParameter("userId", userId);
@@ -146,20 +151,23 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ "c.card_id AS cardId, c.name AS name, c.last_name AS lastName, c.first_name AS firstName, c.name_kana AS nameKana, "
 					+ " c.last_name_kana AS lastNameKana, c.first_name_kana AS firstNameKana, "
 					+ " c.company_name AS companyName, c.department_name AS departmentName, c.position_name AS positionName, c.image_file AS imageFile "
-					+ "FROM possession_card po LEFT JOIN card_info AS c " + "ON po.card_id = c.card_Id "
-					+ "WHERE po.user_id = :userId AND c.approval_status = 1 AND c.delete_flg != 1 AND c.old_card_flg = 0 "
+					+ "FROM  card_info AS c " 
+					+ "WHERE c.card_owner_id = :userId AND c.approval_status = 1 AND c.delete_flg != 1 AND c.old_card_flg = 0 "
 					+ "AND c.company_name = :companyName "
 					+ "AND c.contact_date IN (select ci.contact_date from card_info ci " + "where ci.contact_date  = "
 					+ "(select max(contact_date) from card_info where contact_date >= '" + this.complianceDate + "')) "
-					+ "GROUP BY c.card_id " + "ORDER BY c.create_date DESC");
+					+ "GROUP BY c.card_id " 
+					+ "ORDER BY c.create_date DESC");
 		} else {
 			query = getEntityManager().createNativeQuery("SELECT "
 					+ "c.card_id AS cardId, c.name AS name, c.last_name AS lastName, c.first_name AS firstName, c.name_kana AS nameKana, "
 					+ " c.last_name_kana AS lastNameKana, c.first_name_kana AS firstNameKana, "
 					+ "c.company_name AS companyName, c.department_name AS departmentName, c.position_name AS positionName, c.image_file AS imageFile "
-					+ "FROM possession_card po LEFT JOIN card_info AS c " + "ON po.card_id = c.card_Id "
-					+ "WHERE po.user_id = :userId AND c.approval_status = 1 AND c.delete_flg != 1 AND c.old_card_flg = 0 "
-					+ "AND c.company_name = :companyName " + "GROUP BY c.card_id " + "ORDER BY c.create_date DESC");
+					+ "FROM card_info AS c " 
+					+ "WHERE c.card_owner_id = :userId AND c.approval_status = 1 AND c.delete_flg != 1 AND c.old_card_flg = 0 "
+					+ "AND c.company_name = :companyName " 
+					+ "GROUP BY c.card_id " 
+					+ "ORDER BY c.create_date DESC");
 		}
 		query.setParameter("userId", userId);
 		query.setParameter("companyName", companyName);
@@ -1270,7 +1278,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 					+ " AND (c.companyName is not null AND c.companyName <> '') "
 					//+ "GROUP BY SUBSTR((c.companyNameKana),1,1) ORDER BY c.companyNameKana ASC, c.companyName ASC ";
-					+ "GROUP BY c.companyName ORDER BY c.companyNameKana ASC, c.companyName ASC ";
+					+ "GROUP BY c.companyNameKana ORDER BY c.companyNameKana ASC";
 			
 		} else if (sortType == SearchConditions.TAG.getValue()) {
 			sqlStr = "SELECT ut.tagName AS groupDate FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
