@@ -206,6 +206,9 @@ public class UserController {
 	@Value("${ip.address.lan}")
 	private String ipAddressLan;
 	
+	@Value("${ip.address.global}")
+	private String ipAddressGlobal;
+	
 	@Autowired
 	SettingsInfoService settingsInfoService;
 
@@ -373,7 +376,7 @@ public class UserController {
 			inetAddress = InetAddress.getLocalHost();
 
 		    String serverAddress = inetAddress.getHostAddress().toString();
-		    if(serverAddress.equals(this.ipAddressLan)){
+		    if(!serverAddress.equals(this.ipAddressGlobal)){
 		    	block = 1;
 		    } else {
 		    	block = 2;

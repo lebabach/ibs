@@ -9,8 +9,8 @@
 
 <%
 	String serverAddress, ipAddressConfigGobal, ipAddressConfigLocal, localHost;
-	Integer showDownload;
-	showDownload = 1;
+	Integer isLocal;
+	isLocal = 1;
 	localHost = "error";
 	serverAddress = "error";
 	ipAddressConfigGobal = "error";
@@ -24,10 +24,10 @@
 	    
 	    serverAddress = inetAddress.getHostAddress().toString();
 	    
-	    if(serverAddress.equals(ipAddressConfigLocal)){
-	    	showDownload = 1;
+	    if(!serverAddress.equals(ipAddressConfigGobal)){
+	    	isLocal = 1;
 	    } else {
-	    	showDownload = 2;
+	    	isLocal = 0;
 	    }
 	
 	    
@@ -259,7 +259,7 @@
                           <li><a href="<c:url value='/user/addBusinessCard' />">名刺データ作成</a></li>
                           <li><a href="<c:url value='/user/companyTree' />">顧客組織一覧</a></li>
                           <li><a href="<c:url value='/user/overlapcards' />">名刺の最新化（名寄せ）</a></li>
-                          <% if(showDownload == 1){ %>
+                          <% if(isLocal == 1){ %>
                 			<li><a href="<c:url value='/user/download' />">自分の名刺ダウンロード</a></li>
                			  <% } %>
                           <li class="divider"></li>

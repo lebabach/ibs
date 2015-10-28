@@ -143,6 +143,7 @@ a {
 }
 </style>
 </c:if>
+
 <div id="details" class="container">
 	<!-- Start banner -->
 	<div class="row animated fadeInRight">
@@ -212,6 +213,10 @@ a {
                   </div>
                   <!-- modal body -->
                     <div class="modal-body">
+                      <div id="loading-copy" style="display: none; z-index: 1000; position: fixed;top: 50%;left: 50%;margin-top: -50px;margin-left: -50px;">
+							<img src="<c:url value='/assets/img/loading-card.gif'/>" />
+					  </div>
+					  
                       <div class="form-group" id="errors" style="padding:10px 0 10px 0; text-align: center;"></div>
                       <div class="form-group">
                           <input type="email" class="form-control" id="sfEmail" placeholder="ID" value="" name="login_id">
@@ -1962,6 +1967,8 @@ label.error {
 	}
 	
 	function loginSaleForce(){
+		$("#loading-copy").show();
+		
 		var lastname = $("input[name=lastName]").val();
 		var firstname = $("input[name=firstName]").val();
 		var positionName = $("input[name=positionName]").val();
@@ -1994,8 +2001,11 @@ label.error {
         		xhr.setRequestHeader("Content-Type", "application/json");
         	},
         	success: function(response) {
-	       		if(response.faultcode == "INVALID_LOGIN"){
-	       			$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'>セールスフォース連携に失敗しました</label>");
+	       		//console.log(response);
+        		$("#loading-copy").hide();
+        		
+	       		if(response.faultcode.indexOf("INVALID_LOGIN") != 0 || response.faultcode == "INVALID_LOGIN"){
+	       			$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'><fmt:message key='sf.login.failed' /></label>");
 	       		}
 	       		else{
 	       			var isChecked = false;
@@ -2004,7 +2014,7 @@ label.error {
 	       				$('#modal-login-saleforce').find('.close').click();
 	       				BootstrapDialog.show({
             				title: '<fmt:message key="popup.title.info" />',
-           	             	message: 'セールスフォースに名刺データを連携しました'
+           	             	message: '<fmt:message key="sf.login.success" />'
             	      	});
 	       				
 	       				if(isChecked)
@@ -2017,6 +2027,7 @@ label.error {
 	       		}
         	},
         	error: function(xhr, status, error){
+        		$("#loading-copy").hide();
         		console.log("Error :"+ xhr.responseText);
 		  	}
         });	
@@ -2027,11 +2038,11 @@ label.error {
 		var sfPassword = $("#sfPassword").val();
 		
 		if(sfEmail == ""){
-			$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'>Login Id is not blank</label>")
+			$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'><fmt:message key='sf.loginId.blank' /></label>")
 			return false;
 		}
 		else if(sfPassword == ""){
-			$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'>Password is not blank</label>")
+			$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'><fmt:message key='sf.password.blank' /></label>")
 			return false;
 		}
 		else{
