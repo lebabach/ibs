@@ -529,7 +529,7 @@ $(document).ready(function() {
 				</fieldset>
 				<fieldset>
 					<label class="l-a-b"><fmt:message key='edit.card.zipcode' /><span>*</span></label> 
-					<input class="input-a-b p-postal-code" name="zipCode" maxlength="7" id="zipcode">
+					<input class="input-a-b p-postal-code" name="zipCode" id="zipcode">
 						<p class="mesage_error error_zipcode"></p>
 						
 						<span class="p-country-name" style="display: none;">Japan</span>
