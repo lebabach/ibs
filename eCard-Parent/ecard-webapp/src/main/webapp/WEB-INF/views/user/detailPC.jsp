@@ -883,7 +883,7 @@ label.error {
                     			    },
                     			    zipCode : {
                     			    	required: false,
-                    			    	number : true
+                    			    	customphone: true
                     			    }
                     			},
                     			messages: {
@@ -945,7 +945,7 @@ label.error {
                     }, "<fmt:message key="valid.URL" />");
                     
                     $.validator.addMethod('customphone', function (value, element) {
-                        return this.optional(element) || /^[0-9-+()]+$/.test(value);
+                        return this.optional(element) || /^[0-9-+()●]+$/.test(value);
                     }, "<fmt:message key="valid.phoneNumber" />");
                     
                 </script>
