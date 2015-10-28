@@ -953,7 +953,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			
 		} else if (sortType == SearchConditions.NAME.getValue()) {
 			sqlStr = "SELECT c.nameKana AS groupDate, c FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
-					+" AND (c.nameKana is not null AND c.nameKana <> '') "
+					/*+" AND (c.nameKana is not null AND c.nameKana <> '') "*/
 					+ "AND c.nameKana LIKE :valueSearch ORDER BY c.nameKana ASC";
 			
 		} else if (sortType == SearchConditions.COMPANY.getValue()) {			
@@ -984,10 +984,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		query.setParameter("userId", userId);
 		
 		if (sortType == SearchConditions.NAME.getValue()) {
-			if(valueSearch != "" || valueSearch != null)
+			if(!valueSearch.equals("") && !valueSearch.equals(null))
 				query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
 			else 
-				query.setParameter("valueSearch", valueSearch + "%");
+				query.setParameter("valueSearch", valueSearch );
 		} else {
 			if(!valueSearch.equals("cardNoTag")){
 			  query.setParameter("valueSearch", valueSearch);
@@ -1258,9 +1258,11 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 					+ " GROUP BY DATE_FORMAT(c.contactDate,'%Y/%m') ORDER BY c.contactDate DESC ";
 			
 		} else if (sortType == SearchConditions.NAME.getValue()) {
-			sqlStr = "SELECT c.nameKana  AS groupDate FROM CardInfo c "
+		 /*CASE c.nameKana WHEN '' THEN '#' ELSE c.nameKana END*/ 
+		 
+			sqlStr = "SELECT c.nameKana AS groupDate FROM CardInfo c "
 					+ "WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
-					+ " AND (c.nameKana is not null AND c.nameKana <> '') "
+					/*+ " AND (c.nameKana is not null AND c.nameKana <> '') "*/
 					+ "GROUP BY SUBSTR((c.nameKana),1,1) ORDER BY c.nameKana ASC ";
 			
 		} else if (sortType == SearchConditions.COMPANY.getValue()) {
@@ -1309,7 +1311,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			
 		} else if (typeSort == SearchConditions.NAME.getValue()) {
 			sqlStr = "SELECT COUNT(*) FROM CardInfo c WHERE c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
-					+" AND (c.nameKana is not null AND c.nameKana <> '') "
+					/*+" AND (c.nameKana is not null AND c.nameKana <> '') "*/
 					+ "AND c.nameKana LIKE :valueSearch";
 			
 		} else if (typeSort == SearchConditions.COMPANY.getValue()) {			
@@ -1340,7 +1342,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		query.setParameter("userId", userId);
 		
 		if (typeSort == SearchConditions.NAME.getValue()) {
-			if(valueSearch != "" || valueSearch != null)
+			if(!valueSearch.equals("") && !valueSearch.equals(null))
 				query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
 			else 
 				query.setParameter("valueSearch", valueSearch + "%");
