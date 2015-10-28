@@ -131,7 +131,7 @@
 	  
 	  var errorLineNo = $('input[name=errorLineNo]').val();
 	  var existLineNo = $('input[name=existLineNo]').val();
-	  if (recordSuccess != 0 || recordError != 0 || recordEmpty != 0){
+	  if (recordSuccess != 0 || recordError != 0 || recordEmpty != 0 || recordConflict != 0){
 	  		$(".recordSuccess").text("<fmt:message key='import.msg.success'/> : " +recordSuccess);
 	  		$(".recordError").text("<fmt:message key='import.msg.error'/> : "+recordError);	  		
 	  		$(".recordConflict").text("<fmt:message key='import.msg.conflict'/> : "+recordConflict);

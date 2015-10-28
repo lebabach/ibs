@@ -392,6 +392,10 @@ public class DataProcessController {
              // send mail function here
     			//sendMailResgisterOperator(subUserInfoList);
     			System.out.println("=======uploadOperatorCSV:===========send Mail size = ");
+			} else {
+				
+				recordSuccess = 0;
+                recordError = recordCnt - recordSuccess - recordConflict;
 			}
 			System.out.println("=======uploadOperatorCSV:===========return model ");
 			modelAndView.addObject("recordSuccess", recordSuccess);
