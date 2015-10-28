@@ -496,7 +496,7 @@ history.pushState(null, null, null);
 							language : 'ja',
 							todayHighlight : true,
 							keyboardNavigation : false,
-							format : 'yyyy年MMdd日',
+							format : 'yyyy年mm月dd日',
 							forceParse : true,
 							autoclose : true,
 							calendarWeeks : true
