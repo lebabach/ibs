@@ -2001,10 +2001,10 @@ label.error {
         		xhr.setRequestHeader("Content-Type", "application/json");
         	},
         	success: function(response) {
-	       		//console.log(response);
+	       		console.log(response);
         		$("#loading-copy").hide();
         		
-	       		if(response.faultcode.indexOf("INVALID_LOGIN") != 0 || response.faultcode == "INVALID_LOGIN"){
+	       		if(response.toString().indexOf("INVALID_LOGIN") > 0 || response.faultcode == "sf:INVALID_LOGIN" || response.faultcode == "INVALID_LOGIN"){
 	       			$("#errors").html("<label class='error' style='margin-left:0px; font-size:13pt;'><fmt:message key='sf.login.failed' /></label>");
 	       		}
 	       		else{
