@@ -325,11 +325,17 @@ public class DataProcessController {
 				userInfo.setFirstName(listUser.getFirstName());
 				userInfo.setLastNameKana(listUser.getLastNameKana());
 				userInfo.setFirstNameKana(listUser.getFirstNameKana());
-								
-				try {
-					userInfo.setUseDate(new SimpleDateFormat("yyyy/MM/dd").parse(listUser.getUseDate()));
-				} catch (ParseException ex) {
-					ex.printStackTrace();
+				
+				if(StringUtils.isNotBlank(listUser.getUseDate())){
+					try {
+						userInfo.setUseDate(new SimpleDateFormat("yyyy/MM/dd").parse(listUser.getUseDate()));
+					} catch (ParseException ex) {
+						ex.printStackTrace();
+						recordError++;
+						errorLineNo += recordCnt + ",";
+						continue;
+					}
+				} else {
 					recordError++;
 					errorLineNo += recordCnt + ",";
 					continue;
@@ -353,7 +359,7 @@ public class DataProcessController {
 				String password = new BigInteger(130, new SecureRandom()).toString(32);
 				userInfo.setPassword(new BCryptPasswordEncoder().encode(password));
 				// Set roleID and roleAdminID
-				if(listUser.getRoleAdminID() == null || listUser.getSalesforce() == null){
+				if(!StringUtils.isNotBlank(listUser.getRoleAdminID()) || !StringUtils.isNotBlank(listUser.getSalesforce()) || !StringUtils.isNotBlank(listUser.getRoleID() )){
 					recordError++;
 					errorLineNo += recordCnt + ",";
 					continue;
