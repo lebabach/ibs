@@ -323,37 +323,51 @@ public class UserController {
 			}*/
 			
 		}
-		
-		
+		int check = 0;
 		for (String nameSort : lstNameSort) {
 			List<CardInfo> cardInfoDisp = new ArrayList<>();
-			for (CardInfoUserVo cardInfo : lstCardInfo) {
-				if(typeSort == SearchConditions.NAME.getValue()){
-					if(cardInfo.getSortType() != ""){
-						if (nameSort.equals(cardInfo.getSortType().toUpperCase().substring(0,1))) {
+			if (check == 0) {
+				for (CardInfoUserVo cardInfo : lstCardInfo) {
+					if(typeSort == SearchConditions.NAME.getValue()){
+						if(cardInfo.getSortType() != ""){
+							if (nameSort.equals(cardInfo.getSortType().toUpperCase().substring(0,1))) {
+								cardInfoDisp.add(cardInfo.getCardInfo());
+							}
+						} else {
 							cardInfoDisp.add(cardInfo.getCardInfo());
 						}
 					} else {
-						cardInfoDisp.add(cardInfo.getCardInfo());
+						if (nameSort.equals(cardInfo.getSortType())) {
+							cardInfoDisp.add(cardInfo.getCardInfo());
+						}
 					}
-				} else {
-					if (nameSort.equals(cardInfo.getSortType())) {
-						cardInfoDisp.add(cardInfo.getCardInfo());
-					}
+					
 				}
-				
+				CardInfoPCVo cardInfoPCVo;
+				try {
+						if (cardInfoDisp.size() > 0) {
+							cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp));
+							cardInfoSearchResponses.add(cardInfoPCVo);				
+							check = 1;
+						}
+					
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}	
+			} else {
+				CardInfoPCVo cardInfoPCVo;
+				try {
+						cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp));
+						cardInfoSearchResponses.add(cardInfoPCVo);	
+					
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
 			}
-			CardInfoPCVo cardInfoPCVo;
-			try {
-//				if (cardInfoDisp.size() > 0) {
-					cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp));
-					cardInfoSearchResponses.add(cardInfoPCVo);
-//				}
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}	
 		}
 
 		dataTableResponse.setData(cardInfoSearchResponses);

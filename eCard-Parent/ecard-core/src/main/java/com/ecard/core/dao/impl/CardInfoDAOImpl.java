@@ -1353,7 +1353,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 			if(!valueSearch.equals("") && !valueSearch.equals(null))
 				query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
 			else 
-				query.setParameter("valueSearch", valueSearch + "%");
+				query.setParameter("valueSearch", valueSearch );
 		} else {
 			if(!valueSearch.equals("cardNoTag")){
 			  query.setParameter("valueSearch", valueSearch);
