@@ -335,22 +335,10 @@ public final class CardInfoConverter {
 			cardInfoCSV.setAddress2(cardInfo.getAddress2());
 			cardInfoCSV.setAddress3(cardInfo.getAddress3());
 			cardInfoCSV.setTelNumberCompany(cardInfo.getTelNumberCompany());
-			cardInfoCSV.setTelNumberDepartment(cardInfo.getTelNumberDepartment());
-			cardInfoCSV.setTelNumberDirect(cardInfo.getTelNumberDirect());
+			cardInfoCSV.setTelNumberDepartment(cardInfo.getTelNumberDepartment());			
 			cardInfoCSV.setFaxNumber(cardInfo.getFaxNumber());
 			cardInfoCSV.setMobileNumber(cardInfo.getMobileNumber());
 			cardInfoCSV.setCompanyUrl(cardInfo.getCompanyUrl());
-			cardInfoCSV.setSubAddressFull(cardInfo.getSubAddressFull());
-			cardInfoCSV.setSubAddress1(cardInfo.getSubAddress1());
-			cardInfoCSV.setSubAddress2(cardInfo.getSubAddress2());
-			cardInfoCSV.setSubAddress3(cardInfo.getSubAddress3());
-			cardInfoCSV.setSubZipCode(cardInfo.getSubZipCode());
-			cardInfoCSV.setSubTelNumberCompany(cardInfo.getSubTelNumberCompany());
-			cardInfoCSV.setSubTelNumberDepartment(cardInfo.getSubTelNumberDepartment());
-			cardInfoCSV.setSubTelNumberDirect(cardInfo.getSubTelNumberDirect());
-			cardInfoCSV.setSubFaxNumber(cardInfo.getSubFaxNumber());			
-			cardInfoCSV.setCreateDate(cardInfo.getCreateDate());
-			cardInfoCSV.setUpdateDate(cardInfo.getUpdateDate());
 			cardInfoCSV.setContactDate(cardInfo.getContactDate());
 			listCardInfoCSV.add(cardInfoCSV);			
 		}

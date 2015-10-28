@@ -146,6 +146,12 @@ public class UserController {
 			"companyUrl", "subAddressFull", "subZipCode", "subAddress1", "subAddress2", "subAddress3",
 			"subTelNumberCompany", "subTelNumberDepartment", "subTelNumberDirect", "subFaxNumber",
 			"createDate", "updateDate", "contactDate" };
+	private String[] headerJapanse = { "名刺採番", "会社名", "会社名カナ", "部署名", "役職名", "氏名（姓）",
+			"氏名（名）", "氏名（姓）カナ", "氏名（名）カナ", "メール", "郵便番号", "住所", "住所１", "住所２",
+			"住所３", "電話番号１", "電話番号２ ", "telNumberDirect", "FAX番号", "携帯電話番号",
+			"会社URL", "subAddressFull", "subZipCode", "subAddress1", "subAddress2", "subAddress3",
+			"subTelNumberCompany", "subTelNumberDepartment", "subTelNumberDirect", "subFaxNumber",
+			"createDate", "updateDate", "名刺交換日" };
 	@Autowired
 	UserInfoService userInfoService;
 
@@ -472,7 +478,7 @@ public class UserController {
 				response.setCharacterEncoding("UTF-8");
 				response.setHeader(headerKey, headerValue);
 				ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-				csvWriter.writeHeader(header);
+				csvWriter.writeHeader(headerJapanse);
 
 				for (CardInfoCSV aCard : listUserInfoCSV) {
 					csvWriter.write(aCard, header);
@@ -590,7 +596,7 @@ public class UserController {
 			String headerValue = String.format("attachment; filename=\"%s\"", csvFileName);
 			response.setHeader(headerKey, headerValue);
 			ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-			csvWriter.writeHeader(header);
+			csvWriter.writeHeader(headerJapanse);
 
 			for (CardInfoCSV aCard : listUserInfoCSV) {
 				csvWriter.write(aCard, header);
@@ -600,7 +606,7 @@ public class UserController {
 			response.setContentType("text/html");
 			ICsvBeanWriter csvWriter = new CsvBeanWriter(new FileWriter(absoluteFilePath),
 					CsvPreference.STANDARD_PREFERENCE);
-			csvWriter.writeHeader(header);
+			csvWriter.writeHeader(headerJapanse);
 
 			for (CardInfoCSV aCard : listUserInfoCSV) {
 				csvWriter.write(aCard, header);
