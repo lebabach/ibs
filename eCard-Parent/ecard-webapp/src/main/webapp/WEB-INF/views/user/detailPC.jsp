@@ -861,10 +861,6 @@ label.error {
                             		lastName: "required",
                             		fisrtNameKana: "required",
                             		lastNameKana: "required",
-                    				email: {
-                    					required: true,
-                    					email: true
-                    				},
                     			    telNumberDepartment : {
                     			    	required: false,
                     			    	customphone: true
@@ -893,7 +889,6 @@ label.error {
                             		lastName: "<fmt:message key="valid.name" />",
                             		fisrtNameKana: "<fmt:message key="valid.nameKana" />",
                             		lastNameKana: "<fmt:message key="valid.nameKana" />",
-                    				email: "<fmt:message key="valid.email" />",
                     				telNumberDepartment: "<fmt:message key="valid.phoneNumber" />",
                     				telNumberCompany: "<fmt:message key="valid.phoneNumber" />",
                     				mobileNumber: "<fmt:message key="valid.phoneNumber" />",
@@ -911,7 +906,6 @@ label.error {
                             });
                             
                             $(".input-submit").click(function(){
-                            	
                           		if($("#editForm").valid()){
                            			$(".input-new-1").removeClass("input-new-1-ac");
                                     $('.p-fomr2').hide();
@@ -931,7 +925,20 @@ label.error {
                            		}
                             });
                             
-                    });        
+                            $("#email").blur(function(){
+                            	$("#editForm #email-error").hide();
+                            	var emailAddress = $("#email").val();
+                            	if(!isValidEmailAddress(emailAddress)){
+                            		$("#requireEmail").hide();
+                            		$("#formatEmail").show();
+                            	}
+                            	
+                            	if(emailAddress == ""){
+                            		$("#requireEmail").show();
+                            		$("#formatEmail").hide();
+                            	}
+                            });
+                    });
                     
                     function validateURL(value){
                       // URL validation from http://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
@@ -948,6 +955,14 @@ label.error {
                         return this.optional(element) || /^[0-9-+()●]+$/.test(value);
                     }, "<fmt:message key="valid.phoneNumber" />");
                     
+                    $.validator.addMethod('customEmail', function (value, element) {
+                        return this.optional(element) || /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i.test(value);
+                    });
+                    
+                    function isValidEmailAddress(emailAddress) {
+                	    var pattern = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
+                	    return pattern.test(emailAddress);
+                	};
                 </script>
                 
 				<div class="panel-body" style="padding: 15px 15px 0 15px;">
@@ -1017,6 +1032,8 @@ label.error {
 									</div>
 									<input type="email" class="ipt_txt front_full_name input-new-1"
 										value="${cardInfo.email}" name="email" id="email">
+									<p style="color: red; display:none; padding-left: 15px;" id="requireEmail"><fmt:message key="valid.email" /></p>
+									<p style="color: red; display: none; padding-left: 15px;" id="formatEmail"><fmt:message key="valid.email.format" /></p>
 								</dd>
 							</dl>
 						</div>
