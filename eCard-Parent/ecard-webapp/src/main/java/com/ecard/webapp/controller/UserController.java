@@ -838,7 +838,8 @@ public class UserController {
 				departmentName = departmentName.substring(0, 255);
 			}
 
-			String password = cardInfo.getLogin_pass() + CommonConstants.tokenAuthen;
+			//String password = cardInfo.getLogin_pass() + CommonConstants.tokenAuthen;
+			String password = cardInfo.getLogin_pass();
 			
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 			map.add("lastname", lastName);
