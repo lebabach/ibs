@@ -883,7 +883,7 @@ label.error {
                     			    },
                     			    zipCode : {
                     			    	required: false,
-                    			    	customphone : true
+                    			    	number : true
                     			    }
                     			},
                     			messages: {
@@ -896,7 +896,8 @@ label.error {
                     				email: "<fmt:message key="valid.email" />",
                     				telNumberDepartment: "<fmt:message key="valid.phoneNumber" />",
                     				telNumberCompany: "<fmt:message key="valid.phoneNumber" />",
-                    				mobileNumber: "<fmt:message key="valid.phoneNumber" />"
+                    				mobileNumber: "<fmt:message key="valid.phoneNumber" />",
+                    				zipCode: "<fmt:message key="valid.zipCode" />"
                     			}
                             });
                             
@@ -1053,7 +1054,7 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.zipCode}" name="zipCode" id="zipCode" readonly="readonly">
+										value="${cardInfo.zipCode}" name="zipCode" id="zipCode" readonly="readonly" minlength="7" maxlength="7">
 								</dd>
 							</dl>
 						</div>
