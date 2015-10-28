@@ -359,13 +359,9 @@ history.pushState(null, null, null);
 						$(".btn_address")
 								.click(
 										function() {
-											var zipcodeString = $('#zipcode')
-													.val();
-											console.log(zipcodeString
-													.indexOf('-'));
-											if (zipcodeString.indexOf('-') > 1
-													|| zipcodeString
-															.indexOf(' ') > 1) {
+											var zipcodeString = $('#zipcode').val();
+											console.log(zipcodeString.indexOf('-'));
+											if (zipcodeString.indexOf('-') > 1|| zipcodeString.indexOf(' ') > 1) {
 												//$(".error_zipcode").text("<fmt:message key='edit.card.validate.zipcode'/>");			
 												$(".mesage_error").css(
 														"display", "block");
@@ -832,7 +828,7 @@ history.pushState(null, null, null);
 											style="position: relative; margin: 0 auto; width: auto">
 											<input name="zipCode" type="text" value="${cardInfo.zipCode}"
 												class="form-control p-postal-code" id="zipcode"
-												placeholder="" style="width: 322px">
+												placeholder=""  maxlength="7"  style="width: 322px">
 											<!-- <a
 												style="position: absolute; left: 198px; top: 0px; width: 150px; height: 32px;"
 												class="ch-address btn_address">郵便番号から住所を入力</a> -->
