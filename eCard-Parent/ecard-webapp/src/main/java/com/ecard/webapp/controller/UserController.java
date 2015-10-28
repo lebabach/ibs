@@ -272,7 +272,7 @@ public class UserController {
 		modelAndView.setViewName("homePC");
 		modelAndView.addObject("lstNameSort",lstNameSort);
 		modelAndView.addObject("lstCardInfoPCVo", lstCardInfoPCVo);
-		modelAndView.addObject("totalCardInfo", listTotalCardInfo);
+		modelAndView.addObject("totalCardInfo", listTotalCardInfo.intValue());
 		modelAndView.addObject("listTagGroup", listTagGroup);
 		return modelAndView;
 

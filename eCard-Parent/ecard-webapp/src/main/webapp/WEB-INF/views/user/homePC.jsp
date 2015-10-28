@@ -420,7 +420,8 @@
 						        </div>
 					        </c:forEach>						      
 				     	</c:forEach>
-				     	<c:if test="${lstCardInfoPCVo.size() < totalCardInfo}">
+				     	<input class="hidden" name="totalCardInfo" value="${totalCardInfo}">
+				     	<c:if test="${totalCardInfo > 10}">
 				     		<div class="list-group-item pointer show-content" style="text-align: center;">
 					      	 	<a id="clickToLoadMore"  style="color: red;"> 次の10件を表示</a>
 					      	</div>
