@@ -136,7 +136,7 @@ history.pushState(null, null, null);
 		var zipcode = $('#zipcode').val();
         var email = $("#email").val();
         var fax = $("input[name=faxNumber]").val();
-		var customPhone=/^[0-9-+()]+$/;
+        var customPhone=/^[0-9-+()●]+$/;
 		var companyNameKanaId = $('#companyNameKanaId').val();
 		if (firstname == "") {
 			$(".error_firstname").text(
