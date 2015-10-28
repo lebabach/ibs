@@ -697,8 +697,13 @@
        	if(typeSort == 5){
        		strDate = strDate.slice(0,4)+"/"+strDate.slice(4,strDate.length+1);	
        	}
+       	if(typeSort == 1){
+       		strDate = "";	
+       	}
+       	
        	self.find('.list-group-item').remove();
        	$("#loading-copy").show();
+       	
           $.ajax({
    			type: 'POST',
    			url: 'search',
@@ -1067,17 +1072,27 @@
 					 /* } else if(typeSort == 6 && value.nameSort=="cardNoTag") {
 						 nameShow = "（タグ設定なし)"; */
 					 } else if (typeSort == 1 ){
-						nameShow = changeAphabetToHigrana(value.nameSort);		 
+						nameShow = changeAphabetToHigrana(value.nameSort);						
 					 } else {
 						 nameShow = value.nameSort;
 					 }
 					 
 					 
-					 if(key == 0){	
-						listGroup = $('.business_card_book').append(
+					 if(key == 0){
+						 if(value.nameSort.replace("/","").trim()==""){
+								value.nameSort="NULL";
+								listGroup = $('.business_card_book').append(
+										'<div class="list-group" style="margin-bottom: 0px !important;" id="NULL">'
+								        +'<div class="ul-left-li active list-group-item-title">'+"#"+'</div></div>');
+						 } else {
+								listGroup = $('.business_card_book').append(
+										'<div class="list-group" style="margin-bottom: 0px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
+								        +'<div class="ul-left-li active list-group-item-title">'+nameShow+'</div></div>');
+						 }
+						/* listGroup = $('.business_card_book').append(
 								'<div class="list-group" style="margin-bottom: 0px !important;" id="'+value.nameSort.replace("/","").trim()+'">'
 						        +'<div class="ul-left-li active list-group-item-title">'+nameShow+'</div></div>');
-				 
+ */				 
 						 $.each( value.lstCardInfo, function (k,v) {
 							 listGroupItem += '<div class="list-group-item pointer show-content">'
 					    					+'<div class="row row-new">'
@@ -1880,7 +1895,9 @@
    		    if(typeSort == 5){
             	strDate = strDate.slice(0,4)+"/"+strDate.slice(4,strDate.length+1);	
             }
-   		   
+   		 	if(typeSort == 1 && strDate == "NULL"){
+        		strDate = "";	
+        	}
    		   if(isLoading != 0){    			       			   
    			   return false;
    		   }

@@ -298,11 +298,11 @@ public class UserController {
 		// Search all
 		// 
 		if(searchType == 0) {
-			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), typeSort);
+			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), typeSort);			
 			if(lstNameSort.size() > 0) {
-				if(valueSearch == "" || valueSearch == null){				
+				if(valueSearch == "" || valueSearch == null){					
 					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).trim(), page);
-					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort,lstNameSort.get(0));
+					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort,lstNameSort.get(0).trim());
 				} else {
 					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, valueSearch, page);
 					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort, valueSearch);
