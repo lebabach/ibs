@@ -260,7 +260,7 @@
                           <li><a href="<c:url value='/user/companyTree' />">顧客組織一覧</a></li>
                           <li><a href="<c:url value='/user/overlapcards' />">名刺の最新化（名寄せ）</a></li>
                           <% if(isLocal == 1){ %>
-                			<li><a href="<c:url value='/user/download' />">自分の名刺ダウンロード</a></li>
+                			<li><a href="<c:url value='/user/download' />">名刺ダウンロード</a></li>
                			  <% } %>
                           <li class="divider"></li>
                           <li><a href="<c:url value='/user/faq' />">FAQ</a></li>                          

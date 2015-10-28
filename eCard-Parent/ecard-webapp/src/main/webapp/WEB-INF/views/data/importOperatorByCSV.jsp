@@ -1,8 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ page language="java" contentType="text/html"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 
 <style>
 	.mesage_error{
@@ -50,7 +50,7 @@
 					<p style="color: red;" class="mesage_record recordConflict"></p>
 				</div>
              <div class="col-md-12 col-xs-offset-5">
-             	<form class="form-horizontal" role="form" id="upload" action = "<c:url value="/data/uploadOperatorCSV"/>" enctype="multipart/form-data" method="POST">
+             	<form class="form-horizontal" role="form" id="upload" action = "<c:url value="/data/uploadOperatorCSV"/>" enctype="multipart/form-data" method="post">
                  <div class="row" style="margin-bottom:5px">
                       <select id="groupId" name ="groupCompanyId" style=" width: 170px;height:32px;">
                       <option value=''>会社選択</option>
