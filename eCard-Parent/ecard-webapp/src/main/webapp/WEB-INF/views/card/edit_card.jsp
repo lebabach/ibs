@@ -527,11 +527,7 @@ history.pushState(null, null, null);
 						$.fn.autoKana("#companyname", "#companyNameKanaId", {
 							katakana : true
 						});
-						
-						$("#zipcode").blur(function(){
-							$("#zipcode").val($("#zipcode").val().replace("-", ""));
-						});
-
+	})
 </script>
 <style>
 .col-sm-12 span {
