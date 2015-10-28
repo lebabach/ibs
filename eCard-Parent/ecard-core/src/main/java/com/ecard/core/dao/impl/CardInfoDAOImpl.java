@@ -979,7 +979,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				sqlStr = "SELECT ut.tagName AS groupDate, c FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
 						+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 						+" AND (ut.tagName is not null AND ut.tagName <> '') "
-						+" AND ut.tagName = :valueSearch ORDER BY ut.tagId ASC ";
+						+" AND ut.tagId = :valueSearch ORDER BY ut.tagId ASC ";
 			}
 			
 		} else {
@@ -996,6 +996,8 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
 			else 
 				query.setParameter("valueSearch", valueSearch );
+		}else if(sortType == SearchConditions.TAG.getValue()){
+			query.setParameter("valueSearch",Integer.parseInt(valueSearch));
 		} else {
 			if(!valueSearch.equals("cardNoTag")){
 			  query.setParameter("valueSearch", valueSearch);
@@ -1337,7 +1339,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				sqlStr = "SELECT COUNT(*) FROM CardTag ct INNER JOIN ct.userTag ut INNER JOIN ct.cardInfo c"
 						+" WHERE ut.userInfo.userId = :userId AND c.cardOwnerId = :userId AND c.approvalStatus = 1 AND c.deleteFlg = 0 AND c.oldCardFlg = 0 "
 						+" AND (ut.tagName is not null AND ut.tagName <> '') "
-						+" AND ut.tagName = :valueSearch";
+						+" AND ut.tagId = :valueSearch";
 			}
 			
 		} else {
@@ -1354,6 +1356,8 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				query.setParameter("valueSearch", valueSearch.substring(0, 1).toLowerCase() + "%");
 			else 
 				query.setParameter("valueSearch", valueSearch + "%");
+		}else if (typeSort == SearchConditions.TAG.getValue()){
+			query.setParameter("valueSearch",Integer.parseInt(valueSearch) );
 		} else {
 			if(!valueSearch.equals("cardNoTag")){
 			  query.setParameter("valueSearch", valueSearch);

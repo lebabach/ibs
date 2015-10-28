@@ -256,7 +256,7 @@ public class UserController {
 					CardInfoPCVo cardInfoPCVo;
 					try {
 						if (cardInfoDisp.size() > 0) {
-							cardInfoPCVo = new CardInfoPCVo(lstNameSort.get(0), CardInfoConverter.convertCardInforList(cardInfoDisp));
+							cardInfoPCVo = new CardInfoPCVo(lstNameSort.get(0), CardInfoConverter.convertCardInforList(cardInfoDisp),listTagGroup);
 							lstCardInfoPCVo.add(cardInfoPCVo);
 						}
 					} catch (IllegalAccessException e) {
@@ -295,14 +295,31 @@ public class UserController {
 		List<String> lstNameSort = null;		
 		List<CardInfoUserVo> lstCardInfo = null;
 		Long listTotalCardInfo = new Long(0);
+		List<TagGroup> listTagGroup = null;
+		String tagId = null;
 		// Search all
 		// 
 		if(searchType == 0) {
-			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), typeSort);			
+			lstNameSort = cardInfoService.getListSortType(ecardUser.getUserId(), typeSort);		
+			listTagGroup = getCardTag();
+			if(typeSort == SearchConditions.TAG.getValue() ){
+				for(TagGroup tag : listTagGroup ){
+					if(tag.getTagName().toString().trim().equals(lstNameSort.get(0).trim())){
+						tagId = tag.getTagId().toString();
+						break;
+					}
+				}
+			}
 			if(lstNameSort.size() > 0) {
-				if(valueSearch == "" || valueSearch == null){					
-					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).trim(), page);
-					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort,lstNameSort.get(0).trim());
+				if(valueSearch == "" || valueSearch == null){	
+					if(typeSort == SearchConditions.TAG.getValue() ){
+						lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, tagId, page);
+						listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort,tagId);
+					}else{
+						lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, lstNameSort.get(0).trim(), page);
+						listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort,lstNameSort.get(0).trim());
+					}
+					
 				} else {
 					lstCardInfo = cardInfoService.getListPossesionCard(ecardUser.getUserId(), typeSort, valueSearch, page);
 					listTotalCardInfo = cardInfoService.countPossessionCard(ecardUser.getUserId(), typeSort, valueSearch);
@@ -346,7 +363,7 @@ public class UserController {
 			CardInfoPCVo cardInfoPCVo;
 			try {
 //				if (cardInfoDisp.size() > 0) {
-					cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp));
+					cardInfoPCVo = new CardInfoPCVo(nameSort, CardInfoConverter.convertCardInforList(cardInfoDisp),listTagGroup);
 					cardInfoSearchResponses.add(cardInfoPCVo);
 //				}
 			} catch (IllegalAccessException e) {
