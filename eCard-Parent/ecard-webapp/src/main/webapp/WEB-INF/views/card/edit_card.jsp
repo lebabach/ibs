@@ -128,6 +128,8 @@ history.pushState(null, null, null);
 		var checkValidation = true;
 		var firstname = $("#fistname").val();
 		var lastname = $("#lastname").val();
+		var firstnameKana = $("#firstnamekana").val();
+		var lastnameKana = $("#lastnamekana").val();
 		var telcompany = $("#telcompany").val();
 		var teldepartment = $("#teldepartment").val();
 		var mobilenumber = $("#mobilenumber").val();
@@ -139,14 +141,22 @@ history.pushState(null, null, null);
         var customPhone=/^[0-9-+()●]+$/;
 		var companyNameKanaId = $('#companyNameKanaId').val();
 		if (firstname == "") {
-			$(".error_firstname").text(
-					"<fmt:message key='edit.card.validate'/>");
+			$(".error_firstname").text("<fmt:message key='edit.card.validate'/>");
 			checkValidation = false;
 			$(".mesage_error").css("display", "block");
 		}
 		if (lastname == "") {
-			$(".error_lastname")
-					.text("<fmt:message key='edit.card.validate'/>");
+			$(".error_lastname").text("<fmt:message key='edit.card.validate'/>");
+			checkValidation = false;
+			$(".mesage_error").css("display", "block");
+		}
+		if (firstnameKana == "") {
+			$(".error_fistnamekana").text("<fmt:message key='edit.card.validate'/>");
+			checkValidation = false;
+			$(".mesage_error").css("display", "block");
+		}
+		if (lastnameKana == "") {
+			$(".error_lastnamekana").text("<fmt:message key='edit.card.validate'/>");
 			checkValidation = false;
 			$(".mesage_error").css("display", "block");
 		}
@@ -235,6 +245,8 @@ history.pushState(null, null, null);
 		$(".error_zipcode").text("");
         $(".error_email").text("");
 		$(".error_companyNameKana").text("");
+		$(".error_fistnamekana").text("");
+		$(".error_lastnamekana").text("");
 	}
 
 	function getRoteImage(roteOfImage) {
@@ -684,7 +696,7 @@ history.pushState(null, null, null);
 									<div class="float-left">
 										<h4>
 											<fmt:message key='edit.card.lastnamekana' />
-											<span></span>
+											<span> * </span>
 										</h4>
 									</div>
 									<div class="float-right float-right-content">
@@ -698,7 +710,7 @@ history.pushState(null, null, null);
 									<div class="float-left">
 										<h4>
 											<fmt:message key='edit.card.firstnamekana' />
-											<span></span>
+											<span> * </span>
 										</h4>
 									</div>
 									<div class="float-right float-right-content">
