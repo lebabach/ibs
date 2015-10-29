@@ -744,8 +744,8 @@ $(document).ready(function() {
 										<th><fmt:message key='overlap.cards.table1.exchanges' /></th>
 										<th><fmt:message key='overlap.cards.table1.owner' /></th> --%>
 										
-										<th style="width: 378px"><fmt:message key='overlap.cards.table1.name.email.company' /></th>
-										<th style="width: 100px">画像</th>
+										<th style="width: 300px"><fmt:message key='overlap.cards.table1.name.email.company' /></th>
+										<th style="width: 156px">画像</th>
 										<th style="width: 280px"><fmt:message key='overlap.cards.table1.address' /> <br><fmt:message key='overlap.cards.table1.TEL' /></th>
 										<th style="width: 173px"><fmt:message key='overlap.cards.table1.department' /> <br><fmt:message key='overlap.cards.table1.position' /></th>
 										<th><fmt:message key='overlap.cards.table1.exchanges' /><br>名刺所有者</th>
