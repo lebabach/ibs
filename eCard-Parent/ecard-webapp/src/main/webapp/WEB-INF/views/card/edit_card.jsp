@@ -220,7 +220,7 @@ history.pushState(null, null, null);
 		} */
 
 		if (!(customPhone.test(zipcode))) {
-			$(".error_zipcode").text("<fmt:message key='valid.zipcode.fullsize'/> ");
+			$(".error_zipcode").text("<fmt:message key='edit.card.validate.zipcode'/> ");
 			$(".mesage_error").css("display", "block");
 			checkValidation = false;
 		}
