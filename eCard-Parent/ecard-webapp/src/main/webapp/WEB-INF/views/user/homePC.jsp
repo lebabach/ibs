@@ -910,7 +910,7 @@
 					$.each( resp, function( k, v ) {
 						 $(".list-group").append('<div class="list-group-item pointer show-content">'
 			 					+'<div class="row row-new">'
-								+	'<div class="col-md-1 col-xs-1"><input type="hidden" name="cardId" value = "'+v.cardId+'"></div>'
+								+	'<div class="col-md-1 col-xs-1"><input type="hidden" name="bla" value = "'+v.cardId+'"></div>'
 								+	'<div class="col-md-5">'
 								+		'<div class="col-xs-11 mg-top">'
 								+ 			'<p class="name">'+v.lastName +' '+ v.firstName+'</p>'
@@ -944,7 +944,7 @@
 					$.each( resp, function( k, v ) {
 						 $(".list-group").append('<div class="list-group-item pointer show-content">'
 			 					+'<div class="row row-new">'
-								+	'<div class="col-md-1 col-xs-1"><input type="hidden" name="cardId" value = "none"></div>'
+								+	'<div class="col-md-1 col-xs-1"><input type="hidden" name="bla" value = "none"></div>'
 								+	'<div class="col-md-5">'
 								+		'<div class="col-xs-11 mg-top">'
 								+ 			'<p class="name">データ入力中</p>'
