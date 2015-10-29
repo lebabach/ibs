@@ -464,14 +464,14 @@ a {
 	                                          $(".p-date").removeAttr('readonly');
 	                                  }
 	                              });   
-	                              $('.input-reset,.input-submit').on({
+	                              /* $('.input-reset,.input-submit').on({
 	                               'click':function(){
 	                                          $(".p-date").removeClass("p-date-input");
 	                                          $('.p-fomr').hide();
 	                                          $('.div-pen').removeClass('div-pen-ac') 
 	                                          $(".p-date").attr('readonly', 'readonly');
 	                                  }
-	                              });     
+	                              });   */   
                               
                               	$("#editContactDate").click(function(){
                               		var dateTime = new Date($("input[name=contactDate]").datepicker("getDate"));
@@ -849,7 +849,7 @@ label.error {
                              'click':function(){
                                         $(".input-new-1").addClass("input-new-1-ac");
                                         $('.p-fomr2').show();
-                                        $('.div-pen').addClass('div-pen-ac') 
+                                        $('.edit2').addClass('div-pen-ac') 
                                         $(".input-new-1").removeAttr('readonly');
                                         
                                         $(".email-hide").hide();
@@ -865,7 +865,7 @@ label.error {
                              'click':function(){
                                         $(".input-new-1").removeClass("input-new-1-ac");
                                         $('.p-fomr2').hide();
-                                        $('.div-pen').removeClass('div-pen-ac') 
+                                        $('.edit2').removeClass('div-pen-ac') 
                                         $(".input-new-1").attr('readonly', 'readonly');
                                         
                                         $(".email-hide").show();
