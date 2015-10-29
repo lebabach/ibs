@@ -1214,7 +1214,7 @@ label.error {
 					<c:forEach var="listCardConnected" items="${listCardConnect}" varStatus="loop">
 						<div class="list-group-item pointer div-new">
 							<div class="row" style="margin-right: 0">
-								<div class="col-md-5 col-md-5-n">
+								<div class="col-md-5 col-md-5-n" style="width:100%;">
 									<div class="col-xs-11 mg-top">
 										<p class="name"><a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.name}"></c:out></a> </p>
 										<p class="livepass"><a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.companyName}"></c:out></a></p>
