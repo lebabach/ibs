@@ -231,7 +231,7 @@
                                                 </select>
                                                 <div class="form-group">
                                                     <label for="freeText">フリーワード</label>
-                                                    <input type="email" class="form-control" name="freeText" id="freeText" placeholder="会社名・氏名・emailを入力 * and * でAND検索">
+                                                    <input type="email" class="form-control" name="freeText" id="freeText">
                                                         </div>
                                                 <h4 class="modal-title" id="modal-label">必要に応じて入力してください</h4>
                                                 <div class="form-group" style="display:none">
