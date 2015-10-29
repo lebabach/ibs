@@ -1009,9 +1009,9 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.companyName}" name="companyName" readonly="readonly"> <br/>
+										value="${cardInfo.companyName}" name="companyName" readonly="readonly" placeholder="会社名" > <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.companyNameKana}" name="companyNameKana" readonly="readonly">
+										value="${cardInfo.companyNameKana}" name="companyNameKana" readonly="readonly" placeholder="会社名カナ">
 								</dd>
 							</dl>
 						</div>
@@ -1023,9 +1023,9 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.departmentName}" name="departmentName" readonly="readonly"> <br/>
+										value="${cardInfo.departmentName}" name="departmentName" readonly="readonly" placeholder="部署名"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.positionName}" name="positionName" readonly="readonly">
+										value="${cardInfo.positionName}" name="positionName" readonly="readonly" placeholder="役職名">
 								</dd>
 							</dl>
 						</div>
@@ -1037,13 +1037,13 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.lastName}" name="lastName" readonly="readonly"> <br/>
+										value="${cardInfo.lastName}" name="lastName" readonly="readonly" placeholder="氏名（姓）"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.firstName}" name="firstName" readonly="readonly"> <br/>
+										value="${cardInfo.firstName}" name="firstName" readonly="readonly" placeholder="氏名（名）"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.lastNameKana}" name="lastNameKana" readonly="readonly"> <br/>
+										value="${cardInfo.lastNameKana}" name="lastNameKana" readonly="readonly" placeholder="氏名（姓）カナ"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.firstNameKana}" name="firstNameKana" readonly="readonly">
+										value="${cardInfo.firstNameKana}" name="firstNameKana" readonly="readonly" placeholder="氏名（名）カナ">
 								</dd>
 							</dl>
 						</div>
@@ -1058,7 +1058,7 @@ label.error {
 										<a href="mailto:${cardInfo.email}" target="_blank">${cardInfo.email}</a>
 									</div>
 									<input type="email" class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.email}" name="email" id="email">
+										value="${cardInfo.email}" name="email" id="email" placeholder="メールアドレス">
 									<p style="color: #CC5965; font-weight:bold;display:none; padding-left: 15px;" id="requireEmail"><fmt:message key="valid.email" /></p>
 									<p style="color: red; display: none; padding-left: 15px;" id="formatEmail"><fmt:message key="valid.email.format" /></p>
 								</dd>
@@ -1072,11 +1072,11 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberDepartment}" name="telNumberDepartment" id="telNumberDepartment"  readonly="readonly"/> <br/>
+										value="${cardInfo.telNumberDepartment}" name="telNumberDepartment" id="telNumberDepartment"  readonly="readonly" placeholder="電話番号（部署）" /> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberCompany}" name="telNumberCompany" id="telNumberCompany" readonly="readonly"><br/>
+										value="${cardInfo.telNumberCompany}" name="telNumberCompany" id="telNumberCompany" readonly="readonly" placeholder="電話番号（会社）"><br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.mobileNumber}" name="mobileNumber" id="mobileNumber" readonly="readonly" />
+										value="${cardInfo.mobileNumber}" name="mobileNumber" id="mobileNumber" readonly="readonly" placeholder="携帯電話番号" />
 								</dd>
 							</dl>
 						</div>
@@ -1087,18 +1087,18 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.faxNumber}" name="faxNumber" readonly="readonly">
+										value="${cardInfo.faxNumber}" name="faxNumber" readonly="readonly" placeholder="FAX番号">
 								</dd>
 							</dl>
 						</div>
 						<div class="section">
 							<dl>
 								<dt>
-									<img src="<c:url value='/assets/img/zip_code_ic.png'/>" alt="会社FAX">
+									<img src="<c:url value='/assets/img/zip_code_ic.png'/>" alt="会社FAX" width="28">
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.zipCode}" name="zipCode" id="zipCode" readonly="readonly">
+										value="${cardInfo.zipCode}" name="zipCode" id="zipCode" readonly="readonly" placeholder="郵便番号">
 								</dd>
 							</dl>
 						</div>
@@ -1110,7 +1110,7 @@ label.error {
 								</dt>
 								<dd class="address-hide" style="display: none">
 									<div class="ipt_txt front_email">
-										<a href="#" target="_blank" id="linkMap" onclick="gotoMap();">
+										<a href="#" id="linkMap" onclick="gotoMap();">
 											<c:out value="${ cardInfo.address1 }"></c:out> 
 											<c:out value="${ cardInfo.address2 }"></c:out> 
 											<c:out value="${ cardInfo.address3 }"></c:out> 
@@ -1120,13 +1120,13 @@ label.error {
 								</dd>	
 								<dd id="address">
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address1}" name="address1" id="address1" readonly="readonly"> <br/>
+										value="${cardInfo.address1}" name="address1" id="address1" readonly="readonly" placeholder="住所（都道府県）"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address2}" name="address2" id="address2" readonly="readonly"> <br/>
+										value="${cardInfo.address2}" name="address2" id="address2" readonly="readonly" placeholder="住所（市区町村）"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address3}" name="address3" id="address3" readonly="readonly"> <br/>
+										value="${cardInfo.address3}" name="address3" id="address3" readonly="readonly" placeholder="住所（番地）"> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.address4}" name="address4" id="address4" readonly="readonly"> <br/>
+										value="${cardInfo.address4}" name="address4" id="address4" readonly="readonly" placeholder="住所(マンション・建物名等)"> <br/>
 								</dd>
 							</dl>
 						</div>
@@ -1141,7 +1141,7 @@ label.error {
 										<a href="${cardInfo.companyUrl}" target="_blank">${cardInfo.companyUrl}</a>
 									</div>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.companyUrl}" name="companyUrl" id="companyURL" readonly="readonly">
+										value="${cardInfo.companyUrl}" name="companyUrl" id="companyURL" readonly="readonly" placeholder="会社URL">
 								</dd>
 							</dl>
 						</div>
@@ -2168,7 +2168,8 @@ label.error {
 	function gotoMap(){
 		var address = 'http://maps.google.com/maps?q=<c:out value="${ cardInfo.address1 }"></c:out> <c:out value="${ cardInfo.address2 }"></c:out> <c:out value="${ cardInfo.address3 }"></c:out> <c:out value="${ cardInfo.address4 }"></c:out>';
 		var uri = encodeURI(address);
-		window.location.href = uri;
+		//window.location.href = uri;
+		window.open(uri,'_blank');
 	}
    </script>
    
