@@ -163,7 +163,7 @@
 }
 
 .input-c {
-	width: 524px;
+	width: 522px;
 	padding: 10px;
 	color: #666;
 }
