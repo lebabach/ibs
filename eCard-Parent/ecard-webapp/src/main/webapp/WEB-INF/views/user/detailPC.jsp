@@ -1072,9 +1072,9 @@ label.error {
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberDepartment}" name="telNumberDepartment" id="telNumberDepartment"  readonly="readonly" placeholder="電話番号" /> <br/>
+										value="${cardInfo.telNumberDepartment}" name="telNumberDepartment" id="telNumberDepartment"  readonly="readonly" placeholder="電話番号（部署）" /> <br/>
 									<input class="ipt_txt front_full_name input-new-1"
-										value="${cardInfo.telNumberCompany}" name="telNumberCompany" id="telNumberCompany" readonly="readonly" placeholder="電話番号"><br/>
+										value="${cardInfo.telNumberCompany}" name="telNumberCompany" id="telNumberCompany" readonly="readonly" placeholder="電話番号（会社）"><br/>
 									<input class="ipt_txt front_full_name input-new-1"
 										value="${cardInfo.mobileNumber}" name="mobileNumber" id="mobileNumber" readonly="readonly" placeholder="携帯電話番号" />
 								</dd>
