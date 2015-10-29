@@ -22,7 +22,7 @@
 		});
 		
 		$('a.ch-del').on('click', function() {
-			if (confirm('<fmt:message key="operator.list.confirmDelete"/>')) {
+			if (confirm('<fmt:message key="team.list.confirmDelete"/>')) {
 				var parentTrTag = $(this).parent().parent();
 				var teamId = parentTrTag.find("td:first-child").text();
 				 $.ajax({
