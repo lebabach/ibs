@@ -443,6 +443,37 @@ function getImageFromSCP(fileImageName){
     });						
 }
 
+function getImageFromSCPTblCards(fileImageName){
+	var target = $('#tbl-cards img[name="'+fileImageName+'"]');			
+	$.ajax({
+        type: 'POST',
+        url: '/ecard-webapp/user/getImageFile',
+        data: 'fileImage='+fileImageName,    	        
+    }).done(function(resp, status, xhr){
+    	if(target == []){
+    		target = $('img[name="'+fileImageName+'"]');
+    	}
+    	//debugger;
+    	if(resp == ""){
+    		target.attr('src','');    	  
+	        target.attr('src','/ecard-webapp/assets/img/card_08.png');
+    	} else {
+    		target.attr('src','');
+    		target.attr('style','width:100%');	
+	        target.attr('src','data:image/png;base64,'+resp);
+    	}
+    }).fail(function(resp, status, xhr){
+        //alert('Error');
+    });						
+}
+
+function loadImage(){
+	$("#tbl-cards img").each(function(){
+		var imageName=$(this).attr("name");
+		getImageFromSCPTblCards(imageName);
+	});
+}
+
 $(function() {
     $.xhrPool = [];
     $.xhrPool.abortAll = function() {
@@ -471,7 +502,7 @@ $(document).ready(function() {
 		var positionName=$(this).closest( "tr" ).find(".positionName").val();
 		var telNumberCompany=$(this).closest( "tr" ).find(".telNumberCompany").val();
 		var groupCompanyId=$(this).closest( "tr" ).find(".groupCompanyId").val(); 
-		$.xhrPool.abortAll();
+		
 		sendAjaxListConnectCards(email,companyName,addressFull,departmentName,positionName,telNumberCompany,groupCompanyId,firstName,cardId);
 	});
 	
@@ -498,6 +529,7 @@ $(document).ready(function() {
 	dataTables = $('#tbl-cards').dataTable( {
 		"fnDrawCallback" : function() {
 			loadICheck();
+			loadImage();
 		},
 		"dom" : '<<t>ip>',
 		"iDisplayLength" : 10,
@@ -557,6 +589,11 @@ $(document).ready(function() {
 				       	$(td).html(name);
 				}},
 				
+			{"data": "imageFile",
+					"createdCell": function (td, cellData, rowData, row, col) {
+					       $(td).html("<a href='/ecard-webapp/user/card/details/"+rowData.cardId+"' ><img name="+rowData.imageFile+" alt='image' src='<c:url value='/assets/img/loading.gif'/>' style='width: 100%'></a>");
+					}},	
+				
 				
 			/* { "data": "addressFull",
 				"createdCell": function (td, cellData, rowData, row, col) {
@@ -593,9 +630,10 @@ $(document).ready(function() {
 		],
 		"columnDefs": [
 		               { "width": "1px", "targets": 0 },
-		               { "width": "330px", "targets": 1 },
-		               { "width": "350px", "targets": 2 },
-		               { "width": "135px", "targets": 3 }
+		               { "width": "270px", "targets": 1 },
+		               { "width": "100px", "targets": 2 },
+		               { "width": "280px", "targets": 3 },
+		               { "width": "135px", "targets": 4 }
 		             ],
 	});
 	
@@ -603,6 +641,7 @@ $(document).ready(function() {
 		$.xhrPool.abortAll();
 		$("#tbl-connect-cards >tbody").remove();
 		var dataTableSearch = $('#tbl-cards').dataTable();
+		dataTableSearch.fnClearTable();
 		dataTableSearch.fnFilter();
 		
 	})
@@ -670,6 +709,7 @@ $(document).ready(function() {
 										<th><fmt:message key='overlap.cards.table1.TEL' /></th>--%>
 										
 										<th><fmt:message key='overlap.cards.table1.name.company' /> <br><fmt:message key='overlap.cards.table1.email.company' /></th>
+										<th style="width: 100px">画像</th>
 										<th><fmt:message key='overlap.cards.table1.address' /> <br><fmt:message key='overlap.cards.table1.TEL' /></th>
 										<th><fmt:message key='overlap.cards.table1.department' /> <br><fmt:message key='overlap.cards.table1.position' /></th>
 										
