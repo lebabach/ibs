@@ -805,10 +805,11 @@ a {
 						</c:if>
 					</div>
 				</div>
-				<style type="text/css">
+<style type="text/css">
 .input-new-1 {
 	border: none;
 	background: none;
+	width: 335px;
 }
 
 .input-new-1-ac {
