@@ -42,8 +42,8 @@
         	<c:forEach var="cardInfo" items="${cardInfoList}" varStatus="loop">
 	        <div class="list-group-item pointer">
 	          <div class="row row-new" id="${ cardInfo.cardId }">
-	            <div class="col-md-1 col-xs-1"></div>
-	            <div class="col-md-5">
+	            <!-- <div class="col-md-1 col-xs-1"></div> -->
+	            <div class="col-md-7" style="margin-left: 15px;">
 	              <div class="col-xs-11 mg-top">
 	                <p class="name"><c:out value="${ cardInfo.name }"></c:out></p>
 	                <p class="livepass"><c:out value="${ cardInfo.companyName }"></c:out></p>
@@ -52,7 +52,7 @@
 	                <p class="mail"><a href="mailto:${ cardInfo.email }"><c:out value="${ cardInfo.email }"></c:out></a></p>
 	              </div>
 	            </div>
-	            <div class="col-md-6">
+	            <div class="col-md-4">
 	              <div class="col-xs-5">
 	                </div>
 	                  <div class="col-xs-7">
