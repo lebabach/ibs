@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
@@ -545,10 +546,18 @@ public class UserController {
 			String headerValue = String.format("attachment; filename=\"%s\"", fileName);
 			byte[] bufferData = new byte[1024];
 			response.setHeader(headerKey, headerValue);
-			ServletOutputStream os = response.getOutputStream();
+			//ServletOutputStream os = response.getOutputStream();
 
 			InputStream inputStream = new ByteArrayInputStream(myBytes);
-			try {
+			
+			BufferedOutputStream outs = new BufferedOutputStream(response.getOutputStream());
+            int len;
+            while ((len = inputStream.read(bufferData)) > 0) {
+              outs.write(bufferData, 0, len);
+            }
+            outs.close();
+                
+			/*try {
 				int c;
 				while ((c = inputStream.read(bufferData)) != -1) {
 					os.write(bufferData, 0, c);
@@ -558,7 +567,7 @@ public class UserController {
 				if (inputStream != null)
 					inputStream.close();
 				os.close();
-			}
+			}*/
 			// update History
 			cardInfoService.updateDownloadHistory(downloadCsv.getCsvId());
 			// send mail to roleAdminID

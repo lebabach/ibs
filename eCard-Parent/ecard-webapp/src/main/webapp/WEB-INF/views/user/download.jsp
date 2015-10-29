@@ -436,7 +436,8 @@ body{
 			<div class="title-box-1">名刺のダウンロード</div>
 			<div class="content-box-1">
                 <p id="titleMsg" class="p-box-1 p-box-1-blue" style="display: none">
-					ダウンロードファイルの作成を行います。しばらくお待ちください。	
+					ダウンロードファイルの作成を行います。しばらくお待ちください。 <br/>
+					<span style="color:#0080cb;">最大10分程度かかります</span>	
 				</p>
                 
                 <div class="box-3">                	
