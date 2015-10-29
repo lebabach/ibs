@@ -324,7 +324,7 @@ body{
 		text-align:center;
 		}
     
-	.box-3 a{
+	.box-3 button{
 		width:auto;
 		margin:12px 0;
 		display:inline-block;
@@ -339,9 +339,9 @@ body{
 		text-shadow: 0 -1px 2px #000;
 		white-space: nowrap;
 		font-size: 14px;
-   
+   		border:0px;
 		}	
-   span.span-td{
+   button.span-td{
      background-color: #e3157a;
      padding: 5px 12px 5px 12px;
      text-shadow: 0 -1px 2px #000;
@@ -350,6 +350,7 @@ body{
     color: #ffffff !important;
     display:inline-block;
     cursor: pointer;
+    border:0px;
    } 
   /*end edit 9/10*/    
 		.p-line{
@@ -441,10 +442,10 @@ body{
 				</p>
                 
                 <div class="box-3">                	
-                    <a id="1"  class="export">自分の名刺ダウンロード</a>
+                    <button id="1"  class="export">自分の名刺ダウンロード</button>
                     <c:if test="${roleAdminId == 7}">
-                    	<a id="2" class="export">自社の名刺をダウンロード</a>
-                    	<a id="3" class="export">グループ名刺をダウンロード</a>
+                    	<button id="2" class="export">自社の名刺をダウンロード</button>
+                    	<button id="3" class="export">グループ名刺をダウンロード</button>
                     </c:if>
                 </div>
                 <p class="p-line"></p>
@@ -468,9 +469,8 @@ body{
 									<%-- <c:out value="${downloadCSVHistory.csvUrl}" /> --%>
 									<%-- <a href="downloadFileCSV/${downloadCSVHistory.csvUrl}"><c:out value="${downloadCSVHistory.csvUrl}" /></a> --%>
 									<input type="hidden" name="csvURL" value="${downloadCSVHistory.csvUrl}" />
-									<span class="span-td">ダウンロード</span>
+									<button class="span-td">ダウンロード</button>
 								</c:if>
-
 							</td>
 						</tr>
 					</c:forEach>
@@ -482,13 +482,17 @@ body{
 
 
 <script type="text/javascript">
-   $(document).on('click', 'a.export', function(){		
-	    $('a.export').removeClass('active');
+   $(document).on('click', 'button.export', function(){
+	   $(this).prop('disabled', true);
+	   $(this).attr("style", "background-color:gray");
+	   
+	    $('button.export').removeClass('active');
 	    $('button.export').removeClass('active');
 	    $(this).addClass('active');
 	    var id = $(this).attr('id');
 		if(id == 1){
 			document.location.href="downloadCSV/"+id;
+			$(this).prop('disabled', false);
 			/* setTimeout(function(){ 				
 				document.location.href='/ecard-webapp/user/download';
 			}, 3000); */
@@ -502,22 +506,30 @@ body{
 				setTimeout(function(){ 				
 					document.location.href='/ecard-webapp/user/download';
 				}, 3000);
+				
+				$(this).prop('disabled', false);
 								
 			}).fail(function(xhr, status, err) {
 				$("#titleMsg").css('display','none');
 				document.location.href='/ecard-webapp/user/download';
+				
+				$(this).prop('disabled', false);
 			});	
 		}
 	});
 	$(document).ready(function(){
 		
 		$('.span-td').click(function(e){
+			$(this).attr("style", "background-color:gray");
+			$(this).prop('disabled', true);
+			
 			var csvID = parseInt($(this).parents('tr').attr("id"));
 			var csvName = $(this).parents('tr').find('input[name=csvURL]').val();
 			document.location.href="downloadFileCSV/"+csvID;
 			setTimeout(function(){ 				
 				document.location.href='/ecard-webapp/user/download';
 			}, 3000);
+			
 			/* $.ajax({
 				type: 'POST',
 				url: 'requestDownloadCSV',
@@ -535,7 +547,6 @@ body{
 			});  */
 			
 		});
-		
 	});
 	
 	function showMsg(){
