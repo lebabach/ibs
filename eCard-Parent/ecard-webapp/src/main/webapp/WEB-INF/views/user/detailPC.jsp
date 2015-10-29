@@ -284,6 +284,10 @@ a {
 						</c:if>
 					</div>
 <style type="text/css">
+.edit2, .div-pen-contact{
+	cursor: pointer;
+}
+
 .div-pen-ac {
 	background: #dfdfdf;
 	padding: 1px 8px;
