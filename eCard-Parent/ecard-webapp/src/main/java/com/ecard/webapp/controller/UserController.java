@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -116,6 +115,7 @@ import com.ecard.core.vo.UserTagAndCardTag;
 import com.ecard.webapp.constant.CommonConstants;
 import com.ecard.webapp.constant.CsvConstant;
 import com.ecard.webapp.security.EcardUser;
+import com.ecard.webapp.util.FileUploadModel;
 import com.ecard.webapp.util.StringUtilsHelper;
 import com.ecard.webapp.util.UploadFileUtil;
 import com.ecard.webapp.vo.CardAndUserTagHome;
@@ -1955,8 +1955,11 @@ public class UserController {
 				g2.drawString(cardInfo.getName() != null ? StringUtilsHelper.convertToUTF8(cardInfo.getName())
 						: StringUtils.EMPTY, CommonConstants.xCooder + 30, CommonConstants.yCooder + 150);
 				g2.dispose();
-				UploadFileUtil.overrideImage(UploadFileUtil.encodeToString(image, "jpg"), scpHostName, scpUser,
+				FileUploadModel fileUploadModel = UploadFileUtil.overrideImage(UploadFileUtil.encodeToString(image, "jpg"), scpHostName, scpUser,
 						scpPassword, cardInfo.getImageFile());
+				if(!fileUploadModel.isStatus()){
+	            	UploadFileUtil.writeLostImage(UploadFileUtil.encodeToString(image, "jpg"), cardInfo.getImageFile());
+				}
 			} catch (Exception ex) {
 				logger.error("Error upload default card image: " + ex.getMessage());
 			}
