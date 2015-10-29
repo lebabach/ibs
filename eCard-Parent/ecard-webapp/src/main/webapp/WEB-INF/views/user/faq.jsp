@@ -443,7 +443,7 @@
                   <dt class="href-8-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                   <dd>何枚までまとめて撮影できますか？</dd>
                   <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
-                  <dd class="dd-maB">30枚まで連続撮影が可能です。</dd>
+                  <dd class="dd-maB">10枚まで連続撮影が可能です。</dd>
                   <dt class="href-9-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                   <dd>フラッシュ撮影はできますか？</dd>
                   <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
@@ -463,7 +463,7 @@
                   <dt class="href-12-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                   <dd>1日の取込限度枚数はありますか？</dd>
                   <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
-                  <dd class="dd-maB">一度に送信できる枚数は30枚となりますが、取込の限度枚数はありません。</dd>
+                  <dd class="dd-maB">一度に送信できる枚数は10枚となりますが、取込の限度枚数はありません。</dd>
                   <dt class="href-13-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                   <dd>名前カナもデータ化されますか？</dd>
                   <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
@@ -475,7 +475,7 @@
                   <dt class="href-15-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                   <dd>スマホでの撮影以外で、データ化する方法はありませんか？</dd>
                   <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
-                  <dd class="dd-maB">30枚以上の名刺取込については、データ登録センターへの取込依頼が可能です。メールフォーマットにてご依頼の上、名刺をデータ登録センターまで郵送して下さい。また、今後スキャナ接続機能の実装を検討しておりますので、実装後はスキャナより取込が可能なります。※使用するメールフォーマットはユーザガイドに記載があります。</dd>
+                  <dd class="dd-maB">10枚以上の名刺取込については、データ登録センターへの取込依頼が可能です。メールフォーマットにてご依頼の上、名刺をデータ登録センターまで郵送して下さい。また、今後スキャナ接続機能の実装を検討しておりますので、実装後はスキャナより取込が可能なります。※使用するメールフォーマットはユーザガイドに記載があります。</dd>
                   <dt class="href-16-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                   <dd>データ登録センターへ取込依頼する場合は、データ化までにどの程度時間がかかりますか？</dd>
                   <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
@@ -526,15 +526,16 @@
                     <dt class="href-26-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                     <dd>同じ名刺を2枚登録し、データが2つできてしまいました。名刺を統合することはできますか？</dd>
                     <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
-                    <dd class="dd-maB">2015年11月リリース予定のPC版に実装予定です。</dd>
+                    <dd class="dd-maB">PC版の「名刺の最新化(名寄せ)」機能にて統合が可能です。名刺（履歴化する名刺）を選択すると、統合先候補が表示されます。統合先名刺を選択の上、
+                        最新化ボタンを押すと名刺が統合されます。※他ユーザ所有の名刺を選択した場合（最新化名刺）と同様、名刺情報は履歴として保存されます。</dd>
                     <dt class="href-27-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                     <dd>名刺情報のダウンロードはできますか？</dd>
                     <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
-                    <dd class="dd-maB">2015年11月リリース予定のPC版に実装予定です。</dd>
+                    <dd class="dd-maB">PC版の「名刺のダウンロード」機能にて、ダウンロードが可能です。ダウンロードが可能な名刺は自身が所有している名刺のみになります。</dd>
                     <dt class="href-28-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                     <dd>既にデータ化されている名刺データの取込はできますか？</dd>
                     <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
-                    <dd class="dd-maB">2015年11月リリース予定のPC版に実装予定です。</dd>
+                    <dd class="dd-maB">BC-RIBBON管理者までお問合せ下さい。取込フォーマットにデータをご入力いただければ、BC-RIBBONへのデータ取込が可能です。</dd>
                 </dl>
                 <div class="category_title">名刺情報共有範囲</div>
                 <dl class="dl">
@@ -555,7 +556,7 @@
                     <dt class="href-31-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                     <dd>名刺を他ユーザへ公開したくない場合、非公開設定はできますか？</dd>
                     <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
-                    /ecard-webapp/assets/img/icon-a.pngmaB">名刺自体を非公開にすることはできません。他ユーザへの非公開項目となっているメモ欄がありますので、顧客の機密情報などはメモ欄にご記載下さい。非公開機能については今後の実装を検討しています。</dd>
+                    <dd class="dd-maB">名刺自体を非公開にすることはできません。他ユーザへの非公開項目となっているメモ欄がありますので、顧客の機密情報などはメモ欄にご記載下さい。非公開機能については今後の実装を検討しています。</dd>
                 </dl>
                 <div class="category_title">退職・異動</div>
                 <dl class="dl">
@@ -571,7 +572,8 @@
                 <div class="category_title">アプリ操作</div>
                 <dl class="dl">
                     <dt class="href-34-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
-                    <dd>ログアウトはどうすればできますか？/ecard-webapp/assets/img/icon-q.png            <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
+                    <dd>ログアウトはどうすればできますか？</dd>
+                    <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
                     <dd class="dd-maB">アプリを終了すればログアウトされます。</dd>
                     <dt class="href-35-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                     <dd>ログインIDの保存は解除できますか？</dd>
@@ -583,8 +585,7 @@
                     <dt class="href-36-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                     <dd>スマホを持っていない場合は利用できませんか？</dd>
                     <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
-                    <dd class="dd-maB"> スマホ・タブレットをお持ちでない方もPC版をご利用いただけます。名刺データの取り込みについては、データ登録センターにご依頼下さい。また、今後スキャナ接続機能の実装を検討しておりますので、実装後はスキャナより取込が可能となります。※PC版のリリースは2015年11月1日を予定しています。
-</dd>
+                    <dd class="dd-maB"> スマホ・タブレットをお持ちでない方もPC版をご利用いただけます。名刺データの取り込みについては、データ登録センターにご依頼下さい。また、今後スキャナ接続機能の実装を検討しておりますので、実装後はスキャナより取込が可能となります。</dd>
                     <dt class="href-37-qa"><img src="/ecard-webapp/assets/img/icon-q.png"></dt>
                     <dd>プロフィールはどうすれば編集できますか？</dd>
                     <dt><img src="/ecard-webapp/assets/img/icon-a.png"></dt>
