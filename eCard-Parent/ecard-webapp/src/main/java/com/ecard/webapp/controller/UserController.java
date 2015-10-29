@@ -533,6 +533,9 @@ public class UserController {
 			throws IOException {
 		try {
 			DownloadCsv downloadCsv = cardInfoService.getDownloadCSV(id);
+			// update History
+			cardInfoService.updateDownloadHistory(downloadCsv.getCsvId());
+			
 			String fileName = downloadCsv.getCsvUrl();
 
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -568,8 +571,7 @@ public class UserController {
 					inputStream.close();
 				os.close();
 			}*/
-			// update History
-			cardInfoService.updateDownloadHistory(downloadCsv.getCsvId());
+			
 			// send mail to roleAdminID
 			List<UserInfo> listUser = userInfoService.getAllUserInfo();
 			List<String> listUserId = new ArrayList<>();
@@ -595,12 +597,18 @@ public class UserController {
 
 	public void deleteFileCSV(String fileName) throws IOException {
 
-		String saveFileCSV = System.getProperty("user.dir") + "/csv";
+		//String saveFileCSV = System.getProperty("user.dir") + "/csv";
+		String saveFileCSV = "/data/csv";
 		String fileExist = saveFileCSV + "/" + fileName;
 
 		File myFile = new File(fileExist);
-		if (myFile.exists())
+		if (myFile.exists()){
 			myFile.delete();
+			System.out.println("Delete success : "+myFile.getAbsolutePath());
+		}
+		else{
+			System.out.println("Delete failed : "+myFile.getAbsolutePath());
+		}
 	}
 
 	public void sendMailDownload(List<String> listUserId, Context ctx) throws IOException {
