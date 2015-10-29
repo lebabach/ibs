@@ -106,7 +106,6 @@ public class EmailServiceImpl implements EmailService{
         this.mailSender.send(mimeMessage);
     }
     public void sendMailContact(final String mailFrom, final List<String> mailTo, final String subject, Context ctx, String htmlFile) throws MessagingException {
-    	if(mailTo.size() > 15){
     		  int batchSize = 15; 
 			  int totalRecords = mailTo.size();
 			  int startIndex = 0;
@@ -125,7 +124,8 @@ public class EmailServiceImpl implements EmailService{
 			        final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8"); // true = multipart
 			        message.setSubject(subject);
 			        message.setFrom(mailFrom);
-			        message.setTo(subList.toArray(new String[subList.size()])); 
+			        message.setTo(mailFrom);
+			        message.setBcc(subList.toArray(new String[subList.size()])); 
 			        //message.setTo(mailTo.toArray(new String[mailTo.size()]));              
 			        // Create the HTML body using Thymeleaf
 			        final String htmlContent = this.templateEngine.process(htmlFile, ctx);
@@ -135,21 +135,7 @@ public class EmailServiceImpl implements EmailService{
 			        this.mailSender.send(mimeMessage);
 		        }
 		      }
-    	}else{
-	    	final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
-	        final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8"); // true = multipart
-	        
-	        message.setSubject(subject);
-	        message.setFrom(mailFrom);
-	        message.setTo(mailTo.toArray(new String[mailTo.size()])); 
-	        //message.setTo(mailTo.toArray(new String[mailTo.size()]));              
-	        // Create the HTML body using Thymeleaf
-	        final String htmlContent = this.templateEngine.process(htmlFile, ctx);
-	        
-	        message.setText(htmlContent, true); 
-	        
-	        this.mailSender.send(mimeMessage);
-    	}
+    	
     }
 
     public List<HistorySendEmail> getAllEmail(){
