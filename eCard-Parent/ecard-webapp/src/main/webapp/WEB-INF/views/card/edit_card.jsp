@@ -226,7 +226,7 @@ history.pushState(null, null, null);
 		}
 		if (companyNameKanaId == "") {
 			$(".error_companyNameKana").text(
-					"<fmt:message key='edit.card.validate'/>");
+					"<fmt:message key='valid.zipCode'/>");
 			checkValidation = false;
 			$(".mesage_error").css("display", "block");
 		}

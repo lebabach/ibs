@@ -370,7 +370,7 @@ function checkValidationForm() {
 	}
 	if (zipcode!="" && !(customPhone.test(zipcode))) {
 		$(".error_zipcode").text(
-			"<fmt:message key='edit.card.validate.zipcode'/>");
+			"<fmt:message key='valid.zipCode'/>");
 		checkValidation = false;
 		$(".mesage_error").css("display", "block");
 	}
