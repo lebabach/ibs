@@ -154,7 +154,7 @@
 						<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-example">名刺検索</button>
                                 <!-- modal -->
                                 <div class="modal" id="modal-example" tabindex="-1">
-                                    <div class="modal-dialog">                                        
+                                    <div class="modal-dialog" style="margin-top: -43px !important;">                                        
                                         <!-- modal content -->
                                         <style type="text/css">
                                             .modal-content-new{
