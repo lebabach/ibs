@@ -1094,7 +1094,7 @@ label.error {
 						<div class="section">
 							<dl>
 								<dt>
-									<img src="<c:url value='/assets/img/zip_code_ic.png'/>" alt="会社FAX">
+									<img src="<c:url value='/assets/img/zip_code_ic.png'/>" alt="会社FAX" width="24">
 								</dt>
 								<dd>
 									<input class="ipt_txt front_full_name input-new-1"
@@ -1110,7 +1110,7 @@ label.error {
 								</dt>
 								<dd class="address-hide" style="display: none">
 									<div class="ipt_txt front_email">
-										<a href="#" target="_blank" id="linkMap" onclick="gotoMap();">
+										<a href="#" id="linkMap" onclick="gotoMap();">
 											<c:out value="${ cardInfo.address1 }"></c:out> 
 											<c:out value="${ cardInfo.address2 }"></c:out> 
 											<c:out value="${ cardInfo.address3 }"></c:out> 
@@ -2168,7 +2168,8 @@ label.error {
 	function gotoMap(){
 		var address = 'http://maps.google.com/maps?q=<c:out value="${ cardInfo.address1 }"></c:out> <c:out value="${ cardInfo.address2 }"></c:out> <c:out value="${ cardInfo.address3 }"></c:out> <c:out value="${ cardInfo.address4 }"></c:out>';
 		var uri = encodeURI(address);
-		window.location.href = uri;
+		//window.location.href = uri;
+		window.open(uri,'_blank');
 	}
    </script>
    
