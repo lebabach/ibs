@@ -2248,7 +2248,7 @@
 		function deleteTag(id){
 			$('#selectTagBox').find('option[value!=0]').remove();
 	     	$.ajax({
-	        	url: "<c:url value='/user/deleteTag' />",
+	        	url: "<c:url value='/user/deleteTagHome' />",
 	        	data: 'tagId='+ id,
 	        	type: "GET",
 	        	

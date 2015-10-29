@@ -1297,6 +1297,23 @@ public class UserController {
 
 		return getCardTag();
 	}
+	
+	@RequestMapping(value = "deleteTagHome", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TagGroup> deleteTagHome(@RequestParam Integer tagId, HttpServletRequest request,
+			HttpServletResponse response) {
+		logger.debug("deleteTag", UserController.class);
+
+		try {
+			cardTagService.deleteCardTagByTagId(tagId);
+			userTagService.deleteUserTag(tagId);
+		} catch (Exception ex) {
+			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		List<TagGroup> listTagGroup = getCardTag();
+		appendCardId(listTagGroup);
+		return listTagGroup;
+	}
 
 	@RequestMapping(value = "delBusinessCard", method = RequestMethod.POST)
 	@ResponseBody
