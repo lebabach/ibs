@@ -220,13 +220,13 @@ history.pushState(null, null, null);
 		} */
 
 		if (!(customPhone.test(zipcode))) {
-			$(".error_zipcode").text("<fmt:message key='edit.card.validate.zipcode'/> ");
+			$(".error_zipcode").text("<fmt:message key='valid.zipCode'/> ");
 			$(".mesage_error").css("display", "block");
 			checkValidation = false;
 		}
 		if (companyNameKanaId == "") {
 			$(".error_companyNameKana").text(
-					"<fmt:message key='valid.zipCode'/>");
+					"<fmt:message key='edit.card.validate'/>");
 			checkValidation = false;
 			$(".mesage_error").css("display", "block");
 		}
