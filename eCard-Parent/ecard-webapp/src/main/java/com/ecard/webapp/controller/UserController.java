@@ -586,6 +586,7 @@ public class UserController {
 			ctx.setVariable("company", userInfo.getCompanyNameKana());
 			ctx.setVariable("userDownload", userInfo.getNameKana());
 			ctx.setVariable("dateDownload", downloadCsv.getApprovalDate());
+			ctx.setVariable("emailDownload", userInfo.getEmail());
 			// ctx.setVariable("recordNumber",answerText);
 			sendMailDownload(listUserId, ctx);
 
