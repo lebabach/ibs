@@ -283,7 +283,7 @@
                 message: '<fmt:message key="msg.process.card.confirm" />',
                 closable: true, // <-- Default value is false
                 btnOKLabel: 'OK', // <-- Default value is 'OK',
-                btnCancelLabel: 'Cancel', // <-- Default value is 'Cancel',
+                btnCancelLabel: 'キャンセル', // <-- Default value is 'Cancel',
                 btnCancelClass: 'btn-primary',
                 callback: function(result) {
                     if(result) {
