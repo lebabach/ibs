@@ -395,8 +395,8 @@ background-color: blue;
 						</c:if>
                        
                        </span>                       
-                       <span><button type="button" class="btn btn-primary btn_delete"
-									data-dismiss="modal">削除</button></span>
+                       <!-- <span><button type="button" class="btn btn-primary btn_delete"
+									data-dismiss="modal">削除</button></span> -->
                        <span><button type="button" class="btn btn-primary btn_leave"
 									data-dismiss="modal">退職</button></span>
                        <span><button type="button" class="btn btn-primary btn_cancle"
