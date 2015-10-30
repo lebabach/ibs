@@ -322,7 +322,7 @@ function setNotify(image,content,date,card_id,notifyType,id,read_flg){
 	if(read_flg==0){
 		divContent='<div class="content_notice" style="font-weight: bold" title="'+content+'">'+content+'</div>'
 	}
-	var data='<tr class="pointer">'
+	var data='<tr class="pointer" title="'+content+'">'
 	+tdImage
 	+tdContent
 	+divContent

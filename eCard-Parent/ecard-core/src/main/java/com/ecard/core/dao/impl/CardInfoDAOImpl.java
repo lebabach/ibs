@@ -500,7 +500,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		 */
 		String sqlStr = "SELECT u.* FROM user_info AS u INNER JOIN "
 				+ "(SELECT ci.card_owner_id FROM card_info AS ci WHERE ci.approval_status = 1 "
-				+ "AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";
+				+ "AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId AND ci.old_card_flg = 0  ";
 
 		if (groupCompanyId == 1 || groupCompanyId == 2 || groupCompanyId == 3 || groupCompanyId == 4
 				|| groupCompanyId == 5) {

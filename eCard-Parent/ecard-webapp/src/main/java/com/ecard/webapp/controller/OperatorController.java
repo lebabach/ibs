@@ -114,8 +114,8 @@ public class OperatorController {
 			 userInfos = userInfoService.searchUserForList(textSearch, limit, offset);
 			 count = userInfoService.countUserForList(textSearch);
 		}else{
-			 userInfos = userInfoService.searchUserOfMyCompanyForList(criteriaSearch, limit, offset, ecardUser.getGroupCompanyId());
-			 count = userInfoService.countUserForList(criteriaSearch, ecardUser.getGroupCompanyId());
+			 userInfos = userInfoService.searchUserOfMyCompanyForList(textSearch, limit, offset, ecardUser.getGroupCompanyId());
+			 count = userInfoService.countUserForList(textSearch, ecardUser.getGroupCompanyId());
 		}
 		
 		long totalRecord = count.longValue();
@@ -381,13 +381,16 @@ public class OperatorController {
     @RequestMapping(value = "searchList", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public DataPagingJsonVO<UserInfoResultVO> searchList(HttpServletRequest request) {
+    	
 		DataPagingJsonVO<UserInfoResultVO> dataTableResponse = new DataPagingJsonVO<UserInfoResultVO>();
 		List<UserInfoResultVO> userInfoResultVOs = new ArrayList<UserInfoResultVO>();
+		int userId= Integer.parseInt(request.getParameter("userLeave")) ;
+		UserInfo userLeave = userInfoService.getUserInfoByUserId(userId);
 		String criteriaSearch = request.getParameter("criteriaSearch");
 		String textSearch = criteriaSearch.trim().replaceAll(" +", "|");
-		
-		List<UserInfoVo> userInfos =userInfoService.searchUser(textSearch,-1,-1); 
-		BigInteger count = userInfoService.countUser(textSearch);
+		List<UserInfoVo> userInfos = userInfoService.searchUserOfMyCompanyForList(textSearch, -1, -1, userLeave.getGroupCompanyId());; 
+		BigInteger count = userInfoService.countUserForList(textSearch, userLeave.getGroupCompanyId());
+	
 		long totalRecord = count.longValue();
 		for (UserInfoVo info : userInfos) {
 			UserInfoResultVO userInfoResultVO = new UserInfoResultVO(info.getUserId(), info.getName(), info.getCompanyName(), info.getPositionName(), info.getEmail(), info.getMobileNumber(), info.getCreateDate().toString() ,info.getFirstName(),info.getLastName(),info.getFirstNameKana(),info.getLastNameKana(),info.getDepartmentName(),info.getUserIndexNo());

@@ -761,6 +761,7 @@
      });
 
        $("#deletePeople").click(function(e){
+    	   $.xhrPool.abortAll();
     	   if (confirm('<fmt:message key="card.list.confirmDelete"/>')) {
     		   var listCardId=[];
     			$(".icheckbox_square-green.checked").each(function(){
@@ -779,15 +780,18 @@
  					if(resp != 0){
  						$(".list-group-item .checked").closest('.list-group-item').each(function(){
  						$(this).removeClass("checked")
- 	 					  if($(this).parents('.list-group').find('.row-new').length==1){
- 	 					    $(this).parents('.list-group').remove();
- 	 					  } else {
- 	 					    $(this).remove();
- 	 					  }
+	 	 					  if($(this).parents('.list-group').find('.row-new').length==1){
+	 	 					    $(this).parents('.list-group').remove();
+	 	 					  } else {
+	 	 					    $(this).remove();
+	 	 					  }
  	 					});	
  					}
  					reloadICheck();
- 					
+ 					BootstrapDialog.show({
+         				title: '成功',
+        	            message: '削除しました'
+         	      });
  				}).fail(function(xhr, status, err) {
  					console.log('BBB='+err);
  				});
