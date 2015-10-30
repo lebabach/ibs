@@ -1876,6 +1876,7 @@ public class UserController {
 				card2.setCardOwnerId( ecardUser.getUserId());
 				card2.setCardOwnerName( StringUtilsHelper.mergerStringEitherAWord(user.getLastName(), user.getFirstName(), " "));
 				card2.setGroupCompanyId(card1.getGroupCompanyId());
+				card2.setContactDate(card1.getContactDate());
 				CardInfo newCard= cardInfoService.registerCardImageOverLapOfAdmin(setCardInfo(card2));
 				
 				card2.setCardOwnerId(ownerUserId);
