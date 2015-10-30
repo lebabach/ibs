@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
@@ -503,16 +504,16 @@ public class UserController {
 				String headerKey = "Content-Disposition";
 				String headerValue = String.format("attachment; filename=\"%s\"", fileName);
 				response.setCharacterEncoding("UTF-8");
-				
 				response.setHeader(headerKey, headerValue);
-				ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+				OutputStream outputStream = response.getOutputStream();
+				outputStream.write(0xEF);   // 1st byte of BOM
+				outputStream.write(0xBB);
+				outputStream.write(0xBF); 
+				PrintWriter out = new PrintWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+				ICsvBeanWriter csvWriter = new CsvBeanWriter(out , CsvPreference.STANDARD_PREFERENCE);
 				csvWriter.writeHeader(headerJapanse);
-				 
-				
 				for (CardInfoCSV aCard : listUserInfoCSV) {
 					csvWriter.write(aCard, header);
-					
-					
 				}
 				csvWriter.close();
 				
@@ -635,8 +636,8 @@ public class UserController {
 	public void createCSVFile(HttpServletResponse response, String fileName, List<CardInfoCSV> listUserInfoCSV,
 			Integer typeCSV) throws IOException {
 		String csvFileName = fileName;
-//		String workingDirectory = System.getProperty("user.dir") + "/csv";
-		String workingDirectory ="/data/csv";
+		String workingDirectory = System.getProperty("user.dir") + "/csv";
+//		String workingDirectory ="/data/csv";
 
 		String absoluteFilePath = "";
 		absoluteFilePath = workingDirectory + File.separator + csvFileName;
