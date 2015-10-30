@@ -1056,24 +1056,32 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
     }
     
     public List<PairUtil<Integer,Integer>> getListUserPushToByCard(CardInfo cardInfo){
-/*    	select card_id,contact_date,card_owner_id
-    	from card_info c 
-    	WHERE contact_date in (
-    	    SELECT MAX(ci.contact_date)
-    	  FROM card_info ci
-    		where  ((ci.email = 'hientuminh@gmail.com' AND ci.email <> ''))
-    		AND ci.old_card_flg = 0 AND ci.approval_status = 1 AND ci.delete_flg = 0 AND ci.card_owner_id <> 13
-    		group by ci.card_owner_id
-    	)  and ((c.email = 'hientuminh@gmail.com' AND c.email <> ''))
-    	AND c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id <> 13
+/*    		SELECT c.card_id, c.card_owner_id, c.contact_date
+			FROM card_info c
+			INNER JOIN user_info u ON u.user_id = c.card_owner_id
+			INNER JOIN 
+			(
+				SELECT card_owner_id, MAX(contact_date) as TopDate
+				FROM card_info c
+				INNER JOIN user_info u ON u.user_id = c.card_owner_id
+				WHERE  ((c.email = 'tomohisa.sasagawa@inte.co.jp' AND c.email <> '') OR (c.name = '氣賀 信彰' AND c.company_name = '株式会社NTTデータ'))
+				AND c.old_card_flg = 0  AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id <> 59
+				GROUP BY card_owner_id
+			) 
+			AS EachItem ON EachItem.TopDate = c.contact_date AND  EachItem.card_owner_id = c.card_owner_id
+			WHERE  ((c.email = 'tomohisa.sasagawa@inte.co.jp' AND c.email <> '') OR (c.name = '氣賀 信彰' AND c.company_name = '株式会社NTTデータ'))
+				AND c.old_card_flg = 0  AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id <> 59
+				GROUP BY card_owner_id 
 */
 
     	String sqlStr="SELECT ci.card_owner_id, ci.card_id"
 				+ " FROM card_info ci "
 				+ "	WHERE ci.contact_date IN ("
 				+ " 	SELECT MAX(c.contact_date) FROM card_info c "
-				+ "		WHERE  ((c.email = :email AND c.email <> '') OR (c.name = :name AND c.company_name = :companyName))"
-				+ "		AND c.old_card_flg = 0  AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id <> :cardOwnerId"
+				+ "     INNER JOIN user_info u ON u.user_id = c.card_owner_id"
+				+ "		WHERE  ((c.email = :email AND c.email <> '') OR (c.name = :name AND c.company_name = :companyName)) "
+				+ "		AND c.old_card_flg = 0  AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id <> :cardOwnerId "
+				+ "		AND u.delete_flg = 0"
 				+ "		GROUP BY c.card_owner_id"
 				+ " ) "
 				+ " AND ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName))" 
@@ -1098,6 +1106,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 						+ this.complianceDate + "' ))";
 			}
 		}
+		sqlStr+= " GROUP BY ci.card_owner_id";
 		
 		Query query = getEntityManager().createNativeQuery(sqlStr);		
 		query.setParameter("name", cardInfo.getName());
@@ -1118,14 +1127,16 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
     public List<Integer> getListUserPushFromByCard(CardInfo cardInfo){
     	String sqlStr="SELECT DISTINCT ci.card_owner_id"
 				+ " FROM card_info ci "
+				+ " INNER JOIN user_info u ON u.user_id = ci.card_owner_id"
 				+ "	WHERE ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName))" 
-				+ " AND ci.old_card_flg = 0  AND ci.approval_status = 1 AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";
+				+ " AND ci.old_card_flg = 0  AND ci.approval_status = 1 AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId "
+				+ " AND u.delete_flg = 0";
 		if (cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 || cardInfo.getGroupCompanyId() == 3
 				|| cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5) {
-			sqlStr += "AND ( ci.group_company_id IN (1,2,3,4,5)  OR ( ci.group_company_id NOT IN(1,2,3,4,5) AND ci.contact_date >= '"
+			sqlStr += " AND ( ci.group_company_id IN (1,2,3,4,5)  OR ( ci.group_company_id NOT IN(1,2,3,4,5) AND ci.contact_date >= '"
 					+ this.complianceDate + "' ))";
 		} else {
-			sqlStr += "AND ( ci.group_company_id = " + cardInfo.getGroupCompanyId() + " OR ( ci.group_company_id <> "
+			sqlStr += " AND ( ci.group_company_id = " + cardInfo.getGroupCompanyId() + " OR ( ci.group_company_id <> "
 					+ cardInfo.getGroupCompanyId() + " AND ci.contact_date >= '" + this.complianceDate + "' ))";
 		}
 
@@ -1720,12 +1731,23 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
         return (Long)getOrNull(query);
     }
 	
+	private String printSqlPSH(String sql, String name, String company, Integer cardOwner, String email) {
+		sql = sql.replace(":name", name + "");
+		sql = sql.replace(":companyName", company + "");
+		sql = sql.replace(":cardOwnerId", cardOwner + "");
+		sql = sql.replace(":email", email + "");
+		
+		return sql;
+	}
+	
 	public List<CardInfoNotifyChange> getListCardInfoNotifyChange(CardInfo cardInfo){
 		String sqlStr="SELECT ci.card_id, ci.name, ci.company_name, ci.company_name_kana, ci.department_name, ci.position_name, ci.email, ci.tel_number_company,"
-				+ " ci.mobile_number, ci.address_full, ci.company_url, ci.card_owner_id, ci.group_company_id, MAX(ci.contact_date)"
+				+ " ci.mobile_number, ci.address_full, ci.company_url, ci.card_owner_id, ci.group_company_id, ci.contact_date"
 				+ " FROM card_info ci "
+				+ " INNER JOIN user_info u ON u.user_id = ci.card_owner_id"
 				+ "	WHERE ((ci.email = :email AND ci.email <> '') OR (ci.name = :name AND ci.company_name = :companyName))" 
-				+ " AND ci.old_card_flg = 0  AND ci.approval_status = 1 AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId ";
+				+ " AND ci.old_card_flg = 0  AND ci.approval_status = 1 AND ci.delete_flg = 0 AND ci.card_owner_id <> :cardOwnerId "
+				+ " AND u.delete_flg = 0 ";
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date comDate=new Date();
 		try {
@@ -1748,7 +1770,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		query.setParameter("email", cardInfo.getEmail());
 		query.setParameter("companyName", cardInfo.getCompanyName());
 		query.setParameter("cardOwnerId", cardInfo.getCardOwnerId());
-		
+		System.out.println("AAAAAAAAAAAAAAAAAAAA = " + printSqlPSH(sqlStr, cardInfo.getName(),  cardInfo.getCompanyName(),  cardInfo.getCardOwnerId(), cardInfo.getEmail()) );
 	    
 	    List<Object[]> listObj = query.getResultList();
         List<CardInfoNotifyChange> lstcardInfoUserVo = new ArrayList<>();
@@ -1819,4 +1841,6 @@ public BigInteger totalListConnectUser(Integer userId, Integer recentFlg) {
         }
         return listUserInfo.get(0);
 	}
+	
+
 }
