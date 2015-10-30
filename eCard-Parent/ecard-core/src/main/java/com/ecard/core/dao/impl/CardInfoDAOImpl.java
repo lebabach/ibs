@@ -1257,7 +1257,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
     }
     
     public List<CardInfo> listCardInfoByCardType(Integer cardType){
-        Query query = getEntityManager().createQuery("SELECT c FROM CardInfo c WHERE c.cardType = :cardType");
+        Query query = getEntityManager().createQuery("SELECT c FROM CardInfo c WHERE c.cardType = :cardType and c.imageFile = 'card_04.jpg'");
         query.setParameter("cardType", cardType);
         return (List<CardInfo>)query.getResultList();
     }

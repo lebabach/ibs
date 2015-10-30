@@ -31,7 +31,7 @@
 	<!-- CENTER SIDE -->
 	<div id="center-side" class="col-sm-12">
 		<!-- BAR TOP -->
-		<div class="row bg-white box-shadow menu-top-header">
+		<div class="row bg-white box-shadow menu-top-header" style="width:100%;">
 			<div class="col-sm-12 ch-check" id="ct1">
 				<div class="float-left col-sm-6">
 					<h4 class="h4-header">
@@ -52,8 +52,32 @@
 		</div>
 
 		<!-- END BAR TOP -->
+		<style type="text/css">
+			.divBtn{
+				float: right;
+				padding: 15px;
+			}
+			
+			#btnDrawImage{
+				background-color: #e3157a;
+				padding: 8px 12px 8px 12px;
+				text-shadow: 0 -1px 2px #000;
+				white-space: nowrap;
+				font-size: 14px;
+				color: #ffffff !important;
+				display:inline-block;
+				cursor: pointer;
+				border:0px;
+				border-radius: 5px;
+			}
+		</style>
+
 		<div
 			class="row bg-white box-shadow box-marginTop5 padding-top-bottom col-sm-12">
+			<div class="divBtn">
+				<button id="btnDrawImage">画像合成バッチ実行</button>
+			</div>
+			
 			<div style="margin: 0 auto">
 				<div class="row" style="text-align: center; margin: 25px;">
 					<p style="color: red;" class="mesage_error error_exception"></p>
@@ -246,6 +270,11 @@
     		}
     		$("#upload").submit();
     	});
+        
+        //Process card image
+        $("#btnDrawImage").click(function(){
+        	processCardImage();
+        });
     });
     
     $('select').on('change', function() {		
@@ -321,4 +350,28 @@
             }
         }
     };
+    
+    function processCardImage(){
+    	$.ajax({
+        	url: "<c:url value='/data/processCardImage' />",
+        	//data: JSON.stringify(json),
+        	type: "POST",
+        	dataType: 'json',
+        	beforeSend: function(xhr) {
+        		xhr.setRequestHeader("Accept", "application/json");
+        		xhr.setRequestHeader("Content-Type", "application/json");
+        	},
+        	success: function(resp) {
+				if(resp == true){
+					BootstrapDialog.show({
+	    				title: '<fmt:message key="popup.title.info" />',
+	    				message: '<fmt:message key="msg.process.card.success" />'
+	    	      	});
+				}
+        	},
+        	error: function(error){
+        		console.log(error);
+		  	}
+        });	    	
+    }
 </script>

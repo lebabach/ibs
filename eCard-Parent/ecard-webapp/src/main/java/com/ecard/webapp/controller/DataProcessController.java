@@ -8,6 +8,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.lang.Thread.State;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.ParseException;
@@ -36,9 +37,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.supercsv.cellprocessor.constraint.NotNull;
@@ -54,6 +57,7 @@ import com.ecard.core.model.PossessionCardId;
 import com.ecard.core.model.Roles;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.UserTag;
+import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.service.CardInfoService;
 import com.ecard.core.service.CardTagService;
 import com.ecard.core.service.DataIndexService;
@@ -64,6 +68,7 @@ import com.ecard.core.service.MasterService;
 import com.ecard.core.service.PossessionCardService;
 import com.ecard.core.service.UserInfoService;
 import com.ecard.core.service.UserTagService;
+import com.ecard.core.util.DataIndexUtil;
 import com.ecard.webapp.constant.CommonConstants;
 import com.ecard.webapp.constant.CsvConstant;
 import com.ecard.webapp.security.EcardUser;
@@ -708,6 +713,16 @@ public class DataProcessController {
 		return modelAndView;
     }
     
+    @RequestMapping(value = "processCardImage", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public boolean processCardImage(HttpServletRequest request) {
+    	// Start new thread to upload default card for list of success importing card
+    	UploadDefaultCardThread uploadThread = new UploadDefaultCardThread();
+        uploadThread.start();
+    	    	
+        return true;
+    }
+    
     private static CellProcessor[] getProcessorsUser(){
         return new CellProcessor[] {
             new NotNull() , // sansanId
@@ -913,7 +928,6 @@ public class DataProcessController {
 	 * @author nhat.nguyen
 	 */
     class UploadDefaultCardThread extends Thread {
-
 		public void run() {
 			List<CardInfo> cardInfoList = cardInfoService.listCardInfoByCardType(1);
 			 
@@ -929,6 +943,8 @@ public class DataProcessController {
 				
 				for (CardInfo cardInfo : cardInfoList) {
 					Thread.sleep(1000);
+					
+					cardInfo.setImageFile(DataIndexUtil.setPropertyCodeFrom(cardInfo.getCardIndexNo(), "00M",TableTypeEnum.ImageInfor)+".jpg");
 					BufferedImage image = UploadFileUtil.decodeToImage(defaultImage64);
 					Graphics g = image.getGraphics();
 					Graphics2D g2 = (Graphics2D)g;
@@ -947,8 +963,8 @@ public class DataProcessController {
 					UploadFileUtil.overrideImage(UploadFileUtil.encodeToString(image, "jpg"), scpHostName, scpUser, scpPassword, cardInfo.getImageFile());
 					
 				}
-				
-				cardInfoService.updateCardType();
+				cardInfoService.updateCardInfoNoIndex(cardInfoList);
+				//cardInfoService.updateCardType();
 			} catch (Exception ex) {
 				logger.error("Error upload default card image: " + ex.getMessage());
 			}

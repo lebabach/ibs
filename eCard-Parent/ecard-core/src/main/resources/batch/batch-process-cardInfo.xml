@@ -30,7 +30,7 @@
     
     <import resource="context.xml"/>
     
-    <job id="batchProcessCard" xmlns="http://www.springframework.org/schema/batch" restartable="true">
+    <!-- <job id="batchProcessCard" xmlns="http://www.springframework.org/schema/batch" restartable="true">
         <step id="batchProcessCardStep" allow-start-if-complete="true">
             <tasklet ref="batchProcessCardTasklet"></tasklet>
         </step>
@@ -38,20 +38,19 @@
         
     <bean id="batchProcessCardTasklet" class="com.ecard.core.batch.tasklet.BatchProcessCardTasklet">
     	<property name="dataSource" ref="dataSource"/>
-    </bean>
+    </bean> -->
     
-    <!-- run every 10 seconds -->
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
-				<ref bean="batchProcessCardCronTrigger"/>
+				<!-- <ref bean="batchProcessCardCronTrigger"/> -->
 				<ref bean="batchUploadLostImageCronTrigger"/>
 				<ref bean="batchLinkCardCronTrigger"/>
 			</list>
         </property>
     </bean>
     
-    <bean id="batchProcessCardCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <!-- <bean id="batchProcessCardCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="jobDetail" />
         <property name="cronExpression" value=" 0 0 3 * * ? " />
     </bean>
@@ -66,7 +65,7 @@
             </map>
         </property>
         <property name="durability" value="true" />
-    </bean>
+    </bean> -->
     
     <bean class="org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor">
         <property name="jobRegistry" ref="jobRegistry" />
