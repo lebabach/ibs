@@ -1645,6 +1645,7 @@ public class UserController {
 		UserInfo userInfo = userInfoService.getUserInfoByUserId(userId);
 		// Set id for user login
 		cardInfo.setCardOwnerId(userId);
+		cardInfo.setCardOwnerName(ecardUser.getFullName());
 		cardInfo.setOperaterId(userId);
 		CompanyInfo companyInfo = new CompanyInfo();
 		companyInfo.setCompanyId(0);
