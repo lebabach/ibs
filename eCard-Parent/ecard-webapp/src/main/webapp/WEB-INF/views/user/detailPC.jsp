@@ -1055,7 +1055,7 @@ label.error {
 								<dd>
 									<div class="ipt_txt front_email email-hide"
 										style="display: none">
-										<a href="mailto:${cardInfo.email}" target="_blank">${cardInfo.email}</a>
+										<a href="mailto:${cardInfo.email}" >${cardInfo.email}</a>
 									</div>
 									<input type="email" class="ipt_txt front_full_name input-new-1"
 										value="${cardInfo.email}" name="email" id="email" placeholder="メールアドレス">
