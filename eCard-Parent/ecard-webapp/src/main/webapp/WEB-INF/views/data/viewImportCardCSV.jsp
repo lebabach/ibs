@@ -70,6 +70,11 @@
 				border:0px;
 				border-radius: 5px;
 			}
+			.btn-default {
+			    background-color: #1AB394 !important;
+			    border-color: #1AB394;
+			    color: #FFF;
+			}
 		</style>
 
 		<div
@@ -273,7 +278,22 @@
         
         //Process card image
         $("#btnDrawImage").click(function(){
-        	processCardImage();
+        	BootstrapDialog.confirm({
+                title: '<fmt:message key="popup.title.info" />',
+                message: '<fmt:message key="msg.process.card.confirm" />',
+                closable: true, // <-- Default value is false
+                btnOKLabel: 'OK', // <-- Default value is 'OK',
+                btnCancelLabel: 'Cancel', // <-- Default value is 'Cancel',
+                btnCancelClass: 'btn-primary',
+                callback: function(result) {
+                    if(result) {
+                    	processCardImage();
+                    }else {
+                    	//result.close();
+                    }
+                }
+            });
+        	
         });
     });
     
