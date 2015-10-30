@@ -208,6 +208,7 @@ $(document).ready(function() {
   $(document).on('click', '#criteriaSearch', function() {
 	   $('.content_user').html("");
 	   var criteriaSearch = $('.criteriaSearch').val();
+	   var userLeave = parseInt($("input[name=userLeave]").val())
 	   console.log(criteriaSearch);
 	   if (criteriaSearch == ""){
 		   document.location.href="<c:url value='/operators/changeowner/"+${userLeave.userId}+" '/>";
@@ -217,7 +218,7 @@ $(document).ready(function() {
 			type: 'POST',
 			url: '<c:url value="/operators/searchList"/>',
 			cache: false,
-			data: 'criteriaSearch='+criteriaSearch,
+			data: 'criteriaSearch='+criteriaSearch + '&userLeave='+userLeave,
 			success: function(response) {
 				$('#paging').dataTable().fnClearTable();
 				 $(function() {
