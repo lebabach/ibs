@@ -1004,7 +1004,7 @@ label.error {
 						<div class="section">
 							<dl>
 								<dt>
-									<img src="<c:url value='/assets/img/ico_busho.png'/>"
+									<img src="<c:url value='/assets/img/ico_com.png'/>"
 										alt="${cardInfo.companyName}">
 								</dt>
 								<dd>
@@ -1018,7 +1018,7 @@ label.error {
 						<div class="section">
 							<dl>
 								<dt>
-									<img src="<c:url value='/assets/img/ico_com.png'/>"
+									<img src="<c:url value='/assets/img/ico_info.png'/>"
 										alt="${cardInfo.departmentName}">
 								</dt>
 								<dd>
@@ -1032,7 +1032,7 @@ label.error {
 						<div class="section">
 							<dl>
 								<dt>
-									<img src="<c:url value='/assets/img/ico_info.png'/>"
+									<img src="<c:url value='/assets/img/ico_busho.png'/>"
 										alt="${cardInfo.lastNameKana}">
 								</dt>
 								<dd>
