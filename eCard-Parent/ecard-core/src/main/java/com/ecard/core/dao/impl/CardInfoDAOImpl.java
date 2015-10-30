@@ -784,7 +784,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	public List<com.ecard.core.vo.CardInfo> getListCardSearchAll(String owner, String searchText, String name,
 			String position, String department, String company, int pageNumber, int groupCompanyId) {
 
-        String sqlStr = "SELECT c.* FROM card_info c WHERE c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 AND c.newest_card_flg = 1 ";
+        String sqlStr = "SELECT c.* FROM card_info c WHERE c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 ";
         
         if (groupCompanyId == 1 || groupCompanyId ==2 || groupCompanyId ==3 || groupCompanyId == 4 || groupCompanyId == 5 ){
              sqlStr += " AND (c.group_company_id IN(1,2,3,4,5) OR (c.group_company_id NOT IN(1,2,3,4,5) AND c.contact_date >= '"+ this.complianceDate +"')) ";
@@ -873,7 +873,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
     
     public BigInteger getTotalCardSearchAll(String owner, String searchText,String name, String position,String department,String company, int pageNumber, int groupCompanyId) {                
         
-        String sqlStr = "SELECT COUNT(*) FROM card_info c WHERE c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 AND c.newest_card_flg = 1 ";
+        String sqlStr = "SELECT COUNT(*) FROM card_info c WHERE c.old_card_flg = 0 AND c.approval_status = 1 AND c.delete_flg = 0 ";
         
         if (groupCompanyId == 1 || groupCompanyId ==2 || groupCompanyId ==3 || groupCompanyId == 4 || groupCompanyId == 5 ){
              sqlStr += " AND (c.group_company_id IN(1,2,3,4,5) OR (c.group_company_id NOT IN(1,2,3,4,5) AND c.contact_date >= '"+ this.complianceDate +"')) ";
@@ -1518,7 +1518,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 
 	public List<com.ecard.core.vo.CardInfo> searchCompanyTree(String companyName) {
 		String sqlStr = "SELECT c.company_name AS companyName, count(*) AS cnt, c.card_id AS cardId FROM card_info AS c "
-				+ "WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 AND c.newest_card_flg = 1 ";
+				+ "WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 ";
 
 		String params[] = { "'*W1:1,2:1,3:0,4:0,5:0,6:0,7:1,8:0,9:0,10:0,11:0,12:0,13:0,14:0 +",
 				"\"" + companyName.toLowerCase() + "\"", "'" };
@@ -1542,7 +1542,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 
 	public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName) {
 		String sqlStr = "SELECT c.department_name AS departmentName, count(*) AS cnt, c.card_id AS cardId FROM card_info AS c "
-				+ "WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 AND c.newest_card_flg = 1 AND c.company_name = :companyName GROUP BY department_name";
+				+ "WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 AND c.company_name = :companyName GROUP BY department_name";
 		Query query = getEntityManager().createNativeQuery(sqlStr);
 		query.setParameter("companyName", companyName);
 
@@ -1558,7 +1558,7 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 	}
 
 	public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName) {
-		String sqlStr = "SELECT c.name AS name, count(*) AS cnt, c.card_id AS cardId FROM card_info AS c WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 AND c.newest_card_flg = 1 "
+		String sqlStr = "SELECT c.name AS name, count(*) AS cnt, c.card_id AS cardId FROM card_info AS c WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 "
 				+ "AND c.company_name = :companyName AND c.department_name = :departmentName "
 				+ "GROUP BY c.name ";
 		Query query = getEntityManager().createNativeQuery(sqlStr);
