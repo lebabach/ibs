@@ -620,7 +620,7 @@ a {
 					<ul class="ul-memo">
 					<c:forEach var="cardMemo" items="${listCardMemo}" varStatus="loop">
 						<li>
-							<p style="font-size:10pt;"><c:out value="${ cardMemo.memo }"></c:out> </p>
+							<p style="font-size:10pt;">${ cardMemo.memo } </p>
 							<p class="p-date-n"><fmt:formatDate value='${ cardMemo.create_date }' pattern="yyyy年MM月dd日"/></p><span class="delMemo" id="${ cardMemo.seq }" class='span-close'>x</span>
 						</li>
 					</c:forEach>

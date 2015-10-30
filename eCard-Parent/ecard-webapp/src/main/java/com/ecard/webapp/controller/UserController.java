@@ -708,6 +708,10 @@ public class UserController {
 					cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
 
 			List<CardInfoMemo> listCardMemo = getListCardMemo(cardInfo.getCardId());
+			for(CardInfoMemo cardInfoMemo :listCardMemo){
+				String memo = nlToBR(cardInfoMemo.getMemo());
+				cardInfoMemo.setMemo(memo);
+			}
 			modelAndView.addObject("listCardMemo", listCardMemo);
 
 			if (!cardInfo.getCardOwnerId().equals(userId)) {
@@ -1251,8 +1255,8 @@ public class UserController {
 			userCardMemo.setCreateDate(new Date());
 			userCardMemo.setUserId(userId);
 
-			String memo = userCardMemo.getMemo().replace("\n", "<br/>");
-			userCardMemo.setMemo(memo);
+			//String memo = userCardMemo.getMemo().replace("\n", "<br/>");
+			//userCardMemo.setMemo(memo);
 			
 			int seq;
 			if (userCardMemo.getSeq() != 0) {
@@ -1273,6 +1277,10 @@ public class UserController {
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
 		List<CardInfoMemo> listCardMemo = getListCardMemo(userCardMemo.getCardId());
+		for(CardInfoMemo cardInfoMemo : listCardMemo){
+			String memo = nlToBR(cardInfoMemo.getMemo());
+			cardInfoMemo.setMemo(memo);
+		}
 		return listCardMemo;
 	}
 
@@ -2208,6 +2216,16 @@ public class UserController {
 		BigInteger total = cardInfoService.totalListCardRecent(ecardUser.getUserId());    
         return total.intValue();
 	}
+	
+	public static String nlToBR(String str) {
+        if (str == null || "".equals(str)) {
+          return "";
+        }
+        str = str.replaceAll("\r\n", "<br />");
+        str = str.replaceAll("\n", "<br />");
+        return str;
+      }
+	
 	private CardInfo setCardInfo(CardInfo card){
 		CardInfo newcard=new CardInfo();
 		newcard.setCompanyInfo(card.getCompanyInfo());
