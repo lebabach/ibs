@@ -49,7 +49,16 @@ var dataTables;
 				{ "data": "companyName"},
 				{ "data": "positionName"},
 				{ "data": "email"},
-				{ "data": "mobileNumber"},
+				{ "data": "useStopFlg",
+					"createdCell": function (td, cellData, rowData, row, col) {
+						if(rowData.useStopFlg == 2){
+					       $(td).html("ロック中");
+						}else{
+							 $(td).html("");
+						}
+						
+					}	
+				},
 				{ "data": "useStopFlg",
 					"createdCell": function (td, cellData, rowData, row, col) {
 						if(rowData.useStopFlg == 1){
@@ -133,7 +142,16 @@ var dataTables;
 					{ "data": "companyName"},
 					{ "data": "positionName"},
 					{ "data": "email"},
-					{ "data": "mobileNumber"},
+					{ "data": "useStopFlg",
+						"createdCell": function (td, cellData, rowData, row, col) {
+							if(rowData.useStopFlg == 2){
+						       $(td).html("ロック中");
+							}else{
+								 $(td).html("");
+							}
+							
+						}	
+					},
 					{ "data": "useStopFlg",
 						"createdCell": function (td, cellData, rowData, row, col) {
 							if(rowData.useStopFlg == 1){
@@ -255,7 +273,7 @@ var dataTables;
 									<th><fmt:message key="operator.list.companyName" /></th>
 									<th><fmt:message key="operator.list.position" /></th>
 									<th><fmt:message key="operator.list.email" /></th>
-									<th><fmt:message key="operator.list.phone" /></th>
+									<th><fmt:message key="operator.list.lock" /></th>
 									<th><fmt:message key="operator.list.stop" /></th>
 									<th><fmt:message key="operator.list.leave" /></th>
 									<th><fmt:message key="operator.list.createDate" /></th>
