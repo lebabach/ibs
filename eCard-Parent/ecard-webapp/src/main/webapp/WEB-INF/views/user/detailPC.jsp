@@ -1306,7 +1306,11 @@ label.error {
 		   			  url: "<c:url value='/user/delBusinessCard' />",
 		   			  data: 'cardId='+ $("input[name=cardId]").val(),
 		   			  success: function(){
-		   				  window.location.href = "<c:url value='/user/home' />";
+		   				 window.location.href = "<c:url value='/user/home' />";
+		   				 BootstrapDialog.show({
+	         				title: '成功',
+	        	            message: '削除しました'
+	         	         });
 		   			  },
 		   			  error: function(){
 		   				  BootstrapDialog.show({
