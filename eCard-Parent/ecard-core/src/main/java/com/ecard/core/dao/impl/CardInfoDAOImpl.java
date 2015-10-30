@@ -1079,8 +1079,8 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				+ "	WHERE ci.contact_date IN ("
 				+ " 	SELECT MAX(c.contact_date) FROM card_info c "
 				+ "     INNER JOIN user_info u ON u.user_id = c.card_owner_id"
-				+ "		WHERE  ((c.email = :email AND c.email <> '') OR (c.name = :name AND c.company_name = :companyName))"
-				+ "		AND c.old_card_flg = 0  AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id <> :cardOwnerId"
+				+ "		WHERE  ((c.email = :email AND c.email <> '') OR (c.name = :name AND c.company_name = :companyName)) "
+				+ "		AND c.old_card_flg = 0  AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id <> :cardOwnerId "
 				+ "		AND u.delete_flg = 0"
 				+ "		GROUP BY c.card_owner_id"
 				+ " ) "
@@ -1133,10 +1133,10 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				+ " AND u.delete_flg = 0";
 		if (cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 || cardInfo.getGroupCompanyId() == 3
 				|| cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5) {
-			sqlStr += "AND ( ci.group_company_id IN (1,2,3,4,5)  OR ( ci.group_company_id NOT IN(1,2,3,4,5) AND ci.contact_date >= '"
+			sqlStr += " AND ( ci.group_company_id IN (1,2,3,4,5)  OR ( ci.group_company_id NOT IN(1,2,3,4,5) AND ci.contact_date >= '"
 					+ this.complianceDate + "' ))";
 		} else {
-			sqlStr += "AND ( ci.group_company_id = " + cardInfo.getGroupCompanyId() + " OR ( ci.group_company_id <> "
+			sqlStr += " AND ( ci.group_company_id = " + cardInfo.getGroupCompanyId() + " OR ( ci.group_company_id <> "
 					+ cardInfo.getGroupCompanyId() + " AND ci.contact_date >= '" + this.complianceDate + "' ))";
 		}
 
