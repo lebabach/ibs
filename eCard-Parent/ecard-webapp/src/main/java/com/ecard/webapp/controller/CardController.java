@@ -537,11 +537,11 @@ public class CardController {
 				strPush = strPush.substring(0, strPush.length() - 1);
 				strPush += "変わりました。";
 				if(isPush != 0){
-					pushNoticeConnectUser(cardSameInfo.getCardOwnerId(), cardInfo.getCardId(),strPush, 2);
+					pushNoticeConnectUser(cardSameInfo.getCardOwnerId(), cardSameInfo.getCardId(),strPush, 2);
 					UserNotification userNotification = new UserNotification();
 					noticeUser.setUserId(cardSameInfo.getCardOwnerId());
 					userNotification.setUserInfo(noticeUser);
-					userNotification.setCardId(cardInfo.getCardId());
+					userNotification.setCardId(cardSameInfo.getCardId());
 					userNotification.setNoticeDate(new Date());
 					userNotification.setReadFlg(0);				
 	            	userNotification.setChangeParamType(1);            	
