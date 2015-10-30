@@ -709,10 +709,6 @@ public class UserController {
 					cardInfo.getName(), cardInfo.getCompanyName(), cardInfo.getEmail());
 
 			List<CardInfoMemo> listCardMemo = getListCardMemo(cardInfo.getCardId());
-			for(CardInfoMemo cardInfoMemo :listCardMemo){
-				String memo = nlToBR(cardInfoMemo.getMemo());
-				cardInfoMemo.setMemo(memo);
-			}
 			modelAndView.addObject("listCardMemo", listCardMemo);
 
 			if (!cardInfo.getCardOwnerId().equals(userId)) {
@@ -1278,10 +1274,6 @@ public class UserController {
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
 		}
 		List<CardInfoMemo> listCardMemo = getListCardMemo(userCardMemo.getCardId());
-		for(CardInfoMemo cardInfoMemo : listCardMemo){
-			String memo = nlToBR(cardInfoMemo.getMemo());
-			cardInfoMemo.setMemo(memo);
-		}
 		return listCardMemo;
 	}
 
@@ -1393,6 +1385,10 @@ public class UserController {
 			listCardMemo = cardMemoService.getMemoCard(cardId);
 		} catch (Exception ex) {
 			logger.debug("Exception : " + ex.getMessage(), UserController.class);
+		}
+		for(CardInfoMemo cardInfoMemo : listCardMemo){
+			String memo = nlToBR(cardInfoMemo.getMemo());
+			cardInfoMemo.setMemo(memo);
 		}
 		return listCardMemo;
 	}
