@@ -231,7 +231,7 @@ $(document).ready(function() {
 			            			    				' <input type="radio" name = "bla" value="'+item.userId+'"  style="position: absolute; opacity: 0;">'
 			            			    		)
 			            			    ),
-			                            $('<td>').text(item.firstName + " " + item.lastName),
+			                            $('<td>').text(item.lastName + " " + item.firstName),
 			                            $('<td>').text(item.companyName),
 			                            $('<td>').text(item.departmentName),
 			                            $('<td>').text(item.positionName),

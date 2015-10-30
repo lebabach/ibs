@@ -620,7 +620,7 @@ a {
 					<ul class="ul-memo">
 					<c:forEach var="cardMemo" items="${listCardMemo}" varStatus="loop">
 						<li>
-							<p style="font-size:10pt;"><c:out value="${ cardMemo.memo }"></c:out> </p>
+							<p style="font-size:10pt;">${ cardMemo.memo } </p>
 							<p class="p-date-n"><fmt:formatDate value='${ cardMemo.create_date }' pattern="yyyy年MM月dd日"/></p><span class="delMemo" id="${ cardMemo.seq }" class='span-close'>x</span>
 						</li>
 					</c:forEach>
@@ -1004,7 +1004,7 @@ label.error {
 						<div class="section">
 							<dl>
 								<dt>
-									<img src="<c:url value='/assets/img/ico_busho.png'/>"
+									<img src="<c:url value='/assets/img/ico_com.png'/>"
 										alt="${cardInfo.companyName}">
 								</dt>
 								<dd>
@@ -1018,7 +1018,7 @@ label.error {
 						<div class="section">
 							<dl>
 								<dt>
-									<img src="<c:url value='/assets/img/ico_com.png'/>"
+									<img src="<c:url value='/assets/img/ico_info.png'/>"
 										alt="${cardInfo.departmentName}">
 								</dt>
 								<dd>
@@ -1032,7 +1032,7 @@ label.error {
 						<div class="section">
 							<dl>
 								<dt>
-									<img src="<c:url value='/assets/img/ico_info.png'/>"
+									<img src="<c:url value='/assets/img/ico_busho.png'/>"
 										alt="${cardInfo.lastNameKana}">
 								</dt>
 								<dd>
@@ -1055,7 +1055,7 @@ label.error {
 								<dd>
 									<div class="ipt_txt front_email email-hide"
 										style="display: none">
-										<a href="mailto:${cardInfo.email}" target="_blank">${cardInfo.email}</a>
+										<a href="mailto:${cardInfo.email}" >${cardInfo.email}</a>
 									</div>
 									<input type="email" class="ipt_txt front_full_name input-new-1"
 										value="${cardInfo.email}" name="email" id="email" placeholder="メールアドレス">
@@ -1306,7 +1306,11 @@ label.error {
 		   			  url: "<c:url value='/user/delBusinessCard' />",
 		   			  data: 'cardId='+ $("input[name=cardId]").val(),
 		   			  success: function(){
-		   				  window.location.href = "<c:url value='/user/home' />";
+		   				 window.location.href = "<c:url value='/user/home' />";
+		   				 BootstrapDialog.show({
+	         				title: '成功',
+	        	            message: '削除しました'
+	         	         });
 		   			  },
 		   			  error: function(){
 		   				  BootstrapDialog.show({
