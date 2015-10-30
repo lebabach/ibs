@@ -761,6 +761,7 @@
      });
 
        $("#deletePeople").click(function(e){
+    	   $.xhrPool.abortAll();
     	   if (confirm('<fmt:message key="card.list.confirmDelete"/>')) {
     		   var listCardId=[];
     			$(".icheckbox_square-green.checked").each(function(){
@@ -787,7 +788,10 @@
  	 					});	
  					}
  					reloadICheck();
- 					
+ 					BootstrapDialog.show({
+         				title: '成功',
+        	            message: '削除しました'
+         	      });
  				}).fail(function(xhr, status, err) {
  					console.log('BBB='+err);
  				});
