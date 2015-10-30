@@ -76,7 +76,7 @@ var dataTables;
 					"createdCell": function (td, cellData, rowData, row, col) {
 						$(td).html("<a href='<c:url value='/operators/confirm/"+cellData+"'/>' class='ch-ok'><fmt:message key='operator.list.confirm' /></a> "
 								+ "<a href='<c:url value='/operators/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> "
-								+ "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>");
+								/* + "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>" */);
 					}
 				},
 			],
@@ -160,7 +160,7 @@ var dataTables;
 						"createdCell": function (td, cellData, rowData, row, col) {
 							$(td).html("<a href='<c:url value='/operators/confirm/"+cellData+"'/>' class='ch-ok'><fmt:message key='operator.list.confirm' /></a> "
 									+ "<a href='<c:url value='/operators/edit/"+cellData+"'/>' class='ch-edit'><fmt:message key='operator.list.edit' /></a> "
-									+ "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>");
+									/* + "<a class='ch-del'><fmt:message key = 'operator.list.delete'/></a>" */);
 						}
 					},
 				],
