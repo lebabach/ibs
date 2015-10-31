@@ -1555,7 +1555,6 @@
         }); 
 
         $(document).on('click','#addTag',function(e){
-         	$.xhrPool.abortAll();
           if($(".balloon").css("display") == "block"){
             $(".balloon").css("display","none");
           }else{
