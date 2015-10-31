@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecard.core.dao.ContactHistoryDAO;
 import com.ecard.core.model.ContactHistory;
@@ -17,6 +18,7 @@ import com.ecard.core.model.ContactHistory;
 * @author vinhla
 */
 @Repository("contactHistoryDAO")
+@Transactional
 public class ContactHistoryDAOImpl extends GenericDao implements ContactHistoryDAO {
 	
 	public ContactHistory saveContactHistory(ContactHistory contactHistory) {
@@ -52,8 +54,9 @@ public class ContactHistoryDAOImpl extends GenericDao implements ContactHistoryD
 		String sql = "UPDATE contact_history t SET t.card_id = :card_id2 WHERE t.card_id = :card_id1 AND t.user_id =:user_id";
 		Query query = getEntityManager().createNativeQuery(sql);
 		query.setParameter("card_id2", cardId2);
-		query.setParameter("user_id", userId);
 		query.setParameter("card_id1", cardId1);
+		query.setParameter("user_id", userId);
+		
 		try{
 			int result = query.executeUpdate();	
 			if (result == 0) {
