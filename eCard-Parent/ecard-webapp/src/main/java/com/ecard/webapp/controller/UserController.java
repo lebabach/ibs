@@ -1910,6 +1910,8 @@ public class UserController {
 				System.out.println("=====================================after: owner insertOldCard===================================");
 				oldCardService.updateCardIdWithOldCard(newCard.getCardId(), cardid1);
 				System.out.println("=====================================after:owner updateCardIdWithOldCard===================================");
+				userCardMemoService.updateUserCardMemo(cardid1, ecardUser.getUserId().intValue(), newCard.getCardId());
+				contactHistoryService.updateContactHistory(cardid1, ecardUser.getUserId().intValue(), newCard.getCardId());
 			}else{
 				userCardMemoService.updateUserCardMemo(cardid1, ecardUser.getUserId().intValue(), cardid2);
 				contactHistoryService.updateContactHistory(cardid1, ecardUser.getUserId().intValue(), cardid2);
