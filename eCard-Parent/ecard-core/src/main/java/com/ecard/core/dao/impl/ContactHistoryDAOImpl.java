@@ -18,7 +18,7 @@ import com.ecard.core.model.ContactHistory;
 * @author vinhla
 */
 @Repository("contactHistoryDAO")
-@Transactional
+
 public class ContactHistoryDAOImpl extends GenericDao implements ContactHistoryDAO {
 	
 	public ContactHistory saveContactHistory(ContactHistory contactHistory) {
@@ -49,6 +49,7 @@ public class ContactHistoryDAOImpl extends GenericDao implements ContactHistoryD
 	}
 
 	@Override
+	@Transactional
 	public boolean updateContactHistory(int cardId1, int userId, int cardId2) {
 		// TODO Auto-generated method stub
 		String sql = "UPDATE contact_history t SET t.card_id = :card_id2 WHERE t.card_id = :card_id1 AND t.user_id =:user_id";
