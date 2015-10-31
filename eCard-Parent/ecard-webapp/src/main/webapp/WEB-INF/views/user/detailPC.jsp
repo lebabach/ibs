@@ -1874,7 +1874,7 @@ label.error {
 		//Hide scrollbar
         if($('.ul-memo li').length <= 5){
        	 	$(".panel-memo").attr("style", "height:auto; overflow-x:hidden; overflow-y:hidden;");
-       	 	$(".panel-heading").attr("style", "width:100%;");
+       	 	$(".panel-heading").attr("style", "width:100%;height: 40px;");
         }
 	}
 	
