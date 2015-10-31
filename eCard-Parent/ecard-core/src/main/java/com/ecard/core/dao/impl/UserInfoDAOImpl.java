@@ -495,7 +495,7 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
     
     public List<DownloadCsv> getHistoryCSVDownload(Integer userId){
 //    	Query query = getEntityManager().createNativeQuery("SELECT * FROM download_csv AS dc WHERE dc.user_id = :userId AND dc.csv_approval_status = 1  ORDER BY  dc.approval_date DESC");
-    	Query query = getEntityManager().createNativeQuery("SELECT * FROM download_csv AS dc WHERE dc.user_id = :userId ORDER BY  dc.approval_date DESC");
+    	Query query = getEntityManager().createNativeQuery("SELECT * FROM download_csv AS dc WHERE dc.user_id = :userId ORDER BY  dc.csv_id DESC");
     	query.setParameter("userId", userId);
         
         List<Object[]> rows = query.getResultList();
