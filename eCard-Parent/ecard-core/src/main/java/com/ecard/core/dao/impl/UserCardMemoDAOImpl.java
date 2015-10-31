@@ -11,11 +11,10 @@ import com.ecard.core.dao.OldCardDAO;
 import com.ecard.core.dao.UserCardMemoDAO;
 import com.ecard.core.model.enums.IndexTypeEnum;
 @Repository("userCardMemoDAO")
-@Transactional
 public class UserCardMemoDAOImpl extends GenericDao  implements UserCardMemoDAO{
 	
 	@Override
-	
+	@Transactional
 	public boolean updateUserCardMemo(int cardId1,int userId,int cardId2){
 		String sql = "UPDATE user_card_memo t SET t.card_id = :card_id2 WHERE t.card_id = :card_id1 AND t.user_id =:user_id";
 		Query query = getEntityManager().createNativeQuery(sql);
