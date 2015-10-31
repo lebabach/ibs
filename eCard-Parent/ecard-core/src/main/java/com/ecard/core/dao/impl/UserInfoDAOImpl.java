@@ -307,7 +307,7 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
 					+ " OR u.tel_number_company REGEXP :criteriaSearch "
 					+ " OR u.address_full REGEXP :criteriaSearch "
 					+ " OR u.position_name REGEXP :criteriaSearch) AND ";
-		sqlQuery += "u.delete_flg = 0 and u.leave_flg = 0  ORDER BY u.create_date DESC";
+		sqlQuery += "u.delete_flg = 0 and u.leave_flg = 0 and (DATE_FORMAT(NOW(),'%Y-%m-%d') BETWEEN DATE_FORMAT(u.use_date,'%Y-%m-%d') AND DATE_FORMAT(u.end_date,'%Y-%m-%d'))  ORDER BY u.create_date DESC";
 		Query query = null;
 		if (limit > -1 && offet > -1)
 			query = getEntityManager(). createNativeQuery(sqlQuery).setFirstResult(offet).setMaxResults(limit);
@@ -346,7 +346,7 @@ public class UserInfoDAOImpl extends GenericDao implements UserInfoDAO {
 					+ " OR u.tel_number_company REGEXP :criteriaSearch "
 					+ " OR u.address_full REGEXP :criteriaSearch "
 					+ "OR u.position_name REGEXP :criteriaSearch) AND ";
-		sqlQuery += "u.delete_flg = 0 and u.leave_flg = 0  ORDER BY u.create_date DESC";
+		sqlQuery += " u.delete_flg = 0 and u.leave_flg = 0 and (DATE_FORMAT(NOW(),'%Y-%m-%d') BETWEEN DATE_FORMAT(u.use_date,'%Y-%m-%d') AND DATE_FORMAT(u.end_date,'%Y-%m-%d'))  ORDER BY u.create_date DESC";
 		Query query = getEntityManager().createNativeQuery(sqlQuery);
 		if(!criteriaSearch.isEmpty())
 			query.setParameter("criteriaSearch", criteriaSearch);
