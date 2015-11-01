@@ -9,6 +9,7 @@ import java.util.List;
 import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.PrusalHistory;
+import com.ecard.core.model.UserInfo;
 import com.ecard.core.util.PairUtil;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
@@ -150,7 +151,7 @@ public interface CardInfoDAO extends IGenericDao{
     public DownloadCsv getDownloadCSV(Integer csvId);
     public List<com.ecard.core.vo.CardInfo> getListCardAllocationUser(int userId,int tagId,int limit,int offset);
 
-    public List<com.ecard.core.vo.CardInfo> searchCompanyTree(String companyName);
+    public List<com.ecard.core.vo.CardInfo> searchCompanyTree(UserInfo userInfo, String companyName);
     
     public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName);
     

@@ -2007,7 +2007,10 @@ public class UserController {
 		List<com.ecard.core.vo.CardInfo> cardList = null;
 		String jsonObj = "";
 		try {
-			cardList = cardInfoService.searchCompanyTree(cardInfo.getCompanyName());
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+			UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+			cardList = cardInfoService.searchCompanyTree(userInfo, cardInfo.getCompanyName());
 			if (cardList.size() > 0) {
 				jsonObj = new Gson().toJson(cardList);
 			}
