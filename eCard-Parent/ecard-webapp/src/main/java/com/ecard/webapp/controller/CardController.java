@@ -710,7 +710,7 @@ public class CardController {
 		            cardInfo.setOperaterId(userId);
 		            companyInfo = new CompanyInfo();
 		            companyInfo.setCompanyId(0);
-		           
+		            cardInfo.setCardOwnerName(userInfo.getName());
 		            cardInfo.setGroupCompanyId(userInfo.getGroupCompanyId());
 		            cardInfo.setCompanyInfo(companyInfo);
 		            cardInfo.setCreateDate(new Date());
