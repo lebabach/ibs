@@ -548,7 +548,7 @@ public class UserController {
 
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			UserInfo userInfo = userInfoService.findUserByEmail(authentication.getName());
-			String saveFileCSV = "/data/csv/";
+			String saveFileCSV = "/data/csv";
 			// String saveFileCSV = System.getProperty("user.dir") + "/csv";
 			File file = new File(saveFileCSV + "/" + fileName);
 
