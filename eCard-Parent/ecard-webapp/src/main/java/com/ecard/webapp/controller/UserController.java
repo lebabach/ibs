@@ -745,8 +745,11 @@ public class UserController {
 			
 			prusalHistory.setId(prusalHistoryId);
 			
+			LocalDate localContactDate= cardInfo.getContactDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			LocalDate localCompliance= dateCompliance.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			
 			boolean checkCompliance = false;
-			if(cardInfo.getContactDate() == dateCompliance || cardInfo.getContactDate().after(dateCompliance)){
+			if(localContactDate.isEqual(localCompliance) || localContactDate.isAfter(localCompliance)){
 				checkCompliance = true;
 			}
 			
