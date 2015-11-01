@@ -1166,70 +1166,72 @@ label.error {
 				</style>
 			</c:if>
 			<c:if test="${ not empty listCardConnect }">
-			<!-- List card connected -->
-			<div class="panel panel-default">
-				<div class="panel-heading" style="height: 40px;">
-					<div style="float: left; font-weight: bold;">
-						<h5><fmt:message key="card.detail.connect" /></h5>
-					</div>
-				</div>
-				
-				<div class="panel-body listCardConnect" style="padding: 10px 0;">
-				<style type="text/css">
-                  .div-new{
-                           padding: 0 10px 5px 10px !important;
-                           margin-bottom: 10px !important;
-                           border-left: none !important;
-                            border-right: none !important;
-                             border-top: none !important;
-                           border-bottom: 1px solid #e7eaec !important;
-                           border-radius:1px;
-                  	}
-                   .col-md-5-n{
-                       width: 60%;
-                       
-                   }
-                   .col-md-5-n .col-xs-11{width: 100%; padding: 0 !important;}
-                   .col-md-5-n .col-xs-11 p{margin: 0 !important}
-                   .col-md-5-n .col-xs-11 p.num{height: auto;}
-                   .col-md-6{width:40%;  padding: 0 !important;}
-                   .col-md-6-n .col-xs-5 { width: 60%; position: relative;}
-                   .col-md-6-n .col-xs-5 img{
-                       left: 0;
-                       right: inherit;
-                   }
-                   .col-md-6-n .col-xs-7 { width: 40%;}
-                   img.img-thumb-n{     max-width: 123px;
-                       height: 74px;
-                       margin-top: 18px;}
-                   img.img-1{ margin-top: 40px; width: 28px;}
-                   img.img-2{ width: 26px; margin-top: 71px;}
-                   .mg-top {
-					    margin-top: 5px;
-					}
-					.div-new a{
-						color: #333 !important;
-					}
-                </style>
-					<c:forEach var="listCardConnected" items="${listCardConnect}" varStatus="loop">
-						<div class="list-group-item pointer div-new">
-							<div class="row" style="margin-right: 0">
-								<div class="col-md-5 col-md-5-n" style="width:100%;">
-									<div class="col-xs-11 mg-top">
-										<p class="name"><a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.name}"></c:out></a> </p>
-										<p class="livepass"><a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.companyName}"></c:out></a></p>
-										<p class="department_and_position">
-											<a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.departmentName}"></c:out> </a>
-											<a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.positionName}"></c:out></a>
-										</p>
-									</div>
-								</div>
+				<c:if test="${ isMyCard == true }">
+					<!-- List card connected -->
+					<div class="panel panel-default">
+						<div class="panel-heading" style="height: 40px;">
+							<div style="float: left; font-weight: bold;">
+								<h5><fmt:message key="card.detail.connect" /></h5>
 							</div>
 						</div>
-					</c:forEach>
-				</div>
-			</div>
-			<!-- List card connected -->
+						
+						<div class="panel-body listCardConnect" style="padding: 10px 0;">
+						<style type="text/css">
+		                  .div-new{
+		                           padding: 0 10px 5px 10px !important;
+		                           margin-bottom: 10px !important;
+		                           border-left: none !important;
+		                            border-right: none !important;
+		                             border-top: none !important;
+		                           border-bottom: 1px solid #e7eaec !important;
+		                           border-radius:1px;
+		                  	}
+		                   .col-md-5-n{
+		                       width: 60%;
+		                       
+		                   }
+		                   .col-md-5-n .col-xs-11{width: 100%; padding: 0 !important;}
+		                   .col-md-5-n .col-xs-11 p{margin: 0 !important}
+		                   .col-md-5-n .col-xs-11 p.num{height: auto;}
+		                   .col-md-6{width:40%;  padding: 0 !important;}
+		                   .col-md-6-n .col-xs-5 { width: 60%; position: relative;}
+		                   .col-md-6-n .col-xs-5 img{
+		                       left: 0;
+		                       right: inherit;
+		                   }
+		                   .col-md-6-n .col-xs-7 { width: 40%;}
+		                   img.img-thumb-n{     max-width: 123px;
+		                       height: 74px;
+		                       margin-top: 18px;}
+		                   img.img-1{ margin-top: 40px; width: 28px;}
+		                   img.img-2{ width: 26px; margin-top: 71px;}
+		                   .mg-top {
+							    margin-top: 5px;
+							}
+							.div-new a{
+								color: #333 !important;
+							}
+		                </style>
+							<c:forEach var="listCardConnected" items="${listCardConnect}" varStatus="loop">
+								<div class="list-group-item pointer div-new">
+									<div class="row" style="margin-right: 0">
+										<div class="col-md-5 col-md-5-n" style="width:100%;">
+											<div class="col-xs-11 mg-top">
+												<p class="name"><a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.name}"></c:out></a> </p>
+												<p class="livepass"><a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.companyName}"></c:out></a></p>
+												<p class="department_and_position">
+													<a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.departmentName}"></c:out> </a>
+													<a href="<c:url value='/user/profile/${ listCardConnected.userId }'/>"><c:out value="${listCardConnected.positionName}"></c:out></a>
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+						</div>
+					</div>
+					<!-- List card connected -->
+				</c:if>
 			</c:if>
 		</div>
 		<!-- End Right side -->
