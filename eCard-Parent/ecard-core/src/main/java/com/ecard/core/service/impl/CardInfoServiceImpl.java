@@ -5,19 +5,13 @@ package com.ecard.core.service.impl;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ecard.core.batch.util.UploadFileUtil;
 import com.ecard.core.dao.CardInfoDAO;
@@ -26,26 +20,19 @@ import com.ecard.core.dao.DataIndexDAO;
 import com.ecard.core.dao.OldCardDAO;
 import com.ecard.core.dao.UserCardMemoDAO;
 import com.ecard.core.dao.UserInfoDAO;
-import com.ecard.core.model.AdminPossessionCard;
 import com.ecard.core.model.CardInfo;
-import com.ecard.core.model.CompanyInfo;
-import com.ecard.core.model.ContactHistory;
 import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.OldCard;
 import com.ecard.core.model.OldCardId;
-import com.ecard.core.model.PossessionCard;
 import com.ecard.core.model.PrusalHistory;
-import com.ecard.core.model.UserCardMemo;
 import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.enums.ActionTypeEnum;
 import com.ecard.core.model.enums.IndexTypeEnum;
 import com.ecard.core.model.enums.PropertyCodeEnum;
 import com.ecard.core.model.enums.TableTypeEnum;
 import com.ecard.core.service.CardInfoService;
-import com.ecard.core.service.ContactHistoryService;
 import com.ecard.core.util.DataIndexUtil;
 import com.ecard.core.util.PairUtil;
-import com.ecard.core.util.StringUtilsHelper;
 import com.ecard.core.vo.CardConnectModel;
 import com.ecard.core.vo.CardInfoAndPosCard;
 import com.ecard.core.vo.CardInfoConnectUser;
@@ -413,8 +400,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 		return cardInfoDAO.getDownloadCSV(csvId);
 	}
 	
-	public List<com.ecard.core.vo.CardInfo> searchCompanyTree(String companyName){
-		return cardInfoDAO.searchCompanyTree(companyName);
+	public List<com.ecard.core.vo.CardInfo> searchCompanyTree(UserInfo userInfo, String companyName){
+		return cardInfoDAO.searchCompanyTree(userInfo, companyName);
 	}
 	
 	public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName){

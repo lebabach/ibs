@@ -27,6 +27,7 @@ import com.ecard.core.model.CardInfo;
 import com.ecard.core.model.CardTagId;
 import com.ecard.core.model.DownloadCsv;
 import com.ecard.core.model.PrusalHistory;
+import com.ecard.core.model.UserInfo;
 import com.ecard.core.model.UserTag;
 import com.ecard.core.model.enums.PermissionType;
 import com.ecard.core.model.enums.SearchConditions;
@@ -1064,12 +1065,12 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 				SELECT card_owner_id, MAX(contact_date) as TopDate
 				FROM card_info c
 				INNER JOIN user_info u ON u.user_id = c.card_owner_id
-				WHERE  ((c.email = 'tomohisa.sasagawa@inte.co.jp' AND c.email <> '') OR (c.name = '氣賀 信彰' AND c.company_name = '株式会社NTTデータ'))
+				WHERE  ((c.email = 'tomohisa.sasagawa@inte.co.jp' AND c.email <> '') OR (c.name = 'æ°£è³€ ä¿¡å½°' AND c.company_name = 'æ ªå¼�ä¼šç¤¾NTTãƒ‡ãƒ¼ã‚¿'))
 				AND c.old_card_flg = 0  AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id <> 59
 				GROUP BY card_owner_id
 			) 
 			AS EachItem ON EachItem.TopDate = c.contact_date AND  EachItem.card_owner_id = c.card_owner_id
-			WHERE  ((c.email = 'tomohisa.sasagawa@inte.co.jp' AND c.email <> '') OR (c.name = '氣賀 信彰' AND c.company_name = '株式会社NTTデータ'))
+			WHERE  ((c.email = 'tomohisa.sasagawa@inte.co.jp' AND c.email <> '') OR (c.name = 'æ°£è³€ ä¿¡å½°' AND c.company_name = 'æ ªå¼�ä¼šç¤¾NTTãƒ‡ãƒ¼ã‚¿'))
 				AND c.old_card_flg = 0  AND c.approval_status = 1 AND c.delete_flg = 0 AND c.card_owner_id <> 59
 				GROUP BY card_owner_id 
 */
@@ -1527,10 +1528,18 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		return lstCardInfoVo;
 	}
 
-	public List<com.ecard.core.vo.CardInfo> searchCompanyTree(String companyName) {
+	public List<com.ecard.core.vo.CardInfo> searchCompanyTree(UserInfo userInfo, String companyName) {
 		String sqlStr = "SELECT c.company_name AS companyName, count(*) AS cnt, c.card_id AS cardId FROM card_info AS c "
 				+ "WHERE c.approval_status = 1 AND c.old_card_flg = 0 AND c.delete_flg = 0 ";
 
+	   if (userInfo.getGroupCompanyId() == 1 || userInfo.getGroupCompanyId() ==2 || 
+			   userInfo.getGroupCompanyId() ==3 || userInfo.getGroupCompanyId() == 4 || userInfo.getGroupCompanyId() == 5 ){
+            sqlStr += " AND (c.group_company_id IN(1,2,3,4,5) OR (c.group_company_id NOT IN(1,2,3,4,5) AND c.contact_date >= '"+ this.complianceDate +"')) ";
+       } else {
+            sqlStr += " AND (c.group_company_id = " + userInfo.getGroupCompanyId() + " OR (c.group_company_id <> " + userInfo.getGroupCompanyId() 
+                    + "  AND c.contact_date >= '"+ this.complianceDate +"')) ";
+       }
+		
 		String params[] = { "'*W1:1,2:1,3:0,4:0,5:0,6:0,7:1,8:0,9:0,10:0,11:0,12:0,13:0,14:0 +",
 				"\"" + companyName.toLowerCase() + "\"", "'" };
 
