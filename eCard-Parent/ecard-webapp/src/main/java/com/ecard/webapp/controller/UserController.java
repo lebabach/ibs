@@ -9,13 +9,13 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -548,18 +548,18 @@ public class UserController {
 
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			UserInfo userInfo = userInfoService.findUserByEmail(authentication.getName());
-			// Connect to SCP and download File
-			byte[] myBytes = UploadFileUtil.getFileCSVFromSCP(fileName, scpHostName, scpUser, scpPassword,
-					Integer.parseInt(scpPort));
+			String saveFileCSV = "/data/csv/";
+			// String saveFileCSV = System.getProperty("user.dir") + "/csv";
+			File file = new File(saveFileCSV + "/" + fileName);
+
 			// Set file response
 			response.setContentType("application/force-download");
 			String headerKey = "Content-Disposition";
 			String headerValue = String.format("attachment; filename=\"%s\"", fileName);
 			byte[] bufferData = new byte[1024];
 			response.setHeader(headerKey, headerValue);
-			//ServletOutputStream os = response.getOutputStream();
 
-			InputStream inputStream = new ByteArrayInputStream(myBytes);
+			InputStream inputStream = new FileInputStream(file);
 			
 			BufferedOutputStream outs = new BufferedOutputStream(response.getOutputStream());
 			outs.write(0xef);
@@ -570,7 +570,7 @@ public class UserController {
               outs.write(bufferData, 0, len);
             }
             outs.close();
-                
+            inputStream.close();
 			/*try {
 				int c;
 				while ((c = inputStream.read(bufferData)) != -1) {
