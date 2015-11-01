@@ -1701,16 +1701,16 @@ public class CardInfoDAOImpl extends GenericDao implements CardInfoDAO {
 		
 		if (userInfo.getGroupCompanyId() == 1 || userInfo.getGroupCompanyId() ==2 || 
 				   userInfo.getGroupCompanyId() ==3 || userInfo.getGroupCompanyId() == 4 || userInfo.getGroupCompanyId() == 5 ){
-		     sqlStr += " AND (c.group_company_id IN(1,2,3,4,5) OR (c.group_company_id NOT IN(1,2,3,4,5) AND c.contact_date >= '"+ this.complianceDate +"')) ";
+		     sqlStr += " AND (c.groupCompanyId IN(1,2,3,4,5) OR (c.groupCompanyId NOT IN(1,2,3,4,5) AND c.contactDate >= '"+ this.complianceDate +"')) ";
 		} else {
-		     sqlStr += " AND (c.group_company_id = " + userInfo.getGroupCompanyId() + " OR (c.group_company_id <> " + userInfo.getGroupCompanyId() 
-		        + "  AND c.contact_date >= '"+ this.complianceDate +"')) ";
+		     sqlStr += " AND (c.groupCompanyId = " + userInfo.getGroupCompanyId() + " OR (c.groupCompanyId <> " + userInfo.getGroupCompanyId() 
+		        + "  AND c.contactDate >= '"+ this.complianceDate +"')) ";
 		}
 		
 		Query query = getEntityManager().createQuery(sqlStr);
-		query.setParameter("companyName", companyName);
-		query.setParameter("departmentName", departmentName);
-		query.setParameter("name", name);
+		query.setParameter("companyName", companyName.trim());
+		query.setParameter("departmentName", departmentName.trim());
+		query.setParameter("name", name.trim());
 		return (List<CardInfo>)query.getResultList();
 	}
 	
