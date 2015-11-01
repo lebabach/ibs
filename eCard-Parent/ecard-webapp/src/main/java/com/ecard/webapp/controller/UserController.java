@@ -745,13 +745,18 @@ public class UserController {
 			
 			prusalHistory.setId(prusalHistoryId);
 			
+			boolean checkCompliance = false;
+			if(cardInfo.getContactDate() == dateCompliance || cardInfo.getContactDate().after(dateCompliance)){
+				checkCompliance = true;
+			}
+			
 			if(!cardInfo.getCardOwnerId().equals(userId)){
 				if((userInfo.getGroupCompanyId() == 1 || userInfo.getGroupCompanyId() == 2 || userInfo.getGroupCompanyId() == 3 
 						|| userInfo.getGroupCompanyId() == 4 || userInfo.getGroupCompanyId() == 5)){
 					if((cardInfo.getGroupCompanyId() == 1 || cardInfo.getGroupCompanyId() == 2 || cardInfo.getGroupCompanyId() == 3 
 							|| cardInfo.getGroupCompanyId() == 4 || cardInfo.getGroupCompanyId() == 5) 
 							|| ( (cardInfo.getGroupCompanyId() != 1 || cardInfo.getGroupCompanyId() != 2 || cardInfo.getGroupCompanyId() != 3 
-									|| cardInfo.getGroupCompanyId() != 4 || cardInfo.getGroupCompanyId() != 5)  && cardInfo.getContactDate().after(dateCompliance) )){
+									|| cardInfo.getGroupCompanyId() != 4 || cardInfo.getGroupCompanyId() != 5)  && checkCompliance)){
 						//Save history
 						cardInfoService.savePrusalHistory(prusalHistory);
 					}
@@ -760,7 +765,7 @@ public class UserController {
 					}
 				}else{
 					if(cardInfo.getGroupCompanyId() == userInfo.getGroupCompanyId() 
-							|| (cardInfo.getGroupCompanyId() != userInfo.getGroupCompanyId() && cardInfo.getContactDate().after(dateCompliance))){
+							|| (cardInfo.getGroupCompanyId() != userInfo.getGroupCompanyId() && checkCompliance)){
 						//Save history
 						cardInfoService.savePrusalHistory(prusalHistory);
 					}
