@@ -153,11 +153,11 @@ public interface CardInfoDAO extends IGenericDao{
 
     public List<com.ecard.core.vo.CardInfo> searchCompanyTree(UserInfo userInfo, String companyName);
     
-    public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName);
+    public List<com.ecard.core.vo.CardInfo> searchDepartment(UserInfo userInfo, String companyName);
     
-    public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName);
+    public List<com.ecard.core.vo.CardInfo> searchCardInfo(UserInfo userInfo, String companyName, String departmentName);
     
-    public List<CardInfo> searchCardInfoByName(String companyName, String departmentName, String name);
+    public List<CardInfo> searchCardInfoByName(UserInfo userInfo, String companyName, String departmentName, String name);
     
     public BigInteger countListCardAllocationUser(int userId, int tagId);
     public List<TagUser> getAllTagUser(int userId);

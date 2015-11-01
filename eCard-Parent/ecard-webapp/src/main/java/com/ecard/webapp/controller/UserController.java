@@ -2028,7 +2028,11 @@ public class UserController {
 		List<com.ecard.core.vo.CardInfo> cardList = null;
 		String jsonObj = "";
 		try {
-			cardList = cardInfoService.searchDepartment(cardInfo.getCompanyName());
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+			UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+			
+			cardList = cardInfoService.searchDepartment(userInfo, cardInfo.getCompanyName());
 			if (cardList.size() > 0) {
 				jsonObj = new Gson().toJson(cardList);
 			}
@@ -2046,10 +2050,14 @@ public class UserController {
 		List<com.ecard.core.vo.CardInfo> cardList = null;
 		String jsonObj = "";
 		try {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+			UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+			
 			if(cardInfo.getDepartmentName() == null){
 				cardInfo.setDepartmentName("");
 			}
-			cardList = cardInfoService.searchCardInfo(cardInfo.getCompanyName(), cardInfo.getDepartmentName());
+			cardList = cardInfoService.searchCardInfo(userInfo, cardInfo.getCompanyName(), cardInfo.getDepartmentName());
 			if (cardList.size() > 0) {
 				jsonObj = new Gson().toJson(cardList);
 			}
@@ -2066,7 +2074,11 @@ public class UserController {
 
 		ModelAndView modelAndView = new ModelAndView();
 		try{
-			List<CardInfo> cardList = cardInfoService.searchCardInfoByName(compName, deptName, name);
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			EcardUser ecardUser = (EcardUser) authentication.getPrincipal();
+			UserInfo userInfo = userInfoService.getUserInfoByUserId(ecardUser.getUserId());
+			
+			List<CardInfo> cardList = cardInfoService.searchCardInfoByName(userInfo, compName, deptName, name);
 			
 			if(cardList.size() > 0){
 				modelAndView.addObject("cardInfoList", cardList);

@@ -404,16 +404,16 @@ public class CardInfoServiceImpl implements CardInfoService {
 		return cardInfoDAO.searchCompanyTree(userInfo, companyName);
 	}
 	
-	public List<com.ecard.core.vo.CardInfo> searchDepartment(String companyName){
-		return cardInfoDAO.searchDepartment(companyName);
+	public List<com.ecard.core.vo.CardInfo> searchDepartment(UserInfo userInfo, String companyName){
+		return cardInfoDAO.searchDepartment(userInfo, companyName);
 	}
 	
-	public List<com.ecard.core.vo.CardInfo> searchCardInfo(String companyName, String departmentName){
-		return cardInfoDAO.searchCardInfo(companyName, departmentName);
+	public List<com.ecard.core.vo.CardInfo> searchCardInfo(UserInfo userInfo, String companyName, String departmentName){
+		return cardInfoDAO.searchCardInfo(userInfo, companyName, departmentName);
 	}
 	
-	public List<CardInfo> searchCardInfoByName(String companyName, String departmentName, String name){
-		return cardInfoDAO.searchCardInfoByName(companyName, departmentName, name);
+	public List<CardInfo> searchCardInfoByName(UserInfo userInfo, String companyName, String departmentName, String name){
+		return cardInfoDAO.searchCardInfoByName(userInfo, companyName, departmentName, name);
 	}
 
 	@Override
